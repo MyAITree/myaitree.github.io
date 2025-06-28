@@ -1,7 +1,7 @@
 # MyAITree (मैत्री)
 ![Logo](/logo2.png)
 
-**Consultancy Through Code**
+**Consultant through Code**
 
 ---
 ## Meaning
