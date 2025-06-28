@@ -5,21 +5,17 @@
 ---
 ## Meaning
 
-is friendship, amity, or loving-kindness. It can also refer to a state of being friendly, a relationship between friends, or a feeling of goodwill. In some contexts, it is associated with the Buddhist concept of compassion.
+is friendship, amity, or loving-kindness. It can also refer to a state of being friendly, a relationship between friends, or a feeling of goodwill. In some contexts, it is associated with the Buddhist concept of compassion. MyAITree is a consultancy that delivers. We resolve pain through innovative, Intelligent, and Software solutions that drive growth.
 
---
-
-## 🚀 About Us
-
-MyAITree is a consultancy that delivers. We connect businesses with their customers through innovative, Intelligent, and Software solutions that drive growth.
+---
 
 ## 🌳 Our Services
 
-1. **Business Due Diligence**
-2. **Target Setting**
-3. **Process Refining**
-4. **Test of Time**
-5. **Self Dependent**
+1. **Business Due Dilligence**
+2. **Goal Setting**
+3. **Process Refinement**
+4. **Analytics through Test of Time**
+5. **Self-Sufficiency**
 
 
 ## ✨ Why Choose Us?
