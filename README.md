@@ -1,20 +1,26 @@
-# MyAITree
+# MyAITree (मैत्री)
 
 **Consultancy Through Code**
 
 ---
+## Meaning
+
+is friendship, amity, or loving-kindness. It can also refer to a state of being friendly, a relationship between friends, or a feeling of goodwill. In some contexts, it is associated with the Buddhist concept of compassion.
+
+--
 
 ## 🚀 About Us
 
-MyAITree is a technology consultancy that delivers innovative solutions through elegant code. We specialize in bridging the gap between business needs and technical implementation, crafting tailored AI and software solutions that drive growth.
+MyAITree is a consultancy that delivers. We connect businesses with their customers through innovative, Intelligent, and Software solutions that drive growth.
 
 ## 🌳 Our Services
 
-- **AI Strategy & Implementation**
-- **Custom Software Development**
-- **Data Engineering & Analytics**
-- **Cloud Architecture & Migration**
-- **Technical Due Diligence**
+1. **Business Due Diligence**
+2. **Target Setting**
+3. **Process Refining**
+4. **Test of Time**
+5. **Self Dependent**
+
 
 ## ✨ Why Choose Us?
 
@@ -26,13 +32,13 @@ MyAITree is a technology consultancy that delivers innovative solutions through 
 ## 🌐 Connect With Us
 
 - Website: [myaitree.com](https://www.myaitree.com)
-- Email: hello@myaitree.com
+- Email: jating@myaitree.com
 - LinkedIn: [MyAITree](https://linkedin.com/company/myaitree)
 
 ## 🛠️ Tech Stack
 
-`Python` `TensorFlow` `PyTorch` `AWS` `GCP` `Azure` `Docker` `Kubernetes` `React` `Node.js` `SQL/NoSQL`
+`Python` `PyTorch` `AWS` `Docker` `React` `Node.js` `SQL/NoSQL` `MongoDb`
 
 ---
 
-"Growing intelligent solutions, one line of code at a time." 🌱
+"Growing intelligence, one line of code at a time." 🌱
