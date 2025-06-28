@@ -17,7 +17,7 @@ is friendship, amity, or loving-kindness. It can also refer to a state of being 
 1. **Business Due Dilligence**
 2. **Goal Setting**
 3. **Process Refinement**
-4. **Analytics through Test of Time**
+4. **Results through Test of Time**
 5. **Self-Sufficiency**
 
 
