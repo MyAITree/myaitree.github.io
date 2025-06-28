@@ -1,4 +1,5 @@
 # MyAITree (मैत्री)
+![Logo](/logo2.png)
 
 **Consultancy Through Code**
 
@@ -7,9 +8,7 @@
 
 is friendship, amity, or loving-kindness. It can also refer to a state of being friendly, a relationship between friends, or a feeling of goodwill. In some contexts, it is associated with the Buddhist concept of compassion. MyAITree is a consultancy that delivers. We resolve pain through innovative, Intelligent, and Software solutions that drive growth.
 
----
 
-![Logo](/logo2.png)
 
 ---
 
