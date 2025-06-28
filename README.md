@@ -1,4 +1,4 @@
-# MyAITree (मैत्री)
+# My.AI.Tree (मैत्री)
 
 **Consultancy Through Code**
 
