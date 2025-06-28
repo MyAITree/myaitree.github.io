@@ -9,7 +9,7 @@ is friendship, amity, or loving-kindness. It can also refer to a state of being 
 
 ---
 
-![Logo](/logo1.png)
+![Logo](/logo2.png)
 
 ---
 
