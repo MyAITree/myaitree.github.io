@@ -8,7 +8,8 @@
 
 is friendship, amity, or loving-kindness. It can also refer to a state of being friendly, a relationship between friends, or a feeling of goodwill. In some contexts, it is associated with the Buddhist concept of compassion. MyAITree is a consultancy that delivers. We resolve pain through innovative, Intelligent, and Software solutions that drive growth.
 
-
+## Purpose
+To become the world's fastest sustainable problem-solving company.
 
 ---
 
