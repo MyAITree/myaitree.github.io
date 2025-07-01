@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown Printer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 10px;
+            font-family: monospace;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #0366d6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0356b6;
+        }
+        #preview {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 4px;
+            background-color: white;
+        }
+        @media print {
+            .no-print {
+                display: none;
+            }
+            #preview {
+                border: none;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Markdown Printer</h1>
+        <div class="no-print">
+            <p>Paste your Markdown content below:</p>
+            <textarea id="markdown-input" placeholder="Paste your Markdown here..."></textarea>
+            <div class="buttons">
+                <button id="preview-btn">Preview</button>
+                <button id="print-btn">Print</button>
+                <button id="clear-btn">Clear</button>
+            </div>
+        </div>
+        <div id="preview" class="markdown-body"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        const markdownInput = document.getElementById('markdown-input');
+        const previewBtn = document.getElementById('preview-btn');
+        const printBtn = document.getElementById('print-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const preview = document.getElementById('preview');
+
+        // Initialize with some example Markdown
+        markdownInput.value = `# Welcome to Markdown Printer
+
+## Features
+- Paste any Markdown content
+- Preview how it will look
+- Print directly
+
+## Example Code
+\`\`\`javascript
+function hello() {
+    console.log("Hello, world!");
+}
+\`\`\`
+
+Created with ❤️ for easy printing.`;
+
+        // Render initial content
+        preview.innerHTML = marked.parse(markdownInput.value);
+
+        previewBtn.addEventListener('click', () => {
+            preview.innerHTML = marked.parse(markdownInput.value);
+        });
+
+        printBtn.addEventListener('click', () => {
+            preview.innerHTML = marked.parse(markdownInput.value);
+            setTimeout(() => {
+                window.print();
+            }, 100);
+        });
+
+        clearBtn.addEventListener('click', () => {
+            markdownInput.value = '';
+            preview.innerHTML = '';
+        });
+
+        // Auto-update preview when typing (optional)
+        markdownInput.addEventListener('input', () => {
+            preview.innerHTML = marked.parse(markdownInput.value);
+        });
+    </script>
+</body>
+</html>
