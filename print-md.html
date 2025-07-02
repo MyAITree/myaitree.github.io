@@ -17,6 +17,14 @@
             flex-direction: column;
             gap: 20px;
         }
+        .heading-input {
+            width: 100%;
+            padding: 10px;
+            font-size: 1.5em;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
         textarea {
             width: 100%;
             min-height: 300px;
@@ -54,12 +62,31 @@
                 border: none;
                 padding: 0;
             }
+            .heading-input {
+                border: none;
+                padding: 0;
+                font-size: 2em;
+                font-weight: bold;
+            }
+        }
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #0366d6;
+            text-decoration: none;
+        }
+        .home-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Markdown Printer</h1>
+        <a href="index.html" class="home-link no-print">← Back to Home</a>
+        
+        <!-- Heading input box -->
+        <input type="text" class="heading-input" id="document-heading" placeholder="Document Title">
+        
         <div class="no-print">
             <p>Paste your Markdown content below:</p>
             <textarea id="markdown-input" placeholder="Paste your Markdown here..."></textarea>
@@ -75,15 +102,28 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
         const markdownInput = document.getElementById('markdown-input');
+        const headingInput = document.getElementById('document-heading');
         const previewBtn = document.getElementById('preview-btn');
         const printBtn = document.getElementById('print-btn');
         const clearBtn = document.getElementById('clear-btn');
         const preview = document.getElementById('preview');
 
-        // Initialize with some example Markdown
-        markdownInput.value = `# Welcome to Markdown Printer
+        // Check for URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const markdownParam = urlParams.get('md');
+        const titleParam = urlParams.get('title');
+        
+        if (markdownParam) {
+            markdownInput.value = decodeURIComponent(markdownParam);
+        }
+        
+        if (titleParam) {
+            headingInput.value = decodeURIComponent(titleParam);
+        }
 
-## Features
+        // Default content if no parameter
+        if (!markdownParam) {
+            markdownInput.value = `## Features
 - Paste any Markdown content
 - Preview how it will look
 - Print directly
@@ -93,33 +133,41 @@
 function hello() {
     console.log("Hello, world!");
 }
-\`\`\`
+\`\`\``;
+        }
 
-Created with ❤️ for easy printing.`;
+        // Initial render
+        updatePreview();
 
-        // Render initial content
-        preview.innerHTML = marked.parse(markdownInput.value);
+        previewBtn.addEventListener('click', updatePreview);
+        printBtn.addEventListener('click', printDocument);
+        clearBtn.addEventListener('click', clearDocument);
 
-        previewBtn.addEventListener('click', () => {
-            preview.innerHTML = marked.parse(markdownInput.value);
-        });
+        // Auto-update preview when typing
+        markdownInput.addEventListener('input', updatePreview);
+        headingInput.addEventListener('input', updatePreview);
 
-        printBtn.addEventListener('click', () => {
-            preview.innerHTML = marked.parse(markdownInput.value);
+        function updatePreview() {
+            let content = '';
+            if (headingInput.value) {
+                content += `# ${headingInput.value}\n\n`;
+            }
+            content += markdownInput.value;
+            preview.innerHTML = marked.parse(content);
+        }
+
+        function printDocument() {
+            updatePreview();
             setTimeout(() => {
                 window.print();
             }, 100);
-        });
+        }
 
-        clearBtn.addEventListener('click', () => {
+        function clearDocument() {
+            headingInput.value = '';
             markdownInput.value = '';
             preview.innerHTML = '';
-        });
-
-        // Auto-update preview when typing (optional)
-        markdownInput.addEventListener('input', () => {
-            preview.innerHTML = marked.parse(markdownInput.value);
-        });
+        }
     </script>
 </body>
 </html>
