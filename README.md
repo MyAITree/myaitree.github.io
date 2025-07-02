@@ -40,7 +40,7 @@ To become the world's fastest sustainable problem-solving company.
 
 ## 🛠️ Tools 
 
-- [Print MD Directly](https://www.myaitree.com/print-md.html)
+- [Print Md](https://myaitree.com/print-md.html)
 
 
 
