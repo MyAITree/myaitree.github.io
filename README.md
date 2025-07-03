@@ -13,6 +13,23 @@ To become the world's fastest sustainable problem-solving company.
 
 ---
 
+## 🤝 Current Projects
+
+- [Cozy Kutumbh](https://www.cozykutumbh.com/)
+- [Mahavir Online](mahavir.online)
+- [HiLiter](https://chromewebstore.google.com/detail/amoiindcmmfjfpgahbbbdmjbklmkicdb?utm_source=item-share-cb)
+
+
+---
+
+## 🛠️ Tools 
+
+- [Print Md](https://myaitree.com/print-md.html)
+- [Counter](https://myaitree.com/counter.html)
+
+
+---
+
 ## 🌳 Our Services
 
 1. **Business Due Dilligence**
@@ -38,28 +55,9 @@ To become the world's fastest sustainable problem-solving company.
 
 ---
 
-## 🛠️ Tools 
-
-- [Print Md](https://myaitree.com/print-md.html)
-- [Counter](https://myaitree.com/counter.html)
-
-
----
-
-## 🤝 Current Projects
-
-- [Cozy Kutumbh](https://www.cozykutumbh.com/)
-- [Mahavir Online](mahavir.online)
-- [HiLiter](https://chromewebstore.google.com/detail/amoiindcmmfjfpgahbbbdmjbklmkicdb?utm_source=item-share-cb)
-
-
----
-
 ## 🛠️ Tech Stack
 
 `Python` `PyTorch` `AWS` `Docker` `React` `Node.js` `SQL/NoSQL` `MongoDb`
-
----
 
 ---
 
