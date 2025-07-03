@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Click Counter App</title>
+    <title>Persistent Click Counter</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -63,7 +63,7 @@
 </head>
 <body>
     <div class="counter-app">
-        <h1>Counter App</h1>
+        <h1>Persistent Counter</h1>
         <div class="counter-value" id="counter">0</div>
         <div class="btn-container">
             <button class="btn btn-decrease" onclick="changeCount(-1)">Decrease (-)</button>
@@ -73,16 +73,22 @@
     </div>
 
     <script>
-        let count = 0;
+        // Load saved count from localStorage (or default to 0)
+        let count = localStorage.getItem('counter') ? parseInt(localStorage.getItem('counter')) : 0;
         const counterElement = document.getElementById('counter');
+
+        // Initialize counter display
+        updateCounter();
 
         function changeCount(amount) {
             count += amount;
+            localStorage.setItem('counter', count); // Save to localStorage
             updateCounter();
         }
 
         function resetCounter() {
             count = 0;
+            localStorage.setItem('counter', count); // Reset in localStorage
             updateCounter();
         }
 
