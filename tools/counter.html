@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click Counter App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .counter-app {
+            text-align: center;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 300px;
+        }
+        .counter-value {
+            font-size: 3rem;
+            margin: 1rem 0;
+            color: #333;
+        }
+        .btn {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .btn-decrease {
+            background-color: #f44336;
+        }
+        .btn-decrease:hover {
+            background-color: #d32f2f;
+        }
+        .btn-reset {
+            background-color: #555;
+        }
+        .btn-reset:hover {
+            background-color: #333;
+        }
+        .btn-container {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="counter-app">
+        <h1>Counter App</h1>
+        <div class="counter-value" id="counter">0</div>
+        <div class="btn-container">
+            <button class="btn btn-decrease" onclick="changeCount(-1)">Decrease (-)</button>
+            <button class="btn" onclick="changeCount(1)">Increase (+)</button>
+        </div>
+        <button class="btn btn-reset" onclick="resetCounter()">Reset</button>
+    </div>
+
+    <script>
+        let count = 0;
+        const counterElement = document.getElementById('counter');
+
+        function changeCount(amount) {
+            count += amount;
+            updateCounter();
+        }
+
+        function resetCounter() {
+            count = 0;
+            updateCounter();
+        }
+
+        function updateCounter() {
+            counterElement.textContent = count;
+            // Change color based on value
+            if (count > 0) {
+                counterElement.style.color = '#4CAF50';
+            } else if (count < 0) {
+                counterElement.style.color = '#f44336';
+            } else {
+                counterElement.style.color = '#333';
+            }
+        }
+    </script>
+</body>
+</html>
