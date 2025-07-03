@@ -24,8 +24,8 @@ To become the world's fastest sustainable problem-solving company.
 
 ## 🛠️ Tools 
 
-- [Print Md](https://myaitree.com/print-md.html)
-- [Counter](https://myaitree.com/counter.html)
+- [Print Md](https://myaitree.com/tools/print-md.html)
+- [Counter](https://myaitree.com/tools/counter.html)
 
 
 ---
