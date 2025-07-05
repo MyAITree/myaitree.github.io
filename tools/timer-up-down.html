@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Countdown Timer with Alarm</title>
+    <title>Countdown Timer with Rooster Alarm</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -31,6 +31,8 @@
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
+            justify-content: center;
+            align-items: center;
         }
         button {
             padding: 10px 20px;
@@ -62,6 +64,7 @@
             align-items: center;
             gap: 5px;
             margin-top: 10px;
+            justify-content: center;
         }
         #continueCounting {
             background-color: #2196F3;
@@ -69,10 +72,17 @@
         #continueCounting:hover {
             background-color: #0b7dda;
         }
+        .alarm-active {
+            animation: pulse 0.5s infinite alternate;
+        }
+        @keyframes pulse {
+            from { background-color: white; }
+            to { background-color: #ffeeee; }
+        }
     </style>
 </head>
 <body>
-    <div class="timer-container">
+    <div class="timer-container" id="timerContainer">
         <h1>Countdown Timer</h1>
         <div class="controls">
             <input type="number" id="minutes" min="0" max="59" value="1" placeholder="Min">
@@ -100,11 +110,13 @@
         const secondsInput = document.getElementById('seconds');
         const alarm = document.getElementById('alarm');
         const autoContinueCheckbox = document.getElementById('autoContinue');
+        const timerContainer = document.getElementById('timerContainer');
 
         let timer;
         let totalSeconds = 60;
         let isRunning = false;
         let isCountingUp = false;
+        let lastAlarmMinute = null;
 
         // Initialize timer display
         updateDisplay();
@@ -138,11 +150,22 @@
             
             timerDisplay.textContent = `${sign}${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             
-            if (totalSeconds <= 0 && !isCountingUp) {
+            if (totalSeconds <= 0) {
                 timerDisplay.style.color = 'red';
-                continueBtn.disabled = false;
+                if (!isCountingUp) {
+                    continueBtn.disabled = false;
+                }
+                
+                // Sound alarm every minute when counting up
+                if (isCountingUp && seconds === 0) {
+                    if (lastAlarmMinute !== minutes) {
+                        playAlarm();
+                        lastAlarmMinute = minutes;
+                    }
+                }
             } else {
                 timerDisplay.style.color = '#333';
+                lastAlarmMinute = null;
             }
         }
 
@@ -164,12 +187,12 @@
                         totalSeconds--;
                         
                         if (totalSeconds <= 0) {
+                            playAlarm();
+                            timerContainer.classList.add('alarm-active');
+                            
                             if (autoContinueCheckbox.checked) {
                                 isCountingUp = true;
                                 continueBtn.disabled = true;
-                            } else {
-                                pauseTimer();
-                                playAlarm();
                             }
                         }
                     } else {
@@ -187,6 +210,7 @@
             timer = undefined;
             isRunning = false;
             startBtn.textContent = 'Start';
+            timerContainer.classList.remove('alarm-active');
         }
 
         // Reset the timer
@@ -197,6 +221,7 @@
             const seconds = parseInt(secondsInput.value) || 0;
             totalSeconds = minutes * 60 + seconds;
             continueBtn.disabled = true;
+            timerContainer.classList.remove('alarm-active');
             updateDisplay();
         }
 
@@ -204,6 +229,12 @@
         function playAlarm() {
             alarm.currentTime = 0;
             alarm.play().catch(e => console.log("Audio play failed:", e));
+            
+            // Visual feedback
+            timerContainer.classList.add('alarm-active');
+            setTimeout(() => {
+                timerContainer.classList.remove('alarm-active');
+            }, 1000);
         }
 
         // Update totalSeconds when inputs change (only when timer isn't running)
