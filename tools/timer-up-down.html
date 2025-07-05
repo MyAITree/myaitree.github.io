@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Countdown Timer with Rooster Alarm</title>
+    <title>Pomodoro Timer with Rooster Alarm</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -21,11 +21,14 @@
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            max-width: 90%;
         }
         #timer {
             font-size: 5rem;
             margin: 20px 0;
             color: #333;
+            font-family: 'Courier New', monospace;
         }
         .controls {
             display: flex;
@@ -33,6 +36,7 @@
             margin-bottom: 20px;
             justify-content: center;
             align-items: center;
+            flex-wrap: wrap;
         }
         button {
             padding: 10px 20px;
@@ -42,14 +46,15 @@
             cursor: pointer;
             background-color: #4CAF50;
             color: white;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
         }
         button:hover {
-            background-color: #45a049;
+            filter: brightness(1.1);
         }
         button:disabled {
             background-color: #cccccc;
             cursor: not-allowed;
+            filter: none;
         }
         input {
             padding: 10px;
@@ -59,18 +64,22 @@
             border: 1px solid #ddd;
             border-radius: 5px;
         }
-        label {
+        .options {
             display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .option-row {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 5px;
-            margin-top: 10px;
-            justify-content: center;
         }
         #continueCounting {
             background-color: #2196F3;
         }
-        #continueCounting:hover {
-            background-color: #0b7dda;
+        #loopAlarm {
+            background-color: #FF9800;
         }
         .alarm-active {
             animation: pulse 0.5s infinite alternate;
@@ -79,33 +88,45 @@
             from { background-color: white; }
             to { background-color: #ffeeee; }
         }
+        h1 {
+            color: #d63031;
+            margin-top: 0;
+        }
     </style>
 </head>
 <body>
     <div class="timer-container" id="timerContainer">
-        <h1>Countdown Timer</h1>
+        <h1>Pomodoro Timer</h1>
         <div class="controls">
-            <input type="number" id="minutes" min="0" max="59" value="1" placeholder="Min">
+            <input type="number" id="minutes" min="0" max="59" value="25" placeholder="Min">
             <span>:</span>
             <input type="number" id="seconds" min="0" max="59" value="0" placeholder="Sec">
             <button id="startBtn">Start</button>
             <button id="resetBtn">Reset</button>
         </div>
-        <div id="timer">01:00</div>
-        <button id="continueCounting" disabled>Continue Counting Up</button>
-        <label>
-            <input type="checkbox" id="autoContinue" checked>
-            Auto continue counting up when timer ends
-        </label>
+        <div id="timer">25:00</div>
+        <div class="options">
+            <div class="option-row">
+                <button id="continueCounting" disabled>Continue Counting Up</button>
+                <button id="loopAlarm">Loop Alarm: OFF</button>
+            </div>
+            <div class="option-row">
+                <label>
+                    <input type="checkbox" id="autoContinue" checked>
+                    Auto continue counting up
+                </label>
+            </div>
+        </div>
     </div>
 
-    <audio id="alarm" src="https://myaitree.com/sounds/mixkit-rooster-crowing-in-the-morning-2462.wav" preload="auto"></audio>
+    <audio id="alarm" src="https://myaitree.com/sounds/mixkit-rooster-crowing-in-the-morning-2462.wav" preload="auto" loop="false"></audio>
 
     <script>
         const timerDisplay = document.getElementById('timer');
         const startBtn = document.getElementById('startBtn');
         const resetBtn = document.getElementById('resetBtn');
         const continueBtn = document.getElementById('continueCounting');
+        const loopAlarmBtn = document.getElementById('loopAlarm');
         const minutesInput = document.getElementById('minutes');
         const secondsInput = document.getElementById('seconds');
         const alarm = document.getElementById('alarm');
@@ -113,10 +134,12 @@
         const timerContainer = document.getElementById('timerContainer');
 
         let timer;
-        let totalSeconds = 60;
+        let totalSeconds = 25 * 60; // Default to 25 minutes
         let isRunning = false;
         let isCountingUp = false;
         let lastAlarmMinute = null;
+        let isLoopingAlarm = false;
+        let alarmInterval = null;
 
         // Initialize timer display
         updateDisplay();
@@ -141,6 +164,9 @@
                 startTimer();
             }
         });
+
+        // Loop Alarm button
+        loopAlarmBtn.addEventListener('click', toggleLoopAlarm);
 
         // Update timer display
         function updateDisplay() {
@@ -210,6 +236,7 @@
             timer = undefined;
             isRunning = false;
             startBtn.textContent = 'Start';
+            stopAlarm();
             timerContainer.classList.remove('alarm-active');
         }
 
@@ -217,7 +244,7 @@
         function resetTimer() {
             pauseTimer();
             isCountingUp = false;
-            const minutes = parseInt(minutesInput.value) || 0;
+            const minutes = parseInt(minutesInput.value) || 25; // Default to 25
             const seconds = parseInt(secondsInput.value) || 0;
             totalSeconds = minutes * 60 + seconds;
             continueBtn.disabled = true;
@@ -232,9 +259,37 @@
             
             // Visual feedback
             timerContainer.classList.add('alarm-active');
-            setTimeout(() => {
-                timerContainer.classList.remove('alarm-active');
-            }, 1000);
+            
+            // If looping is enabled, keep playing alarm
+            if (isLoopingAlarm) {
+                if (alarmInterval) clearInterval(alarmInterval);
+                alarmInterval = setInterval(() => {
+                    if (!isRunning) {
+                        clearInterval(alarmInterval);
+                        return;
+                    }
+                    alarm.currentTime = 0;
+                    alarm.play();
+                }, 3000); // Repeat every 3 seconds
+            }
+        }
+
+        // Stop alarm sound
+        function stopAlarm() {
+            alarm.pause();
+            if (alarmInterval) {
+                clearInterval(alarmInterval);
+                alarmInterval = null;
+            }
+            timerContainer.classList.remove('alarm-active');
+        }
+
+        // Toggle alarm looping
+        function toggleLoopAlarm() {
+            isLoopingAlarm = !isLoopingAlarm;
+            alarm.loop = isLoopingAlarm;
+            loopAlarmBtn.textContent = `Loop Alarm: ${isLoopingAlarm ? 'ON' : 'OFF'}`;
+            loopAlarmBtn.style.backgroundColor = isLoopingAlarm ? '#4CAF50' : '#FF9800';
         }
 
         // Update totalSeconds when inputs change (only when timer isn't running)
