@@ -52,12 +52,14 @@
                     <h1 class="text-center mb-4">Perfect Timer</h1>
                     
                     <div class="d-flex justify-content-center align-items-center mb-4 time-inputs">
-                        <input type="number" id="minutes" class="form-control form-control-lg text-center" min="0" max="99" value="0" placeholder="Min" style="width: 80px;">
+                        <input type="number" id="hours" class="form-control form-control-lg text-center" min="0" max="99" value="0" placeholder="Hrs" style="width: 80px;">
+                        <span class="mx-2 fs-4">:</span>
+                        <input type="number" id="minutes" class="form-control form-control-lg text-center" min="0" max="59" value="0" placeholder="Min" style="width: 80px;">
                         <span class="mx-2 fs-4">:</span>
                         <input type="number" id="seconds" class="form-control form-control-lg text-center" min="0" max="59" value="0" placeholder="Sec" style="width: 80px;">
                     </div>
                     
-                    <div id="timer" class="mb-4">00:00</div>
+                    <div id="timer" class="mb-4">00:00:00</div>
                     
                     <div class="d-flex gap-2 mb-4">
                         <button id="startBtn" class="btn btn-success btn-lg flex-grow-1">Start</button>
@@ -102,6 +104,7 @@
         const timerDisplay = document.getElementById('timer');
         const startBtn = document.getElementById('startBtn');
         const resetBtn = document.getElementById('resetBtn');
+        const hoursInput = document.getElementById('hours');
         const minutesInput = document.getElementById('minutes');
         const secondsInput = document.getElementById('seconds');
         const alarm = document.getElementById('alarm');
@@ -116,7 +119,7 @@
         let originalTime = 0;
         let isRunning = false;
         let isCountingUp = false;
-        let lastAlarmMinute = null;
+        let lastAlarmTime = null;
         let alarmInterval = null;
         let animationFrameId = null;
         let expected = 0;
@@ -131,6 +134,7 @@
         // Event Listeners
         startBtn.addEventListener('click', toggleTimer);
         resetBtn.addEventListener('click', resetTimer);
+        hoursInput.addEventListener('change', updateTimerFromInputs);
         minutesInput.addEventListener('change', updateTimerFromInputs);
         secondsInput.addEventListener('change', updateTimerFromInputs);
         loopAlarmCheckbox.addEventListener('change', toggleLoopAlarm);
@@ -183,13 +187,14 @@
             if (!isRunning) {
                 // If starting fresh (not resuming), get values from inputs
                 if (!isCountingUp && animationFrameId === null) {
+                    const hours = parseInt(hoursInput.value) || 0;
                     const minutes = parseInt(minutesInput.value) || 0;
                     const seconds = parseInt(secondsInput.value) || 0;
-                    totalSeconds = minutes * 60 + seconds;
+                    totalSeconds = hours * 3600 + minutes * 60 + seconds;
                     originalTime = totalSeconds;
                     
                     // Save to history if it's a new timer (not continuing)
-                    saveToHistory(minutes, seconds);
+                    saveToHistory(hours, minutes, seconds);
                 }
                 
                 isRunning = true;
@@ -267,9 +272,10 @@
         function resetTimer() {
             pauseTimer();
             isCountingUp = false;
+            const hours = parseInt(hoursInput.value) || 0;
             const minutes = parseInt(minutesInput.value) || 0;
             const seconds = parseInt(secondsInput.value) || 0;
-            totalSeconds = minutes * 60 + seconds;
+            totalSeconds = hours * 3600 + minutes * 60 + seconds;
             originalTime = totalSeconds;
             stopAlarm();
             updateDisplay();
@@ -284,7 +290,8 @@
             }
             
             const absSeconds = Math.abs(displaySeconds);
-            const minutes = Math.floor(absSeconds / 60);
+            const hours = Math.floor(absSeconds / 3600);
+            const minutes = Math.floor((absSeconds % 3600) / 60);
             const seconds = absSeconds % 60;
             let sign = '';
             
@@ -292,7 +299,7 @@
                 sign = '-';
             }
             
-            timerDisplay.textContent = `${sign}${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            timerDisplay.textContent = `${sign}${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             
             if (totalSeconds <= originalTime && !isCountingUp) {
                 timerDisplay.style.color = '#212529';
@@ -303,10 +310,11 @@
             }
             
             // Sound alarm every minute when counting up in negative mode
-            if (isCountingUp && !additiveModeCheckbox.checked && seconds === 0) {
-                if (lastAlarmMinute !== minutes) {
+            if (isCountingUp && !additiveModeCheckbox.checked) {
+                const currentTime = Math.abs(totalSeconds);
+                if (currentTime % 60 === 0 && currentTime !== lastAlarmTime) {
                     playAlarm();
-                    lastAlarmMinute = minutes;
+                    lastAlarmTime = currentTime;
                 }
             }
         }
@@ -325,16 +333,17 @@
 
         function updateTimerFromInputs() {
             if (!isRunning) {
+                const hours = parseInt(hoursInput.value) || 0;
                 const minutes = parseInt(minutesInput.value) || 0;
                 const seconds = parseInt(secondsInput.value) || 0;
-                totalSeconds = minutes * 60 + seconds;
+                totalSeconds = hours * 3600 + minutes * 60 + seconds;
                 originalTime = totalSeconds;
                 updateDisplay();
             }
         }
 
-        function saveToHistory(minutes, seconds) {
-            const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        function saveToHistory(hours, minutes, seconds) {
+            const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             
             // Check if this time already exists in history
             const existingIndex = timerHistory.findIndex(item => item.time === timeString);
@@ -346,6 +355,7 @@
                 // Add new entry
                 timerHistory.push({
                     time: timeString,
+                    hours: hours,
                     minutes: minutes,
                     seconds: seconds,
                     timestamp: Date.now()
@@ -380,7 +390,7 @@
                 historyItem.innerHTML = `
                     <span class="history-time">${item.time}</span>
                     <div class="history-actions d-flex gap-2">
-                        <button class="use-btn btn btn-sm btn-success" data-minutes="${item.minutes}" data-seconds="${item.seconds}">Use</button>
+                        <button class="use-btn btn btn-sm btn-success" data-hours="${item.hours}" data-minutes="${item.minutes}" data-seconds="${item.seconds}">Use</button>
                         <button class="delete-btn btn btn-sm btn-danger" data-time="${item.time}">Delete</button>
                     </div>
                 `;
@@ -391,11 +401,13 @@
             // Add event listeners to the new buttons
             document.querySelectorAll('.use-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
+                    const hours = parseInt(this.getAttribute('data-hours'));
                     const minutes = parseInt(this.getAttribute('data-minutes'));
                     const seconds = parseInt(this.getAttribute('data-seconds'));
+                    hoursInput.value = hours;
                     minutesInput.value = minutes;
                     secondsInput.value = seconds;
-                    totalSeconds = minutes * 60 + seconds;
+                    totalSeconds = hours * 3600 + minutes * 60 + seconds;
                     originalTime = totalSeconds;
                     updateDisplay();
                 });
