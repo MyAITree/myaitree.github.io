@@ -3,83 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pomodoro Timer with Rooster Alarm</title>
+    <title>Advanced Timer with History</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            background-color: #f5f5f5;
+            background-color: #f8f9fa;
+            color: #333;
         }
-        .timer-container {
-            text-align: center;
+        .container {
+            display: flex;
+            gap: 30px;
+            width: 90%;
+            max-width: 1200px;
+        }
+        .timer-section {
             background-color: white;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 400px;
-            max-width: 90%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 350px;
+        }
+        .history-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            flex-grow: 1;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-top: 0;
+            text-align: center;
         }
         #timer {
-            font-size: 5rem;
-            margin: 20px 0;
-            color: #333;
+            font-size: 4.5rem;
+            margin: 25px 0;
+            color: #2c3e50;
             font-family: 'Courier New', monospace;
+            text-align: center;
         }
         .controls {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
             justify-content: center;
+        }
+        .time-inputs {
+            display: flex;
+            gap: 5px;
             align-items: center;
-            flex-wrap: wrap;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 1rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background-color: #4CAF50;
-            color: white;
-            transition: all 0.3s;
-        }
-        button:hover {
-            filter: brightness(1.1);
-        }
-        button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-            filter: none;
+            margin-bottom: 20px;
         }
         input {
             padding: 10px;
             font-size: 1rem;
-            width: 60px;
+            width: 70px;
             text-align: center;
             border: 1px solid #ddd;
             border-radius: 5px;
         }
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 20px;
+        button {
+            padding: 12px 24px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #3498db;
+            color: white;
+            transition: all 0.2s;
         }
-        .option-row {
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        #startBtn {
+            background-color: #2ecc71;
+            flex-grow: 1;
+        }
+        #startBtn:hover {
+            background-color: #27ae60;
+        }
+        #resetBtn {
+            background-color: #e74c3c;
+        }
+        #resetBtn:hover {
+            background-color: #c0392b;
+        }
+        .options {
+            margin-top: 25px;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .option input {
+            width: auto;
+            margin-right: 10px;
+        }
+        .option label {
+            font-size: 1rem;
+        }
+        .history-list {
+            margin-top: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .history-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.2s;
         }
-        #continueCounting {
-            background-color: #2196F3;
+        .history-item:hover {
+            background-color: #f8f9fa;
         }
-        #loopAlarm {
-            background-color: #FF9800;
+        .history-time {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+        }
+        .history-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .history-actions button {
+            padding: 5px 10px;
+            font-size: 0.9rem;
+        }
+        .use-btn {
+            background-color: #2ecc71;
+        }
+        .delete-btn {
+            background-color: #e74c3c;
         }
         .alarm-active {
             animation: pulse 0.5s infinite alternate;
@@ -88,33 +154,47 @@
             from { background-color: white; }
             to { background-color: #ffeeee; }
         }
-        h1 {
-            color: #d63031;
-            margin-top: 0;
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .timer-section, .history-section {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="timer-container" id="timerContainer">
-        <h1>Pomodoro Timer</h1>
-        <div class="controls">
-            <input type="number" id="minutes" min="0" max="59" value="25" placeholder="Min">
-            <span>:</span>
-            <input type="number" id="seconds" min="0" max="59" value="0" placeholder="Sec">
-            <button id="startBtn">Start</button>
-            <button id="resetBtn">Reset</button>
-        </div>
-        <div id="timer">25:00</div>
-        <div class="options">
-            <div class="option-row">
-                <button id="continueCounting" disabled>Continue Counting Up</button>
-                <button id="loopAlarm">Loop Alarm: OFF</button>
+    <div class="container">
+        <div class="timer-section" id="timerContainer">
+            <h1>Timer</h1>
+            <div class="time-inputs">
+                <input type="number" id="minutes" min="0" max="99" value="25" placeholder="Min">
+                <span>:</span>
+                <input type="number" id="seconds" min="0" max="59" value="0" placeholder="Sec">
             </div>
-            <div class="option-row">
-                <label>
+            <div id="timer">25:00</div>
+            <div class="controls">
+                <button id="startBtn">Start</button>
+                <button id="resetBtn">Reset</button>
+            </div>
+            <div class="options">
+                <div class="option">
                     <input type="checkbox" id="autoContinue" checked>
-                    Auto continue counting up
-                </label>
+                    <label for="autoContinue">Auto continue counting up</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="loopAlarm">
+                    <label for="loopAlarm">Loop alarm sound</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="history-section">
+            <h1>Timer History</h1>
+            <div class="history-list" id="historyList">
+                <!-- History items will be added here dynamically -->
             </div>
         </div>
     </div>
@@ -122,87 +202,57 @@
     <audio id="alarm" src="https://myaitree.com/sounds/mixkit-rooster-crowing-in-the-morning-2462.wav" preload="auto" loop="false"></audio>
 
     <script>
+        // DOM Elements
         const timerDisplay = document.getElementById('timer');
         const startBtn = document.getElementById('startBtn');
         const resetBtn = document.getElementById('resetBtn');
-        const continueBtn = document.getElementById('continueCounting');
-        const loopAlarmBtn = document.getElementById('loopAlarm');
         const minutesInput = document.getElementById('minutes');
         const secondsInput = document.getElementById('seconds');
         const alarm = document.getElementById('alarm');
         const autoContinueCheckbox = document.getElementById('autoContinue');
+        const loopAlarmCheckbox = document.getElementById('loopAlarm');
         const timerContainer = document.getElementById('timerContainer');
+        const historyList = document.getElementById('historyList');
 
+        // Timer variables
         let timer;
         let totalSeconds = 25 * 60; // Default to 25 minutes
         let isRunning = false;
         let isCountingUp = false;
         let lastAlarmMinute = null;
-        let isLoopingAlarm = false;
         let alarmInterval = null;
+        let timerHistory = JSON.parse(localStorage.getItem('timerHistory')) || [];
 
-        // Initialize timer display
+        // Initialize
         updateDisplay();
+        renderHistory();
 
-        // Start/Pause button
-        startBtn.addEventListener('click', () => {
+        // Event Listeners
+        startBtn.addEventListener('click', toggleTimer);
+        resetBtn.addEventListener('click', resetTimer);
+        minutesInput.addEventListener('change', updateTimerFromInputs);
+        secondsInput.addEventListener('change', updateTimerFromInputs);
+        loopAlarmCheckbox.addEventListener('change', toggleLoopAlarm);
+
+        // Functions
+        function toggleTimer() {
             if (isRunning) {
                 pauseTimer();
             } else {
                 startTimer();
             }
-        });
-
-        // Reset button
-        resetBtn.addEventListener('click', resetTimer);
-
-        // Continue Counting button
-        continueBtn.addEventListener('click', () => {
-            if (totalSeconds <= 0) {
-                isCountingUp = true;
-                continueBtn.disabled = true;
-                startTimer();
-            }
-        });
-
-        // Loop Alarm button
-        loopAlarmBtn.addEventListener('click', toggleLoopAlarm);
-
-        // Update timer display
-        function updateDisplay() {
-            const minutes = Math.floor(Math.abs(totalSeconds) / 60);
-            const seconds = Math.abs(totalSeconds) % 60;
-            const sign = totalSeconds < 0 ? '-' : '';
-            
-            timerDisplay.textContent = `${sign}${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            
-            if (totalSeconds <= 0) {
-                timerDisplay.style.color = 'red';
-                if (!isCountingUp) {
-                    continueBtn.disabled = false;
-                }
-                
-                // Sound alarm every minute when counting up
-                if (isCountingUp && seconds === 0) {
-                    if (lastAlarmMinute !== minutes) {
-                        playAlarm();
-                        lastAlarmMinute = minutes;
-                    }
-                }
-            } else {
-                timerDisplay.style.color = '#333';
-                lastAlarmMinute = null;
-            }
         }
 
-        // Start the timer
         function startTimer() {
             if (!isRunning) {
                 // If starting fresh (not resuming), get values from inputs
-                if (!isRunning && !isCountingUp && timer === undefined) {
+                if (!isCountingUp && timer === undefined) {
                     const minutes = parseInt(minutesInput.value) || 0;
                     const seconds = parseInt(secondsInput.value) || 0;
                     totalSeconds = minutes * 60 + seconds;
+                    
+                    // Save to history if it's a new timer (not continuing)
+                    saveToHistory(minutes, seconds);
                 }
                 
                 isRunning = true;
@@ -218,7 +268,6 @@
                             
                             if (autoContinueCheckbox.checked) {
                                 isCountingUp = true;
-                                continueBtn.disabled = true;
                             }
                         }
                     } else {
@@ -230,7 +279,6 @@
             }
         }
 
-        // Pause the timer
         function pauseTimer() {
             clearInterval(timer);
             timer = undefined;
@@ -240,19 +288,39 @@
             timerContainer.classList.remove('alarm-active');
         }
 
-        // Reset the timer
         function resetTimer() {
             pauseTimer();
             isCountingUp = false;
-            const minutes = parseInt(minutesInput.value) || 25; // Default to 25
+            const minutes = parseInt(minutesInput.value) || 25;
             const seconds = parseInt(secondsInput.value) || 0;
             totalSeconds = minutes * 60 + seconds;
-            continueBtn.disabled = true;
             timerContainer.classList.remove('alarm-active');
             updateDisplay();
         }
 
-        // Play alarm sound
+        function updateDisplay() {
+            const minutes = Math.floor(Math.abs(totalSeconds) / 60);
+            const seconds = Math.abs(totalSeconds) % 60;
+            const sign = totalSeconds < 0 ? '-' : '';
+            
+            timerDisplay.textContent = `${sign}${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (totalSeconds <= 0) {
+                timerDisplay.style.color = '#e74c3c';
+                
+                // Sound alarm every minute when counting up
+                if (isCountingUp && seconds === 0) {
+                    if (lastAlarmMinute !== minutes) {
+                        playAlarm();
+                        lastAlarmMinute = minutes;
+                    }
+                }
+            } else {
+                timerDisplay.style.color = '#2c3e50';
+                lastAlarmMinute = null;
+            }
+        }
+
         function playAlarm() {
             alarm.currentTime = 0;
             alarm.play().catch(e => console.log("Audio play failed:", e));
@@ -261,7 +329,7 @@
             timerContainer.classList.add('alarm-active');
             
             // If looping is enabled, keep playing alarm
-            if (isLoopingAlarm) {
+            if (loopAlarmCheckbox.checked) {
                 if (alarmInterval) clearInterval(alarmInterval);
                 alarmInterval = setInterval(() => {
                     if (!isRunning) {
@@ -274,7 +342,6 @@
             }
         }
 
-        // Stop alarm sound
         function stopAlarm() {
             alarm.pause();
             if (alarmInterval) {
@@ -284,32 +351,95 @@
             timerContainer.classList.remove('alarm-active');
         }
 
-        // Toggle alarm looping
         function toggleLoopAlarm() {
-            isLoopingAlarm = !isLoopingAlarm;
-            alarm.loop = isLoopingAlarm;
-            loopAlarmBtn.textContent = `Loop Alarm: ${isLoopingAlarm ? 'ON' : 'OFF'}`;
-            loopAlarmBtn.style.backgroundColor = isLoopingAlarm ? '#4CAF50' : '#FF9800';
+            alarm.loop = loopAlarmCheckbox.checked;
         }
 
-        // Update totalSeconds when inputs change (only when timer isn't running)
-        minutesInput.addEventListener('change', () => {
+        function updateTimerFromInputs() {
             if (!isRunning) {
                 const minutes = parseInt(minutesInput.value) || 0;
                 const seconds = parseInt(secondsInput.value) || 0;
                 totalSeconds = minutes * 60 + seconds;
                 updateDisplay();
             }
-        });
+        }
 
-        secondsInput.addEventListener('change', () => {
-            if (!isRunning) {
-                const minutes = parseInt(minutesInput.value) || 0;
-                const seconds = parseInt(secondsInput.value) || 0;
-                totalSeconds = minutes * 60 + seconds;
-                updateDisplay();
+        function saveToHistory(minutes, seconds) {
+            const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Check if this time already exists in history
+            const existingIndex = timerHistory.findIndex(item => item.time === timeString);
+            
+            if (existingIndex >= 0) {
+                // Update timestamp if it exists
+                timerHistory[existingIndex].timestamp = Date.now();
+            } else {
+                // Add new entry
+                timerHistory.push({
+                    time: timeString,
+                    minutes: minutes,
+                    seconds: seconds,
+                    timestamp: Date.now()
+                });
             }
-        });
+            
+            // Sort by most recent
+            timerHistory.sort((a, b) => b.timestamp - a.timestamp);
+            
+            // Keep only the last 10 items
+            if (timerHistory.length > 10) {
+                timerHistory = timerHistory.slice(0, 10);
+            }
+            
+            // Save to localStorage and update UI
+            localStorage.setItem('timerHistory', JSON.stringify(timerHistory));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            historyList.innerHTML = '';
+            
+            if (timerHistory.length === 0) {
+                historyList.innerHTML = '<p>No timer history yet. Start a timer to save it here.</p>';
+                return;
+            }
+            
+            timerHistory.forEach(item => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                
+                historyItem.innerHTML = `
+                    <span class="history-time">${item.time}</span>
+                    <div class="history-actions">
+                        <button class="use-btn" data-minutes="${item.minutes}" data-seconds="${item.seconds}">Use</button>
+                        <button class="delete-btn" data-time="${item.time}">Delete</button>
+                    </div>
+                `;
+                
+                historyList.appendChild(historyItem);
+            });
+            
+            // Add event listeners to the new buttons
+            document.querySelectorAll('.use-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const minutes = parseInt(this.getAttribute('data-minutes'));
+                    const seconds = parseInt(this.getAttribute('data-seconds'));
+                    minutesInput.value = minutes;
+                    secondsInput.value = seconds;
+                    totalSeconds = minutes * 60 + seconds;
+                    updateDisplay();
+                });
+            });
+            
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const timeToDelete = this.getAttribute('data-time');
+                    timerHistory = timerHistory.filter(item => item.time !== timeToDelete);
+                    localStorage.setItem('timerHistory', JSON.stringify(timerHistory));
+                    renderHistory();
+                });
+            });
+        }
     </script>
 </body>
 </html>
