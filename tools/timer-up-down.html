@@ -230,7 +230,6 @@
 
         function handleReachingZero() {
             playAlarm();
-            timerContainer.classList.add('alarm-active');
             
             if (autoContinueCheckbox.checked) {
                 isCountingUp = true;
@@ -243,13 +242,47 @@
             }
         }
 
+        function playAlarm() {
+            // Visual feedback
+            timerContainer.classList.add('alarm-active');
+            
+            // Play alarm immediately
+            alarm.currentTime = 0;
+            alarm.play().catch(e => console.log("Audio play failed:", e));
+            
+            // Set up looping if enabled
+            if (loopAlarmCheckbox.checked) {
+                // Clear any existing interval
+                if (alarmInterval) clearInterval(alarmInterval);
+                
+                // Set up new interval
+                alarmInterval = setInterval(() => {
+                    if (!isRunning && !loopAlarmCheckbox.checked) {
+                        clearInterval(alarmInterval);
+                        return;
+                    }
+                    alarm.currentTime = 0;
+                    alarm.play();
+                }, 3000); // Repeat every 3 seconds
+            }
+        }
+
+        function stopAlarm() {
+            // Stop audio and clear any looping
+            alarm.pause();
+            if (alarmInterval) {
+                clearInterval(alarmInterval);
+                alarmInterval = null;
+            }
+            timerContainer.classList.remove('alarm-active');
+        }
+
         function pauseTimer() {
             isRunning = false;
             startBtn.textContent = 'Start';
             startBtn.classList.remove('btn-warning');
             startBtn.classList.add('btn-success');
             stopAlarm();
-            timerContainer.classList.remove('alarm-active');
         }
 
         function resetTimer() {
@@ -259,7 +292,7 @@
             const seconds = parseInt(secondsInput.value) || 0;
             totalSeconds = minutes * 60 + seconds;
             originalTime = totalSeconds;
-            timerContainer.classList.remove('alarm-active');
+            stopAlarm();
             updateDisplay();
         }
 
@@ -299,38 +332,16 @@
             }
         }
 
-        function playAlarm() {
-            alarm.currentTime = 0;
-            alarm.play().catch(e => console.log("Audio play failed:", e));
+        function toggleLoopAlarm() {
+            alarm.loop = loopAlarmCheckbox.checked;
             
-            // Visual feedback
-            timerContainer.classList.add('alarm-active');
-            
-            // If looping is enabled, keep playing alarm
-            if (loopAlarmCheckbox.checked) {
-                if (alarmInterval) clearInterval(alarmInterval);
-                alarmInterval = setInterval(() => {
-                    if (!isRunning) {
-                        clearInterval(alarmInterval);
-                        return;
-                    }
-                    alarm.currentTime = 0;
-                    alarm.play();
-                }, 3000); // Repeat every 3 seconds
-            }
-        }
-
-        function stopAlarm() {
-            alarm.pause();
-            if (alarmInterval) {
+            // If looping was just enabled and we're in alarm state, start the interval
+            if (loopAlarmCheckbox.checked && timerContainer.classList.contains('alarm-active')) {
+                playAlarm();
+            } else if (!loopAlarmCheckbox.checked && alarmInterval) {
                 clearInterval(alarmInterval);
                 alarmInterval = null;
             }
-            timerContainer.classList.remove('alarm-active');
-        }
-
-        function toggleLoopAlarm() {
-            alarm.loop = loopAlarmCheckbox.checked;
         }
 
         function updateTimerFromInputs() {
