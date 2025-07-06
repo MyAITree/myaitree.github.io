@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown to Slides Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+        .container {
+            display: flex;
+            flex: 1;
+            gap: 20px;
+        }
+        #input-area, #output-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        textarea {
+            flex: 1;
+            padding: 10px;
+            font-family: monospace;
+            resize: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            align-self: flex-start;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #slides-container {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background: #f9f9f9;
+        }
+        .slide {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            page-break-after: always;
+        }
+        .slide:last-child {
+            margin-bottom: 0;
+        }
+        h1 { font-size: 2em; color: #333; }
+        h2 { font-size: 1.5em; color: #444; }
+        h3 { font-size: 1.17em; color: #555; }
+        h4 { font-size: 1em; color: #666; }
+        h5 { font-size: 0.83em; color: #777; }
+        h6 { font-size: 0.67em; color: #888; }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 3px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: monospace;
+            background: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        blockquote {
+            border-left: 4px solid #ddd;
+            padding-left: 15px;
+            color: #666;
+            margin-left: 0;
+        }
+        hr {
+            border: 0;
+            height: 1px;
+            background: #ddd;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Markdown to Slides Converter</h1>
+    <button id="convert-btn">Convert to Slides</button>
+    
+    <div class="container">
+        <div id="input-area">
+            <label for="markdown-input">Markdown Input:</label>
+            <textarea id="markdown-input" placeholder="Enter your Markdown here...">
+# Slide 1
+This is the first slide
+
+---
+
+## Slide 2
+- Item 1
+- Item 2
+- Item 3
+
+### Subheading
+Some content
+
+---
+
+# Slide 3
+```javascript
+function example() {
+    console.log("Code highlighting");
+}
+Blockquote example</textarea>
+</div>
+    <div id="output-area">
+        <label>Slides Output:</label>
+        <div id="slides-container"></div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('convert-btn').addEventListener('click', convertMarkdownToSlides);
+    
+    function convertMarkdownToSlides() {
+        const markdown = document.getElementById('markdown-input').value;
+        const slidesContainer = document.getElementById('slides-container');
+        slidesContainer.innerHTML = '';
+        
+        // Split markdown into slides based on horizontal rules or headings
+        const slideSeparator = /(?:^|\n)\s*---\s*(?:\n|$)/;
+        let slideChunks = markdown.split(slideSeparator);
+        
+        // If no slides found, treat entire content as one slide
+        if (slideChunks.length === 1 && !slideChunks[0].trim()) {
+            slideChunks = [markdown];
+        }
+        
+        slideChunks.forEach(chunk => {
+            if (!chunk.trim()) return;
+            
+            const slideDiv = document.createElement('div');
+            slideDiv.className = 'slide';
+            
+            // Convert Markdown to HTML
+            const html = marked.parse(chunk.trim());
+            slideDiv.innerHTML = html;
+            
+            slidesContainer.appendChild(slideDiv);
+        });
+    }
+</script>
+
+<!-- Include marked.js for Markdown parsing -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</body> 
+</html>
