@@ -6,7 +6,7 @@ To create a visually symbolic painting of **John Stuart Mill**'s philosophy, we'
 
 ---
 
-![JS Mill](philosophers/JS-Mill.png)
+![JS Mill](https://myaitree.com/philosophers/JS-Mill.png)
 
 ### **Visual Elements & Symbolism**
 
