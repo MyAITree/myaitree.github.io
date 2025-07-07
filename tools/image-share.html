@@ -9,6 +9,8 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-storage-compat.js"></script>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- QR Code Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
     <style>
         body {
             padding: 20px;
@@ -46,6 +48,24 @@
             background-color: #f8d7da;
             color: #721c24;
         }
+        #qrcode {
+            margin: 20px auto;
+            padding: 10px;
+            background: white;
+            display: inline-block;
+        }
+        .share-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .share-option {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -79,9 +99,20 @@
             </div>
             <div class="card-body">
                 <p>Your image has been uploaded successfully!</p>
-                <p>Share this link:</p>
-                <div class="share-link" id="shareLink"></div>
-                <button id="copyBtn" class="btn btn-secondary mt-2">Copy Link</button>
+                
+                <div class="share-options">
+                    <div class="share-option">
+                        <h4>Shareable Link</h4>
+                        <div class="share-link" id="shareLink"></div>
+                        <button id="copyBtn" class="btn btn-secondary mt-2">Copy Link</button>
+                    </div>
+                    
+                    <div class="share-option">
+                        <h4>QR Code</h4>
+                        <div id="qrcode"></div>
+                        <button id="downloadQrBtn" class="btn btn-secondary mt-2">Download QR Code</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -98,8 +129,6 @@
             measurementId: "G-377MBY9E7Q"
         };
 
-
-
         // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const storage = firebase.storage();
@@ -113,6 +142,8 @@
         const shareSection = document.getElementById('shareSection');
         const shareLink = document.getElementById('shareLink');
         const copyBtn = document.getElementById('copyBtn');
+        const qrcodeDiv = document.getElementById('qrcode');
+        const downloadQrBtn = document.getElementById('downloadQrBtn');
 
         // Show image preview when file is selected
         imageUpload.addEventListener('change', function(e) {
@@ -161,12 +192,26 @@
                         shareLink.textContent = downloadURL;
                         shareSection.style.display = 'block';
                         
+                        // Generate QR code
+                        generateQRCode(downloadURL);
+                        
                         // Scroll to share section
                         shareSection.scrollIntoView({ behavior: 'smooth' });
                     });
                 }
             );
         });
+
+        // Generate QR code
+        function generateQRCode(url) {
+            const qr = qrcode(0, 'L');
+            qr.addData(url);
+            qr.make();
+            qrcodeDiv.innerHTML = qr.createImgTag(6, 0);
+            
+            // Store the QR code SVG for downloading
+            qrcodeDiv.setAttribute('data-svg', qr.createSvgTag());
+        }
 
         // Copy link to clipboard
         copyBtn.addEventListener('click', function() {
@@ -178,6 +223,21 @@
                     copyBtn.textContent = originalText;
                 }, 2000);
             });
+        });
+
+        // Download QR code
+        downloadQrBtn.addEventListener('click', function() {
+            const svg = qrcodeDiv.getAttribute('data-svg');
+            const blob = new Blob([svg], {type: 'image/svg+xml'});
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'qrcode.svg';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         });
 
         // Helper function to show status messages
