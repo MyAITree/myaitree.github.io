@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Share App</title>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-storage-compat.js"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            font-family: Arial, sans-serif;
+        }
+        .preview-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .preview-img {
+            max-width: 100%;
+            max-height: 400px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .share-link {
+            word-break: break-all;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mb-4">Image Share App</h1>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2>Upload Image</h2>
+            </div>
+            <div class="card-body">
+                <div id="status" class="status d-none"></div>
+                
+                <div class="mb-3">
+                    <label for="imageUpload" class="form-label">Choose an image to upload:</label>
+                    <input class="form-control" type="file" id="imageUpload" accept="image/*">
+                </div>
+                
+                <div class="preview-container d-none" id="previewContainer">
+                    <h3>Preview</h3>
+                    <img id="previewImg" class="preview-img" src="#" alt="Preview">
+                </div>
+                
+                <button id="uploadBtn" class="btn btn-primary mt-3" disabled>Upload Image</button>
+            </div>
+        </div>
+        
+        <div class="card" id="shareSection" style="display: none;">
+            <div class="card-header">
+                <h2>Share Your Image</h2>
+            </div>
+            <div class="card-body">
+                <p>Your image has been uploaded successfully!</p>
+                <p>Share this link:</p>
+                <div class="share-link" id="shareLink"></div>
+                <button id="copyBtn" class="btn btn-secondary mt-2">Copy Link</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDZjqiKRSKBhX27YNkkNlui3xmJQFdIVCg",
+            authDomain: "my-ai-tree.firebaseapp.com",
+            projectId: "my-ai-tree",
+            storageBucket: "my-ai-tree.firebasestorage.app",
+            messagingSenderId: "830305583526",
+            appId: "1:830305583526:web:49c72f229d1582f07e0f67",
+            measurementId: "G-377MBY9E7Q"
+        };
+
+
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const storage = firebase.storage();
+
+        // DOM elements
+        const imageUpload = document.getElementById('imageUpload');
+        const previewContainer = document.getElementById('previewContainer');
+        const previewImg = document.getElementById('previewImg');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const statusDiv = document.getElementById('status');
+        const shareSection = document.getElementById('shareSection');
+        const shareLink = document.getElementById('shareLink');
+        const copyBtn = document.getElementById('copyBtn');
+
+        // Show image preview when file is selected
+        imageUpload.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    previewContainer.classList.remove('d-none');
+                    uploadBtn.disabled = false;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Upload image to Firebase Storage
+        uploadBtn.addEventListener('click', function() {
+            const file = imageUpload.files[0];
+            if (!file) return;
+
+            uploadBtn.disabled = true;
+            uploadBtn.textContent = 'Uploading...';
+            statusDiv.className = 'status d-none';
+
+            // Generate a unique filename
+            const filename = 'image_' + Date.now() + '_' + file.name;
+            const storageRef = storage.ref().child('images/' + filename);
+            const uploadTask = storageRef.put(file);
+
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    // Progress monitoring can be added here
+                },
+                (error) => {
+                    showStatus('Error uploading image: ' + error.message, 'error');
+                    uploadBtn.disabled = false;
+                    uploadBtn.textContent = 'Upload Image';
+                },
+                () => {
+                    // Upload completed successfully
+                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        showStatus('Image uploaded successfully!', 'success');
+                        uploadBtn.textContent = 'Upload Complete';
+                        
+                        // Show share section
+                        shareLink.textContent = downloadURL;
+                        shareSection.style.display = 'block';
+                        
+                        // Scroll to share section
+                        shareSection.scrollIntoView({ behavior: 'smooth' });
+                    });
+                }
+            );
+        });
+
+        // Copy link to clipboard
+        copyBtn.addEventListener('click', function() {
+            const link = shareLink.textContent;
+            navigator.clipboard.writeText(link).then(() => {
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 2000);
+            });
+        });
+
+        // Helper function to show status messages
+        function showStatus(message, type) {
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.classList.remove('d-none');
+        }
+    </script>
+</body>
+</html>
