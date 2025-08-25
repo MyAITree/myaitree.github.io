@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regex Text to JSON Transformer</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: #4e54c8;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .input-section, .output-section {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #4e54c8;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        textarea, input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus, input:focus {
+            outline: none;
+            border-color: #4e54c8;
+        }
+        
+        textarea {
+            min-height: 200px;
+            font-family: monospace;
+        }
+        
+        button {
+            background: #4e54c8;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background: #3a3eb3;
+        }
+        
+        .output {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 15px;
+            min-height: 250px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+        
+        .error {
+            color: #d9534f;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+        
+        .example {
+            background: #f0f7ff;
+            border-left: 4px solid #4e54c8;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .example h3 {
+            margin-bottom: 10px;
+            color: #4e54c8;
+        }
+        
+        .example pre {
+            background: #e8f1ff;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 14px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Regex Text to JSON Transformer</h1>
+            <p class="subtitle">Convert text to structured JSON using regular expressions with named groups</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="input-section">
+                <h2>Input</h2>
+                <label for="inputText">Text to analyze:</label>
+                <textarea id="inputText" placeholder="Enter your text here...">John Doe, age 30, email: john.doe@example.com
+Jane Smith, age 25, email: jane.smith@example.org
+Bob Johnson, age 40, email: bob.johnson@example.net</textarea>
+                
+                <label for="regexPattern">Regular Expression with named groups:</label>
+                <input type="text" id="regexPattern" placeholder="Enter regex pattern..." value="(?<name>[^,]+), age (?<age>\d+), email: (?<email>[\w\.-]+@[\w\.-]+\.\w+)">
+                
+                <button id="transformBtn">Transform to JSON</button>
+                
+                <div class="example">
+                    <h3>Example Usage</h3>
+                    <p>Use named groups in your regex like <code>(?&lt;name&gt;pattern)</code> to create JSON properties.</p>
+                    <p>For example: <code>(?&lt;first&gt;\w+)\s+(?&lt;last&gt;\w+)</code> will create { "first": "...", "last": "..." }</p>
+                </div>
+            </div>
+            
+            <div class="output-section">
+                <h2>Output</h2>
+                <label for="outputJson">JSON Result:</label>
+                <div id="outputJson" class="output">{ "transformedData": [] }</div>
+                <div id="errorMsg" class="error"></div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Created with JavaScript • Regex Text to JSON Transformer</p>
+        </footer>
+    </div>
+
+    <script>
+        class RegexTransformer {
+            constructor() {
+                this.inputText = document.getElementById('inputText');
+                this.regexPattern = document.getElementById('regexPattern');
+                this.outputJson = document.getElementById('outputJson');
+                this.errorMsg = document.getElementById('errorMsg');
+                this.transformBtn = document.getElementById('transformBtn');
+                
+                this.transformBtn.addEventListener('click', () => this.transform());
+            }
+            
+            transform() {
+                // Clear previous error
+                this.errorMsg.textContent = '';
+                
+                const text = this.inputText.value;
+                const regexPattern = this.regexPattern.value;
+                
+                if (!text || !regexPattern) {
+                    this.showError('Please provide both text and regex pattern');
+                    return;
+                }
+                
+                try {
+                    // Create regex with global and multiline flags
+                    const regex = new RegExp(regexPattern, 'gm');
+                    const matches = [];
+                    
+                    let match;
+                    while ((match = regex.exec(text)) !== null) {
+                        // Extract named groups from the match
+                        const groups = match.groups || {};
+                        
+                        // If no named groups, use the entire match array
+                        if (Object.keys(groups).length === 0) {
+                            // Create a simple array of capture groups
+                            const captureGroups = match.slice(1).filter(group => group !== undefined);
+                            matches.push(captureGroups);
+                        } else {
+                            matches.push(groups);
+                        }
+                        
+                        // Prevent infinite loop with zero-length matches
+                        if (match.index === regex.lastIndex) {
+                            regex.lastIndex++;
+                        }
+                    }
+                    
+                    if (matches.length === 0) {
+                        this.outputJson.textContent = JSON.stringify({ message: 'No matches found' }, null, 2);
+                    } else {
+                        this.outputJson.textContent = JSON.stringify(matches, null, 2);
+                    }
+                    
+                    // Syntax highlight the JSON output
+                    this.highlightJson();
+                    
+                } catch (error) {
+                    this.showError('Error with regex pattern: ' + error.message);
+                }
+            }
+            
+            showError(message) {
+                this.errorMsg.textContent = message;
+                this.outputJson.textContent = '{ "error": "' + message + '" }';
+            }
+            
+            highlightJson() {
+                const jsonText = this.outputJson.textContent;
+                // Simple JSON highlighting
+                const highlighted = jsonText
+                    .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, 
+                    function(match) {
+                        let cls = 'number';
+                        if (/^"/.test(match)) {
+                            if (/:$/.test(match)) {
+                                cls = 'key';
+                            } else {
+                                cls = 'string';
+                            }
+                        } else if (/true|false/.test(match)) {
+                            cls = 'boolean';
+                        } else if (/null/.test(match)) {
+                            cls = 'null';
+                        }
+                        return '<span class="' + cls + '">' + match + '</span>';
+                    });
+                
+                this.outputJson.innerHTML = highlighted;
+            }
+        }
+
+        // Initialize the application when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const app = new RegexTransformer();
+            
+            // Add some CSS for JSON highlighting
+            const style = document.createElement('style');
+            style.textContent = `
+                .string { color: #d14; }
+                .number { color: #099; }
+                .boolean { color: #0086b3; }
+                .null { color: #0086b3; }
+                .key { color: #458; font-weight: bold; }
+            `;
+            document.head.appendChild(style);
+            
+            // Trigger transformation on load with example data
+            app.transform();
+        });
+    </script>
+</body>
+</html>

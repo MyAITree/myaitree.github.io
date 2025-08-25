@@ -15,22 +15,33 @@ To become the world's fastest sustainable problem-solving company.
 
 ## 🤝 Current Projects
 
+### E-Commerce Projects
 - [Cozy Kutumbh](https://www.cozykutumbh.com/)
 - [Mahavir Online](mahavir.online)
-- [HiLiter](https://chromewebstore.google.com/detail/amoiindcmmfjfpgahbbbdmjbklmkicdb?utm_source=item-share-cb)
 
+### Education Projects
+- [HiLiter](https://chromewebstore.google.com/detail/amoiindcmmfjfpgahbbbdmjbklmkicdb?utm_source=item-share-cb)
+- [Qaizen Quiz Bot](https://t.me/QaizenBot)
 
 ---
 
 ## 🛠️ Tools 
 
+### Text-Centric Tools
 - [Print Md](https://myaitree.com/tools/print-md.html)
-- [Counter](https://myaitree.com/tools/counter.html)
-- [iFrame XPath](https://myaitree.com/tools/xpath/xpath-extractor.html)
-- [Timer Up Down](https://myaitree.com/tools/timer-up-down.html)
-- [Voice Note](https://myaitree.com/tools/voice-note.html)
 - [Md2Slides](https://myaitree.com/tools/md2slides.html)
+
+#### Web Data Tool
+- [iFrame XPath](https://myaitree.com/tools/xpath/xpath-extractor.html)
+
+### Audio/Visual Tools
+- [Voice Note](https://myaitree.com/tools/voice-note.html)
 - [ImageShare](https://myaitree.com/tools/image-share.html)
+
+### Number/Time-Based Tools
+- [Counter](https://myaitree.com/tools/counter.html)
+- [Timer Up Down](https://myaitree.com/tools/timer-up-down.html)
+
 
 ---
 
