@@ -37,6 +37,7 @@ To become the world's fastest sustainable problem-solving company.
 - [JSON Merge](https://myaitree.com/tools/json-merge.html): Merge two JSON on conditions
 - [JSON Inner Join](https://myaitree.com/tools/json-inner-join.html): Join two JSON on inner join
 - [JSON key renamer](https://myaitree.com/tools/json-key-renamer.html): Rename JSON key
+- [JSON modifier](https://myaitree.com/tools/json-modifier.html): Modifies structure of JSON
 
 ### Audio/Visual Tools
 - [Voice Note](https://myaitree.com/tools/voice-note.html): Create voice notes quickly and share with anybody.
