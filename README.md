@@ -28,19 +28,20 @@ To become the world's fastest sustainable problem-solving company.
 ## 🛠️ Tools 
 
 ### Text-Centric Tools
-- [Print Md](https://myaitree.com/tools/print-md.html)
-- [Md2Slides](https://myaitree.com/tools/md2slides.html)
+- [Print Md](https://myaitree.com/tools/print-md.html): Directly print chatgpt markdown text
+- [Md2Slides](https://myaitree.com/tools/md2slides.html): Divide the Markdown to slides
+- [RegrUs](https://myaitree.com/tools/regr-us.html): Regex to JSON converter - based on object based regex.
 
 #### Web Data Tool
-- [iFrame XPath](https://myaitree.com/tools/xpath/xpath-extractor.html)
+- [iFrame XPath](https://myaitree.com/tools/xpath/xpath-extractor.html): Extract xpath from the html pages - use the javascript code and copy paste it.
 
 ### Audio/Visual Tools
-- [Voice Note](https://myaitree.com/tools/voice-note.html)
-- [ImageShare](https://myaitree.com/tools/image-share.html)
+- [Voice Note](https://myaitree.com/tools/voice-note.html): Create voice notes quickly and share with anybody.
+- [ImageShare](https://myaitree.com/tools/image-share.html): Upload images and share with anyone.
 
 ### Number/Time-Based Tools
-- [Counter](https://myaitree.com/tools/counter.html)
-- [Timer Up Down](https://myaitree.com/tools/timer-up-down.html)
+- [Counter](https://myaitree.com/tools/counter.html): Just click and count - for practicing
+- [Timer Up Down](https://myaitree.com/tools/timer-up-down.html): Start timer and continue until stopped.
 
 
 ---
