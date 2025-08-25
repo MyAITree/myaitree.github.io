@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JSON Structure Transformer</title>
+    <title>JSON Restructuring Tool</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -11,106 +11,221 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .card {
+        .app-container {
+            background: white;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             overflow: hidden;
         }
-        .card-header {
+        .app-header {
             background: #5a67d8;
             color: white;
-            font-weight: 600;
+            padding: 20px;
         }
-        .btn-primary {
-            background-color: #5a67d8;
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            padding: 20px;
+            height: 65vh;
+        }
+        @media (max-width: 992px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+        }
+        .json-section, .result-section {
+            display: flex;
+            flex-direction: column;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #5a67d8;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        textarea {
+            width: 100%;
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            resize: none;
+        }
+        textarea:focus {
+            outline: none;
             border-color: #5a67d8;
         }
-        .btn-primary:hover {
-            background-color: #4c51bf;
-            border-color: #4c51bf;
-        }
-        .btn-success {
-            background-color: #38a169;
-            border-color: #38a169;
-        }
-        .btn-success:hover {
-            background-color: #2f855a;
-            border-color: #2f855a;
-        }
-        .json-box {
-            min-height: 250px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-        }
-        .transform-box {
-            background-color: #f8f9fa;
-            border-radius: 5px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-        .copy-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            z-index: 10;
-        }
-        .highlight {
-            color: #d14;
-        }
-        .example-btn {
-            cursor: pointer;
-            color: #5a67d8;
-            text-decoration: underline;
-        }
-        .stat-box {
-            background-color: #f8f9fa;
+        .workflow-area {
+            background: #f8f9fa;
             border-radius: 8px;
             padding: 15px;
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .node-palette {
+            display: flex;
+            gap: 10px;
             margin-bottom: 15px;
+            flex-wrap: wrap;
         }
-        .stat-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #5a67d8;
-        }
-        .stat-label {
+        .node-item {
+            background: white;
+            border: 2px solid #5a67d8;
+            border-radius: 8px;
+            padding: 8px 12px;
             font-size: 14px;
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+        }
+        .node-item:hover {
+            background: #5a67d8;
+            color: white;
+        }
+        .canvas {
+            flex: 1;
+            background: white;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            overflow: auto;
+            min-height: 200px;
+        }
+        .node {
+            background: white;
+            border: 2px solid #5a67d8;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            width: 200px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            cursor: move;
+        }
+        .node-header {
+            font-weight: 600;
+            color: #5a67d8;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .node-content {
+            font-size: 13px;
             color: #666;
         }
-        .transformation-item {
-            border-left: 4px solid #5a67d8;
-            background-color: #f0f7ff;
-            padding: 10px 15px;
-            margin-bottom: 10px;
-            border-radius: 0 5px 5px 0;
+        .connection-line {
+            height: 2px;
+            background: #5a67d8;
+            margin: 5px 0;
+            position: relative;
         }
-        pre {
-            border-radius: 5px;
+        .connection-line:after {
+            content: "→";
+            position: absolute;
+            right: -10px;
+            top: -8px;
+            color: #5a67d8;
+        }
+        .result-box {
+            flex: 1;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
             padding: 15px;
-            background-color: #f8f9fa;
-            overflow-x: auto;
+            font-family: monospace;
+            font-size: 14px;
+            overflow: auto;
+            white-space: pre-wrap;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+        }
+        .btn {
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-primary {
+            background: #5a67d8;
+            color: white;
+            border: none;
+        }
+        .btn-primary:hover {
+            background: #4c51bf;
+        }
+        .btn-success {
+            background: #38a169;
+            color: white;
+            border: none;
+        }
+        .btn-success:hover {
+            background: #2f855a;
+        }
+        .btn-secondary {
+            background: #718096;
+            color: white;
+            border: none;
+        }
+        .btn-secondary:hover {
+            background: #4a5568;
+        }
+        .footer {
+            text-align: center;
+            padding: 15px;
+            color: #666;
+            font-size: 14px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+        }
+        .empty-canvas {
+            color: #999;
+            text-align: center;
+            padding: 30px;
+        }
+        .key {
+            color: #d14;
+        }
+        .string {
+            color: #099;
+        }
+        .number {
+            color: #0086b3;
+        }
+        .boolean {
+            color: #0086b3;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="row mb-4">
-            <div class="col text-center">
-                <h1 class="text-white mt-3">JSON Structure Transformer</h1>
-                <p class="text-white">Modify your JSON structure with ease</p>
-            </div>
+    <div class="app-container">
+        <div class="app-header">
+            <h1><i class="fas fa-project-diagram me-2"></i>JSON Restructuring Tool</h1>
+            <p class="mb-0">Drag and drop nodes to transform your JSON structure</p>
         </div>
 
-        <div class="row">
-            <div class="col-lg-6 mb-4">
-                <div class="card h-100">
-                    <div class="card-header">
-                        <h5 class="mb-0">Input JSON</h5>
-                    </div>
-                    <div class="card-body">
-                        <textarea class="form-control json-box" id="inputJson" placeholder="Paste your JSON here...">{
+        <div class="main-content">
+            <div class="json-section">
+                <div class="section-title">Input JSON</div>
+                <textarea id="inputJson">{
   "users": [
     {
       "id": 1,
@@ -128,10 +243,6 @@
           "state": "NY",
           "zip": "10001"
         }
-      },
-      "subscription": {
-        "plan": "premium",
-        "status": "active"
       }
     },
     {
@@ -150,153 +261,52 @@
           "state": "CA",
           "zip": "90001"
         }
-      },
-      "subscription": {
-        "plan": "basic",
-        "status": "inactive"
       }
     }
   ]
 }</textarea>
-                        <div class="mt-3">
-                            <small>Try these examples: 
-                                <span class="example-btn" data-example="flatten">Flatten</span> | 
-                                <span class="example-btn" data-example="rename">Rename Keys</span> | 
-                                <span class="example-btn" data-example="restructure">Restructure</span>
-                            </small>
-                        </div>
+            </div>
+
+            <div class="workflow-section">
+                <div class="section-title">Workflow Builder</div>
+                <div class="workflow-area">
+                    <div class="node-palette">
+                        <div class="node-item" draggable="true" data-type="rename"><i class="fas fa-tag"></i> Rename Key</div>
+                        <div class="node-item" draggable="true" data-type="extract"><i class="fas fa-cut"></i> Extract Field</div>
+                        <div class="node-item" draggable="true" data-type="flatten"><i class="fas fa-layer-group"></i> Flatten</div>
+                        <div class="node-item" draggable="true" data-type="filter"><i class="fas fa-filter"></i> Filter</div>
+                        <div class="node-item" draggable="true" data-type="sort"><i class="fas fa-sort"></i> Sort</div>
+                        <div class="node-item" draggable="true" data-type="group"><i class="fas fa-object-group"></i> Group By</div>
+                    </div>
+                    <div class="canvas" id="canvas">
+                        <div class="empty-canvas">Drag nodes here to build your transformation workflow</div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-lg-6 mb-4">
-                <div class="card h-100">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Transformed JSON</h5>
-                        <button class="btn btn-sm btn-success" id="copyBtn">
-                            <i class="fas fa-copy me-1"></i> Copy
-                        </button>
-                    </div>
-                    <div class="card-body position-relative">
-                        <pre id="outputJson">{
+            <div class="result-section">
+                <div class="section-title">Transformed JSON</div>
+                <div class="result-box" id="outputJson">{
   "result": "Your transformed JSON will appear here"
-}</pre>
-                    </div>
-                </div>
+}</div>
             </div>
         </div>
 
-        <div class="row mb-4">
-            <div class="col">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Transformation Options</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="transform-box">
-                                    <h6>Key Transformation</h6>
-                                    <div class="mb-3">
-                                        <label class="form-label">Change Key Names (comma-separated oldKey:newKey)</label>
-                                        <input type="text" class="form-control" id="keyMapping" placeholder="first_name:firstName, personal_info:info">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Key Prefix</label>
-                                        <input type="text" class="form-control" id="keyPrefix" placeholder="user_">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Key Suffix</label>
-                                        <input type="text" class="form-control" id="keySuffix" placeholder="_data">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="transform-box">
-                                    <h6>Structure Transformation</h6>
-                                    <div class="mb-3">
-                                        <label class="form-label">Flatten JSON</label>
-                                        <select class="form-select" id="flattenOption">
-                                            <option value="none">No Flattening</option>
-                                            <option value="partial">Partial (1 level)</option>
-                                            <option value="full">Full Flattening</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Wrap in Object</label>
-                                        <input type="text" class="form-control" id="wrapKey" placeholder="data">
-                                    </div>
-                                    <div class="mb-3 form-check">
-                                        <input type="checkbox" class="form-check-input" id="removeNulls">
-                                        <label class="form-check-label">Remove Null/Empty Values</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
-                            <button class="btn btn-primary" id="transformBtn">
-                                <i class="fas fa-sync-alt me-2"></i> Transform JSON
-                            </button>
-                            <button class="btn btn-secondary" id="resetBtn">
-                                <i class="fas fa-redo me-2"></i> Reset
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="controls">
+            <button class="btn btn-primary" id="processBtn">
+                <i class="fas fa-play-circle"></i> Process JSON
+            </button>
+            <button class="btn btn-success" id="copyBtn">
+                <i class="fas fa-copy"></i> Copy Result
+            </button>
+            <button class="btn btn-secondary" id="resetBtn">
+                <i class="fas fa-redo"></i> Reset
+            </button>
         </div>
 
-        <div class="row">
-            <div class="col-md-4 mb-4">
-                <div class="stat-box">
-                    <div class="stat-value" id="inputSize">1.2</div>
-                    <div class="stat-label">Input Size (KB)</div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="stat-box">
-                    <div class="stat-value" id="outputSize">0.8</div>
-                    <div class="stat-label">Output Size (KB)</div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="stat-box">
-                    <div class="stat-value" id="keyCount">14</div>
-                    <div class="stat-label">Keys Processed</div>
-                </div>
-            </div>
+        <div class="footer">
+            <p>JSON Restructuring Tool &copy; 2023 | Drag and drop nodes to transform your data</p>
         </div>
-
-        <div class="row">
-            <div class="col">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Transformation Examples</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="transformation-item">
-                            <h6>Flatten Nested Objects</h6>
-                            <p class="mb-1">Converts nested objects into a flat structure with combined keys</p>
-                            <small>Example: <span class="highlight">{"user": {"name": "John"}}</span> becomes <span class="highlight">{"user_name": "John"}</span></small>
-                        </div>
-                        <div class="transformation-item">
-                            <h6>Rename Keys</h6>
-                            <p class="mb-1">Change specific key names using the mapping format</p>
-                            <small>Example: <span class="highlight">first_name:firstName, personal_info:info</span></small>
-                        </div>
-                        <div class="transformation-item">
-                            <h6>Add Prefix/Suffix</h6>
-                            <p class="mb-1">Add a prefix or suffix to all keys in the JSON</p>
-                            <small>Example: Prefix <span class="highlight">user_</span> creates keys like <span class="highlight">user_name</span></small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <footer class="text-center text-white mt-5">
-            <p>JSON Structure Transformer &copy; 2023</p>
-        </footer>
     </div>
 
     <script>
@@ -304,192 +314,247 @@
             // Elements
             const inputJson = document.getElementById('inputJson');
             const outputJson = document.getElementById('outputJson');
+            const processBtn = document.getElementById('processBtn');
             const copyBtn = document.getElementById('copyBtn');
-            const transformBtn = document.getElementById('transformBtn');
             const resetBtn = document.getElementById('resetBtn');
-            const keyMapping = document.getElementById('keyMapping');
-            const keyPrefix = document.getElementById('keyPrefix');
-            const keySuffix = document.getElementById('keySuffix');
-            const flattenOption = document.getElementById('flattenOption');
-            const wrapKey = document.getElementById('wrapKey');
-            const removeNulls = document.getElementById('removeNulls');
-            const inputSize = document.getElementById('inputSize');
-            const outputSize = document.getElementById('outputSize');
-            const keyCount = document.getElementById('keyCount');
-            const exampleBtns = document.querySelectorAll('.example-btn');
-
-            // Initialize with sample transformation
-            transformJSON();
-
-            // Event listeners
-            transformBtn.addEventListener('click', transformJSON);
-            copyBtn.addEventListener('click', copyOutput);
-            resetBtn.addEventListener('click', resetForm);
-            inputJson.addEventListener('input', updateStats);
+            const canvas = document.getElementById('canvas');
+            const nodeItems = document.querySelectorAll('.node-item');
             
-            exampleBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    loadExample(this.dataset.example);
+            // Store nodes
+            let nodes = [];
+            let nodeCount = 0;
+            
+            // Initialize
+            highlightJson(outputJson, {result: "Your transformed JSON will appear here"});
+            
+            // Event listeners for node items
+            nodeItems.forEach(item => {
+                item.addEventListener('dragstart', function(e) {
+                    e.dataTransfer.setData('text/plain', this.dataset.type);
                 });
             });
-
-            // Functions
-            function transformJSON() {
+            
+            // Event listener for canvas
+            canvas.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#5a67d8';
+            });
+            
+            canvas.addEventListener('dragleave', function() {
+                this.style.borderColor = '#ccc';
+            });
+            
+            canvas.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#ccc';
+                
+                // Remove empty message if it exists
+                const emptyMsg = this.querySelector('.empty-canvas');
+                if (emptyMsg) emptyMsg.remove();
+                
+                const nodeType = e.dataTransfer.getData('text/plain');
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                addNode(nodeType, x, y);
+            });
+            
+            // Process button
+            processBtn.addEventListener('click', processJson);
+            
+            // Copy button
+            copyBtn.addEventListener('click', function() {
+                const text = outputJson.textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    // Show success feedback
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy Result';
+                    }, 2000);
+                });
+            });
+            
+            // Reset button
+            resetBtn.addEventListener('click', function() {
+                nodes = [];
+                nodeCount = 0;
+                canvas.innerHTML = '<div class="empty-canvas">Drag nodes here to build your transformation workflow</div>';
+                outputJson.textContent = '{}';
+                inputJson.value = '';
+            });
+            
+            // Add node to canvas
+            function addNode(type, x, y) {
+                nodeCount++;
+                const id = `node-${nodeCount}`;
+                
+                let title = '';
+                let content = '';
+                
+                switch(type) {
+                    case 'rename':
+                        title = 'Rename Key';
+                        content = 'Rename a field in the JSON';
+                        break;
+                    case 'extract':
+                        title = 'Extract Field';
+                        content = 'Extract a specific field';
+                        break;
+                    case 'flatten':
+                        title = 'Flatten JSON';
+                        content = 'Flatten nested objects';
+                        break;
+                    case 'filter':
+                        title = 'Filter Data';
+                        content = 'Filter based on conditions';
+                        break;
+                    case 'sort':
+                        title = 'Sort Data';
+                        content = 'Sort by specific field';
+                        break;
+                    case 'group':
+                        title = 'Group By';
+                        content = 'Group data by field';
+                        break;
+                }
+                
+                const nodeEl = document.createElement('div');
+                nodeEl.className = 'node';
+                nodeEl.id = id;
+                nodeEl.style.position = 'absolute';
+                nodeEl.style.left = `${x}px`;
+                nodeEl.style.top = `${y}px`;
+                nodeEl.innerHTML = `
+                    <div class="node-header">
+                        <span>${title}</span>
+                        <i class="fas fa-times" style="cursor:pointer"></i>
+                    </div>
+                    <div class="node-content">${content}</div>
+                `;
+                
+                // Add delete functionality
+                nodeEl.querySelector('.fa-times').addEventListener('click', function() {
+                    nodeEl.remove();
+                    nodes = nodes.filter(node => node.id !== id);
+                    
+                    if (nodes.length === 0) {
+                        canvas.innerHTML = '<div class="empty-canvas">Drag nodes here to build your transformation workflow</div>';
+                    }
+                });
+                
+                // Make node draggable
+                makeDraggable(nodeEl);
+                
+                canvas.appendChild(nodeEl);
+                
+                // Store node data
+                nodes.push({
+                    id: id,
+                    type: type,
+                    x: x,
+                    y: y
+                });
+                
+                // Add connection line if there are previous nodes
+                if (nodes.length > 1) {
+                    const connection = document.createElement('div');
+                    connection.className = 'connection-line';
+                    canvas.appendChild(connection);
+                }
+            }
+            
+            // Make nodes draggable
+            function makeDraggable(element) {
+                let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+                
+                element.onmousedown = dragMouseDown;
+                
+                function dragMouseDown(e) {
+                    e = e || window.event;
+                    e.preventDefault();
+                    // Get the mouse cursor position at startup
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    document.onmouseup = closeDragElement;
+                    // Call a function whenever the cursor moves
+                    document.onmousemove = elementDrag;
+                }
+                
+                function elementDrag(e) {
+                    e = e || window.event;
+                    e.preventDefault();
+                    // Calculate the new cursor position
+                    pos1 = pos3 - e.clientX;
+                    pos2 = pos4 - e.clientY;
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    // Set the element's new position
+                    element.style.top = (element.offsetTop - pos2) + "px";
+                    element.style.left = (element.offsetLeft - pos1) + "px";
+                }
+                
+                function closeDragElement() {
+                    // Stop moving when mouse button is released
+                    document.onmouseup = null;
+                    document.onmousemove = null;
+                }
+            }
+            
+            // Process JSON based on nodes
+            function processJson() {
                 try {
-                    const jsonData = JSON.parse(inputJson.value);
-                    let transformed = JSON.parse(JSON.stringify(jsonData)); // Deep clone
+                    const inputData = JSON.parse(inputJson.value);
+                    let result = JSON.parse(JSON.stringify(inputData)); // Deep clone
                     
-                    // Apply transformations based on options
-                    if (keyMapping.value) {
-                        transformed = renameKeys(transformed, keyMapping.value);
+                    // Apply transformations based on nodes
+                    for (const node of nodes) {
+                        switch(node.type) {
+                            case 'rename':
+                                result = renameKeys(result, {
+                                    'personal_info': 'info',
+                                    'first_name': 'firstName',
+                                    'last_name': 'lastName'
+                                });
+                                break;
+                            case 'extract':
+                                result = extractFields(result, ['id', 'firstName', 'lastName', 'email']);
+                                break;
+                            case 'flatten':
+                                result = flattenJson(result);
+                                break;
+                            case 'filter':
+                                result = filterData(result, item => item.id === 1);
+                                break;
+                            case 'sort':
+                                result = sortData(result, 'firstName');
+                                break;
+                            case 'group':
+                                result = groupBy(result, 'state');
+                                break;
+                        }
                     }
                     
-                    if (keyPrefix.value) {
-                        transformed = addKeyPrefix(transformed, keyPrefix.value);
-                    }
-                    
-                    if (keySuffix.value) {
-                        transformed = addKeySuffix(transformed, keySuffix.value);
-                    }
-                    
-                    if (flattenOption.value !== 'none') {
-                        transformed = flattenJSON(transformed, flattenOption.value);
-                    }
-                    
-                    if (wrapKey.value) {
-                        transformed = wrapJSON(transformed, wrapKey.value);
-                    }
-                    
-                    if (removeNulls.checked) {
-                        transformed = removeNullValues(transformed);
-                    }
-                    
-                    // Display the transformed JSON
-                    outputJson.textContent = JSON.stringify(transformed, null, 2);
-                    updateStats();
-                    
-                    // Syntax highlighting
-                    highlightJSON();
+                    // Display result
+                    highlightJson(outputJson, result);
                     
                 } catch (error) {
                     outputJson.textContent = `Error: ${error.message}`;
                 }
             }
             
-            function renameKeys(obj, mapping) {
-                const mappings = {};
-                mapping.split(',').forEach(pair => {
-                    const [oldKey, newKey] = pair.split(':').map(k => k.trim());
-                    if (oldKey && newKey) {
-                        mappings[oldKey] = newKey;
-                    }
-                });
-                
-                return processObject(obj);
-                
-                function processObject(obj) {
-                    if (Array.isArray(obj)) {
-                        return obj.map(item => processObject(item));
-                    } else if (typeof obj === 'object' && obj !== null) {
-                        const newObj = {};
-                        for (const [key, value] of Object.entries(obj)) {
-                            const newKey = mappings[key] || key;
-                            
-                            if (typeof value === 'object' && value !== null) {
-                                newObj[newKey] = processObject(value);
-                            } else {
-                                newObj[newKey] = value;
-                            }
-                        }
-                        return newObj;
-                    }
-                    return obj;
-                }
-            }
-            
-            function addKeyPrefix(obj, prefix) {
-                return processObject(obj);
-                
-                function processObject(obj) {
-                    if (Array.isArray(obj)) {
-                        return obj.map(item => processObject(item));
-                    } else if (typeof obj === 'object' && obj !== null) {
-                        const newObj = {};
-                        for (const [key, value] of Object.entries(obj)) {
-                            const newKey = prefix + key;
-                            
-                            if (typeof value === 'object' && value !== null) {
-                                newObj[newKey] = processObject(value);
-                            } else {
-                                newObj[newKey] = value;
-                            }
-                        }
-                        return newObj;
-                    }
-                    return obj;
-                }
-            }
-            
-            function addKeySuffix(obj, suffix) {
-                return processObject(obj);
-                
-                function processObject(obj) {
-                    if (Array.isArray(obj)) {
-                        return obj.map(item => processObject(item));
-                    } else if (typeof obj === 'object' && obj !== null) {
-                        const newObj = {};
-                        for (const [key, value] of Object.entries(obj)) {
-                            const newKey = key + suffix;
-                            
-                            if (typeof value === 'object' && value !== null) {
-                                newObj[newKey] = processObject(value);
-                            } else {
-                                newObj[newKey] = value;
-                            }
-                        }
-                        return newObj;
-                    }
-                    return obj;
-                }
-            }
-            
-            function flattenJSON(obj, level) {
-                const result = {};
-                
-                function flatten(current, path, depth) {
-                    if (depth > (level === 'full' ? 100 : 1)) {
-                        result[path] = current;
-                        return;
-                    }
-                    
-                    if (Array.isArray(current)) {
-                        result[path] = current;
-                    } else if (typeof current === 'object' && current !== null) {
-                        for (const [key, value] of Object.entries(current)) {
-                            const newPath = path ? `${path}_${key}` : key;
-                            flatten(value, newPath, depth + 1);
-                        }
-                    } else {
-                        result[path] = current;
-                    }
-                }
-                
-                flatten(obj, '', 0);
-                return result;
-            }
-            
-            function wrapJSON(obj, key) {
-                return { [key]: obj };
-            }
-            
-            function removeNullValues(obj) {
+            // Transformation functions
+            function renameKeys(obj, keyMap) {
                 if (Array.isArray(obj)) {
-                    return obj.map(item => removeNullValues(item)).filter(item => item != null);
+                    return obj.map(item => renameKeys(item, keyMap));
                 } else if (typeof obj === 'object' && obj !== null) {
                     const newObj = {};
                     for (const [key, value] of Object.entries(obj)) {
-                        if (value !== null && value !== '') {
-                            newObj[key] = removeNullValues(value);
+                        const newKey = keyMap[key] || key;
+                        if (typeof value === 'object' && value !== null) {
+                            newObj[newKey] = renameKeys(value, keyMap);
+                        } else {
+                            newObj[newKey] = value;
                         }
                     }
                     return newObj;
@@ -497,59 +562,69 @@
                 return obj;
             }
             
-            function copyOutput() {
-                const text = outputJson.textContent;
-                navigator.clipboard.writeText(text).then(() => {
-                    // Show success feedback
-                    copyBtn.innerHTML = '<i class="fas fa-check me-1"></i> Copied!';
-                    setTimeout(() => {
-                        copyBtn.innerHTML = '<i class="fas fa-copy me-1"></i> Copy';
-                    }, 2000);
+            function extractFields(obj, fields) {
+                if (Array.isArray(obj)) {
+                    return obj.map(item => extractFields(item, fields));
+                } else if (typeof obj === 'object' && obj !== null) {
+                    const newObj = {};
+                    for (const field of fields) {
+                        if (obj.hasOwnProperty(field)) {
+                            newObj[field] = obj[field];
+                        }
+                    }
+                    return newObj;
+                }
+                return obj;
+            }
+            
+            function flattenJson(obj, parentKey = '', result = {}) {
+                if (Array.isArray(obj)) {
+                    for (let i = 0; i < obj.length; i++) {
+                        flattenJson(obj[i], `${parentKey}[${i}]`, result);
+                    }
+                } else if (typeof obj === 'object' && obj !== null) {
+                    for (const [key, value] of Object.entries(obj)) {
+                        const newKey = parentKey ? `${parentKey}.${key}` : key;
+                        if (typeof value === 'object' && value !== null) {
+                            flattenJson(value, newKey, result);
+                        } else {
+                            result[newKey] = value;
+                        }
+                    }
+                }
+                return result;
+            }
+            
+            function filterData(arr, condition) {
+                if (!Array.isArray(arr)) return arr;
+                return arr.filter(condition);
+            }
+            
+            function sortData(arr, field) {
+                if (!Array.isArray(arr)) return arr;
+                return [...arr].sort((a, b) => {
+                    if (a[field] < b[field]) return -1;
+                    if (a[field] > b[field]) return 1;
+                    return 0;
                 });
             }
             
-            function resetForm() {
-                inputJson.value = '';
-                outputJson.textContent = '{}';
-                keyMapping.value = '';
-                keyPrefix.value = '';
-                keySuffix.value = '';
-                flattenOption.value = 'none';
-                wrapKey.value = '';
-                removeNulls.checked = false;
-                updateStats();
+            function groupBy(arr, field) {
+                if (!Array.isArray(arr)) return arr;
+                
+                return arr.reduce((groups, item) => {
+                    const key = item[field];
+                    if (!groups[key]) {
+                        groups[key] = [];
+                    }
+                    groups[key].push(item);
+                    return groups;
+                }, {});
             }
             
-            function updateStats() {
-                // Update input size
-                const inputText = inputJson.value;
-                inputSize.textContent = (new Blob([inputText]).size / 1024).toFixed(1);
-                
-                // Update output size
-                const outputText = outputJson.textContent;
-                outputSize.textContent = (new Blob([outputText]).size / 1024).toFixed(1);
-                
-                // Update key count (approximate)
-                try {
-                    const jsonObj = JSON.parse(inputText);
-                    keyCount.textContent = countKeys(jsonObj);
-                } catch {
-                    keyCount.textContent = '0';
-                }
-            }
-            
-            function countKeys(obj) {
-                if (typeof obj !== 'object' || obj === null) return 0;
-                
-                let count = Object.keys(obj).length;
-                for (const value of Object.values(obj)) {
-                    count += countKeys(value);
-                }
-                return count;
-            }
-            
-            function highlightJSON() {
-                const jsonText = outputJson.textContent;
+            // Syntax highlighting for JSON
+            function highlightJson(element, data) {
+                const jsonText = JSON.stringify(data, null, 2);
                 // Simple JSON highlighting
                 const highlighted = jsonText
                     .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, 
@@ -569,62 +644,8 @@
                         return '<span class="' + cls + '">' + match + '</span>';
                     });
                 
-                outputJson.innerHTML = highlighted;
+                element.innerHTML = highlighted;
             }
-            
-            function loadExample(type) {
-                let input = '';
-                let mapping = '';
-                
-                switch(type) {
-                    case 'flatten':
-                        input = `{
-  "users": [
-    {
-      "id": 1,
-      "personal_info": {
-        "first_name": "John",
-        "last_name": "Doe"
-      }
-    }
-  ]
-}`;
-                        flattenOption.value = 'full';
-                        break;
-                        
-                    case 'rename':
-                        input = `{
-  "first_name": "John",
-  "last_name": "Doe",
-  "email_address": "john.doe@example.com"
-}`;
-                        mapping = 'first_name:firstName, last_name:lastName, email_address:email';
-                        keyMapping.value = mapping;
-                        break;
-                        
-                    case 'restructure':
-                        input = `{
-  "id": 1,
-  "name": "John Doe",
-  "details": {
-    "age": 30,
-    "city": "New York"
-  }
-}`;
-                        wrapKey.value = 'user';
-                        keyPrefix.value = 'user_';
-                        break;
-                }
-                
-                if (input) {
-                    inputJson.value = input;
-                    transformJSON();
-                }
-            }
-            
-            // Initial stats update
-            updateStats();
-            highlightJSON();
         });
     </script>
 </body>
