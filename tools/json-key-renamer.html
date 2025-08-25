@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Key Renamer</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: #5a67d8;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .json-input, .json-output {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #5a67d8;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 200px;
+            font-family: monospace;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #5a67d8;
+        }
+        
+        .key-mappings {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .mapping-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr 50px;
+            gap: 10px;
+            font-weight: bold;
+        }
+        
+        .mapping-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 50px;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        input {
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            background: white;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #5a67d8;
+        }
+        
+        button {
+            background: #5a67d8;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #4c51bf;
+        }
+        
+        .btn-remove {
+            background: #e53e3e;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-remove:hover {
+            background: #c53030;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .output {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 15px;
+            min-height: 200px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+        
+        .error {
+            color: #e53e3e;
+            font-weight: 500;
+            margin-top: 10px;
+            padding: 10px;
+            background: #fed7d7;
+            border-radius: 4px;
+            border-left: 4px solid #e53e3e;
+        }
+        
+        .success {
+            color: #38a169;
+            font-weight: 500;
+            margin-top: 10px;
+            padding: 10px;
+            background: #f0fff4;
+            border-radius: 4px;
+            border-left: 4px solid #38a169;
+        }
+        
+        .examples {
+            grid-column: 1 / -1;
+            background: #f0f7ff;
+            border-left: 4px solid #5a67d8;
+            padding: 15px;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .examples h3 {
+            margin-bottom: 10px;
+            color: #5a67d8;
+        }
+        
+        .example-item {
+            margin-bottom: 15px;
+        }
+        
+        .example-item h4 {
+            margin-bottom: 5px;
+            color: #5a67d8;
+        }
+        
+        .example-code {
+            background: #e8f1ff;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 14px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .stats {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-box {
+            flex: 1;
+            min-width: 200px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #5a67d8;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>JSON Key Renamer</h1>
+            <p class="subtitle">Rename keys in your JSON objects with ease</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="json-input">
+                <h2>Input JSON</h2>
+                <textarea id="jsonInput" placeholder="Enter your JSON here...">{
+  "firstName": "John",
+  "lastName": "Doe",
+  "age": 30,
+  "emailAddress": "john.doe@example.com",
+  "homeAddress": {
+    "street": "123 Main St",
+    "city": "New York",
+    "state": "NY",
+    "zipCode": "10001"
+  },
+  "phoneNumbers": [
+    {
+      "type": "home",
+      "number": "212-555-1234"
+    },
+    {
+      "type": "work",
+      "number": "646-555-5678"
+    }
+  ]
+}</textarea>
+            </div>
+            
+            <div class="json-output">
+                <h2>Transformed JSON</h2>
+                <div id="output" class="output">{
+  "first_name": "John",
+  "last_name": "Doe",
+  "age": 30,
+  "email": "john.doe@example.com",
+  "address": {
+    "street": "123 Main St",
+    "city": "New York",
+    "state": "NY",
+    "postal_code": "10001"
+  },
+  "phones": [
+    {
+      "type": "home",
+      "number": "212-555-1234"
+    },
+    {
+      "type": "work",
+      "number": "646-555-5678"
+    }
+  ]
+}</div>
+            </div>
+            
+            <div class="key-mappings">
+                <h2>Key Mappings</h2>
+                
+                <div class="mapping-header">
+                    <div>Original Key</div>
+                    <div>New Key</div>
+                    <div></div>
+                </div>
+                
+                <div id="mappingContainer">
+                    <div class="mapping-row">
+                        <input type="text" class="original-key" value="firstName" placeholder="Original key">
+                        <input type="text" class="new-key" value="first_name" placeholder="New key">
+                        <button class="btn-remove">×</button>
+                    </div>
+                    <div class="mapping-row">
+                        <input type="text" class="original-key" value="lastName" placeholder="Original key">
+                        <input type="text" class="new-key" value="last_name" placeholder="New key">
+                        <button class="btn-remove">×</button>
+                    </div>
+                    <div class="mapping-row">
+                        <input type="text" class="original-key" value="emailAddress" placeholder="Original key">
+                        <input type="text" class="new-key" value="email" placeholder="New key">
+                        <button class="btn-remove">×</button>
+                    </div>
+                    <div class="mapping-row">
+                        <input type="text" class="original-key" value="homeAddress" placeholder="Original key">
+                        <input type="text" class="new-key" value="address" placeholder="New key">
+                        <button class="btn-remove">×</button>
+                    </div>
+                    <div class="mapping-row">
+                        <input type="text" class="original-key" value="zipCode" placeholder="Original key">
+                        <input type="text" class="new-key" value="postal_code" placeholder="New key">
+                        <button class="btn-remove">×</button>
+                    </div>
+                    <div class="mapping-row">
+                        <input type="text" class="original-key" value="phoneNumbers" placeholder="Original key">
+                        <input type="text" class="new-key" value="phones" placeholder="New key">
+                        <button class="btn-remove">×</button>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button id="addMapping">Add Mapping</button>
+                    <button id="transformBtn">Transform JSON</button>
+                    <button id="clearBtn">Clear All</button>
+                </div>
+                
+                <div id="message"></div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="keyCount">6</div>
+                    <div class="stat-label">Key Mappings</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="transformCount">11</div>
+                    <div class="stat-label">Keys Transformed</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="jsonSize">0.5</div>
+                    <div class="stat-label">JSON Size (KB)</div>
+                </div>
+            </div>
+            
+            <div class="examples">
+                <h3>How It Works</h3>
+                
+                <div class="example-item">
+                    <h4>Key Mapping</h4>
+                    <div class="example-code">Specify original key names and what you want to rename them to.</div>
+                </div>
+                
+                <div class="example-item">
+                    <h4>Nested Objects</h4>
+                    <div class="example-code">The tool automatically processes nested objects and arrays.</div>
+                </div>
+                
+                <div class="example-item">
+                    <h4>Non-Matching Keys</h4>
+                    <div class="example-code">Keys without mapping rules remain unchanged in the output.</div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Created with JavaScript • JSON Key Renamer Tool</p>
+        </footer>
+    </div>
+
+    <script>
+        class JSONKeyRenamer {
+            constructor() {
+                this.jsonInput = document.getElementById('jsonInput');
+                this.outputDiv = document.getElementById('output');
+                this.mappingContainer = document.getElementById('mappingContainer');
+                this.addMappingBtn = document.getElementById('addMapping');
+                this.transformBtn = document.getElementById('transformBtn');
+                this.clearBtn = document.getElementById('clearBtn');
+                this.messageDiv = document.getElementById('message');
+                this.keyCountDiv = document.getElementById('keyCount');
+                this.transformCountDiv = document.getElementById('transformCount');
+                this.jsonSizeDiv = document.getElementById('jsonSize');
+                
+                this.addMappingBtn.addEventListener('click', () => this.addMappingRow());
+                this.transformBtn.addEventListener('click', () => this.transformJSON());
+                this.clearBtn.addEventListener('click', () => this.clearAll());
+                
+                // Add event listeners to existing remove buttons
+                this.mappingContainer.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('btn-remove')) {
+                        e.target.closest('.mapping-row').remove();
+                        this.updateKeyCount();
+                    }
+                });
+                
+                // Add input event to update counts
+                this.jsonInput.addEventListener('input', () => this.updateStats());
+                
+                // Initialize with example data
+                this.updateKeyCount();
+                this.transformJSON();
+            }
+            
+            addMappingRow() {
+                const row = document.createElement('div');
+                row.className = 'mapping-row';
+                row.innerHTML = `
+                    <input type="text" class="original-key" placeholder="Original key">
+                    <input type="text" class="new-key" placeholder="New key">
+                    <button class="btn-remove">×</button>
+                `;
+                this.mappingContainer.appendChild(row);
+                this.updateKeyCount();
+            }
+            
+            updateKeyCount() {
+                this.keyCountDiv.textContent = this.mappingContainer.querySelectorAll('.mapping-row').length;
+            }
+            
+            transformJSON() {
+                try {
+                    const inputJSON = JSON.parse(this.jsonInput.value);
+                    const mappings = this.getMappings();
+                    
+                    // Transform the JSON
+                    const result = this.renameKeys(inputJSON, mappings);
+                    const transformCount = this.countTransformations(inputJSON, mappings);
+                    
+                    // Display result
+                    this.highlightJSON(this.outputDiv, result);
+                    this.transformCountDiv.textContent = transformCount;
+                    this.updateStats();
+                    this.showMessage(`Successfully transformed ${transformCount} keys`, 'success');
+                } catch (error) {
+                    this.showMessage('Error: ' + error.message, 'error');
+                    this.outputDiv.textContent = 'Error: ' + error.message;
+                }
+            }
+            
+            getMappings() {
+                const mappings = {};
+                const rows = this.mappingContainer.querySelectorAll('.mapping-row');
+                
+                rows.forEach(row => {
+                    const originalKey = row.querySelector('.original-key').value.trim();
+                    const newKey = row.querySelector('.new-key').value.trim();
+                    
+                    if (originalKey && newKey) {
+                        mappings[originalKey] = newKey;
+                    }
+                });
+                
+                return mappings;
+            }
+            
+            renameKeys(obj, mappings) {
+                if (Array.isArray(obj)) {
+                    return obj.map(item => this.renameKeys(item, mappings));
+                } else if (typeof obj === 'object' && obj !== null) {
+                    const newObj = {};
+                    
+                    for (const [key, value] of Object.entries(obj)) {
+                        const newKey = mappings[key] || key;
+                        
+                        if (typeof value === 'object' && value !== null) {
+                            newObj[newKey] = this.renameKeys(value, mappings);
+                        } else {
+                            newObj[newKey] = value;
+                        }
+                    }
+                    
+                    return newObj;
+                }
+                
+                return obj;
+            }
+            
+            countTransformations(obj, mappings) {
+                let count = 0;
+                
+                if (Array.isArray(obj)) {
+                    obj.forEach(item => {
+                        count += this.countTransformations(item, mappings);
+                    });
+                } else if (typeof obj === 'object' && obj !== null) {
+                    for (const key of Object.keys(obj)) {
+                        if (mappings[key]) {
+                            count++;
+                        }
+                        
+                        if (typeof obj[key] === 'object' && obj[key] !== null) {
+                            count += this.countTransformations(obj[key], mappings);
+                        }
+                    }
+                }
+                
+                return count;
+            }
+            
+            updateStats() {
+                try {
+                    const jsonStr = this.jsonInput.value;
+                    const size = new Blob([jsonStr]).size / 1024;
+                    this.jsonSizeDiv.textContent = size.toFixed(1);
+                } catch {
+                    this.jsonSizeDiv.textContent = '0.0';
+                }
+            }
+            
+            highlightJSON(element, data) {
+                const jsonText = JSON.stringify(data, null, 2);
+                // Simple JSON highlighting
+                const highlighted = jsonText
+                    .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, 
+                    function(match) {
+                        let cls = 'number';
+                        if (/^"/.test(match)) {
+                            if (/:$/.test(match)) {
+                                cls = 'key';
+                            } else {
+                                cls = 'string';
+                            }
+                        } else if (/true|false/.test(match)) {
+                            cls = 'boolean';
+                        } else if (/null/.test(match)) {
+                            cls = 'null';
+                        }
+                        return '<span class="' + cls + '">' + match + '</span>';
+                    });
+                
+                element.innerHTML = highlighted;
+            }
+            
+            showMessage(message, type) {
+                this.messageDiv.textContent = message;
+                this.messageDiv.className = type;
+            }
+            
+            clearAll() {
+                this.jsonInput.value = '';
+                this.outputDiv.textContent = '';
+                this.messageDiv.textContent = '';
+                this.messageDiv.className = '';
+                this.mappingContainer.innerHTML = '';
+                this.keyCountDiv.textContent = '0';
+                this.transformCountDiv.textContent = '0';
+                this.jsonSizeDiv.textContent = '0.0';
+                this.addMappingRow();
+            }
+        }
+
+        // Initialize the application when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const app = new JSONKeyRenamer();
+            
+            // Add CSS for JSON highlighting
+            const style = document.createElement('style');
+            style.textContent = `
+                .string { color: #d14; }
+                .number { color: #099; }
+                .boolean { color: #0086b3; }
+                .null { color: #0086b3; }
+                .key { color: #458; font-weight: bold; }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>
