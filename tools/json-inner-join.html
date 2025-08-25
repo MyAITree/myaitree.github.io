@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON ID-Based Merger (Inner Join)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 50%, #fdbb2d 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .json-input, .json-output {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 200px;
+            font-family: monospace;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .controls {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            align-items: center;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+        
+        input, select, button {
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            background: white;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+            min-width: 150px;
+        }
+        
+        button:hover {
+            background: #2980b9;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .output {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 15px;
+            min-height: 200px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+        
+        .error {
+            color: #d9534f;
+            font-weight: 500;
+            margin-top: 10px;
+            padding: 10px;
+            background: #ffebee;
+            border-radius: 4px;
+            border-left: 4px solid #d9534f;
+        }
+        
+        .success {
+            color: #28a745;
+            font-weight: 500;
+            margin-top: 10px;
+            padding: 10px;
+            background: #e8f5e9;
+            border-radius: 4px;
+            border-left: 4px solid #28a745;
+        }
+        
+        .examples {
+            grid-column: 1 / -1;
+            background: #f0f7ff;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .examples h3 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .example-item {
+            margin-bottom: 15px;
+        }
+        
+        .example-item h4 {
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+        
+        .example-code {
+            background: #e8f1ff;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 14px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .stats {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-box {
+            flex: 1;
+            min-width: 200px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>JSON ID-Based Merger (Inner Join)</h1>
+            <p class="subtitle">Merge two JSON arrays based on a common key field</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="json-input">
+                <h2>JSON 1 (Left Dataset)</h2>
+                <textarea id="json1" placeholder="Enter first JSON array...">[
+  {"id": 1, "name": "John", "age": 30, "city": "New York"},
+  {"id": 2, "name": "Jane", "age": 25, "city": "Chicago"},
+  {"id": 3, "name": "Bob", "age": 40, "city": "Los Angeles"}
+]</textarea>
+            </div>
+            
+            <div class="json-input">
+                <h2>JSON 2 (Right Dataset)</h2>
+                <textarea id="json2" placeholder="Enter second JSON array...">[
+  {"id": 1, "email": "john@example.com", "department": "Engineering"},
+  {"id": 2, "email": "jane@example.com", "department": "Marketing"},
+  {"id": 4, "email": "alice@example.com", "department": "Sales"}
+]</textarea>
+            </div>
+            
+            <div class="controls">
+                <div class="control-group">
+                    <label for="keyField">Merge Key Field:</label>
+                    <input type="text" id="keyField" value="id" placeholder="Enter key field name...">
+                </div>
+                
+                <div class="control-group">
+                    <label for="joinType">Join Type:</label>
+                    <select id="joinType">
+                        <option value="inner">Inner Join (default)</option>
+                    </select>
+                </div>
+                
+                <div class="button-group">
+                    <button id="mergeBtn">Merge JSON</button>
+                    <button id="clearBtn">Clear All</button>
+                </div>
+                
+                <div id="message"></div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="leftCount">3</div>
+                    <div class="stat-label">Left Dataset Items</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="rightCount">3</div>
+                    <div class="stat-label">Right Dataset Items</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="resultCount">2</div>
+                    <div class="stat-label">Merged Results</div>
+                </div>
+            </div>
+            
+            <div class="json-output">
+                <h2>Merged Result (Inner Join)</h2>
+                <div id="output" class="output">{
+  "result": [
+    {
+      "id": 1,
+      "name": "John",
+      "age": 30,
+      "city": "New York",
+      "email": "john@example.com",
+      "department": "Engineering"
+    },
+    {
+      "id": 2,
+      "name": "Jane",
+      "age": 25,
+      "city": "Chicago",
+      "email": "jane@example.com",
+      "department": "Marketing"
+    }
+  ]
+}</div>
+            </div>
+            
+            <div class="examples">
+                <h3>How It Works</h3>
+                
+                <div class="example-item">
+                    <h4>Inner Join</h4>
+                    <div class="example-code">Only objects with matching key values in both datasets are included in the result.</div>
+                </div>
+                
+                <div class="example-item">
+                    <h4>Key Field</h4>
+                    <div class="example-code">The field name that exists in both datasets to use for matching (e.g., "id", "email", "name")</div>
+                </div>
+                
+                <div class="example-item">
+                    <h4>Result</h4>
+                    <div class="example-code">The merged objects contain all properties from both datasets for the matching keys.</div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Created with JavaScript • JSON ID-Based Merger Tool</p>
+        </footer>
+    </div>
+
+    <script>
+        class JSONMerger {
+            constructor() {
+                this.json1Textarea = document.getElementById('json1');
+                this.json2Textarea = document.getElementById('json2');
+                this.outputDiv = document.getElementById('output');
+                this.keyFieldInput = document.getElementById('keyField');
+                this.joinTypeSelect = document.getElementById('joinType');
+                this.mergeBtn = document.getElementById('mergeBtn');
+                this.clearBtn = document.getElementById('clearBtn');
+                this.messageDiv = document.getElementById('message');
+                this.leftCountDiv = document.getElementById('leftCount');
+                this.rightCountDiv = document.getElementById('rightCount');
+                this.resultCountDiv = document.getElementById('resultCount');
+                
+                this.mergeBtn.addEventListener('click', () => this.mergeJSON());
+                this.clearBtn.addEventListener('click', () => this.clearAll());
+                
+                // Add input event listeners to update counts
+                this.json1Textarea.addEventListener('input', () => this.updateCounts());
+                this.json2Textarea.addEventListener('input', () => this.updateCounts());
+                
+                // Initialize with example data
+                this.updateCounts();
+                this.highlightJSON(this.outputDiv, {
+                    result: [
+                        {
+                            id: 1,
+                            name: "John",
+                            age: 30,
+                            city: "New York",
+                            email: "john@example.com",
+                            department: "Engineering"
+                        },
+                        {
+                            id: 2,
+                            name: "Jane",
+                            age: 25,
+                            city: "Chicago",
+                            email: "jane@example.com",
+                            department: "Marketing"
+                        }
+                    ]
+                });
+            }
+            
+            updateCounts() {
+                try {
+                    const leftData = JSON.parse(this.json1Textarea.value);
+                    this.leftCountDiv.textContent = Array.isArray(leftData) ? leftData.length : 1;
+                } catch {
+                    this.leftCountDiv.textContent = '0';
+                }
+                
+                try {
+                    const rightData = JSON.parse(this.json2Textarea.value);
+                    this.rightCountDiv.textContent = Array.isArray(rightData) ? rightData.length : 1;
+                } catch {
+                    this.rightCountDiv.textContent = '0';
+                }
+            }
+            
+            mergeJSON() {
+                try {
+                    const leftData = JSON.parse(this.json1Textarea.value);
+                    const rightData = JSON.parse(this.json2Textarea.value);
+                    const keyField = this.keyFieldInput.value.trim();
+                    
+                    if (!keyField) {
+                        throw new Error('Please specify a key field');
+                    }
+                    
+                    // Convert to arrays if single objects
+                    const leftArray = Array.isArray(leftData) ? leftData : [leftData];
+                    const rightArray = Array.isArray(rightData) ? rightData : [rightData];
+                    
+                    // Perform inner join
+                    const result = this.innerJoin(leftArray, rightArray, keyField);
+                    
+                    // Update result count
+                    this.resultCountDiv.textContent = result.length;
+                    
+                    // Display result
+                    this.highlightJSON(this.outputDiv, {result});
+                    this.showMessage(`Successfully merged ${result.length} items`, 'success');
+                } catch (error) {
+                    this.showMessage('Error: ' + error.message, 'error');
+                    this.outputDiv.textContent = 'Error: ' + error.message;
+                    this.resultCountDiv.textContent = '0';
+                }
+            }
+            
+            innerJoin(leftArray, rightArray, keyField) {
+                const result = [];
+                
+                // Create a map for the right array for faster lookup
+                const rightMap = new Map();
+                for (const rightItem of rightArray) {
+                    if (rightItem[keyField] !== undefined) {
+                        rightMap.set(rightItem[keyField], rightItem);
+                    }
+                }
+                
+                // Iterate through left array and merge with right array
+                for (const leftItem of leftArray) {
+                    const keyValue = leftItem[keyField];
+                    if (keyValue !== undefined && rightMap.has(keyValue)) {
+                        // Merge objects
+                        const mergedItem = {
+                            ...leftItem,
+                            ...rightMap.get(keyValue)
+                        };
+                        result.push(mergedItem);
+                    }
+                }
+                
+                return result;
+            }
+            
+            highlightJSON(element, data) {
+                const jsonText = JSON.stringify(data, null, 2);
+                // Simple JSON highlighting
+                const highlighted = jsonText
+                    .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, 
+                    function(match) {
+                        let cls = 'number';
+                        if (/^"/.test(match)) {
+                            if (/:$/.test(match)) {
+                                cls = 'key';
+                            } else {
+                                cls = 'string';
+                            }
+                        } else if (/true|false/.test(match)) {
+                            cls = 'boolean';
+                        } else if (/null/.test(match)) {
+                            cls = 'null';
+                        }
+                        return '<span class="' + cls + '">' + match + '</span>';
+                    });
+                
+                element.innerHTML = highlighted;
+            }
+            
+            showMessage(message, type) {
+                this.messageDiv.textContent = message;
+                this.messageDiv.className = type;
+            }
+            
+            clearAll() {
+                this.json1Textarea.value = '';
+                this.json2Textarea.value = '';
+                this.outputDiv.textContent = '';
+                this.messageDiv.textContent = '';
+                this.messageDiv.className = '';
+                this.keyFieldInput.value = 'id';
+                this.leftCountDiv.textContent = '0';
+                this.rightCountDiv.textContent = '0';
+                this.resultCountDiv.textContent = '0';
+            }
+        }
+
+        // Initialize the application when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const app = new JSONMerger();
+            
+            // Add CSS for JSON highlighting
+            const style = document.createElement('style');
+            style.textContent = `
+                .string { color: #d14; }
+                .number { color: #099; }
+                .boolean { color: #0086b3; }
+                .null { color: #0086b3; }
+                .key { color: #458; font-weight: bold; }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>
