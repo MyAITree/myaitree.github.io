@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Merger</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: #4e54c8;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .json-input, .json-output {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #4e54c8;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 200px;
+            font-family: monospace;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #4e54c8;
+        }
+        
+        .controls {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .merge-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        select, button {
+            padding: 12px 18px;
+            border-radius: 6px;
+            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            background: white;
+        }
+        
+        select {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #4e54c8;
+        }
+        
+        button {
+            background: #4e54c8;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+            min-width: 150px;
+        }
+        
+        button:hover {
+            background: #3a3eb3;
+        }
+        
+        .output {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 15px;
+            min-height: 200px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+        
+        .error {
+            color: #d9534f;
+            font-weight: 500;
+            margin-top: 10px;
+            padding: 10px;
+            background: #ffebee;
+            border-radius: 4px;
+            border-left: 4px solid #d9534f;
+        }
+        
+        .success {
+            color: #28a745;
+            font-weight: 500;
+            margin-top: 10px;
+            padding: 10px;
+            background: #e8f5e9;
+            border-radius: 4px;
+            border-left: 4px solid #28a745;
+        }
+        
+        .examples {
+            grid-column: 1 / -1;
+            background: #f0f7ff;
+            border-left: 4px solid #4e54c8;
+            padding: 15px;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .examples h3 {
+            margin-bottom: 10px;
+            color: #4e54c8;
+        }
+        
+        .example-item {
+            margin-bottom: 15px;
+        }
+        
+        .example-item h4 {
+            margin-bottom: 5px;
+            color: #4e54c8;
+        }
+        
+        .example-code {
+            background: #e8f1ff;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 14px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>JSON Merger</h1>
+            <p class="subtitle">Merge two JSON objects based on their elements</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="json-input">
+                <h2>JSON 1</h2>
+                <textarea id="json1" placeholder="Enter first JSON object...">{
+  "users": [
+    {"id": 1, "name": "John", "age": 30},
+    {"id": 2, "name": "Jane", "age": 25}
+  ],
+  "location": "New York"
+}</textarea>
+            </div>
+            
+            <div class="json-input">
+                <h2>JSON 2</h2>
+                <textarea id="json2" placeholder="Enter second JSON object...">{
+  "users": [
+    {"id": 2, "email": "jane@example.com", "age": 26},
+    {"id": 3, "name": "Bob", "email": "bob@example.com"}
+  ],
+  "department": "Engineering"
+}</textarea>
+            </div>
+            
+            <div class="controls">
+                <div class="merge-options">
+                    <select id="mergeMethod">
+                        <option value="deep">Deep Merge (combine all properties)</option>
+                        <option value="shallow">Shallow Merge (overwrite duplicates)</option>
+                        <option value="concat">Array Concatenation (merge arrays)</option>
+                        <option value="idBased">ID-Based Merge (merge objects with same ID)</option>
+                    </select>
+                    
+                    <select id="keyField" style="display: none;">
+                        <option value="id">ID</option>
+                        <option value="name">Name</option>
+                    </select>
+                    
+                    <button id="mergeBtn">Merge JSON</button>
+                    <button id="clearBtn">Clear All</button>
+                </div>
+                
+                <div id="message"></div>
+            </div>
+            
+            <div class="json-output">
+                <h2>Merged Result</h2>
+                <div id="output" class="output">{ "mergedResult": "Will appear here" }</div>
+            </div>
+            
+            <div class="examples">
+                <h3>How It Works</h3>
+                
+                <div class="example-item">
+                    <h4>Deep Merge</h4>
+                    <div class="example-code">Combines all properties from both objects, recursively merging nested objects</div>
+                </div>
+                
+                <div class="example-item">
+                    <h4>Shallow Merge</h4>
+                    <div class="example-code">Top-level properties in the second object overwrite those in the first</div>
+                </div>
+                
+                <div class="example-item">
+                    <h4>Array Concatenation</h4>
+                    <div class="example-code">Arrays from both objects are concatenated into a single array</div>
+                </div>
+                
+                <div class="example-item">
+                    <h4>ID-Based Merge</h4>
+                    <div class="example-code">Objects with the same ID (or other selected key) are merged together</div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Created with JavaScript • JSON Merger Tool</p>
+        </footer>
+    </div>
+
+    <script>
+        class JSONMerger {
+            constructor() {
+                this.json1Textarea = document.getElementById('json1');
+                this.json2Textarea = document.getElementById('json2');
+                this.outputDiv = document.getElementById('output');
+                this.mergeMethodSelect = document.getElementById('mergeMethod');
+                this.keyFieldSelect = document.getElementById('keyField');
+                this.mergeBtn = document.getElementById('mergeBtn');
+                this.clearBtn = document.getElementById('clearBtn');
+                this.messageDiv = document.getElementById('message');
+                
+                this.mergeBtn.addEventListener('click', () => this.mergeJSON());
+                this.clearBtn.addEventListener('click', () => this.clearAll());
+                this.mergeMethodSelect.addEventListener('change', () => this.toggleKeyField());
+                
+                // Initialize with example data
+                this.highlightJSON(this.outputDiv, { mergedResult: "Will appear here" });
+            }
+            
+            toggleKeyField() {
+                const method = this.mergeMethodSelect.value;
+                this.keyFieldSelect.style.display = method === 'idBased' ? 'block' : 'none';
+            }
+            
+            mergeJSON() {
+                try {
+                    const json1 = JSON.parse(this.json1Textarea.value);
+                    const json2 = JSON.parse(this.json2Textarea.value);
+                    const method = this.mergeMethodSelect.value;
+                    
+                    let result;
+                    
+                    switch(method) {
+                        case 'deep':
+                            result = this.deepMerge(json1, json2);
+                            break;
+                        case 'shallow':
+                            result = {...json1, ...json2};
+                            break;
+                        case 'concat':
+                            result = this.concatArrays(json1, json2);
+                            break;
+                        case 'idBased':
+                            const key = this.keyFieldSelect.value;
+                            result = this.idBasedMerge(json1, json2, key);
+                            break;
+                        default:
+                            result = this.deepMerge(json1, json2);
+                    }
+                    
+                    this.highlightJSON(this.outputDiv, result);
+                    this.showMessage('JSON merged successfully!', 'success');
+                } catch (error) {
+                    this.showMessage('Error: ' + error.message, 'error');
+                    this.outputDiv.textContent = 'Error: ' + error.message;
+                }
+            }
+            
+            deepMerge(obj1, obj2) {
+                const result = {...obj1};
+                
+                for (let key in obj2) {
+                    if (obj2.hasOwnProperty(key)) {
+                        if (typeof obj2[key] === 'object' && obj2[key] !== null && 
+                            typeof result[key] === 'object' && result[key] !== null) {
+                            // Recursively merge objects
+                            result[key] = this.deepMerge(result[key], obj2[key]);
+                        } else if (Array.isArray(obj2[key]) && Array.isArray(result[key])) {
+                            // Merge arrays by concatenating and removing duplicates
+                            result[key] = this.mergeArrays(result[key], obj2[key]);
+                        } else {
+                            // Otherwise, just overwrite the value
+                            result[key] = obj2[key];
+                        }
+                    }
+                }
+                
+                return result;
+            }
+            
+            mergeArrays(arr1, arr2) {
+                // Simple array merge without duplicates
+                const merged = [...arr1];
+                
+                for (const item of arr2) {
+                    if (!merged.some(existingItem => this.isEqual(existingItem, item))) {
+                        merged.push(item);
+                    }
+                }
+                
+                return merged;
+            }
+            
+            concatArrays(obj1, obj2) {
+                const result = {...obj1};
+                
+                for (let key in obj2) {
+                    if (obj2.hasOwnProperty(key)) {
+                        if (Array.isArray(obj2[key]) && Array.isArray(result[key])) {
+                            // Concatenate arrays
+                            result[key] = [...result[key], ...obj2[key]];
+                        } else if (typeof obj2[key] === 'object' && obj2[key] !== null && 
+                                  typeof result[key] === 'object' && result[key] !== null) {
+                            // Recursively handle nested objects
+                            result[key] = this.concatArrays(result[key], obj2[key]);
+                        } else {
+                            // Otherwise, just overwrite the value
+                            result[key] = obj2[key];
+                        }
+                    }
+                }
+                
+                return result;
+            }
+            
+            idBasedMerge(obj1, obj2, keyField) {
+                const result = JSON.parse(JSON.stringify(obj1));
+                
+                for (let key in obj2) {
+                    if (obj2.hasOwnProperty(key)) {
+                        if (Array.isArray(obj2[key]) && Array.isArray(result[key])) {
+                            // Merge arrays based on ID
+                            for (const item of obj2[key]) {
+                                const existingIndex = result[key].findIndex(
+                                    existing => existing[keyField] === item[keyField]
+                                );
+                                
+                                if (existingIndex >= 0) {
+                                    // Merge objects with the same ID
+                                    result[key][existingIndex] = {...result[key][existingIndex], ...item};
+                                } else {
+                                    // Add new object to array
+                                    result[key].push(item);
+                                }
+                            }
+                        } else if (typeof obj2[key] === 'object' && obj2[key] !== null && 
+                                  typeof result[key] === 'object' && result[key] !== null) {
+                            // Recursively handle nested objects
+                            result[key] = this.idBasedMerge(result[key], obj2[key], keyField);
+                        } else {
+                            // Otherwise, just overwrite the value
+                            result[key] = obj2[key];
+                        }
+                    }
+                }
+                
+                return result;
+            }
+            
+            isEqual(obj1, obj2) {
+                // Simple object comparison for array merging
+                return JSON.stringify(obj1) === JSON.stringify(obj2);
+            }
+            
+            highlightJSON(element, data) {
+                const jsonText = JSON.stringify(data, null, 2);
+                // Simple JSON highlighting
+                const highlighted = jsonText
+                    .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, 
+                    function(match) {
+                        let cls = 'number';
+                        if (/^"/.test(match)) {
+                            if (/:$/.test(match)) {
+                                cls = 'key';
+                            } else {
+                                cls = 'string';
+                            }
+                        } else if (/true|false/.test(match)) {
+                            cls = 'boolean';
+                        } else if (/null/.test(match)) {
+                            cls = 'null';
+                        }
+                        return '<span class="' + cls + '">' + match + '</span>';
+                    });
+                
+                element.innerHTML = highlighted;
+            }
+            
+            showMessage(message, type) {
+                this.messageDiv.textContent = message;
+                this.messageDiv.className = type;
+            }
+            
+            clearAll() {
+                this.json1Textarea.value = '';
+                this.json2Textarea.value = '';
+                this.outputDiv.textContent = '';
+                this.messageDiv.textContent = '';
+                this.messageDiv.className = '';
+            }
+        }
+
+        // Initialize the application when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const app = new JSONMerger();
+            
+            // Add CSS for JSON highlighting
+            const style = document.createElement('style');
+            style.textContent = `
+                .string { color: #d14; }
+                .number { color: #099; }
+                .boolean { color: #0086b3; }
+                .null { color: #0086b3; }
+                .key { color: #458; font-weight: bold; }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>

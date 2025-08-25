@@ -34,6 +34,7 @@ To become the world's fastest sustainable problem-solving company.
 
 #### Web Data Tool
 - [iFrame XPath](https://myaitree.com/tools/xpath/xpath-extractor.html): Extract xpath from the html pages - use the javascript code and copy paste it.
+- [JSON Merge](https://myaitree.com/tools/json-merge.html): Merge two JSON on conditions
 
 ### Audio/Visual Tools
 - [Voice Note](https://myaitree.com/tools/voice-note.html): Create voice notes quickly and share with anybody.
