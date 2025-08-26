@@ -217,6 +217,10 @@
         .number {
             color: #d19a66;
         }
+        
+        .property {
+            color: #e5c07b;
+        }
     </style>
 </head>
 <body>
@@ -438,21 +442,48 @@ ${jsCode}`;
                 }
             }
             
-            // Syntax highlighting for output
+            // Syntax highlighting for output - FIXED VERSION
             function highlightOutput(code) {
-                // Escape HTML entities first
-                const escapedCode = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                // First escape HTML entities
+                let escapedCode = code.replace(/&/g, '&amp;')
+                                      .replace(/</g, '&lt;')
+                                      .replace(/>/g, '&gt;')
+                                      .replace(/"/g, '&quot;')
+                                      .replace(/'/g, '&#039;');
                 
-                // Apply syntax highlighting
-                const highlighted = escapedCode
-                    .replace(/(\/\/.*)/g, '<span class="comment">$1</span>')
-                    .replace(/\b(function|const|let|var|return|if|else|for|while|switch|case|break|class|extends)\b/g, '<span class="keyword">$1</span>')
-                    .replace(/\b(useState|createElement|getState|setState|subscribe|document|createTextNode|appendChild|addEventListener|setAttribute)\b/g, '<span class="function">$1</span>')
-                    .replace(/(".*?"|'.*?'|`.*?`)/g, '<span class="string">$1</span>')
-                    .replace(/\b(\d+)\b/g, '<span class="number">$1</span>')
-                    .replace(/(=|\+|-|\*|\/|%|&amp;|\||&lt;|&gt;)/g, '<span class="operator">$1</span>');
+                // Apply syntax highlighting in the correct order
+                // 1. Comments first (to avoid highlighting inside comments)
+                escapedCode = escapedCode.replace(/(\/\/.*)/g, '<span class="comment">$1</span>');
                 
-                outputCode.innerHTML = highlighted;
+                // 2. Strings (to avoid highlighting inside strings)
+                escapedCode = escapedCode.replace(/(".*?")/g, '<span class="string">$1</span>');
+                escapedCode = escapedCode.replace(/('.*?')/g, '<span class="string">$1</span>');
+                
+                // 3. Keywords
+                const keywords = ['function', 'const', 'let', 'var', 'return', 'if', 'else', 
+                                 'for', 'while', 'switch', 'case', 'break', 'class', 'extends'];
+                
+                keywords.forEach(keyword => {
+                    const regex = new RegExp(`\\b${keyword}\\b`, 'g');
+                    escapedCode = escapedCode.replace(regex, `<span class="keyword">${keyword}</span>`);
+                });
+                
+                // 4. Functions
+                const functions = ['useState', 'createElement', 'getState', 'setState', 'subscribe', 
+                                  'document', 'createTextNode', 'appendChild', 'addEventListener', 'setAttribute'];
+                
+                functions.forEach(func => {
+                    const regex = new RegExp(`\\b${func}\\b`, 'g');
+                    escapedCode = escapedCode.replace(regex, `<span class="function">${func}</span>`);
+                });
+                
+                // 5. Numbers
+                escapedCode = escapedCode.replace(/\b(\d+)\b/g, '<span class="number">$1</span>');
+                
+                // 6. Operators
+                escapedCode = escapedCode.replace(/(=|\+|-|\*|\/|%|&amp;|\||&lt;|&gt;)/g, '<span class="operator">$1</span>');
+                
+                outputCode.innerHTML = escapedCode;
             }
             
             // Copy output to clipboard
