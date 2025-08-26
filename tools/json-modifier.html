@@ -114,15 +114,33 @@
             gap: 5px;
             transition: all 0.2s;
             user-select: none;
+            position: relative;
         }
         
         .node-item:hover {
             background: var(--primary);
             color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .node-item:hover::after {
+            content: "Drag me!";
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--dark);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
         }
         
         .node-item:active {
             cursor: grabbing;
+            transform: scale(0.98);
         }
         
         .canvas-container {
@@ -156,6 +174,7 @@
         .node.dragging {
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             z-index: 100;
+            cursor: grabbing;
         }
         
         .node-header {
@@ -228,6 +247,7 @@
         
         .btn-primary:hover {
             background: var(--primary-dark);
+            transform: translateY(-2px);
         }
         
         .btn-success {
@@ -237,6 +257,7 @@
         
         .btn-success:hover {
             background: #2f855a;
+            transform: translateY(-2px);
         }
         
         .btn-secondary {
@@ -246,6 +267,7 @@
         
         .btn-secondary:hover {
             background: #4a5568;
+            transform: translateY(-2px);
         }
         
         .footer {
@@ -309,6 +331,28 @@
                               linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
             background-size: 20px 20px;
             pointer-events: none;
+        }
+        
+        /* Custom cursor for dragging */
+        body.dragging-node {
+            cursor: grabbing !important;
+        }
+        
+        body.dragging-node * {
+            cursor: grabbing !important;
+        }
+        
+        .node-item.dragging {
+            opacity: 0.8;
+            transform: scale(0.95) rotate(5deg);
+        }
+        
+        .node-placeholder {
+            border: 2px dashed var(--primary);
+            border-radius: 8px;
+            background: rgba(90, 103, 216, 0.1);
+            height: 60px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -419,20 +463,53 @@
             const resetBtn = document.getElementById('resetBtn');
             const canvas = document.getElementById('canvas');
             const nodeItems = document.querySelectorAll('.node-item');
+            const body = document.body;
             
             // Store nodes and their data
             let nodes = [];
             let nodeCount = 0;
             let activeNode = null;
             let offsetX, offsetY;
+            let isDraggingFromPalette = false;
+            let dragNodeType = null;
             
             // Initialize
             highlightJson(outputJson, {result: "Your transformed JSON will appear here"});
             
-            // Make node items draggable
+            // Make node items draggable with improved feedback
             nodeItems.forEach(item => {
+                // Drag start event
                 item.addEventListener('dragstart', function(e) {
-                    e.dataTransfer.setData('text/plain', this.dataset.type);
+                    isDraggingFromPalette = true;
+                    dragNodeType = this.dataset.type;
+                    this.classList.add('dragging');
+                    body.classList.add('dragging-node');
+                    
+                    // Create a drag image
+                    const dragImage = this.cloneNode(true);
+                    dragImage.style.position = 'absolute';
+                    dragImage.style.left = '-1000px';
+                    document.body.appendChild(dragImage);
+                    e.dataTransfer.setDragImage(dragImage, 0, 0);
+                    
+                    setTimeout(() => document.body.removeChild(dragImage), 0);
+                });
+                
+                // Drag end event
+                item.addEventListener('dragend', function() {
+                    this.classList.remove('dragging');
+                    body.classList.remove('dragging-node');
+                    isDraggingFromPalette = false;
+                });
+                
+                // Click to add node (alternative to drag)
+                item.addEventListener('click', function() {
+                    if (!isDraggingFromPalette) {
+                        const rect = canvas.getBoundingClientRect();
+                        const x = rect.width / 2 - 100;
+                        const y = Math.max(20, (nodes.length * 120) % (rect.height - 100));
+                        addNode(this.dataset.type, x, y);
+                    }
                 });
             });
             
@@ -450,16 +527,17 @@
                 e.preventDefault();
                 this.style.borderColor = '#ccc';
                 
-                // Remove empty message if it exists
-                const emptyMsg = this.querySelector('.empty-canvas');
-                if (emptyMsg) emptyMsg.remove();
-                
-                const nodeType = e.dataTransfer.getData('text/plain');
-                const rect = canvas.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                addNode(nodeType, x, y);
+                if (isDraggingFromPalette && dragNodeType) {
+                    // Remove empty message if it exists
+                    const emptyMsg = this.querySelector('.empty-canvas');
+                    if (emptyMsg) emptyMsg.remove();
+                    
+                    const rect = canvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    addNode(dragNodeType, x, y);
+                }
             });
             
             // Process button
@@ -632,6 +710,7 @@
                     
                     // Add dragging class for visual feedback
                     element.classList.add('dragging');
+                    body.classList.add('dragging-node');
                     
                     // Prevent text selection during drag
                     e.preventDefault();
@@ -652,6 +731,7 @@
                 document.addEventListener('mouseup', function() {
                     if (activeNode) {
                         activeNode.classList.remove('dragging');
+                        body.classList.remove('dragging-node');
                         activeNode = null;
                     }
                 });
