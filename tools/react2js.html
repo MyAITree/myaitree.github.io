@@ -80,6 +80,7 @@
             background: #1e2227;
             color: #abb2bf;
             line-height: 1.5;
+            min-height: 300px;
         }
         
         .code-editor:focus {
@@ -95,6 +96,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+            min-height: 300px;
         }
         
         .output-code {
@@ -188,10 +190,6 @@
             color: var(--secondary);
         }
         
-        .highlight {
-            color: var(--primary);
-        }
-        
         .comment {
             color: #5c6370;
         }
@@ -210,6 +208,14 @@
         
         .tag {
             color: #e06c75;
+        }
+        
+        .operator {
+            color: #56b6c2;
+        }
+        
+        .number {
+            color: #d19a66;
         }
     </style>
 </head>
@@ -251,7 +257,7 @@
             <div class="code-section">
                 <div class="section-title">Vanilla JavaScript</div>
                 <div class="output-container">
-                    <div class="output-code" id="outputCode">// Converted JavaScript will appear here</div>
+                    <div class="output-code" id="outputCode">// Click 'Convert' to transform the React component to vanilla JavaScript</div>
                 </div>
                 
                 <div class="controls mt-3">
@@ -335,7 +341,7 @@
             };
             
             // Initialize with example
-            highlightOutput("// Click 'Convert' to transform the React component");
+            outputCode.textContent = "// Click 'Convert' to transform the React component to vanilla JavaScript";
             
             // Event listeners
             convertBtn.addEventListener('click', convertReactToJS);
@@ -356,7 +362,7 @@
                 try {
                     const reactComponent = reactCode.value;
                     if (!reactComponent.trim()) {
-                        highlightOutput("// Please enter a React component first");
+                        outputCode.textContent = "// Please enter a React component first";
                         return;
                     }
                     
@@ -428,19 +434,23 @@ ${jsCode}`;
 
                     highlightOutput(jsCode);
                 } catch (error) {
-                    highlightOutput(`// Error: ${error.message}`);
+                    outputCode.textContent = `// Error: ${error.message}`;
                 }
             }
             
             // Syntax highlighting for output
             function highlightOutput(code) {
-                // Simple syntax highlighting
-                const highlighted = code
+                // Escape HTML entities first
+                const escapedCode = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                
+                // Apply syntax highlighting
+                const highlighted = escapedCode
                     .replace(/(\/\/.*)/g, '<span class="comment">$1</span>')
-                    .replace(/\b(function|const|let|var|return|if|else|for|while|switch|case|break|class|extends)\b/g, '<span class=`keyword`>$1</span>')
-                    .replace(/\b(useState|createElement|getState|setState|subscribe)\b/g, '<span class="function">$1</span>')
-                    .replace(/(`[^`]*`|'[^']*'|"[^"]*")/g, '<span class="string">$1</span>')
-                    .replace(/(&lt;[^&]*&gt;)/g, '<span class="tag">$1</span>');
+                    .replace(/\b(function|const|let|var|return|if|else|for|while|switch|case|break|class|extends)\b/g, '<span class="keyword">$1</span>')
+                    .replace(/\b(useState|createElement|getState|setState|subscribe|document|createTextNode|appendChild|addEventListener|setAttribute)\b/g, '<span class="function">$1</span>')
+                    .replace(/(".*?"|'.*?'|`.*?`)/g, '<span class="string">$1</span>')
+                    .replace(/\b(\d+)\b/g, '<span class="number">$1</span>')
+                    .replace(/(=|\+|-|\*|\/|%|&amp;|\||&lt;|&gt;)/g, '<span class="operator">$1</span>');
                 
                 outputCode.innerHTML = highlighted;
             }
@@ -460,7 +470,7 @@ ${jsCode}`;
             // Clear all fields
             function clearAll() {
                 reactCode.value = '';
-                highlightOutput("// Cleared. Enter a React component and click 'Convert'");
+                outputCode.textContent = "// Cleared. Enter a React component and click 'Convert'";
             }
         });
     </script>
