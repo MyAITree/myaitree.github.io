@@ -45,9 +45,10 @@ To become the world's fastest sustainable problem-solving company.
 - [ImageShare](https://myaitree.com/tools/image-share.html): Upload images and share with anyone.
 
 ### Number/Time-Based Tools
-- [Counter](https://myaitree.com/tools/counter.html): Just click and count - for practicing
-- [Timer Up Down](https://myaitree.com/tools/timer-up-down.html): Start timer and continue until stopped.
 
+- [Counter](https://myaitree.com/tools/TimeCat/counter.html): Just click and count - for practicing
+- [Timer Up Down](https://myaitree.com/tools/TimeCat/timer-up-down.html): Start timer and continue until stopped.
+- [Gantt Chart](https://myaitree.com/tools/TimeCat/03-time-gantt.html): Gantt based tasks
 
 ---
 

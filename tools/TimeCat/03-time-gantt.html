@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gantt Chart Time Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/frappe-gantt@0.6.1/dist/frappe-gantt.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/frappe-gantt@0.6.1/dist/frappe-gantt.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2c3e50;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: #4a6fa5;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        button {
+            padding: 10px 16px;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        button:hover {
+            background: #1a2530;
+            transform: translateY(-2px);
+        }
+        
+        .view-options {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .view-option {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .view-option.active {
+            background: #4a6fa5;
+            color: white;
+        }
+        
+        .view-option:hover:not(.active) {
+            background: #e9ecef;
+        }
+        
+        .gantt-container {
+            padding: 20px;
+            height: 500px;
+            overflow: auto;
+        }
+        
+        .form-container {
+            padding: 20px;
+            border-top: 1px solid #eaeaea;
+            background: #f9fafb;
+        }
+        
+        .form-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .submit-btn {
+            background: #2ecc71;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        
+        .submit-btn:hover {
+            background: #27ae60;
+        }
+        
+        .instructions {
+            background: #fff8e1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .instructions h3 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #555;
+        }
+        
+        .task-info {
+            margin-top: 15px;
+            padding: 15px;
+            background: #e8f4fc;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .task-info h3 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .task-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .detail-item {
+            margin-bottom: 8px;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .controls {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .view-options {
+                flex-wrap: wrap;
+            }
+        }
+        
+        /* Custom styles for Frappe Gantt */
+        .gantt .grid-header {
+            fill: #4a6fa5;
+            stroke: #4a6fa5;
+        }
+        
+        .gantt .grid-row {
+            fill: #f8f9fa;
+        }
+        
+        .gantt .grid-row:nth-child(even) {
+            fill: #e9ecef;
+        }
+        
+        .gantt .row-line {
+            stroke: #ddd;
+        }
+        
+        .gantt .today-highlight {
+            fill: #ffecb3;
+            opacity: 0.5;
+        }
+        
+        .gantt .bar {
+            rx: 4;
+            ry: 4;
+        }
+        
+        .gantt .bar-progress {
+            rx: 4;
+            ry: 4;
+            fill: #2ecc71;
+        }
+        
+        .gantt .bar-label {
+            fill: white;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-chart-gantt"></i> Gantt Chart Time Tracker</h1>
+            <div class="controls">
+                <button id="prev-btn"><i class="fas fa-chevron-left"></i> Previous</button>
+                <button id="next-btn">Next <i class="fas fa-chevron-right"></i></button>
+                <button id="today-btn">Today</button>
+            </div>
+        </header>
+        
+        <div class="view-options">
+            <div class="view-option active" data-view="Quarter Day">Quarter Day</div>
+            <div class="view-option" data-view="Half Day">Half Day</div>
+            <div class="view-option" data-view="Day">Day</div>
+            <div class="view-option" data-view="Week">Week</div>
+            <div class="view-option" data-view="Month">Month</div>
+        </div>
+        
+        <div class="gantt-container">
+            <div id="gantt-chart"></div>
+        </div>
+        
+        <div class="task-info" id="task-info">
+            <h3><i class="fas fa-info-circle"></i> Task Details</h3>
+            <div class="task-details">
+                <div class="detail-item">
+                    <span class="detail-label">Task Name:</span> <span id="info-name"></span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Start Date:</span> <span id="info-start"></span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">End Date:</span> <span id="info-end"></span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Progress:</span> <span id="info-progress"></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-container">
+            <h2 class="form-title"><i class="fas fa-plus-circle"></i> Add New Task</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="task-name">Task Name</label>
+                    <input type="text" id="task-name" placeholder="Enter task name">
+                </div>
+                <div class="form-group">
+                    <label for="start-date">Start Date</label>
+                    <input type="date" id="start-date">
+                </div>
+                <div class="form-group">
+                    <label for="end-date">End Date</label>
+                    <input type="date" id="end-date">
+                </div>
+                <div class="form-group">
+                    <label for="progress">Progress (%)</label>
+                    <input type="number" id="progress" min="0" max="100" value="0">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="task-desc">Description (Optional)</label>
+                <textarea id="task-desc" placeholder="Enter task description" rows="2"></textarea>
+            </div>
+            <button class="submit-btn" id="add-task"><i class="fas fa-plus"></i> Add Task</button>
+            
+            <div class="instructions">
+                <h3><i class="fas fa-info-circle"></i> How to use</h3>
+                <ul>
+                    <li>Use the form above to create new tasks with start and end dates</li>
+                    <li>Change the view mode using the options above the chart</li>
+                    <li>Click on a task in the Gantt chart to view its details</li>
+                    <li>Drag the edges of tasks in the chart to change their duration</li>
+                    <li>Drag the middle of tasks to change their start date</li>
+                    <li>Use the navigation buttons to move through the timeline</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize the Gantt chart
+            const ganttChart = new GanttTimeTracker();
+            ganttChart.init();
+        });
+
+        class GanttTimeTracker {
+            constructor() {
+                this.tasks = [
+                    {
+                        id: 'Task 1',
+                        name: 'Research & Planning',
+                        start: '2023-09-01',
+                        end: '2023-09-07',
+                        progress: 100,
+                        dependencies: ''
+                    },
+                    {
+                        id: 'Task 2',
+                        name: 'Design & Prototyping',
+                        start: '2023-09-08',
+                        end: '2023-09-14',
+                        progress: 75,
+                        dependencies: 'Task 1'
+                    },
+                    {
+                        id: 'Task 3',
+                        name: 'Development',
+                        start: '2023-09-15',
+                        end: '2023-09-28',
+                        progress: 25,
+                        dependencies: 'Task 2'
+                    },
+                    {
+                        id: 'Task 4',
+                        name: 'Testing & QA',
+                        start: '2023-09-25',
+                        end: '2023-10-05',
+                        progress: 0,
+                        dependencies: 'Task 3'
+                    },
+                    {
+                        id: 'Task 5',
+                        name: 'Deployment',
+                        start: '2023-10-06',
+                        end: '2023-10-10',
+                        progress: 0,
+                        dependencies: 'Task 4'
+                    }
+                ];
+                this.gantt = null;
+                this.currentView = 'Day';
+            }
+            
+            init() {
+                this.setupDateInputs();
+                this.renderGanttChart();
+                this.bindEvents();
+            }
+            
+            setupDateInputs() {
+                // Set default start date as today
+                const today = new Date();
+                const tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 2);
+                
+                document.getElementById('start-date').value = this.formatDate(today);
+                document.getElementById('end-date').value = this.formatDate(tomorrow);
+            }
+            
+            formatDate(date) {
+                return date.toISOString().split('T')[0];
+            }
+            
+            renderGanttChart() {
+                const ganttElement = document.getElementById('gantt-chart');
+                this.gantt = new Gantt(ganttElement, this.tasks, {
+                    view_mode: this.currentView,
+                    language: 'en',
+                    on_click: (task) => {
+                        this.showTaskDetails(task);
+                    },
+                    on_date_change: (task, start, end) => {
+                        task.start = start;
+                        task.end = end;
+                        this.updateTask(task);
+                    },
+                    on_progress_change: (task, progress) => {
+                        task.progress = progress;
+                        this.updateTask(task);
+                    }
+                });
+            }
+            
+            bindEvents() {
+                // View mode change
+                document.querySelectorAll('.view-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        document.querySelectorAll('.view-option').forEach(opt => {
+                            opt.classList.remove('active');
+                        });
+                        option.classList.add('active');
+                        this.currentView = option.dataset.view;
+                        this.gantt.change_view_mode(this.currentView);
+                    });
+                });
+                
+                // Navigation buttons
+                document.getElementById('prev-btn').addEventListener('click', () => {
+                    this.gantt.prev();
+                });
+                
+                document.getElementById('next-btn').addEventListener('click', () => {
+                    this.gantt.next();
+                });
+                
+                document.getElementById('today-btn').addEventListener('click', () => {
+                    this.gantt.today();
+                });
+                
+                // Add task button
+                document.getElementById('add-task').addEventListener('click', () => {
+                    this.addTask();
+                });
+            }
+            
+            showTaskDetails(task) {
+                const taskInfo = document.getElementById('task-info');
+                document.getElementById('info-name').textContent = task.name;
+                document.getElementById('info-start').textContent = task.start;
+                document.getElementById('info-end').textContent = task.end;
+                document.getElementById('info-progress').textContent = `${task.progress}%`;
+                taskInfo.style.display = 'block';
+            }
+            
+            addTask() {
+                const name = document.getElementById('task-name').value;
+                const start = document.getElementById('start-date').value;
+                const end = document.getElementById('end-date').value;
+                const progress = parseInt(document.getElementById('progress').value);
+                const desc = document.getElementById('task-desc').value;
+                
+                if (!name || !start || !end) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+                
+                const newTask = {
+                    id: `Task ${this.tasks.length + 1}`,
+                    name: name,
+                    start: start,
+                    end: end,
+                    progress: progress,
+                    dependencies: '',
+                    description: desc
+                };
+                
+                this.tasks.push(newTask);
+                this.gantt.refresh(this.tasks);
+                
+                // Reset form
+                document.getElementById('task-name').value = '';
+                document.getElementById('task-desc').value = '';
+                document.getElementById('progress').value = '0';
+                
+                // Set new default dates
+                const newStart = new Date(end);
+                const newEnd = new Date(newStart);
+                newEnd.setDate(newEnd.getDate() + 2);
+                
+                document.getElementById('start-date').value = this.formatDate(newStart);
+                document.getElementById('end-date').value = this.formatDate(newEnd);
+            }
+            
+            updateTask(updatedTask) {
+                const index = this.tasks.findIndex(task => task.id === updatedTask.id);
+                if (index !== -1) {
+                    this.tasks[index] = updatedTask;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
