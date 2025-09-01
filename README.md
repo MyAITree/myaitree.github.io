@@ -1,5 +1,5 @@
 # MyAITree (मैत्री)
-![Logo](/logo2.png)
+![Logo](/images/logo2.png)
 
 **Consultant through Code**
 
