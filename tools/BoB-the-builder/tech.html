@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gift Box Builder - Architecture Diagram</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #6a11cb;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+        .diagram-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .diagram {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        h2 {
+            color: #2575fc;
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .explanation {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0f4ff;
+            border-radius: 8px;
+        }
+        .note {
+            background: #fff4e6;
+            padding: 15px;
+            border-left: 4px solid #ffa94d;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        .key {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .key-item {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+        .key-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            border-radius: 3px;
+        }
+        @media (max-width: 768px) {
+            .diagram-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gift Box Builder Application Architecture</h1>
+        
+        <div class="key">
+            <div class="key-item">
+                <div class="key-color" style="background-color: #ffe4e4;"></div>
+                <span>Classes</span>
+            </div>
+            <div class="key-item">
+                <div class="key-color" style="background-color: #e4ffe7;"></div>
+                <span>Methods</span>
+            </div>
+            <div class="key-item">
+                <div class="key-color" style="background-color: #e4f0ff;"></div>
+                <span>Properties</span>
+            </div>
+            <div class="key-item">
+                <div class="key-color" style="background-color: #f0e4ff;"></div>
+                <span>Events/Interactions</span>
+            </div>
+        </div>
+        
+        <div class="diagram-container">
+            <div class="diagram">
+                <h2>Class Structure</h2>
+                <div class="mermaid">
+classDiagram
+    class Product {
+        +number id
+        +string name
+        +number price
+        +string category
+        +string imageUrl
+        +getFormattedPrice() string
+    }
+
+    class GiftBox {
+        +Array items
+        +addProduct(Product product)
+        +removeProduct(number productId)
+        +clearBox()
+        +getTotal() number
+        +getFormattedTotal() string
+        +getItemCount() number
+    }
+
+    class GiftBoxApp {
+        +Array products
+        +Array filteredProducts
+        +Array categories
+        +GiftBox giftBox
+        +string currentCategory
+        +HTMLElement productsGrid
+        +HTMLElement giftboxItems
+        +HTMLElement giftboxTotal
+        +HTMLElement categoryButtons
+        +HTMLElement clearBoxBtn
+        +HTMLElement checkoutBtn
+        +init()
+        +generateProducts()
+        +setupEventListeners()
+        +filterProductsByCategory(string category)
+        +renderCategories()
+        +renderProducts()
+        +addProductToBox(number productId)
+        +updateGiftBoxUI()
+    }
+
+    GiftBoxApp --> Product : manages
+    GiftBoxApp --> GiftBox : contains
+    GiftBox --> Product : aggregates
+                </div>
+            </div>
+
+            <div class="diagram">
+                <h2>Application Flow</h2>
+                <div class="mermaid">
+flowchart TD
+    Start([Application Start]) --> Init[GiftBoxApp.init]
+    Init --> Generate[generateProducts]
+    Generate --> Setup[setupEventListeners]
+    Setup --> Render[renderProducts]
+    Render --> Wait[Wait for User Interaction]
+
+    Wait -->|Category Filter| Filter[filterProductsByCategory]
+    Filter --> RenderCat[renderProducts]
+    RenderCat --> Wait
+
+    Wait -->|Product Click| AddProduct[addProductToBox]
+    AddProduct --> UpdateUI[updateGiftBoxUI]
+    UpdateUI --> Wait
+
+    Wait -->|Clear Box| Clear[giftBox.clearBox]
+    Clear --> UpdateUI
+
+    Wait -->|Checkout| Validate{isEmpty?}
+    Validate -->|Yes| Alert[Alert: Box is empty]
+    Validate -->|No| Process[Process Order]
+    Process --> Confirm[Show Confirmation]
+    Confirm --> Clear2[Clear Gift Box]
+    Clear2 --> UpdateUI2[updateGiftBoxUI]
+    UpdateUI2 --> Wait
+                </div>
+            </div>
+        </div>
+
+        <div class="explanation">
+            <h2>Architecture Explanation</h2>
+            
+            <p>The Gift Box Builder application follows a <strong>class-based architecture</strong> with clear separation of concerns:</p>
+            
+            <div class="note">
+                <strong>Design Patterns Used:</strong> Constructor Pattern, Module Pattern, Observer Pattern, Singleton Pattern
+            </div>
+            
+            <h3>Key Components:</h3>
+            <ul>
+                <li><strong>Product Class:</strong> Represents individual products with properties and formatting methods</li>
+                <li><strong>GiftBox Class:</strong> Manages the collection of selected products and calculates totals</li>
+                <li><strong>GiftBoxApp Class:</strong> Main application controller that handles UI, events, and data flow</li>
+            </ul>
+            
+            <h3>Data Flow:</h3>
+            <ol>
+                <li>Application initializes and creates sample products</li>
+                <li>UI renders products and sets up event listeners</li>
+                <li>User interactions trigger methods that update application state</li>
+                <li>UI updates reflect changes in state</li>
+            </ol>
+            
+            <h3>Event Handling:</h3>
+            <pre>// Event delegation pattern example
+productsGrid.addEventListener('click', (e) => {
+  const productCard = e.target.closest('.product-card');
+  if (productCard) {
+    const productId = parseInt(productCard.dataset.id);
+    this.addProductToBox(productId);
+  }
+});</pre>
+            
+            <p>The application uses <strong>event delegation</strong> for efficient handling of dynamic elements and maintains a <strong>unidirectional data flow</strong> from user interactions to state changes to UI updates.</p>
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            fontFamily: 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif'
+        });
+    </script>
+</body>
+</html>
