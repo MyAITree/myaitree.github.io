@@ -14,3 +14,8 @@
 4. UI/UX/ Layout - perspective of that thing
 5. Motion - Highlighting
 
+## How to Prompt for One Page App:
+1. Class based Javascript 
+2. one page web app
+3. Use Popular libraries
+

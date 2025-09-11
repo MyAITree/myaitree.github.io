@@ -47,6 +47,7 @@ To become the world's fastest sustainable problem-solving company.
 ### Audio/Visual Tools
 - [Voice Note](https://myaitree.com/tools/voice-note.html): Create voice notes quickly and share with anybody.
 - [ImageShare](https://myaitree.com/tools/image-share.html): Upload images and share with anyone.
+- [Csquare](https://myaitree.com/tools/canva-compare.html): Compare two images created on two canvases using fabric.js & Bootstrap.js
 
 ### Number/Time-Based Tools
 

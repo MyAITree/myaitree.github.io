@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Similarity Comparator</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin-top: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        .canvas-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .canvas-wrapper {
+            flex: 1;
+            min-width: 300px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .canvas-title {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #3498db;
+            font-weight: 600;
+        }
+        
+        .drawing-canvas {
+            background-color: white;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            cursor: crosshair;
+            touch-action: none;
+        }
+        
+        .tools {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-tool {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .brush-size {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .result-container {
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .percentage {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 15px 0;
+        }
+        
+        .progress {
+            height: 30px;
+            border-radius: 15px;
+            margin: 20px auto;
+            max-width: 500px;
+        }
+        
+        .progress-bar {
+            border-radius: 15px;
+            transition: width 0.5s ease;
+        }
+        
+        .message {
+            font-size: 1.2rem;
+            margin-top: 15px;
+            color: #7f8c8d;
+        }
+        
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .canvas-wrapper {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Image Similarity Comparator</h1>
+            <p>Draw on both canvases and compare how similar they are</p>
+        </div>
+        
+        <div class="canvas-container">
+            <div class="canvas-wrapper">
+                <h3 class="canvas-title">Left Canvas</h3>
+                <canvas id="leftCanvas" class="drawing-canvas" width="300" height="300"></canvas>
+                <div class="brush-size">
+                    <span>Brush Size: </span>
+                    <input type="range" id="leftBrushSize" min="1" max="20" value="5" onchange="changeBrushSize('left', this.value)">
+                </div>
+                <div class="tools">
+                    <button class="btn btn-primary btn-tool" onclick="setColor('left', '#3498db')">Blue</button>
+                    <button class="btn btn-danger btn-tool" onclick="setColor('left', '#e74c3c')">Red</button>
+                    <button class="btn btn-success btn-tool" onclick="setColor('left', '#2ecc71')">Green</button>
+                    <button class="btn btn-dark btn-tool" onclick="setColor('left', '#000000')">Black</button>
+                    <button class="btn btn-warning btn-tool" onclick="setEraser('left')">Eraser</button>
+                    <button class="btn btn-secondary btn-tool" onclick="clearCanvas('left')">Clear</button>
+                </div>
+            </div>
+            
+            <div class="canvas-wrapper">
+                <h3 class="canvas-title">Right Canvas</h3>
+                <canvas id="rightCanvas" class="drawing-canvas" width="300" height="300"></canvas>
+                <div class="brush-size">
+                    <span>Brush Size: </span>
+                    <input type="range" id="rightBrushSize" min="1" max="20" value="5" onchange="changeBrushSize('right', this.value)">
+                </div>
+                <div class="tools">
+                    <button class="btn btn-primary btn-tool" onclick="setColor('right', '#3498db')">Blue</button>
+                    <button class="btn btn-danger btn-tool" onclick="setColor('right', '#e74c3c')">Red</button>
+                    <button class="btn btn-success btn-tool" onclick="setColor('right', '#2ecc71')">Green</button>
+                    <button class="btn btn-dark btn-tool" onclick="setColor('right', '#000000')">Black</button>
+                    <button class="btn btn-warning btn-tool" onclick="setEraser('right')">Eraser</button>
+                    <button class="btn btn-secondary btn-tool" onclick="clearCanvas('right')">Clear</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-4">
+            <button class="btn btn-success btn-lg" onclick="compareCanvases()">Compare Images</button>
+            <button class="btn btn-secondary btn-lg ms-2" onclick="clearCanvas('both')">Clear Both</button>
+        </div>
+        
+        <div class="result-container">
+            <h2>Similarity Result</h2>
+            <div class="percentage" id="percentage">0%</div>
+            <div class="progress">
+                <div class="progress-bar" id="progressBar" style="width: 0%; background-color: #e74c3c;"></div>
+            </div>
+            <p class="message" id="message">Draw on both canvases and click compare to see the similarity</p>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Created with JavaScript & Bootstrap | Image Similarity Comparator</p>
+    </footer>
+
+    <script>
+        // Initialize canvas contexts and drawing states
+        const leftCanvas = document.getElementById('leftCanvas');
+        const rightCanvas = document.getElementById('rightCanvas');
+        const leftCtx = leftCanvas.getContext('2d');
+        const rightCtx = rightCanvas.getContext('2d');
+        
+        // Drawing state
+        let isDrawing = {
+            left: false,
+            right: false
+        };
+        
+        let lastX = {
+            left: 0,
+            right: 0
+        };
+        
+        let lastY = {
+            left: 0,
+            right: 0
+        };
+        
+        let brushColor = {
+            left: '#3498db',
+            right: '#3498db'
+        };
+        
+        let brushSize = {
+            left: 5,
+            right: 5
+        };
+        
+        // Initialize canvases
+        function initCanvases() {
+            // Set canvas backgrounds to white
+            leftCtx.fillStyle = 'white';
+            leftCtx.fillRect(0, 0, leftCanvas.width, leftCanvas.height);
+            rightCtx.fillStyle = 'white';
+            rightCtx.fillRect(0, 0, rightCanvas.width, rightCanvas.height);
+            
+            // Set line styles
+            leftCtx.lineWidth = brushSize.left;
+            leftCtx.lineCap = 'round';
+            leftCtx.lineJoin = 'round';
+            leftCtx.strokeStyle = brushColor.left;
+            
+            rightCtx.lineWidth = brushSize.right;
+            rightCtx.lineCap = 'round';
+            rightCtx.lineJoin = 'round';
+            rightCtx.strokeStyle = brushColor.right;
+            
+            // Add event listeners for left canvas
+            leftCanvas.addEventListener('mousedown', (e) => startDrawing(e, 'left'));
+            leftCanvas.addEventListener('mousemove', (e) => draw(e, 'left'));
+            leftCanvas.addEventListener('mouseup', () => stopDrawing('left'));
+            leftCanvas.addEventListener('mouseout', () => stopDrawing('left'));
+            
+            // Touch events for left canvas
+            leftCanvas.addEventListener('touchstart', (e) => handleTouchStart(e, 'left'));
+            leftCanvas.addEventListener('touchmove', (e) => handleTouchMove(e, 'left'));
+            leftCanvas.addEventListener('touchend', () => stopDrawing('left'));
+            
+            // Add event listeners for right canvas
+            rightCanvas.addEventListener('mousedown', (e) => startDrawing(e, 'right'));
+            rightCanvas.addEventListener('mousemove', (e) => draw(e, 'right'));
+            rightCanvas.addEventListener('mouseup', () => stopDrawing('right'));
+            rightCanvas.addEventListener('mouseout', () => stopDrawing('right'));
+            
+            // Touch events for right canvas
+            rightCanvas.addEventListener('touchstart', (e) => handleTouchStart(e, 'right'));
+            rightCanvas.addEventListener('touchmove', (e) => handleTouchMove(e, 'right'));
+            rightCanvas.addEventListener('touchend', () => stopDrawing('right'));
+        }
+        
+        // Initialize canvases when page loads
+        window.onload = initCanvases;
+        
+        // Drawing functions
+        function startDrawing(e, canvas) {
+            isDrawing[canvas] = true;
+            const rect = document.getElementById(canvas + 'Canvas').getBoundingClientRect();
+            const scaleX = document.getElementById(canvas + 'Canvas').width / rect.width;
+            const scaleY = document.getElementById(canvas + 'Canvas').height / rect.height;
+            
+            lastX[canvas] = (e.clientX - rect.left) * scaleX;
+            lastY[canvas] = (e.clientY - rect.top) * scaleY;
+        }
+        
+        function draw(e, canvas) {
+            if (!isDrawing[canvas]) return;
+            
+            const ctx = canvas === 'left' ? leftCtx : rightCtx;
+            const canvasElem = document.getElementById(canvas + 'Canvas');
+            const rect = canvasElem.getBoundingClientRect();
+            const scaleX = canvasElem.width / rect.width;
+            const scaleY = canvasElem.height / rect.height;
+            
+            const currentX = (e.clientX - rect.left) * scaleX;
+            const currentY = (e.clientY - rect.top) * scaleY;
+            
+            ctx.beginPath();
+            ctx.moveTo(lastX[canvas], lastY[canvas]);
+            ctx.lineTo(currentX, currentY);
+            ctx.stroke();
+            
+            lastX[canvas] = currentX;
+            lastY[canvas] = currentY;
+        }
+        
+        function stopDrawing(canvas) {
+            isDrawing[canvas] = false;
+        }
+        
+        // Touch event handlers
+        function handleTouchStart(e, canvas) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousedown', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            document.getElementById(canvas + 'Canvas').dispatchEvent(mouseEvent);
+        }
+        
+        function handleTouchMove(e, canvas) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousemove', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            document.getElementById(canvas + 'Canvas').dispatchEvent(mouseEvent);
+        }
+        
+        // Function to set drawing color
+        function setColor(canvas, color) {
+            brushColor[canvas] = color;
+            if (canvas === 'left') {
+                leftCtx.strokeStyle = color;
+                leftCtx.lineWidth = brushSize.left;
+            } else {
+                rightCtx.strokeStyle = color;
+                rightCtx.lineWidth = brushSize.right;
+            }
+        }
+        
+        // Function to change brush size
+        function changeBrushSize(canvas, size) {
+            brushSize[canvas] = parseInt(size);
+            if (canvas === 'left') {
+                leftCtx.lineWidth = brushSize.left;
+            } else {
+                rightCtx.lineWidth = brushSize.right;
+            }
+        }
+        
+        // Function to set eraser
+        function setEraser(canvas) {
+            if (canvas === 'left') {
+                leftCtx.strokeStyle = 'white';
+                leftCtx.lineWidth = 20;
+            } else {
+                rightCtx.strokeStyle = 'white';
+                rightCtx.lineWidth = 20;
+            }
+        }
+        
+        // Function to clear canvases
+        function clearCanvas(side) {
+            if (side === 'left' || side === 'both') {
+                leftCtx.fillStyle = 'white';
+                leftCtx.fillRect(0, 0, leftCanvas.width, leftCanvas.height);
+                leftCtx.strokeStyle = brushColor.left;
+                leftCtx.lineWidth = brushSize.left;
+            }
+            if (side === 'right' || side === 'both') {
+                rightCtx.fillStyle = 'white';
+                rightCtx.fillRect(0, 0, rightCanvas.width, rightCanvas.height);
+                rightCtx.strokeStyle = brushColor.right;
+                rightCtx.lineWidth = brushSize.right;
+            }
+            
+            // Reset result display
+            document.getElementById('percentage').textContent = '0%';
+            document.getElementById('progressBar').style.width = '0%';
+            document.getElementById('progressBar').style.backgroundColor = '#e74c3c';
+            document.getElementById('message').textContent = 'Draw on both canvases and click compare to see the similarity';
+        }
+        
+        // Function to compare canvases
+        function compareCanvases() {
+            // Get image data from both canvases
+            const leftData = leftCtx.getImageData(0, 0, leftCanvas.width, leftCanvas.height).data;
+            const rightData = rightCtx.getImageData(0, 0, rightCanvas.width, rightCanvas.height).data;
+            
+            // Simple comparison algorithm - counts matching pixels
+            let matchCount = 0;
+            let totalPixels = 0;
+            
+            for (let i = 0; i < leftData.length; i += 4) {
+                // Only compare if pixel is not completely white or transparent
+                if (!(leftData[i] === 255 && leftData[i+1] === 255 && leftData[i+2] === 255) ||
+                    !(rightData[i] === 255 && rightData[i+1] === 255 && rightData[i+2] === 255)) {
+                    totalPixels++;
+                    
+                    // Calculate color distance (simplified)
+                    const rDiff = Math.abs(leftData[i] - rightData[i]);
+                    const gDiff = Math.abs(leftData[i+1] - rightData[i+1]);
+                    const bDiff = Math.abs(leftData[i+2] - rightData[i+2]);
+                    
+                    // Consider pixels similar if color difference is small
+                    if (rDiff < 50 && gDiff < 50 && bDiff < 50) {
+                        matchCount++;
+                    }
+                }
+            }
+            
+            // Calculate similarity percentage
+            const similarity = totalPixels > 0 ? Math.round((matchCount / totalPixels) * 100) : 0;
+            
+            // Update UI with result
+            document.getElementById('percentage').textContent = `${similarity}%`;
+            document.getElementById('progressBar').style.width = `${similarity}%`;
+            
+            // Change progress bar color based on similarity
+            if (similarity > 75) {
+                document.getElementById('progressBar').style.backgroundColor = '#2ecc71';
+            } else if (similarity > 50) {
+                document.getElementById('progressBar').style.backgroundColor = '#f39c12';
+            } else {
+                document.getElementById('progressBar').style.backgroundColor = '#e74c3c';
+            }
+            
+            // Set message based on similarity
+            let message = '';
+            if (similarity === 0) {
+                message = 'The images are completely different.';
+            } else if (similarity < 25) {
+                message = 'The images are very different.';
+            } else if (similarity < 50) {
+                message = 'The images have some similarities.';
+            } else if (similarity < 75) {
+                message = 'The images are quite similar.';
+            } else if (similarity < 90) {
+                message = 'The images are very similar!';
+            } else {
+                message = 'The images are almost identical!';
+            }
+            
+            document.getElementById('message').textContent = message;
+        }
+    </script>
+</body>
+</html>

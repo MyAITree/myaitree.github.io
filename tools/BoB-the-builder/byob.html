@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gift Box Builder</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .app-description {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .products-section {
+            flex: 2;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .giftbox-section {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+            color: #444;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .product-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-card.selected {
+            border-color: #6a11cb;
+            background-color: #f0f4ff;
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 120px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+        
+        .product-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .product-price {
+            color: #6a11cb;
+            font-weight: bold;
+        }
+        
+        .giftbox-items {
+            min-height: 200px;
+            margin-bottom: 20px;
+        }
+        
+        .giftbox-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .giftbox-total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: right;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 2px solid #eee;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+        
+        .add-to-box {
+            background-color: #6a11cb;
+            color: white;
+        }
+        
+        .add-to-box:hover {
+            background-color: #5a0fb8;
+        }
+        
+        .clear-box {
+            background-color: #ff4d4d;
+            color: white;
+        }
+        
+        .clear-box:hover {
+            background-color: #e04444;
+        }
+        
+        .checkout {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .checkout:hover {
+            background-color: #218838;
+        }
+        
+        .empty-box-message {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+            padding: 30px 0;
+        }
+        
+        .category-filter {
+            margin-bottom: 20px;
+        }
+        
+        .category-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .category-btn {
+            padding: 8px 15px;
+            background-color: #f1f1f1;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .category-btn.active {
+            background-color: #6a11cb;
+            color: white;
+        }
+        
+        .category-btn:hover:not(.active) {
+            background-color: #ddd;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Gift Box Builder</h1>
+            <p class="app-description">Select products to create your perfect gift box</p>
+        </header>
+        
+        <div class="main-content">
+            <section class="products-section">
+                <h2 class="section-title">Available Products</h2>
+                
+                <div class="category-filter">
+                    <h3>Filter by Category:</h3>
+                    <div class="category-buttons" id="categoryButtons">
+                        <!-- Category buttons will be generated here -->
+                    </div>
+                </div>
+                
+                <div class="products-grid" id="productsGrid">
+                    <!-- Product cards will be generated here -->
+                </div>
+            </section>
+            
+            <section class="giftbox-section">
+                <h2 class="section-title">Your Gift Box</h2>
+                
+                <div class="giftbox-items" id="giftboxItems">
+                    <p class="empty-box-message">Your gift box is empty. Select products to add them.</p>
+                </div>
+                
+                <div class="giftbox-total" id="giftboxTotal">
+                    Total: $0.00
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="clear-box" id="clearBoxBtn">Clear Box</button>
+                    <button class="checkout" id="checkoutBtn">Checkout</button>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // Product Class
+        class Product {
+            constructor(id, name, price, category, imageUrl) {
+                this.id = id;
+                this.name = name;
+                this.price = price;
+                this.category = category;
+                this.imageUrl = imageUrl;
+            }
+            
+            getFormattedPrice() {
+                return `$${this.price.toFixed(2)}`;
+            }
+        }
+        
+        // GiftBox Class
+        class GiftBox {
+            constructor() {
+                this.items = [];
+            }
+            
+            addProduct(product) {
+                this.items.push(product);
+            }
+            
+            removeProduct(productId) {
+                this.items = this.items.filter(item => item.id !== productId);
+            }
+            
+            clearBox() {
+                this.items = [];
+            }
+            
+            getTotal() {
+                return this.items.reduce((total, product) => total + product.price, 0);
+            }
+            
+            getFormattedTotal() {
+                return `$${this.getTotal().toFixed(2)}`;
+            }
+            
+            getItemCount() {
+                return this.items.length;
+            }
+        }
+        
+        // App Class
+        class GiftBoxApp {
+            constructor() {
+                this.products = [];
+                this.filteredProducts = [];
+                this.categories = [];
+                this.giftBox = new GiftBox();
+                this.currentCategory = 'all';
+                
+                // DOM Elements
+                this.productsGrid = document.getElementById('productsGrid');
+                this.giftboxItems = document.getElementById('giftboxItems');
+                this.giftboxTotal = document.getElementById('giftboxTotal');
+                this.categoryButtons = document.getElementById('categoryButtons');
+                this.clearBoxBtn = document.getElementById('clearBoxBtn');
+                this.checkoutBtn = document.getElementById('checkoutBtn');
+                
+                // Initialize the app
+                this.init();
+            }
+            
+            init() {
+                this.generateProducts();
+                this.setupEventListeners();
+                this.renderProducts();
+                this.renderCategories();
+                this.updateGiftBoxUI();
+            }
+            
+            generateProducts() {
+                // Create some sample products
+                this.products = [
+                    new Product(1, 'Artisanal Chocolate', 12.99, 'food', 'https://via.placeholder.com/150/6a11cb/ffffff?text=Chocolate'),
+                    new Product(2, 'Gourmet Coffee', 15.50, 'beverages', 'https://via.placeholder.com/150/2575fc/ffffff?text=Coffee'),
+                    new Product(3, 'Scented Candle', 18.75, 'home', 'https://via.placeholder.com/150/28a745/ffffff?text=Candle'),
+                    new Product(4, 'Handmade Soap', 9.99, 'bath', 'https://via.placeholder.com/150/ff4d4d/ffffff?text=Soap'),
+                    new Product(5, 'Wine', 24.99, 'beverages', 'https://via.placeholder.com/150/6a11cb/ffffff?text=Wine'),
+                    new Product(6, 'Personalized Mug', 14.95, 'home', 'https://via.placeholder.com/150/2575fc/ffffff?text=Mug'),
+                    new Product(7, 'Gourmet Tea Set', 22.50, 'beverages', 'https://via.placeholder.com/150/28a745/ffffff?text=Tea+Set'),
+                    new Product(8, 'Bath Bombs', 11.25, 'bath', 'https://via.placeholder.com/150/ff4d4d/ffffff?text=Bath+Bomb'),
+                    new Product(9, 'Premium Cookies', 8.99, 'food', 'https://via.placeholder.com/150/6a11cb/ffffff?text=Cookies'),
+                    new Product(10, 'Desk Plant', 16.75, 'home', 'https://via.placeholder.com/150/2575fc/ffffff?text=Plant')
+                ];
+                
+                // Extract unique categories
+                this.categories = ['all', ...new Set(this.products.map(product => product.category))];
+                this.filteredProducts = [...this.products];
+            }
+            
+            setupEventListeners() {
+                // Category filter buttons
+                this.categoryButtons.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('category-btn')) {
+                        const category = e.target.dataset.category;
+                        this.filterProductsByCategory(category);
+                        
+                        // Update active state of buttons
+                        document.querySelectorAll('.category-btn').forEach(btn => {
+                            btn.classList.remove('active');
+                        });
+                        e.target.classList.add('active');
+                    }
+                });
+                
+                // Product selection
+                this.productsGrid.addEventListener('click', (e) => {
+                    const productCard = e.target.closest('.product-card');
+                    if (productCard) {
+                        const productId = parseInt(productCard.dataset.id);
+                        this.addProductToBox(productId);
+                    }
+                });
+                
+                // Clear box button
+                this.clearBoxBtn.addEventListener('click', () => {
+                    this.giftBox.clearBox();
+                    this.updateGiftBoxUI();
+                });
+                
+                // Checkout button
+                this.checkoutBtn.addEventListener('click', () => {
+                    if (this.giftBox.getItemCount() > 0) {
+                        alert(`Thank you for your order! Your gift box with ${this.giftBox.getItemCount()} items is being prepared. Total: ${this.giftBox.getFormattedTotal()}`);
+                        this.giftBox.clearBox();
+                        this.updateGiftBoxUI();
+                    } else {
+                        alert('Your gift box is empty. Please add some products before checking out.');
+                    }
+                });
+            }
+            
+            filterProductsByCategory(category) {
+                this.currentCategory = category;
+                if (category === 'all') {
+                    this.filteredProducts = [...this.products];
+                } else {
+                    this.filteredProducts = this.products.filter(product => product.category === category);
+                }
+                this.renderProducts();
+            }
+            
+            renderCategories() {
+                this.categoryButtons.innerHTML = '';
+                this.categories.forEach(category => {
+                    const button = document.createElement('button');
+                    button.classList.add('category-btn');
+                    if (category === 'all') {
+                        button.classList.add('active');
+                    }
+                    button.dataset.category = category;
+                    button.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+                    this.categoryButtons.appendChild(button);
+                });
+            }
+            
+            renderProducts() {
+                this.productsGrid.innerHTML = '';
+                
+                if (this.filteredProducts.length === 0) {
+                    this.productsGrid.innerHTML = '<p>No products found in this category.</p>';
+                    return;
+                }
+                
+                this.filteredProducts.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.classList.add('product-card');
+                    productCard.dataset.id = product.id;
+                    
+                    productCard.innerHTML = `
+                        <img src="${product.imageUrl}" alt="${product.name}" class="product-image">
+                        <h3 class="product-name">${product.name}</h3>
+                        <p class="product-price">${product.getFormattedPrice()}</p>
+                        <button class="add-to-box">Add to Box</button>
+                    `;
+                    
+                    this.productsGrid.appendChild(productCard);
+                });
+            }
+            
+            addProductToBox(productId) {
+                const product = this.products.find(p => p.id === productId);
+                if (product) {
+                    this.giftBox.addProduct(product);
+                    this.updateGiftBoxUI();
+                    
+                    // Visual feedback
+                    const productCard = document.querySelector(`.product-card[data-id="${productId}"]`);
+                    productCard.classList.add('selected');
+                    setTimeout(() => {
+                        productCard.classList.remove('selected');
+                    }, 500);
+                }
+            }
+            
+            updateGiftBoxUI() {
+                // Update gift box items
+                if (this.giftBox.getItemCount() === 0) {
+                    this.giftboxItems.innerHTML = '<p class="empty-box-message">Your gift box is empty. Select products to add them.</p>';
+                } else {
+                    this.giftboxItems.innerHTML = '';
+                    this.giftBox.items.forEach(item => {
+                        const itemElement = document.createElement('div');
+                        itemElement.classList.add('giftbox-item');
+                        itemElement.innerHTML = `
+                            <span>${item.name}</span>
+                            <span>${item.getFormattedPrice()}</span>
+                        `;
+                        this.giftboxItems.appendChild(itemElement);
+                    });
+                }
+                
+                // Update total
+                this.giftboxTotal.textContent = `Total: ${this.giftBox.getFormattedTotal()}`;
+            }
+        }
+        
+        // Initialize the application when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new GiftBoxApp();
+        });
+    </script>
+</body>
+</html>
