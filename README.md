@@ -27,6 +27,10 @@ To become the world's fastest sustainable problem-solving company.
 - [HiLiter](https://chromewebstore.google.com/detail/amoiindcmmfjfpgahbbbdmjbklmkicdb?utm_source=item-share-cb)
 - [Qaizen Quiz Bot](https://t.me/QaizenBot)
 
+
+#### Tools for QaiZen 
+- [WordCrawl](https://myaitree.com/tools/QaiZen/wordcrawl.html): Single Page Quiz application - Quick Trivia (no Backend)
+
 ---
 
 ## 🛠️ Tools 
@@ -55,6 +59,7 @@ To become the world's fastest sustainable problem-solving company.
 - [Timer Up Down](https://myaitree.com/tools/TimeCat/timer-up-down.html): Start timer and continue until stopped.
 - [Gantt Chart](https://myaitree.com/tools/TimeCat/03-time-gantt.html): Gantt based tasks
 - [ManthanCalendar](https://myaitree.com/tools/TimeCat/04-manthan-calendar.html): Monthly calendar and holidary printing
+
 
 ---
 

@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>WordCrawl — Daily Trivia (Single Page App)</title>
+  <style>
+    :root{--bg:#6b63d6;--card:#f6f6fb;--muted:#6b7280;--accent:#12a56a;--accent-dark:#0f8f56}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;background:linear-gradient(90deg,#6b63d6 0%,#7b5fd6 100%);min-height:100vh;color:#222}
+    header{height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:rgba(0,0,0,0.2);backdrop-filter:blur(4px);color:#fff}
+    .logo{display:flex;gap:12px;align-items:center;font-weight:700}
+    .container{max-width:840px;margin:36px auto;padding:28px;background:var(--card);border-radius:18px;box-shadow:0 12px 30px rgba(0,0,0,0.12)}
+    h1{font-size:40px;margin:6px 0;color:#5a3ea8}
+    .meta{color:var(--muted);margin-bottom:18px}
+    .start-btn{display:inline-flex;align-items:center;gap:10px;padding:18px 28px;border-radius:12px;background:linear-gradient(180deg,var(--accent),var(--accent-dark));color:#fff;border:none;font-weight:700;font-size:20px;cursor:pointer;box-shadow:0 8px 18px rgba(12,106,84,0.18)}
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:20px}
+    .panel{background:#fff;border-radius:12px;padding:18px;border:1px solid rgba(90,60,160,0.03)}
+    .how{background:#faf6ff}
+    .how ul{padding-left:18px;margin:8px 0}
+    .controls{display:flex;gap:12px;align-items:center}
+    select{padding:10px;border-radius:8px;border:1px solid #ddd}
+    .small{font-size:14px;color:var(--muted)}
+    .timer{font-weight:800;font-size:22px}
+    .question{font-size:18px;margin-bottom:12px}
+    .answers{display:flex;flex-direction:column;gap:10px}
+    .answer{padding:12px;border-radius:8px;border:1px solid #e6e6ee;background:#fff;cursor:pointer}
+    .answer.correct{border-color:#12a56a;background:#e9f7f0}
+    .answer.wrong{border-color:#d15a5a;background:#fdeaea}
+    footer{margin-top:18px;color:var(--muted);font-size:13px}
+    .hidden{display:none}
+    @media (max-width:900px){.grid{grid-template-columns:1fr;}.container{margin:20px}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">🎯 <span>WordCrawl</span></div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <div id="player-id" class="small">Playing as: <span id="pid">guest_000</span></div>
+      <button id="login" class="small">Login</button>
+      <button id="register" class="small">Register</button>
+    </div>
+  </header>
+
+  <main class="container" role="main">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:48px;height:48px;border-radius:8px;background:#dfe6ff;display:flex;align-items:center;justify-content:center">📘</div>
+          <div>
+            <h1 id="title">High School Trivia</h1>
+            <div class="meta" id="date">Wednesday, September 17, 2025</div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <div style="margin-bottom:8px">
+          <select id="category-select" aria-label="Choose category">
+            <option>High School Trivia</option>
+            <option>Science</option>
+            <option>History</option>
+            <option>Pop Culture</option>
+          </select>
+        </div>
+        <button id="start" class="start-btn">⚡ Start Challenge</button>
+      </div>
+    </div>
+
+    <div style="margin-top:22px" class="grid">
+      <section class="panel">
+        <div id="quiz-area">
+          <div class="small" id="status">Ready</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+            <div class="small">Time left: <span id="time" class="timer">03:00</span></div>
+            <div class="small">Score: <span id="score">0</span></div>
+          </div>
+
+          <div id="question-box" style="margin-top:18px">
+            <div id="question" class="question">Press <strong>Start Challenge</strong> to begin.</div>
+            <div id="answers" class="answers"></div>
+          </div>
+        </div>
+
+        <footer>
+          <div class="how">
+            <h3>How It Works</h3>
+            <ul>
+              <li>You have <strong>3 minutes</strong> to answer as many questions as possible.</li>
+              <li>Everyone gets the <strong>same questions</strong> today.</li>
+              <li>You can take the daily challenge <strong>once per day</strong>.</li>
+              <li>New challenge available every day at <strong>midnight Pacific Time</strong>.</li>
+            </ul>
+          </div>
+        </footer>
+      </section>
+
+      <aside class="panel">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div>
+            <strong>Player</strong>
+            <div class="small" id="player-panel">guest_000 • Streak: <span id="streak">0</span></div>
+          </div>
+
+          <div>
+            <strong>Leaderboard (top 3)</strong>
+            <ol id="leaderboard" class="small">
+              <li>—</li>
+              <li>—</li>
+              <li>—</li>
+            </ol>
+          </div>
+
+          <div>
+            <strong>Controls</strong>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+              <button id="pause" class="small">Pause</button>
+              <button id="reset" class="small">Reset</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+<script>
+// Single-file SPA: class-based JavaScript (no external libs)
+class TriviaApp {
+  constructor() {
+    this.timeLimit = 180; // seconds
+    this.timer = null;
+    this.remaining = this.timeLimit;
+    this.score = 0;
+    this.questions = this.buildQuestions();
+    this.current = -1;
+    this.startedAt = null;
+    this.hasPlayedToday = this.checkPlayedToday();
+
+    // elements
+    this.el = {
+      time: document.getElementById('time'),
+      score: document.getElementById('score'),
+      start: document.getElementById('start'),
+      question: document.getElementById('question'),
+      answers: document.getElementById('answers'),
+      status: document.getElementById('status'),
+      pid: document.getElementById('pid'),
+      playerPanel: document.getElementById('player-panel'),
+      streak: document.getElementById('streak'),
+      leaderboard: document.getElementById('leaderboard'),
+      pause: document.getElementById('pause'),
+      reset: document.getElementById('reset'),
+      category: document.getElementById('category-select')
+    };
+
+    this.playerId = this.getOrCreatePlayerId();
+    this.updatePlayerUI();
+    this.attachEvents();
+    this.refreshLeaderboard();
+    this.updateTimeDisplay();
+  }
+
+  // --- Storage & player ---
+  getOrCreatePlayerId(){
+    let id = localStorage.getItem('wb_player_id');
+    if(!id){ id = 'player_' + Math.random().toString(36).slice(2,9); localStorage.setItem('wb_player_id', id); }
+    return id;
+  }
+
+  checkPlayedToday(){
+    const key = 'wb_last_play_' + this.getDayKey();
+    return localStorage.getItem(key) === this.playerId;
+  }
+
+  markPlayedToday(){
+    const key = 'wb_last_play_' + this.getDayKey();
+    localStorage.setItem(key, this.playerId);
+  }
+
+  getDayKey(){
+    const now = new Date();
+    // Use UTC date to approximate midnight Pacific for simplicity in this demo
+    return now.toISOString().slice(0,10);
+  }
+
+  // --- UI ---
+  attachEvents(){
+    this.el.start.addEventListener('click',()=>this.start());
+    this.el.pause.addEventListener('click',()=>this.togglePause());
+    this.el.reset.addEventListener('click',()=>this.reset());
+    this.el.category.addEventListener('change',()=>this.changeCategory());
+    document.getElementById('login').addEventListener('click',()=>alert('Login flow not implemented in demo'));
+    document.getElementById('register').addEventListener('click',()=>alert('Register flow not implemented in demo'));
+  }
+
+  updatePlayerUI(){
+    this.el.pid.textContent = this.playerId;
+    this.el.playerPanel.textContent = this.playerId + ' • Streak: ' + (localStorage.getItem('wb_streak')||0);
+    this.el.streak.textContent = localStorage.getItem('wb_streak')||0;
+  }
+
+  updateTimeDisplay(){
+    const mm = String(Math.floor(this.remaining/60)).padStart(2,'0');
+    const ss = String(this.remaining%60).padStart(2,'0');
+    this.el.time.textContent = `${mm}:${ss}`;
+  }
+
+  // --- Quiz flow ---
+  start(){
+    if(this.hasPlayedToday){ alert('You have already taken the daily challenge today.'); return; }
+    if(this.timer) return; // already running
+    this.score = 0; this.current = -1; this.remaining = this.timeLimit; this.updateTimeDisplay(); this.el.score.textContent = this.score;
+    this.el.status.textContent = 'In progress';
+    this.startedAt = Date.now();
+    this.nextQuestion();
+    this.timer = setInterval(()=>this.tick(),1000);
+  }
+
+  tick(){
+    this.remaining -= 1; this.updateTimeDisplay();
+    if(this.remaining<=0){ this.end(); }
+  }
+
+  end(){
+    clearInterval(this.timer); this.timer = null;
+    this.el.status.textContent = 'Finished';
+    this.markPlayedToday(); this.hasPlayedToday = true;
+    this.saveScore();
+    this.showFinal();
+    this.refreshLeaderboard();
+  }
+
+  togglePause(){
+    if(!this.timer) { // resume
+      if(this.remaining<=0) return;
+      this.timer = setInterval(()=>this.tick(),1000); this.el.status.textContent='In progress';
+    } else { // pause
+      clearInterval(this.timer); this.timer = null; this.el.status.textContent='Paused';
+    }
+  }
+
+  reset(){
+    clearInterval(this.timer); this.timer = null; this.remaining = this.timeLimit; this.updateTimeDisplay(); this.score = 0; this.el.score.textContent = this.score; this.el.status.textContent='Ready'; this.current=-1; this.el.question.textContent='Press Start Challenge to begin.'; this.el.answers.innerHTML='';
+  }
+
+  nextQuestion(){
+    this.current += 1;
+    if(this.current >= this.questions.length) this.current = 0; // loop if ran out
+    const q = this.questions[this.current];
+    this.renderQuestion(q);
+  }
+
+  renderQuestion(q){
+    this.el.question.textContent = q.q;
+    this.el.answers.innerHTML = '';
+    q.choices.forEach((c,idx)=>{
+      const btn = document.createElement('button');
+      btn.className='answer'; btn.type='button'; btn.textContent = c;
+      btn.addEventListener('click',()=>this.answer(idx, btn));
+      this.el.answers.appendChild(btn);
+    });
+  }
+
+  answer(idx, btn){
+    const q = this.questions[this.current];
+    // disable further clicks
+    Array.from(this.el.answers.children).forEach(b=>b.disabled=true);
+
+    if(idx === q.answer){
+      btn.classList.add('correct');
+      this.score += 10; // scoring rule
+      this.el.score.textContent = this.score;
+    } else {
+      btn.classList.add('wrong');
+      // highlight correct
+      const correctBtn = this.el.answers.children[q.answer];
+      if(correctBtn) correctBtn.classList.add('correct');
+    }
+
+    // move to next question after short delay
+    setTimeout(()=>{
+      if(this.remaining>0) this.nextQuestion();
+    },600);
+  }
+
+  showFinal(){
+    this.el.question.textContent = `Time's up! Your score: ${this.score}`;
+    this.el.answers.innerHTML = '';
+  }
+
+  // --- Leaderboard (simple local-storage based demo) ---
+  saveScore(){
+    const board = JSON.parse(localStorage.getItem('wb_board')||'[]');
+    board.push({id:this.playerId,score:this.score,at:Date.now()});
+    // keep only today's entries for demo
+    const todayKey = this.getDayKey();
+    const filtered = board.filter(it=> new Date(it.at).toISOString().slice(0,10) === todayKey );
+    localStorage.setItem('wb_board', JSON.stringify(filtered));
+
+    // update streak if beat personal best
+    const best = Math.max(...filtered.filter(it=>it.id===this.playerId).map(x=>x.score),0);
+    const prevBest = parseInt(localStorage.getItem('wb_best')||'0',10);
+    if(this.score > prevBest){ localStorage.setItem('wb_best', this.score); localStorage.setItem('wb_streak', (parseInt(localStorage.getItem('wb_streak')||'0')+1)); }
+    // mark played
+  }
+
+  refreshLeaderboard(){
+    const board = JSON.parse(localStorage.getItem('wb_board')||'[]');
+    const sorted = board.sort((a,b)=>b.score-a.score).slice(0,3);
+    const list = this.el.leaderboard; list.innerHTML='';
+    if(sorted.length===0){ list.innerHTML='<li>—</li><li>—</li><li>—</li>'; return; }
+    sorted.forEach(it=>{
+      const li = document.createElement('li'); li.textContent = `${it.id} — ${it.score}`; list.appendChild(li);
+    });
+  }
+
+  changeCategory(){
+    // In a real app we would fetch category-specific questions. Demo: just shuffle questions.
+    this.questions = this.buildQuestions();
+    this.shuffle(this.questions);
+    this.reset();
+  }
+
+  // --- util & demo question bank ---
+  buildQuestions(){
+    // small static bank for demo — in real world, fetch from server
+    return [
+      {q:'What is the chemical symbol for water?', choices:['O2','H2O','CO2','NaCl'], answer:1},
+      {q:'Who wrote the play "Romeo and Juliet"?', choices:['T. S. Eliot','William Shakespeare','Charles Dickens','Jane Austen'], answer:1},
+      {q:'Which planet is known as the Red Planet?', choices:['Venus','Mars','Jupiter','Saturn'], answer:1},
+      {q:'What is 8 x 7?', choices:['54','56','58','64'], answer:1},
+      {q:'The process by which plants make food is called?', choices:['Respiration','Transpiration','Photosynthesis','Fermentation'], answer:2},
+      {q:'Who discovered gravity when an apple fell?', choices:['Albert Einstein','Isaac Newton','Galileo Galilei','Nikola Tesla'], answer:1},
+    ];
+  }
+
+  shuffle(arr){
+    for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
+  }
+}
+
+// initialize app
+window.addEventListener('DOMContentLoaded',()=>{
+  const app = new TriviaApp();
+  // Expose for debugging
+  window._wb = app;
+});
+</script>
+</body>
+</html>
