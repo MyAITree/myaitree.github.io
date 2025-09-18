@@ -54,7 +54,7 @@ To become the world's fastest sustainable problem-solving company.
 - [Counter](https://myaitree.com/tools/TimeCat/counter.html): Just click and count - for practicing
 - [Timer Up Down](https://myaitree.com/tools/TimeCat/timer-up-down.html): Start timer and continue until stopped.
 - [Gantt Chart](https://myaitree.com/tools/TimeCat/03-time-gantt.html): Gantt based tasks
-- [ManthanCalendar](https://myaitree.com/tools/TimeCat/04-monthly-calendar.html): Monthly calendar and holidary printing
+- [ManthanCalendar](https://myaitree.com/tools/TimeCat/04-manthan-calendar.html): Monthly calendar and holidary printing
 
 ---
 

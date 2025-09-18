@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Calendar Maker</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7f9;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .app-title {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .app-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .options-panel {
+            flex: 1;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 350px;
+        }
+        
+        .panel-section {
+            margin-bottom: 25px;
+        }
+        
+        .panel-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #eaecef;
+            color: #2c3e50;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .checkbox-group {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .checkbox-group input {
+            width: auto;
+            margin-right: 10px;
+        }
+        
+        .color-legend {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .color-box {
+            width: 15px;
+            height: 15px;
+            margin-right: 8px;
+            border-radius: 3px;
+        }
+        
+        .federal {
+            background-color: #ff5252;
+        }
+        
+        .local {
+            background-color: #448aff;
+        }
+        
+        .design-options {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .design-option {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border: 2px solid #eaecef;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .design-option:hover {
+            border-color: #4a6491;
+        }
+        
+        .design-option.selected {
+            border-color: #4a6491;
+            background-color: #f0f4ff;
+        }
+        
+        .design-preview {
+            height: 80px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        
+        .calendar-container {
+            flex: 2;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            min-height: 600px;
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eaecef;
+        }
+        
+        .calendar-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+        }
+        
+        .calendar-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: #4a6491;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        button:hover {
+            background-color: #3a547e;
+        }
+        
+        .download-btn {
+            background-color: #28a745;
+        }
+        
+        .download-btn:hover {
+            background-color: #218838;
+        }
+        
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+        
+        .calendar-weekday {
+            text-align: center;
+            font-weight: 600;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        
+        .calendar-day {
+            height: 80px;
+            padding: 8px;
+            border: 1px solid #eaecef;
+            border-radius: 4px;
+            position: relative;
+        }
+        
+        .day-number {
+            font-weight: 500;
+        }
+        
+        .federal-holiday {
+            background-color: #ffebee;
+            border-color: #ffcdd2;
+        }
+        
+        .local-holiday {
+            background-color: #e3f2fd;
+            border-color: #bbdefb;
+        }
+        
+        .week-number {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 0.7rem;
+            color: #6c757d;
+        }
+        
+        .event {
+            font-size: 0.7rem;
+            margin-top: 4px;
+            padding: 2px 4px;
+            border-radius: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .federal-event {
+            background-color: #ff5252;
+            color: white;
+        }
+        
+        .local-event {
+            background-color: #448aff;
+            color: white;
+        }
+        
+        .next-month {
+            opacity: 0.5;
+        }
+        
+        @media (max-width: 900px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .options-panel {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="app-title">Custom Calendar Maker</h1>
+            <p class="app-subtitle">Create and customize your calendar with holidays and events</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="options-panel">
+                <div class="panel-section">
+                    <h2 class="panel-title">General Options</h2>
+                    <div class="form-group">
+                        <label for="calendar-title">Title (optional)</label>
+                        <input type="text" id="calendar-title" placeholder="My Custom Calendar">
+                    </div>
+                    <div class="form-group">
+                        <label for="country">Country</label>
+                        <select id="country">
+                            <option value="us">United States</option>
+                            <option value="in" selected>India</option>
+                            <option value="uk">United Kingdom</option>
+                            <option value="ca">Canada</option>
+                            <option value="au">Australia</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="year">Year</label>
+                        <select id="year">
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                            <option value="2025" selected>2025</option>
+                            <option value="2026">2026</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="first-month">First Month</label>
+                        <select id="first-month">
+                            <option value="0">January</option>
+                            <option value="1">February</option>
+                            <option value="2">March</option>
+                            <option value="3">April</option>
+                            <option value="4">May</option>
+                            <option value="5">June</option>
+                            <option value="6">July</option>
+                            <option value="7">August</option>
+                            <option value="8" selected>September</option>
+                            <option value="9">October</option>
+                            <option value="10">November</option>
+                            <option value="11">December</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="months">Number of Months</label>
+                        <select id="months">
+                            <option value="1" selected>1 Month</option>
+                            <option value="2">2 Months</option>
+                            <option value="3">3 Months</option>
+                            <option value="6">6 Months</option>
+                            <option value="12">12 Months</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="panel-section">
+                    <h2 class="panel-title">Holidays & Observances</h2>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="federal-holidays" checked>
+                        <label for="federal-holidays">Federal Holidays</label>
+                        <div class="color-legend">
+                            <div class="color-box federal"></div>
+                            <span>Red - Federal holidays</span>
+                        </div>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="non-working" checked>
+                        <label for="non-working">Mark non-working days (weekend)</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="local-holidays" checked>
+                        <label for="local-holidays">Local Holidays</label>
+                        <div class="color-legend">
+                            <div class="color-box local"></div>
+                            <span>Blue - Local holidays</span>
+                        </div>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="observances" checked>
+                        <label for="observances">Important Observances</label>
+                    </div>
+                </div>
+                
+                <div class="panel-section">
+                    <h2 class="panel-title">Calendar Design</h2>
+                    <div class="design-options">
+                        <div class="design-option selected" data-design="1">
+                            <div class="design-preview">Design 1</div>
+                            <span>Design 1</span>
+                        </div>
+                        <div class="design-option" data-design="2">
+                            <div class="design-preview">Design 2</div>
+                            <span>Design 2</span>
+                        </div>
+                        <div class="design-option" data-design="3">
+                            <div class="design-preview">Design 3</div>
+                            <span>Design 3</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="panel-section">
+                    <h2 class="panel-title">Calendar Settings</h2>
+                    <div class="form-group">
+                        <label for="language">Language</label>
+                        <select id="language">
+                            <option value="en" selected>English</option>
+                            <option value="es">Spanish</option>
+                            <option value="fr">French</option>
+                            <option value="de">German</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="font-size">Font Size</label>
+                        <select id="font-size">
+                            <option value="small">Small</option>
+                            <option value="medium">Medium</option>
+                            <option value="large" selected>Larger Font Size</option>
+                        </select>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="week-numbers" checked>
+                        <label for="week-numbers">Show week numbers</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="next-month" checked>
+                        <label for="next-month">Show next month preview</label>
+                    </div>
+                </div>
+                
+                <button id="generate-btn">Generate Calendar</button>
+            </div>
+            
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <h2 class="calendar-title" id="calendar-display-title">September 2025</h2>
+                    <div class="calendar-controls">
+                        <button id="prev-btn">Previous</button>
+                        <button id="next-btn">Next</button>
+                        <button class="download-btn" id="download-btn">Download PDF</button>
+                    </div>
+                </div>
+                
+                <div class="calendar" id="calendar">
+                    <!-- Calendar will be generated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class CustomCalendar {
+            constructor() {
+                this.currentDate = new Date(2025, 8, 1); // September 2025
+                this.selectedOptions = {
+                    title: 'My Custom Calendar',
+                    country: 'in',
+                    year: 2025,
+                    firstMonth: 8, // September (0-indexed)
+                    months: 1,
+                    federalHolidays: true,
+                    nonWorkingDays: true,
+                    localHolidays: true,
+                    observances: true,
+                    design: '1',
+                    language: 'en',
+                    fontSize: 'large',
+                    weekNumbers: true,
+                    nextMonthPreview: true
+                };
+                
+                this.weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                this.monthNames = [
+                    'January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December'
+                ];
+                
+                this.initializeEventListeners();
+                this.generateCalendar();
+            }
+            
+            initializeEventListeners() {
+                document.getElementById('generate-btn').addEventListener('click', () => {
+                    this.updateOptionsFromUI();
+                    this.generateCalendar();
+                });
+                
+                document.getElementById('prev-btn').addEventListener('click', () => {
+                    this.navigateMonth(-1);
+                });
+                
+                document.getElementById('next-btn').addEventListener('click', () => {
+                    this.navigateMonth(1);
+                });
+                
+                document.getElementById('download-btn').addEventListener('click', () => {
+                    this.downloadPDF();
+                });
+                
+                // Design option selection
+                document.querySelectorAll('.design-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        document.querySelectorAll('.design-option').forEach(opt => {
+                            opt.classList.remove('selected');
+                        });
+                        option.classList.add('selected');
+                        this.selectedOptions.design = option.getAttribute('data-design');
+                        this.applyDesign();
+                    });
+                });
+            }
+            
+            updateOptionsFromUI() {
+                this.selectedOptions = {
+                    title: document.getElementById('calendar-title').value || 'My Custom Calendar',
+                    country: document.getElementById('country').value,
+                    year: parseInt(document.getElementById('year').value),
+                    firstMonth: parseInt(document.getElementById('first-month').value),
+                    months: parseInt(document.getElementById('months').value),
+                    federalHolidays: document.getElementById('federal-holidays').checked,
+                    nonWorkingDays: document.getElementById('non-working').checked,
+                    localHolidays: document.getElementById('local-holidays').checked,
+                    observances: document.getElementById('observances').checked,
+                    design: this.selectedOptions.design,
+                    language: document.getElementById('language').value,
+                    fontSize: document.getElementById('font-size').value,
+                    weekNumbers: document.getElementById('week-numbers').checked,
+                    nextMonthPreview: document.getElementById('next-month').checked
+                };
+                
+                // Update current date based on selected options
+                this.currentDate = new Date(this.selectedOptions.year, this.selectedOptions.firstMonth, 1);
+            }
+            
+            navigateMonth(direction) {
+                this.currentDate.setMonth(this.currentDate.getMonth() + direction);
+                this.generateCalendar();
+            }
+            
+            generateCalendar() {
+                const calendarEl = document.getElementById('calendar');
+                calendarEl.innerHTML = '';
+                
+                // Create weekday headers
+                this.weekdays.forEach(day => {
+                    const dayEl = document.createElement('div');
+                    dayEl.className = 'calendar-weekday';
+                    dayEl.textContent = day;
+                    calendarEl.appendChild(dayEl);
+                });
+                
+                const year = this.currentDate.getFullYear();
+                const month = this.currentDate.getMonth();
+                
+                // Update calendar title
+                document.getElementById('calendar-display-title').textContent = 
+                    `${this.monthNames[month]} ${year}`;
+                
+                // Get first day of month and number of days
+                const firstDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                
+                // Calculate week number for the first day
+                let weekNumber = this.getWeekNumber(new Date(year, month, 1));
+                
+                // Add empty cells for days before the first day of the month
+                for (let i = 0; i < firstDay; i++) {
+                    const emptyDay = document.createElement('div');
+                    emptyDay.className = 'calendar-day next-month';
+                    calendarEl.appendChild(emptyDay);
+                }
+                
+                // Add cells for each day of the month
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dayEl = document.createElement('div');
+                    dayEl.className = 'calendar-day';
+                    
+                    // Add week number if needed
+                    if (this.selectedOptions.weekNumbers && new Date(year, month, day).getDay() === 0) {
+                        const weekNumEl = document.createElement('div');
+                        weekNumEl.className = 'week-number';
+                        weekNumEl.textContent = `W${weekNumber}`;
+                        dayEl.appendChild(weekNumEl);
+                        weekNumber++;
+                    }
+                    
+                    // Add day number
+                    const dayNumberEl = document.createElement('div');
+                    dayNumberEl.className = 'day-number';
+                    dayNumberEl.textContent = day;
+                    dayEl.appendChild(dayNumberEl);
+                    
+                    // Check if it's a weekend (non-working day)
+                    const currentDate = new Date(year, month, day);
+                    const isWeekend = currentDate.getDay() === 0 || currentDate.getDay() === 6;
+                    
+                    if (isWeekend && this.selectedOptions.nonWorkingDays) {
+                        dayEl.style.opacity = '0.7';
+                    }
+                    
+                    // Add sample events (in a real app, this would come from a data source)
+                    if (day === 2 || day === 15 || day === 28) {
+                        const eventEl = document.createElement('div');
+                        eventEl.className = 'event federal-event';
+                        eventEl.textContent = 'Public Holiday';
+                        dayEl.appendChild(eventEl);
+                        dayEl.classList.add('federal-holiday');
+                    } else if (day === 7 || day === 21) {
+                        const eventEl = document.createElement('div');
+                        eventEl.className = 'event local-event';
+                        eventEl.textContent = 'Local Holiday';
+                        dayEl.appendChild(eventEl);
+                        dayEl.classList.add('local-holiday');
+                    } else if (day === 10 || day === 23) {
+                        const eventEl = document.createElement('div');
+                        eventEl.className = 'event';
+                        eventEl.textContent = 'Observance';
+                        dayEl.appendChild(eventEl);
+                    }
+                    
+                    calendarEl.appendChild(dayEl);
+                }
+                
+                this.applyDesign();
+            }
+            
+            getWeekNumber(date) {
+                const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+                const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
+                return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+            }
+            
+            applyDesign() {
+                const calendarEl = document.getElementById('calendar');
+                
+                // Reset any previous design classes
+                calendarEl.classList.remove('design-1', 'design-2', 'design-3');
+                
+                // Apply the selected design
+                calendarEl.classList.add(`design-${this.selectedOptions.design}`);
+                
+                // Apply font size
+                document.body.classList.remove('font-small', 'font-medium', 'font-large');
+                document.body.classList.add(`font-${this.selectedOptions.fontSize}`);
+            }
+            
+            downloadPDF() {
+                alert('In a real application, this would generate and download a PDF. This functionality would require a backend service or a PDF generation library.');
+            }
+        }
+
+        // Initialize the calendar when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            const calendar = new CustomCalendar();
+        });
+    </script>
+</body>
+</html>
