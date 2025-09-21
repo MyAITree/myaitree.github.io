@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shared Timer & Stopwatch</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 600px;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+        }
+        
+        h2 {
+            color: #1a2a6c;
+            margin: 25px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .timer-display, .stopwatch-display {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #1a2a6c;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            font-family: monospace;
+        }
+        
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            background: #1a2a6c;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+        
+        button:hover {
+            background: #2a3c9c;
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button.start {
+            background: #28a745;
+        }
+        
+        button.start:hover {
+            background: #34ce57;
+        }
+        
+        button.pause {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        button.pause:hover {
+            background: #ffd54f;
+        }
+        
+        button.reset {
+            background: #dc3545;
+        }
+        
+        button.reset:hover {
+            background: #e25563;
+        }
+        
+        .share-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+        }
+        
+        .share-url {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            word-break: break-all;
+            font-size: 0.9rem;
+            color: #333;
+        }
+        
+        .copy-btn {
+            margin-top: 10px;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            min-width: auto;
+        }
+        
+        .time-input {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            width: 80px;
+            text-align: center;
+            margin: 0 5px;
+        }
+        
+        label {
+            font-weight: bold;
+            margin-right: 5px;
+            color: #333;
+        }
+        
+        .input-group {
+            margin: 15px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .message {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        
+        .stopwatch-info {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+        
+        .stopwatch-info p {
+            margin: 8px 0;
+        }
+        
+        .mode-switcher {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 50px;
+            overflow: hidden;
+            background: #f0f0f0;
+        }
+        
+        .mode {
+            padding: 12px 0;
+            flex: 1;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .mode.active {
+            background: #1a2a6c;
+            color: white;
+        }
+        
+        .timer-section, .stopwatch-section {
+            display: none;
+        }
+        
+        .timer-section.active, .stopwatch-section.active {
+            display: block;
+        }
+        
+        .lap-times {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 10px;
+            text-align: left;
+        }
+        
+        .lap-times li {
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Timer & Stopwatch</h1>
+        
+        <div class="mode-switcher">
+            <div class="mode active" data-mode="timer">Timer</div>
+            <div class="mode" data-mode="stopwatch">Stopwatch</div>
+        </div>
+        
+        <div class="timer-section active">
+            <h2>Countdown Timer</h2>
+            
+            <div class="input-group">
+                <label for="hours">Hrs:</label>
+                <input type="number" id="hours" class="time-input" min="0" max="99" value="0">
+                
+                <label for="minutes">Min:</label>
+                <input type="number" id="minutes" class="time-input" min="0" max="59" value="10">
+                
+                <label for="seconds">Sec:</label>
+                <input type="number" id="seconds" class="time-input" min="0" max="59" value="0">
+            </div>
+            
+            <div class="timer-display" id="timerDisplay">00:10:00</div>
+            
+            <div class="controls">
+                <button id="startTimerBtn" class="start">Start</button>
+                <button id="pauseTimerBtn" class="pause">Pause</button>
+                <button id="resetTimerBtn" class="reset">Reset</button>
+            </div>
+        </div>
+        
+        <div class="stopwatch-section">
+            <h2>Stopwatch</h2>
+            
+            <div class="stopwatch-display" id="stopwatchDisplay">00:00:00.00</div>
+            
+            <div class="controls">
+                <button id="startStopwatchBtn" class="start">Start</button>
+                <button id="pauseStopwatchBtn" class="pause">Pause</button>
+                <button id="resetStopwatchBtn" class="reset">Reset</button>
+                <button id="lapStopwatchBtn">Lap</button>
+            </div>
+            
+            <div class="stopwatch-info">
+                <p>Start Time: <span id="startTime">Not started</span></p>
+                <p>Elapsed Time: <span id="elapsedTime">00:00:00.00</span></p>
+                <p>Lap Times:</p>
+                <ul id="lapTimes" class="lap-times"></ul>
+            </div>
+        </div>
+        
+        <div class="share-section">
+            <h3>Share this Page</h3>
+            <div class="share-url" id="shareUrl">Copy the URL after starting the timer or stopwatch</div>
+            <button id="copyBtn" class="copy-btn">Copy URL</button>
+            <div class="message" id="message"></div>
+        </div>
+    </div>
+
+    <script>
+        class SharedTimer {
+            constructor(displayElement) {
+                this.displayElement = displayElement;
+                this.timerId = null;
+                this.endTime = null;
+                this.isPaused = false;
+                this.pausedTime = 0;
+                
+                // Set up event listeners
+                document.getElementById('startTimerBtn').addEventListener('click', () => this.start());
+                document.getElementById('pauseTimerBtn').addEventListener('click', () => this.pause());
+                document.getElementById('resetTimerBtn').addEventListener('click', () => this.reset());
+                
+                // Update display initially
+                this.updateDisplay();
+            }
+            
+            getTimeInput() {
+                const hours = parseInt(document.getElementById('hours').value) || 0;
+                const minutes = parseInt(document.getElementById('minutes').value) || 0;
+                const seconds = parseInt(document.getElementById('seconds').value) || 0;
+                
+                return (hours * 3600) + (minutes * 60) + seconds;
+            }
+            
+            start() {
+                // Clear any existing timer
+                if (this.timerId) {
+                    clearInterval(this.timerId);
+                }
+                
+                // If we're resuming from pause
+                if (this.isPaused) {
+                    this.endTime = Date.now() + this.pausedTime;
+                    this.isPaused = false;
+                } else {
+                    // Starting a new timer
+                    const totalSeconds = this.getTimeInput();
+                    
+                    if (totalSeconds <= 0) {
+                        showMessage('Please set a valid time', 'error');
+                        return;
+                    }
+                    
+                    this.endTime = Date.now() + (totalSeconds * 1000);
+                }
+                
+                // Update URL with state
+                updateUrlWithState({
+                    mode: 'timer',
+                    endTime: this.endTime
+                });
+                
+                // Start the timer
+                this.timerId = setInterval(() => this.update(), 1000);
+                this.update(); // Immediate update
+                
+                showMessage('Timer started! Share the URL with others.', 'success');
+            }
+            
+            pause() {
+                if (this.timerId && !this.isPaused) {
+                    clearInterval(this.timerId);
+                    this.timerId = null;
+                    this.isPaused = true;
+                    this.pausedTime = this.endTime - Date.now();
+                    showMessage('Timer paused', 'success');
+                    
+                    // Update URL to remove state
+                    updateUrlWithState();
+                }
+            }
+            
+            reset() {
+                if (this.timerId) {
+                    clearInterval(this.timerId);
+                    this.timerId = null;
+                }
+                
+                this.endTime = null;
+                this.isPaused = false;
+                this.pausedTime = 0;
+                
+                // Update URL to remove state
+                updateUrlWithState();
+                
+                // Reset display to input values
+                this.updateDisplay();
+                
+                showMessage('Timer reset', 'success');
+            }
+            
+            update() {
+                const now = Date.now();
+                const remaining = this.endTime - now;
+                
+                if (remaining <= 0) {
+                    this.displayElement.textContent = '00:00:00';
+                    clearInterval(this.timerId);
+                    this.timerId = null;
+                    showMessage('Timer completed!', 'success');
+                    
+                    // Update URL to remove state
+                    updateUrlWithState();
+                    return;
+                }
+                
+                this.updateDisplay(remaining);
+            }
+            
+            updateDisplay(remainingMs) {
+                if (remainingMs === undefined) {
+                    // Show the input values
+                    const totalSeconds = this.getTimeInput();
+                    const hours = Math.floor(totalSeconds / 3600);
+                    const minutes = Math.floor((totalSeconds % 3600) / 60);
+                    const seconds = totalSeconds % 60;
+                    
+                    this.displayElement.textContent = 
+                        `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    return;
+                }
+                
+                // Convert milliseconds to hours, minutes, seconds
+                const totalSeconds = Math.floor(remainingMs / 1000);
+                const hours = Math.floor(totalSeconds / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = totalSeconds % 60;
+                
+                this.displayElement.textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            loadFromState(state) {
+                if (state.endTime) {
+                    this.endTime = parseInt(state.endTime);
+                    const now = Date.now();
+                    
+                    // If the timer has already ended
+                    if (this.endTime <= now) {
+                        this.displayElement.textContent = '00:00:00';
+                        showMessage('Timer has expired', 'error');
+                        return;
+                    }
+                    
+                    // Start the timer with the end time from URL
+                    if (this.timerId) {
+                        clearInterval(this.timerId);
+                    }
+                    
+                    this.timerId = setInterval(() => this.update(), 1000);
+                    this.update(); // Immediate update
+                    
+                    // Set the input values to match
+                    const totalSeconds = Math.floor((this.endTime - now) / 1000);
+                    const hours = Math.floor(totalSeconds / 3600);
+                    const minutes = Math.floor((totalSeconds % 3600) / 60);
+                    const seconds = totalSeconds % 60;
+                    
+                    document.getElementById('hours').value = hours;
+                    document.getElementById('minutes').value = minutes;
+                    document.getElementById('seconds').value = seconds;
+                    
+                    showMessage('Timer loaded from URL', 'success');
+                }
+            }
+        }
+
+        class Stopwatch {
+            constructor(displayElement, startTimeElement, elapsedTimeElement, lapTimesElement) {
+                this.displayElement = displayElement;
+                this.startTimeElement = startTimeElement;
+                this.elapsedTimeElement = elapsedTimeElement;
+                this.lapTimesElement = lapTimesElement;
+                
+                this.startTime = null;
+                this.elapsedTime = 0;
+                this.timerId = null;
+                this.isRunning = false;
+                this.lapTimes = [];
+                
+                // Set up event listeners
+                document.getElementById('startStopwatchBtn').addEventListener('click', () => this.start());
+                document.getElementById('pauseStopwatchBtn').addEventListener('click', () => this.pause());
+                document.getElementById('resetStopwatchBtn').addEventListener('click', () => this.reset());
+                document.getElementById('lapStopwatchBtn').addEventListener('click', () => this.lap());
+            }
+            
+            start() {
+                if (!this.isRunning) {
+                    if (!this.startTime) {
+                        // First start
+                        this.startTime = Date.now();
+                        this.startTimeElement.textContent = new Date(this.startTime).toLocaleTimeString();
+                    } else {
+                        // Resume from pause
+                        this.startTime = Date.now() - this.elapsedTime;
+                    }
+                    
+                    this.isRunning = true;
+                    this.timerId = setInterval(() => this.update(), 10);
+                    
+                    // Update URL with state
+                    updateUrlWithState({
+                        mode: 'stopwatch',
+                        startTime: this.startTime
+                    });
+                    
+                    showMessage('Stopwatch started! Share the URL with others.', 'success');
+                }
+            }
+            
+            pause() {
+                if (this.isRunning) {
+                    clearInterval(this.timerId);
+                    this.isRunning = false;
+                    showMessage('Stopwatch paused', 'success');
+                    
+                    // Update URL to remove state
+                    updateUrlWithState();
+                }
+            }
+            
+            reset() {
+                this.pause();
+                this.startTime = null;
+                this.elapsedTime = 0;
+                this.lapTimes = [];
+                this.updateDisplay();
+                this.startTimeElement.textContent = 'Not started';
+                this.elapsedTimeElement.textContent = '00:00:00.00';
+                this.lapTimesElement.innerHTML = '';
+                
+                // Update URL to remove state
+                updateUrlWithState();
+                
+                showMessage('Stopwatch reset', 'success');
+            }
+            
+            lap() {
+                if (this.isRunning) {
+                    this.lapTimes.push(this.elapsedTime);
+                    this.updateLapTimes();
+                    showMessage('Lap recorded', 'success');
+                }
+            }
+            
+            update() {
+                this.elapsedTime = Date.now() - this.startTime;
+                this.updateDisplay();
+            }
+            
+            updateDisplay() {
+                const formattedTime = this.formatTime(this.elapsedTime);
+                this.displayElement.textContent = formattedTime;
+                this.elapsedTimeElement.textContent = formattedTime;
+            }
+            
+            formatTime(milliseconds) {
+                const totalSeconds = milliseconds / 1000;
+                const hours = Math.floor(totalSeconds / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = Math.floor(totalSeconds % 60);
+                const centiseconds = Math.floor((milliseconds % 1000) / 10);
+                
+                return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${centiseconds.toString().padStart(2, '0')}`;
+            }
+            
+            updateLapTimes() {
+                this.lapTimesElement.innerHTML = '';
+                
+                this.lapTimes.forEach((lapTime, index) => {
+                    const li = document.createElement('li');
+                    li.textContent = `Lap ${index + 1}: ${this.formatTime(lapTime)}`;
+                    this.lapTimesElement.appendChild(li);
+                });
+            }
+            
+            loadFromState(state) {
+                if (state.startTime) {
+                    this.startTime = parseInt(state.startTime);
+                    this.elapsedTime = Date.now() - this.startTime;
+                    
+                    this.startTimeElement.textContent = new Date(this.startTime).toLocaleTimeString();
+                    
+                    // Start the stopwatch
+                    this.isRunning = true;
+                    this.timerId = setInterval(() => this.update(), 10);
+                    this.update();
+                    
+                    showMessage('Stopwatch loaded from URL', 'success');
+                }
+            }
+        }
+
+        // Global functions
+        function updateUrlWithState(state = null) {
+            const url = new URL(window.location);
+            
+            // Clear existing state parameter
+            url.searchParams.delete('state');
+            
+            // Set new state if provided
+            if (state) {
+                const stateStr = JSON.stringify(state);
+                url.searchParams.set('state', encodeURIComponent(stateStr));
+            }
+            
+            window.history.replaceState({}, '', url);
+            document.getElementById('shareUrl').textContent = url.toString();
+        }
+        
+        function parseStateFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const stateStr = urlParams.get('state');
+            
+            if (stateStr) {
+                try {
+                    return JSON.parse(decodeURIComponent(stateStr));
+                } catch (e) {
+                    console.error('Error parsing state from URL', e);
+                    return null;
+                }
+            }
+            
+            return null;
+        }
+        
+        function showMessage(text, type) {
+            const messageElement = document.getElementById('message');
+            messageElement.textContent = text;
+            messageElement.className = `message ${type}`;
+            
+            // Hide message after 3 seconds
+            setTimeout(() => {
+                messageElement.className = 'message';
+                messageElement.textContent = '';
+            }, 3000);
+        }
+        
+        function switchMode(mode) {
+            // Update mode switcher
+            document.querySelectorAll('.mode').forEach(m => {
+                m.classList.toggle('active', m.getAttribute('data-mode') === mode);
+            });
+            
+            // Update sections
+            document.querySelectorAll('.timer-section, .stopwatch-section').forEach(section => {
+                section.classList.toggle('active', section.classList.contains(`${mode}-section`));
+            });
+        }
+
+        // Initialize the application when the page loads
+        let timer, stopwatch;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize timer
+            const timerDisplayElement = document.getElementById('timerDisplay');
+            timer = new SharedTimer(timerDisplayElement);
+            
+            // Initialize stopwatch
+            const stopwatchDisplayElement = document.getElementById('stopwatchDisplay');
+            const startTimeElement = document.getElementById('startTime');
+            const elapsedTimeElement = document.getElementById('elapsedTime');
+            const lapTimesElement = document.getElementById('lapTimes');
+            stopwatch = new Stopwatch(stopwatchDisplayElement, startTimeElement, elapsedTimeElement, lapTimesElement);
+            
+            // Set up mode switching
+            document.querySelectorAll('.mode').forEach(modeElement => {
+                modeElement.addEventListener('click', () => {
+                    const mode = modeElement.getAttribute('data-mode');
+                    switchMode(mode);
+                });
+            });
+            
+            // Set up copy URL button
+            document.getElementById('copyBtn').addEventListener('click', () => {
+                const shareUrl = document.getElementById('shareUrl').textContent;
+                if (shareUrl && shareUrl !== 'Copy the URL after starting the timer or stopwatch') {
+                    navigator.clipboard.writeText(shareUrl)
+                        .then(() => {
+                            showMessage('URL copied to clipboard!', 'success');
+                        })
+                        .catch(err => {
+                            showMessage('Failed to copy URL', 'error');
+                            console.error('Could not copy text: ', err);
+                        });
+                } else {
+                    showMessage('Start a timer or stopwatch first to generate a shareable URL', 'error');
+                }
+            });
+            
+            // Check URL for existing state
+            const state = parseStateFromUrl();
+            if (state) {
+                if (state.mode === 'timer') {
+                    // Switch to timer mode and load state
+                    switchMode('timer');
+                    timer.loadFromState(state);
+                } else if (state.mode === 'stopwatch') {
+                    // Switch to stopwatch mode and load state
+                    switchMode('stopwatch');
+                    stopwatch.loadFromState(state);
+                }
+            }
+            
+            // Set initial share URL
+            document.getElementById('shareUrl').textContent = window.location.href;
+        });
+    </script>
+</body>
+</html>
