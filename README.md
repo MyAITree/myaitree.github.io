@@ -39,6 +39,7 @@ To become the world's fastest sustainable problem-solving company.
 - [Print Md](https://myaitree.com/tools/print-md.html): Directly print chatgpt markdown text
 - [Md2Slides](https://myaitree.com/tools/md2slides.html): Divide the Markdown to slides
 - [RegrUs](https://myaitree.com/tools/regr-us.html): Regex to JSON converter - based on object based regex.
+- [Notica](https://myaitree.com/tools/teetot/notica.html): Block based text editor
 
 #### Web Data Tool
 - [iFrame XPath](https://myaitree.com/tools/xpath/xpath-extractor.html): Extract xpath from the html pages - use the javascript code and copy paste it.

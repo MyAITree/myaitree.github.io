@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notica-like Block Editor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #37352f;
+            line-height: 1.5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 40px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #37352f;
+        }
+        
+        .editor {
+            min-height: 500px;
+            position: relative;
+        }
+        
+        .block {
+            padding: 8px 0;
+            position: relative;
+            transition: background-color 0.1s;
+            border-radius: 4px;
+            margin-bottom: 2px;
+        }
+        
+        .block:hover {
+            background-color: #f7f6f3;
+        }
+        
+        .block.dragging {
+            opacity: 0.5;
+            transform: rotate(3deg);
+        }
+        
+        .block.drag-over-top {
+            border-top: 2px solid #4caf50;
+        }
+        
+        .block.drag-over-bottom {
+            border-bottom: 2px solid #4caf50;
+        }
+        
+        .block-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .drag-handle {
+            cursor: grab;
+            opacity: 0;
+            padding: 4px;
+            transition: opacity 0.2s;
+            color: #b3b3b3;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+        
+        .block:hover .drag-handle {
+            opacity: 1;
+        }
+        
+        .drag-handle:active {
+            cursor: grabbing;
+        }
+        
+        .block-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            line-height: 1.6;
+            background: transparent;
+            resize: none;
+            min-height: 24px;
+            padding: 2px 0;
+            font-family: inherit;
+        }
+        
+        .block-input:focus::placeholder {
+            color: transparent;
+        }
+        
+        .block-type-selector {
+            display: none;
+            position: absolute;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            width: 200px;
+        }
+        
+        .block-type-option {
+            padding: 8px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .block-type-option:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .block-type-option.active {
+            background-color: #f0f0f0;
+        }
+        
+        .block-type-icon {
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .json-viewer {
+            margin-top: 40px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .block-actions {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 0;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            z-index: 5;
+        }
+        
+        .block-action {
+            padding: 6px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+        }
+        
+        .block-action:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .h1-block .block-input {
+            font-size: 1.875rem;
+            font-weight: 700;
+        }
+        
+        .h2-block .block-input {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .h3-block .block-input {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .quote-block {
+            border-left: 3px solid #e0e0e0;
+            padding-left: 16px;
+            font-style: italic;
+        }
+        
+        .todo-block {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .todo-checkbox {
+            width: 16px;
+            height: 16px;
+            border: 1.5px solid #d9d9d9;
+            border-radius: 2px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 4px;
+            flex-shrink: 0;
+        }
+        
+        .todo-checkbox.checked {
+            background-color: #4caf50;
+            border-color: #4caf50;
+            color: white;
+        }
+        
+        .divider-block {
+            height: 1px;
+            background-color: #e0e0e0;
+            margin: 10px 0;
+            width: 100%;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 8px 16px;
+            background-color: #f0f0f0;
+            border: 1px solid #d0d0d0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        button:hover {
+            background-color: #e0e0e0;
+        }
+        
+        button.primary {
+            background-color: #4caf50;
+            color: white;
+            border-color: #4caf50;
+        }
+        
+        button.primary:hover {
+            background-color: #45a049;
+        }
+        
+        .drop-zone {
+            height: 6px;
+            background-color: transparent;
+            margin: 2px 0;
+            transition: background-color 0.2s;
+            border-radius: 3px;
+            position: relative;
+        }
+        
+        .drop-zone::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: transparent;
+            transform: translateY(-50%);
+            transition: background-color 0.2s;
+        }
+        
+        .drop-zone.active::before {
+            background-color: #4caf50;
+        }
+        
+        .drop-zone.active {
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+        
+        .drag-preview {
+            position: absolute;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 8px;
+            z-index: 1000;
+            pointer-events: none;
+            opacity: 0.9;
+            max-width: 300px;
+            display: none;
+        }
+        
+        .drag-preview.visible {
+            display: block;
+        }
+        
+        .empty-editor-message {
+            text-align: center;
+            color: #b3b3b3;
+            padding: 40px;
+            font-style: italic;
+        }
+        
+        .instructions {
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border-left: 3px solid #4caf50;
+        }
+        
+        .instructions h3 {
+            margin-bottom: 10px;
+            color: #37352f;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Notica-like Block Editor</h1>
+        
+        <div class="instructions">
+            <h3>How to use this editor:</h3>
+            <ul>
+                <li>Click on any block to edit its content</li>
+                <li>Press Enter to create a new block</li>
+                <li>Drag blocks using the handle that appears on hover</li>
+                <li>Drop blocks where you see the green drop zone indicator</li>
+                <li>Type "/" to change block type (only when editing)</li>
+                <li>Use the buttons above to add different block types</li>
+            </ul>
+        </div>
+        
+        <div class="controls">
+            <button id="addTextBlock" class="primary">
+                <i class="fas fa-plus"></i> Add Text Block
+            </button>
+            <button id="addTodoBlock">
+                <i class="fas fa-square"></i> Add To-do
+            </button>
+            <button id="addDivider">
+                <i class="fas fa-minus"></i> Add Divider
+            </button>
+            <button id="exportJson">
+                <i class="fas fa-download"></i> Export JSON
+            </button>
+            <button id="clearAll">
+                <i class="fas fa-trash"></i> Clear All
+            </button>
+        </div>
+        
+        <div class="editor" id="editor">
+            <!-- Blocks will be dynamically inserted here -->
+        </div>
+        
+        <h3>Block Data (JSON)</h3>
+        <div class="json-viewer" id="jsonViewer">
+            <!-- JSON data will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        class BlockEditor {
+            constructor(editorElement, jsonViewerElement) {
+                this.editor = editorElement;
+                this.jsonViewer = jsonViewerElement;
+                this.blocks = [];
+                this.nextId = 1;
+                this.draggedBlock = null;
+                this.dragPreview = null;
+                this.dragOffset = { x: 0, y: 0 };
+                this.currentDropZone = null;
+                
+                this.blockTypes = {
+                    'text': { name: 'Text', icon: 'T' },
+                    'h1': { name: 'Heading 1', icon: 'H1' },
+                    'h2': { name: 'Heading 2', icon: 'H2' },
+                    'h3': { name: 'Heading 3', icon: 'H3' },
+                    'quote': { name: 'Quote', icon: '“' },
+                    'todo': { name: 'To-do', icon: '☐' },
+                    'divider': { name: 'Divider', icon: '—' }
+                };
+                
+                this.init();
+            }
+            
+            init() {
+                // Create initial block
+                this.addBlock('text', null);
+                
+                // Set up event listeners
+                this.editor.addEventListener('dragover', this.handleDragOver.bind(this));
+                this.editor.addEventListener('drop', this.handleDrop.bind(this));
+                this.editor.addEventListener('dragleave', this.handleDragLeave.bind(this));
+                
+                // Set up control buttons
+                document.getElementById('addTextBlock').addEventListener('click', () => {
+                    this.addBlock('text', null);
+                });
+                
+                document.getElementById('addTodoBlock').addEventListener('click', () => {
+                    this.addBlock('todo', null);
+                });
+                
+                document.getElementById('addDivider').addEventListener('click', () => {
+                    this.addBlock('divider', null);
+                });
+                
+                document.getElementById('exportJson').addEventListener('click', () => {
+                    this.exportJson();
+                });
+                
+                document.getElementById('clearAll').addEventListener('click', () => {
+                    if (confirm('Are you sure you want to clear all blocks?')) {
+                        this.blocks = [];
+                        this.nextId = 1;
+                        this.addBlock('text', null);
+                        this.renderBlocks();
+                    }
+                });
+                
+                // Update JSON viewer
+                this.updateJsonViewer();
+            }
+            
+            addBlock(type, parentId = null, content = '', insertAfterId = null) {
+                const id = this.nextId++;
+                const block = {
+                    id,
+                    type,
+                    content,
+                    parentId,
+                    children: []
+                };
+                
+                if (insertAfterId !== null) {
+                    const index = this.blocks.findIndex(b => b.id === insertAfterId);
+                    if (index !== -1) {
+                        this.blocks.splice(index + 1, 0, block);
+                    } else {
+                        this.blocks.push(block);
+                    }
+                } else {
+                    this.blocks.push(block);
+                }
+                
+                // If this block has a parent, add it to the parent's children
+                if (parentId !== null) {
+                    const parentBlock = this.blocks.find(b => b.id === parentId);
+                    if (parentBlock) {
+                        parentBlock.children.push(id);
+                    }
+                }
+                
+                this.renderBlocks();
+                this.updateJsonViewer();
+                
+                return id;
+            }
+            
+            removeBlock(id) {
+                const index = this.blocks.findIndex(b => b.id === id);
+                if (index !== -1) {
+                    // Remove from parent's children
+                    const block = this.blocks[index];
+                    if (block.parentId !== null) {
+                        const parentBlock = this.blocks.find(b => b.id === block.parentId);
+                        if (parentBlock) {
+                            parentBlock.children = parentBlock.children.filter(childId => childId !== id);
+                        }
+                    }
+                    
+                    // Remove the block
+                    this.blocks.splice(index, 1);
+                    
+                    this.renderBlocks();
+                    this.updateJsonViewer();
+                }
+            }
+            
+            updateBlockContent(id, content) {
+                const block = this.blocks.find(b => b.id === id);
+                if (block) {
+                    block.content = content;
+                    this.updateJsonViewer();
+                }
+            }
+            
+            updateBlockType(id, type) {
+                const block = this.blocks.find(b => b.id === id);
+                if (block) {
+                    block.type = type;
+                    this.renderBlocks();
+                    this.updateJsonViewer();
+                }
+            }
+            
+            moveBlock(blockId, newParentId = null, insertAfterId = null) {
+                const blockIndex = this.blocks.findIndex(b => b.id === blockId);
+                if (blockIndex === -1) return;
+                
+                const block = this.blocks[blockIndex];
+                
+                // Remove from current position
+                this.blocks.splice(blockIndex, 1);
+                
+                // Remove from old parent's children
+                if (block.parentId !== null) {
+                    const oldParent = this.blocks.find(b => b.id === block.parentId);
+                    if (oldParent) {
+                        oldParent.children = oldParent.children.filter(id => id !== blockId);
+                    }
+                }
+                
+                // Set new parent
+                block.parentId = newParentId;
+                
+                // Add to new parent's children
+                if (newParentId !== null) {
+                    const newParent = this.blocks.find(b => b.id === newParentId);
+                    if (newParent) {
+                        newParent.children.push(blockId);
+                    }
+                }
+                
+                // Insert at new position
+                if (insertAfterId !== null) {
+                    const insertIndex = this.blocks.findIndex(b => b.id === insertAfterId);
+                    if (insertIndex !== -1) {
+                        this.blocks.splice(insertIndex + 1, 0, block);
+                    } else {
+                        this.blocks.push(block);
+                    }
+                } else {
+                    // If no insertAfterId, add to the beginning
+                    this.blocks.unshift(block);
+                }
+                
+                this.renderBlocks();
+                this.updateJsonViewer();
+            }
+            
+            renderBlocks() {
+                this.editor.innerHTML = '';
+                
+                if (this.blocks.length === 0) {
+                    const emptyMessage = document.createElement('div');
+                    emptyMessage.className = 'empty-editor-message';
+                    emptyMessage.textContent = 'No blocks yet. Add a block using the buttons above.';
+                    this.editor.appendChild(emptyMessage);
+                    return;
+                }
+                
+                // Add a drop zone at the top
+                const topDropZone = document.createElement('div');
+                topDropZone.className = 'drop-zone';
+                topDropZone.setAttribute('data-drop-position', 'top');
+                this.editor.appendChild(topDropZone);
+                
+                this.blocks.forEach((block, index) => {
+                    const blockElement = this.createBlockElement(block);
+                    this.editor.appendChild(blockElement);
+                    
+                    // Add a drop zone after each block (except the last one)
+                    if (index < this.blocks.length - 1) {
+                        const dropZone = document.createElement('div');
+                        dropZone.className = 'drop-zone';
+                        dropZone.setAttribute('data-drop-position', block.id);
+                        this.editor.appendChild(dropZone);
+                    }
+                });
+            }
+            
+            createBlockElement(block) {
+                const blockElement = document.createElement('div');
+                blockElement.className = `block ${block.type}-block`;
+                blockElement.setAttribute('data-block-id', block.id);
+                blockElement.draggable = true;
+                
+                let contentHTML = '';
+                const placeholder = block.content ? '' : (block.type === 'todo' ? 'To-do item...' : "Type '/' for commands");
+                
+                if (block.type === 'divider') {
+                    contentHTML = `
+                        <div class="block-content">
+                            <div class="drag-handle"><i class="fas fa-grip-lines"></i></div>
+                            <div class="divider-block"></div>
+                            <div class="block-actions">
+                                <div class="block-action" data-action="delete"><i class="fas fa-trash"></i> Delete</div>
+                            </div>
+                        </div>
+                    `;
+                } else if (block.type === 'todo') {
+                    const isChecked = block.content.startsWith('[x]');
+                    const displayContent = block.content.replace(/^\[[ x]\] /, '');
+                    
+                    contentHTML = `
+                        <div class="block-content">
+                            <div class="drag-handle"><i class="fas fa-grip-lines"></i></div>
+                            <div class="todo-checkbox ${isChecked ? 'checked' : ''}">${isChecked ? '✓' : ''}</div>
+                            <textarea class="block-input" placeholder="${placeholder}">${displayContent}</textarea>
+                            <div class="block-actions">
+                                <div class="block-action" data-action="delete"><i class="fas fa-trash"></i> Delete</div>
+                            </div>
+                        </div>
+                        <div class="block-type-selector">
+                            ${Object.entries(this.blockTypes).map(([type, info]) => `
+                                <div class="block-type-option ${type === block.type ? 'active' : ''}" data-type="${type}">
+                                    <div class="block-type-icon">${info.icon}</div>
+                                    <div>${info.name}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                } else {
+                    contentHTML = `
+                        <div class="block-content">
+                            <div class="drag-handle"><i class="fas fa-grip-lines"></i></div>
+                            <textarea class="block-input" placeholder="${placeholder}">${block.content}</textarea>
+                            <div class="block-actions">
+                                <div class="block-action" data-action="delete"><i class="fas fa-trash"></i> Delete</div>
+                            </div>
+                        </div>
+                        <div class="block-type-selector">
+                            ${Object.entries(this.blockTypes).map(([type, info]) => `
+                                <div class="block-type-option ${type === block.type ? 'active' : ''}" data-type="${type}">
+                                    <div class="block-type-icon">${info.icon}</div>
+                                    <div>${info.name}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+                
+                blockElement.innerHTML = contentHTML;
+                
+                // Set up event listeners for this block
+                this.setupBlockEventListeners(blockElement, block);
+                
+                return blockElement;
+            }
+            
+            setupBlockEventListeners(blockElement, block) {
+                const input = blockElement.querySelector('.block-input');
+                if (input) {
+                    input.addEventListener('input', (e) => {
+                        let content = e.target.value;
+                        
+                        if (block.type === 'todo') {
+                            const checkbox = blockElement.querySelector('.todo-checkbox');
+                            const isChecked = content.startsWith('[x]');
+                            
+                            if (isChecked) {
+                                content = '[x] ' + content.replace(/^\[x\] /, '');
+                            } else {
+                                content = '[ ] ' + content.replace(/^\[ \] /, '');
+                            }
+                            
+                            this.updateBlockContent(block.id, content);
+                            
+                            // Update checkbox UI
+                            if (content.startsWith('[x]')) {
+                                checkbox.classList.add('checked');
+                                checkbox.innerHTML = '✓';
+                            } else {
+                                checkbox.classList.remove('checked');
+                                checkbox.innerHTML = '';
+                            }
+                        } else {
+                            this.updateBlockContent(block.id, content);
+                        }
+                        
+                        // Show type selector if user types '/'
+                        if (content.endsWith('/') && !blockElement.querySelector('.block-type-selector').style.display) {
+                            this.showBlockTypeSelector(block.id);
+                        }
+                    });
+                    
+                    input.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            this.addBlock('text', block.parentId, '', block.id);
+                            
+                            // Focus the new block
+                            setTimeout(() => {
+                                const newBlock = this.editor.querySelector(`[data-block-id="${block.id + 1}"] .block-input`);
+                                if (newBlock) newBlock.focus();
+                            }, 10);
+                        }
+                        
+                        if (e.key === 'Backspace' && e.target.value === '') {
+                            e.preventDefault();
+                            if (this.blocks.length > 1) {
+                                this.removeBlock(block.id);
+                                
+                                // Focus the previous block
+                                const blockIndex = this.blocks.findIndex(b => b.id === block.id);
+                                if (blockIndex > 0) {
+                                    const prevBlockId = this.blocks[blockIndex - 1].id;
+                                    const prevBlock = this.editor.querySelector(`[data-block-id="${prevBlockId}"] .block-input`);
+                                    if (prevBlock) prevBlock.focus();
+                                }
+                            }
+                        }
+                    });
+                    
+                    input.addEventListener('focus', () => {
+                        blockElement.style.backgroundColor = '#f7f6f3';
+                        // Update placeholder to show commands only when focused
+                        if (!block.content) {
+                            input.placeholder = "Type '/' for commands";
+                        }
+                    });
+                    
+                    input.addEventListener('blur', () => {
+                        blockElement.style.backgroundColor = '';
+                        // Hide placeholder when not focused
+                        if (!block.content) {
+                            input.placeholder = '';
+                        }
+                    });
+                }
+                
+                // Set up checkbox for todo items
+                const checkbox = blockElement.querySelector('.todo-checkbox');
+                if (checkbox) {
+                    checkbox.addEventListener('click', () => {
+                        let content = block.content;
+                        const isChecked = content.startsWith('[x]');
+                        
+                        if (isChecked) {
+                            content = content.replace(/^\[x\] /, '[ ] ');
+                        } else {
+                            content = content.replace(/^\[ \] /, '[x] ');
+                        }
+                        
+                        this.updateBlockContent(block.id, content);
+                        
+                        // Update checkbox UI
+                        if (content.startsWith('[x]')) {
+                            checkbox.classList.add('checked');
+                            checkbox.innerHTML = '✓';
+                        } else {
+                            checkbox.classList.remove('checked');
+                            checkbox.innerHTML = '';
+                        }
+                    });
+                }
+                
+                // Set up drag and drop
+                blockElement.addEventListener('dragstart', (e) => {
+                    this.draggedBlock = blockElement;
+                    blockElement.classList.add('dragging');
+                    
+                    // Hide the original element while dragging
+                    blockElement.style.opacity = '0.4';
+                    
+                    e.dataTransfer.setData('text/plain', block.id.toString());
+                    e.dataTransfer.effectAllowed = 'move';
+                    
+                    // Create a simple drag image instead of custom preview
+                    const dragImage = document.createElement('div');
+                    dragImage.textContent = block.content || 'Empty block';
+                    dragImage.style.padding = '5px 10px';
+                    dragImage.style.background = 'white';
+                    dragImage.style.border = '1px solid #ccc';
+                    dragImage.style.borderRadius = '4px';
+                    document.body.appendChild(dragImage);
+                    e.dataTransfer.setDragImage(dragImage, 10, 10);
+                    setTimeout(() => document.body.removeChild(dragImage), 0);
+                });
+                
+                blockElement.addEventListener('dragend', () => {
+                    blockElement.classList.remove('dragging');
+                    blockElement.style.opacity = '1';
+                    this.draggedBlock = null;
+                    
+                    // Hide all drop zones
+                    this.hideAllDropZones();
+                });
+                
+                // Set up block actions
+                const blockActions = blockElement.querySelector('.block-actions');
+                const deleteAction = blockElement.querySelector('[data-action="delete"]');
+                
+                if (deleteAction) {
+                    deleteAction.addEventListener('click', () => {
+                        this.removeBlock(block.id);
+                    });
+                }
+                
+                // Show/hide block actions on hover
+                blockElement.addEventListener('mouseenter', () => {
+                    if (blockActions) blockActions.style.display = 'block';
+                });
+                
+                blockElement.addEventListener('mouseleave', () => {
+                    if (blockActions) blockActions.style.display = 'none';
+                });
+                
+                // Set up type selector options
+                const typeOptions = blockElement.querySelectorAll('.block-type-option');
+                typeOptions.forEach(option => {
+                    option.addEventListener('click', () => {
+                        const newType = option.getAttribute('data-type');
+                        this.updateBlockType(block.id, newType);
+                    });
+                });
+            }
+            
+            handleDragOver(e) {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                
+                // Find the closest drop zone
+                const dropZones = Array.from(this.editor.querySelectorAll('.drop-zone'));
+                const closestDropZone = this.getClosestDropZone(e.clientY, dropZones);
+                
+                // Hide all drop zones first
+                this.hideAllDropZones();
+                
+                // Show the closest drop zone
+                if (closestDropZone) {
+                    closestDropZone.classList.add('active');
+                    this.currentDropZone = closestDropZone;
+                }
+            }
+            
+            handleDrop(e) {
+                e.preventDefault();
+                
+                // Hide all drop zones
+                this.hideAllDropZones();
+                
+                if (!this.draggedBlock) return;
+                
+                const draggedId = parseInt(this.draggedBlock.getAttribute('data-block-id'));
+                
+                if (this.currentDropZone) {
+                    const dropPosition = this.currentDropZone.getAttribute('data-drop-position');
+                    
+                    if (dropPosition === 'top') {
+                        // Move to the top
+                        this.moveBlock(draggedId, null, null);
+                    } else {
+                        // Move after the block with this ID
+                        const insertAfterId = parseInt(dropPosition);
+                        this.moveBlock(draggedId, null, insertAfterId);
+                    }
+                }
+                
+                this.currentDropZone = null;
+            }
+            
+            handleDragLeave(e) {
+                // Only hide drop zones if we're leaving the editor area entirely
+                if (!this.editor.contains(e.relatedTarget)) {
+                    this.hideAllDropZones();
+                }
+            }
+            
+            getClosestDropZone(y, dropZones) {
+                // Find the closest drop zone to the mouse position
+                return dropZones.reduce((closest, dropZone) => {
+                    const box = dropZone.getBoundingClientRect();
+                    const offset = Math.abs(y - (box.top + box.height / 2));
+                    
+                    if (offset < closest.offset) {
+                        return { dropZone, offset };
+                    } else {
+                        return closest;
+                    }
+                }, { dropZone: null, offset: Number.POSITIVE_INFINITY }).dropZone;
+            }
+            
+            hideAllDropZones() {
+                this.editor.querySelectorAll('.drop-zone').forEach(zone => {
+                    zone.classList.remove('active');
+                });
+            }
+            
+            showBlockTypeSelector(blockId) {
+                // Hide all other type selectors
+                document.querySelectorAll('.block-type-selector').forEach(selector => {
+                    selector.style.display = 'none';
+                });
+                
+                // Show the type selector for this block
+                const blockElement = this.editor.querySelector(`[data-block-id="${blockId}"]`);
+                const typeSelector = blockElement.querySelector('.block-type-selector');
+                typeSelector.style.display = 'block';
+                
+                // Position it correctly
+                const input = blockElement.querySelector('.block-input');
+                typeSelector.style.top = `${input.offsetTop + input.offsetHeight}px`;
+                typeSelector.style.left = `${input.offsetLeft}px`;
+                
+                // Hide when clicking outside
+                const hideSelector = (e) => {
+                    if (!typeSelector.contains(e.target)) {
+                        typeSelector.style.display = 'none';
+                        document.removeEventListener('click', hideSelector);
+                    }
+                };
+                
+                setTimeout(() => {
+                    document.addEventListener('click', hideSelector);
+                }, 10);
+            }
+            
+            updateJsonViewer() {
+                // Create a simplified representation for display
+                const displayData = this.blocks.map(block => ({
+                    id: block.id,
+                    type: block.type,
+                    content: block.content.substring(0, 50) + (block.content.length > 50 ? '...' : ''),
+                    parentId: block.parentId,
+                    children: block.children
+                }));
+                
+                this.jsonViewer.textContent = JSON.stringify(displayData, null, 2);
+            }
+            
+            exportJson() {
+                const dataStr = JSON.stringify(this.blocks, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.setAttribute('href', url);
+                link.setAttribute('download', 'blocks.json');
+                link.click();
+            }
+            
+            // Method to get the full block data
+            getBlockData() {
+                return this.blocks;
+            }
+            
+            // Method to load block data
+            loadBlockData(blocks) {
+                this.blocks = blocks;
+                this.nextId = Math.max(...blocks.map(b => b.id)) + 1;
+                this.renderBlocks();
+                this.updateJsonViewer();
+            }
+        }
+
+        // Initialize the editor when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            const editor = new BlockEditor(
+                document.getElementById('editor'),
+                document.getElementById('jsonViewer')
+            );
+            
+            // Make the editor globally available for testing
+            window.blockEditor = editor;
+            
+            // Add some sample content
+            setTimeout(() => {
+                editor.addBlock('h1', null, 'Welcome to the Block Editor');
+                editor.addBlock('text', null, 'This is a Notica-like editor where each line is a block.');
+                editor.addBlock('todo', null, '[ ] Implement drag and drop');
+                editor.addBlock('todo', null, '[x] Create block structure');
+                editor.addBlock('text', null, 'Try dragging blocks using the handle on the left!');
+            }, 100);
+        });
+    </script>
+</body>
+</html>
