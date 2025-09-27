@@ -61,6 +61,7 @@ To become the world's fastest sustainable problem-solving company.
 - [Gantt Chart](https://myaitree.com/tools/TimeCat/03-time-gantt.html): Gantt based tasks
 - [ManthanCalendar](https://myaitree.com/tools/TimeCat/04-manthan-calendar.html): Monthly calendar and holidary printing
 - [Shared Timer](https://myaitree.com/tools/TimeCat/05-shared-timer.html): Shared timer app with stopwatch
+- [Streaker](https://myaitree.com/tools/TimeCat/06-streaker.html): Weekly time tracker app
 
 ---
 

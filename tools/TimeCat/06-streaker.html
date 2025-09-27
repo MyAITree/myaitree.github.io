@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streaker Time Tracker</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .week-info {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .time-settings, .planning-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        input, select, button {
+            padding: 8px 12px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .color-picker {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        
+        .color-option {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .color-option.active {
+            border-color: #2c3e50;
+        }
+        
+        .clear-cell {
+            background-color: #e74c3c;
+            margin-left: 10px;
+        }
+        
+        .clear-cell:hover {
+            background-color: #c0392b;
+        }
+        
+        .tracker-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+        
+        .tracker-table {
+            width: 100%;
+            border-collapse: collapse;
+            position: relative;
+        }
+        
+        .tracker-table th, .tracker-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .tracker-table th {
+            background-color: #34495e;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .time-header {
+            background-color: #2c3e50 !important;
+            position: relative;
+        }
+        
+        .time-marker {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 1px;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .day-row {
+            background-color: #f8f9fa;
+        }
+        
+        .time-cell {
+            min-width: 80px;
+            height: 60px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            position: relative;
+        }
+        
+        .time-cell:hover {
+            background-color: #f1f2f6;
+        }
+        
+        .total-cell {
+            font-weight: bold;
+            background-color: #ecf0f1;
+        }
+        
+        .planned-hours {
+            color: #3498db;
+        }
+        
+        .actual-hours {
+            color: #2ecc71;
+        }
+        
+        .over-hours {
+            color: #e74c3c;
+        }
+        
+        .plan-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.7;
+            z-index: 1;
+        }
+        
+        .diagonal-stripe {
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 5px,
+                currentColor 5px,
+                currentColor 10px
+            );
+        }
+        
+        .vertical-stripe {
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 5px,
+                currentColor 5px,
+                currentColor 10px
+            );
+        }
+        
+        .horizontal-stripe {
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 5px,
+                currentColor 5px,
+                currentColor 10px
+            );
+        }
+        
+        .dotted {
+            background: radial-gradient(circle, currentColor 2px, transparent 2px);
+            background-size: 10px 10px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 450px;
+            max-width: 90%;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+        
+        .modal-body {
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .pattern-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .pattern-option {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #bdc3c7;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .pattern-option.active {
+            border-color: #3498db;
+        }
+        
+        .week-plans {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .week-plans h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        
+        .plan-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: white;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .plan-time {
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .delete-plan {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .week-navigation {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .week-nav-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Enhanced Weekly Time Tracker</h1>
+        
+        <div class="week-info">
+            Week: <span id="week-number">--</span>, 
+            <span id="week-dates">--</span>
+        </div>
+        
+        <div class="week-navigation">
+            <button id="prev-week" class="week-nav-btn">Previous Week</button>
+            <button id="current-week" class="week-nav-btn">Current Week</button>
+            <button id="next-week" class="week-nav-btn">Next Week</button>
+        </div>
+        
+        <div class="controls">
+            <div class="time-settings">
+                <label for="start-time">Start Time:</label>
+                <input type="time" id="start-time" value="08:00">
+                
+                <label for="end-time">End Time:</label>
+                <input type="time" id="end-time" value="20:00">
+                
+                <label for="interval">Interval (min):</label>
+                <select id="interval">
+                    <option value="15">15</option>
+                    <option value="30" selected>30</option>
+                    <option value="60">60</option>
+                </select>
+                
+                <button id="apply-time">Apply</button>
+            </div>
+            
+            <div class="planning-controls">
+                <div class="color-picker">
+                    <span>Cell Color:</span>
+                    <div class="color-option active" data-color="" style="background-color: white;" title="No Color"></div>
+                    <div class="color-option" data-color="#ffcccc" style="background-color: #ffcccc;" title="Light Red"></div>
+                    <div class="color-option" data-color="#ccffcc" style="background-color: #ccffcc;" title="Light Green"></div>
+                    <div class="color-option" data-color="#ccccff" style="background-color: #ccccff;" title="Light Blue"></div>
+                    <div class="color-option" data-color="#ffffcc" style="background-color: #ffffcc;" title="Light Yellow"></div>
+                    <button id="clear-cell" class="clear-cell">Clear Cell</button>
+                </div>
+                
+                <button id="add-plan">Add Weekly Plan</button>
+                <button id="save-data">Save</button>
+                <button id="load-data">Load</button>
+            </div>
+        </div>
+        
+        <div class="tracker-container">
+            <div id="tracker-table-container"></div>
+        </div>
+        
+        <div class="week-plans">
+            <h3>Weekly Plans</h3>
+            <div id="plans-list"></div>
+        </div>
+    </div>
+    
+    <div class="modal" id="plan-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Weekly Plan</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="plan-name">Plan Name:</label>
+                    <input type="text" id="plan-name" placeholder="Enter plan name">
+                </div>
+                <div class="form-group">
+                    <label for="plan-start">Start Time:</label>
+                    <input type="time" id="plan-start" value="09:00">
+                </div>
+                <div class="form-group">
+                    <label for="plan-end">End Time:</label>
+                    <input type="time" id="plan-end" value="17:00">
+                </div>
+                <div class="form-group">
+                    <label>Pattern Style:</label>
+                    <div class="pattern-options">
+                        <div class="pattern-option active" data-pattern="diagonal" style="background: repeating-linear-gradient(45deg, #3498db, #3498db 5px, transparent 5px, transparent 10px);"></div>
+                        <div class="pattern-option" data-pattern="vertical" style="background: repeating-linear-gradient(90deg, #3498db, #3498db 5px, transparent 5px, transparent 10px);"></div>
+                        <div class="pattern-option" data-pattern="horizontal" style="background: repeating-linear-gradient(0deg, #3498db, #3498db 5px, transparent 5px, transparent 10px);"></div>
+                        <div class="pattern-option" data-pattern="dotted" style="background: radial-gradient(circle, #3498db 2px, transparent 2px); background-size: 10px 10px;"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="plan-color">Pattern Color:</label>
+                    <input type="color" id="plan-color" value="#3498db">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="save-plan">Save Plan</button>
+                <button id="cancel-plan">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Main Application Class
+        class EnhancedWeeklyTimeTracker {
+            constructor() {
+                this.days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+                this.startTime = '08:00';
+                this.endTime = '20:00';
+                this.interval = 30; // minutes
+                this.selectedColor = '';
+                this.plans = [];
+                this.cellData = {};
+                this.currentWeek = this.getWeekNumber(new Date());
+                this.currentYear = new Date().getFullYear();
+                this.selectedPattern = 'diagonal';
+                this.selectedPlanColor = '#3498db';
+                
+                this.initializeEventListeners();
+                this.generateTracker();
+                this.loadFromStorage();
+                this.updateWeekInfo();
+            }
+            
+            getWeekNumber(d) {
+                d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+                d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+                const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+                const weekNo = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
+                return weekNo;
+            }
+            
+            getWeekDates(weekNo, year) {
+                const simple = new Date(year, 0, 1 + (weekNo - 1) * 7);
+                const dow = simple.getDay();
+                const weekStart = new Date(simple);
+                if (dow <= 4) {
+                    weekStart.setDate(simple.getDate() - simple.getDay() + 1);
+                } else {
+                    weekStart.setDate(simple.getDate() + 8 - simple.getDay());
+                }
+                
+                const weekEnd = new Date(weekStart);
+                weekEnd.setDate(weekStart.getDate() + 6);
+                
+                return {
+                    start: weekStart,
+                    end: weekEnd
+                };
+            }
+            
+            updateWeekInfo() {
+                const weekDates = this.getWeekDates(this.currentWeek, this.currentYear);
+                const options = { month: 'short', day: 'numeric' };
+                document.getElementById('week-number').textContent = this.currentWeek;
+                document.getElementById('week-dates').textContent = 
+                    `${weekDates.start.toLocaleDateString('en-US', options)} - ${weekDates.end.toLocaleDateString('en-US', options)}`;
+            }
+            
+            initializeEventListeners() {
+                // Time settings
+                document.getElementById('apply-time').addEventListener('click', () => {
+                    this.startTime = document.getElementById('start-time').value;
+                    this.endTime = document.getElementById('end-time').value;
+                    this.interval = parseInt(document.getElementById('interval').value);
+                    this.generateTracker();
+                });
+                
+                // Color picker
+                document.querySelectorAll('.color-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        document.querySelectorAll('.color-option').forEach(opt => {
+                            opt.classList.remove('active');
+                        });
+                        option.classList.add('active');
+                        this.selectedColor = option.getAttribute('data-color');
+                    });
+                });
+                
+                // Clear cell button
+                document.getElementById('clear-cell').addEventListener('click', () => {
+                    this.selectedColor = '';
+                    document.querySelectorAll('.color-option').forEach(opt => {
+                        opt.classList.remove('active');
+                    });
+                    document.querySelector('.color-option[data-color=""]').classList.add('active');
+                });
+                
+                // Pattern options
+                document.querySelectorAll('.pattern-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        document.querySelectorAll('.pattern-option').forEach(opt => {
+                            opt.classList.remove('active');
+                        });
+                        option.classList.add('active');
+                        this.selectedPattern = option.getAttribute('data-pattern');
+                    });
+                });
+                
+                // Plan color
+                document.getElementById('plan-color').addEventListener('change', (e) => {
+                    this.selectedPlanColor = e.target.value;
+                });
+                
+                // Week navigation
+                document.getElementById('prev-week').addEventListener('click', () => {
+                    this.currentWeek--;
+                    if (this.currentWeek < 1) {
+                        this.currentYear--;
+                        this.currentWeek = 52;
+                    }
+                    this.updateWeekInfo();
+                    this.generateTracker();
+                });
+                
+                document.getElementById('current-week').addEventListener('click', () => {
+                    this.currentWeek = this.getWeekNumber(new Date());
+                    this.currentYear = new Date().getFullYear();
+                    this.updateWeekInfo();
+                    this.generateTracker();
+                });
+                
+                document.getElementById('next-week').addEventListener('click', () => {
+                    this.currentWeek++;
+                    if (this.currentWeek > 52) {
+                        this.currentYear++;
+                        this.currentWeek = 1;
+                    }
+                    this.updateWeekInfo();
+                    this.generateTracker();
+                });
+                
+                // Plan modal
+                document.getElementById('add-plan').addEventListener('click', () => {
+                    this.openPlanModal();
+                });
+                
+                document.querySelector('.close-modal').addEventListener('click', () => {
+                    this.closePlanModal();
+                });
+                
+                document.getElementById('cancel-plan').addEventListener('click', () => {
+                    this.closePlanModal();
+                });
+                
+                document.getElementById('save-plan').addEventListener('click', () => {
+                    this.savePlan();
+                });
+                
+                // Save/load data
+                document.getElementById('save-data').addEventListener('click', () => {
+                    this.saveToStorage();
+                    alert('Data saved successfully!');
+                });
+                
+                document.getElementById('load-data').addEventListener('click', () => {
+                    this.loadFromStorage();
+                    this.generateTracker();
+                    alert('Data loaded successfully!');
+                });
+            }
+            
+            generateTimeSlots() {
+                const slots = [];
+                let current = this.timeToMinutes(this.startTime);
+                const end = this.timeToMinutes(this.endTime);
+                
+                while (current < end) {
+                    slots.push(this.minutesToTime(current));
+                    current += this.interval;
+                }
+                
+                return slots;
+            }
+            
+            timeToMinutes(timeStr) {
+                const [hours, minutes] = timeStr.split(':').map(Number);
+                return hours * 60 + minutes;
+            }
+            
+            minutesToTime(minutes) {
+                const hrs = Math.floor(minutes / 60);
+                const mins = minutes % 60;
+                return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+            }
+            
+            generateTracker() {
+                const container = document.getElementById('tracker-table-container');
+                const timeSlots = this.generateTimeSlots();
+                
+                let html = '<table class="tracker-table">';
+                
+                // Header row with time slots
+                html += '<thead><tr><th class="time-header">Day/Time</th>';
+                timeSlots.forEach(slot => {
+                    html += `<th class="time-header">${slot}<div class="time-marker"></div></th>`;
+                });
+                html += '<th>Planned</th><th>Actual</th><th>Status</th></tr></thead>';
+                
+                // Day rows
+                html += '<tbody>';
+                this.days.forEach(day => {
+                    html += `<tr class="day-row"><td>${day}</td>`;
+                    
+                    // Time cells
+                    timeSlots.forEach(slot => {
+                        const cellId = `${this.currentWeek}-${this.currentYear}-${day}-${slot}`;
+                        const cellData = this.cellData[cellId] || { text: '', color: '' };
+                        html += `<td class="time-cell" data-id="${cellId}" 
+                                 style="background-color: ${cellData.color}" 
+                                 contenteditable="true">${cellData.text}</td>`;
+                    });
+                    
+                    // Totals columns
+                    html += `<td class="total-cell planned-hours" id="${day}-planned">0h 0m</td>`;
+                    html += `<td class="total-cell actual-hours" id="${day}-actual">0h 0m</td>`;
+                    html += `<td class="total-cell" id="${day}-status">-</td>`;
+                    
+                    html += '</tr>';
+                });
+                html += '</tbody></table>';
+                
+                container.innerHTML = html;
+                
+                // Add event listeners to cells
+                this.attachCellListeners();
+                
+                // Update totals
+                this.updateTotals();
+                
+                // Draw plan patterns
+                this.drawPlanPatterns();
+            }
+            
+            attachCellListeners() {
+                document.querySelectorAll('.time-cell').forEach(cell => {
+                    cell.addEventListener('click', (e) => {
+                        // Set background color if a color is selected
+                        if (this.selectedColor) {
+                            e.target.style.backgroundColor = this.selectedColor;
+                            this.saveCellData(e.target);
+                        } else {
+                            // If no color selected, clear the cell
+                            e.target.style.backgroundColor = '';
+                            e.target.textContent = '';
+                            this.saveCellData(e.target);
+                        }
+                    });
+                    
+                    cell.addEventListener('blur', (e) => {
+                        this.saveCellData(e.target);
+                        this.updateTotals();
+                    });
+                    
+                    cell.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            e.target.blur();
+                        }
+                    });
+                });
+            }
+            
+            saveCellData(cell) {
+                const cellId = cell.getAttribute('data-id');
+                this.cellData[cellId] = {
+                    text: cell.textContent,
+                    color: cell.style.backgroundColor
+                };
+            }
+            
+            updateTotals() {
+                this.days.forEach(day => {
+                    const timeSlots = this.generateTimeSlots();
+                    let plannedMinutes = 0;
+                    let actualMinutes = 0;
+                    
+                    // Calculate planned time from plans
+                    this.plans.forEach(plan => {
+                        plannedMinutes += this.timeToMinutes(plan.end) - this.timeToMinutes(plan.start);
+                    });
+                    
+                    // Calculate actual time from colored cells
+                    timeSlots.forEach(slot => {
+                        const cellId = `${this.currentWeek}-${this.currentYear}-${day}-${slot}`;
+                        const cell = document.querySelector(`[data-id="${cellId}"]`);
+                        if (cell && cell.style.backgroundColor && cell.style.backgroundColor !== 'white' && 
+                            cell.style.backgroundColor !== 'transparent' && cell.style.backgroundColor !== '') {
+                            actualMinutes += this.interval;
+                        }
+                    });
+                    
+                    // Update display
+                    document.getElementById(`${day}-planned`).textContent = 
+                        `${Math.floor(plannedMinutes / 60)}h ${plannedMinutes % 60}m`;
+                    
+                    document.getElementById(`${day}-actual`).textContent = 
+                        `${Math.floor(actualMinutes / 60)}h ${actualMinutes % 60}m`;
+                    
+                    const statusCell = document.getElementById(`${day}-status`);
+                    if (actualMinutes > plannedMinutes) {
+                        statusCell.textContent = 'Over';
+                        statusCell.className = 'total-cell over-hours';
+                    } else if (actualMinutes === plannedMinutes) {
+                        statusCell.textContent = 'Met';
+                        statusCell.className = 'total-cell actual-hours';
+                    } else {
+                        statusCell.textContent = 'Under';
+                        statusCell.className = 'total-cell planned-hours';
+                    }
+                });
+            }
+            
+            openPlanModal() {
+                document.getElementById('plan-modal').style.display = 'flex';
+            }
+            
+            closePlanModal() {
+                document.getElementById('plan-modal').style.display = 'none';
+                // Reset form
+                document.getElementById('plan-name').value = '';
+                document.getElementById('plan-start').value = '09:00';
+                document.getElementById('plan-end').value = '17:00';
+            }
+            
+            savePlan() {
+                const name = document.getElementById('plan-name').value;
+                const start = document.getElementById('plan-start').value;
+                const end = document.getElementById('plan-end').value;
+                
+                if (!name) {
+                    alert('Please enter a plan name');
+                    return;
+                }
+                
+                if (this.timeToMinutes(start) >= this.timeToMinutes(end)) {
+                    alert('End time must be after start time');
+                    return;
+                }
+                
+                this.plans.push({ 
+                    name, 
+                    start, 
+                    end, 
+                    pattern: this.selectedPattern,
+                    color: this.selectedPlanColor
+                });
+                this.closePlanModal();
+                this.updatePlansList();
+                this.drawPlanPatterns();
+                this.updateTotals();
+            }
+            
+            updatePlansList() {
+                const plansList = document.getElementById('plans-list');
+                plansList.innerHTML = '';
+                
+                this.plans.forEach((plan, index) => {
+                    const planItem = document.createElement('div');
+                    planItem.className = 'plan-item';
+                    planItem.innerHTML = `
+                        <div>
+                            <strong>${plan.name}</strong> (${plan.start} - ${plan.end})
+                        </div>
+                        <div class="plan-time">${plan.pattern}</div>
+                        <button class="delete-plan" data-index="${index}">Delete</button>
+                    `;
+                    plansList.appendChild(planItem);
+                });
+                
+                // Add delete event listeners
+                document.querySelectorAll('.delete-plan').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const index = parseInt(e.target.getAttribute('data-index'));
+                        this.plans.splice(index, 1);
+                        this.updatePlansList();
+                        this.drawPlanPatterns();
+                        this.updateTotals();
+                    });
+                });
+            }
+            
+            drawPlanPatterns() {
+                // Remove existing plan patterns
+                document.querySelectorAll('.plan-pattern').forEach(pattern => pattern.remove());
+                
+                const timeSlots = this.generateTimeSlots();
+                
+                this.plans.forEach(plan => {
+                    const startMinutes = this.timeToMinutes(plan.start);
+                    const endMinutes = this.timeToMinutes(plan.end);
+                    
+                    // Apply to all days of the week
+                    this.days.forEach(day => {
+                        const startSlot = this.findClosestSlot(timeSlots, startMinutes);
+                        const endSlot = this.findClosestSlot(timeSlots, endMinutes);
+                        
+                        if (startSlot === -1 || endSlot === -1) return;
+                        
+                        // Apply pattern to all cells in the time range for this day
+                        for (let i = startSlot; i < endSlot; i++) {
+                            const cellId = `${this.currentWeek}-${this.currentYear}-${day}-${timeSlots[i]}`;
+                            const cell = document.querySelector(`[data-id="${cellId}"]`);
+                            
+                            if (cell) {
+                                const patternDiv = document.createElement('div');
+                                patternDiv.className = `plan-pattern ${plan.pattern}-stripe`;
+                                patternDiv.style.color = plan.color;
+                                cell.style.position = 'relative';
+                                cell.appendChild(patternDiv);
+                            }
+                        }
+                    });
+                });
+            }
+            
+            findClosestSlot(timeSlots, targetMinutes) {
+                for (let i = 0; i < timeSlots.length; i++) {
+                    const slotMinutes = this.timeToMinutes(timeSlots[i]);
+                    if (slotMinutes >= targetMinutes) {
+                        return i;
+                    }
+                }
+                return -1;
+            }
+            
+            saveToStorage() {
+                const data = {
+                    cellData: this.cellData,
+                    plans: this.plans,
+                    settings: {
+                        startTime: this.startTime,
+                        endTime: this.endTime,
+                        interval: this.interval
+                    },
+                    currentWeek: this.currentWeek,
+                    currentYear: this.currentYear
+                };
+                localStorage.setItem('enhancedWeeklyTimeTracker', JSON.stringify(data));
+            }
+            
+            loadFromStorage() {
+                const saved = localStorage.getItem('enhancedWeeklyTimeTracker');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    this.cellData = data.cellData || {};
+                    this.plans = data.plans || [];
+                    
+                    if (data.settings) {
+                        this.startTime = data.settings.startTime || this.startTime;
+                        this.endTime = data.settings.endTime || this.endTime;
+                        this.interval = data.settings.interval || this.interval;
+                        
+                        // Update UI controls
+                        document.getElementById('start-time').value = this.startTime;
+                        document.getElementById('end-time').value = this.endTime;
+                        document.getElementById('interval').value = this.interval;
+                    }
+                    
+                    if (data.currentWeek) this.currentWeek = data.currentWeek;
+                    if (data.currentYear) this.currentYear = data.currentYear;
+                    
+                    this.updateWeekInfo();
+                    this.updatePlansList();
+                }
+            }
+        }
+
+        // Initialize the application when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new EnhancedWeeklyTimeTracker();
+        });
+    </script>
+</body>
+</html>
