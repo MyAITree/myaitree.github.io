@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        input[type="date"], input[type="month"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f5e8;
+            border-radius: 5px;
+            border-left: 4px solid #28a745;
+        }
+        .error {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8d7da;
+            border-radius: 5px;
+            border-left: 4px solid #dc3545;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Age Calculator</h1>
+        <p>Calculate your age as of a specific date</p>
+        
+        <div class="form-group">
+            <label for="birthDate">Birth Date:</label>
+            <input type="date" id="birthDate" value="1994-02-01">
+        </div>
+        
+        <div class="form-group">
+            <label for="targetDate">Target Date (Calculate age as of):</label>
+            <input type="month" id="targetDate" value="2026-08">
+        </div>
+        
+        <button onclick="calculateAge()">Calculate Age</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        class AgeCalculator {
+            constructor(birthDate, targetDate) {
+                this.birthDate = new Date(birthDate);
+                this.targetDate = new Date(targetDate);
+                
+                // Validate dates
+                if (isNaN(this.birthDate.getTime())) {
+                    throw new Error('Invalid birth date');
+                }
+                if (isNaN(this.targetDate.getTime())) {
+                    throw new Error('Invalid target date');
+                }
+                if (this.targetDate < this.birthDate) {
+                    throw new Error('Target date cannot be before birth date');
+                }
+            }
+            
+            calculateAge() {
+                const birth = this.birthDate;
+                const target = this.targetDate;
+                
+                let years = target.getFullYear() - birth.getFullYear();
+                let months = target.getMonth() - birth.getMonth();
+                let days = target.getDate() - birth.getDate();
+                
+                // Adjust for negative months or days
+                if (months < 0 || (months === 0 && days < 0)) {
+                    years--;
+                    months += 12;
+                }
+                
+                // Adjust for negative days
+                if (days < 0) {
+                    const lastMonth = new Date(target.getFullYear(), target.getMonth(), 0);
+                    days += lastMonth.getDate();
+                    months--;
+                    
+                    if (months < 0) {
+                        months += 12;
+                        years--;
+                    }
+                }
+                
+                // Calculate total months and exact age in years
+                const totalMonths = years * 12 + months;
+                const exactAge = years + (months / 12) + (days / 365.25);
+                
+                return {
+                    years: years,
+                    months: months,
+                    days: days,
+                    totalMonths: totalMonths,
+                    exactAge: parseFloat(exactAge.toFixed(2)),
+                    ageDescription: `${years} years, ${months} months, and ${days} days`
+                };
+            }
+            
+            // Static method for quick calculation
+            static calculate(birthDate, targetDate) {
+                const calculator = new AgeCalculator(birthDate, targetDate);
+                return calculator.calculateAge();
+            }
+            
+            // Method to check if a specific age will be reached by target date
+            willBeAge(desiredAge) {
+                const age = this.calculateAge();
+                return age.years >= desiredAge;
+            }
+        }
+        
+        // Example usage with your specific case
+        function runExample() {
+            try {
+                const birthDate = '1994-02-01';
+                const targetDate = '2026-08-01'; // August 2026
+                
+                const result = AgeCalculator.calculate(birthDate, targetDate);
+                console.log(`Born: ${birthDate}`);
+                console.log(`Target Date: ${targetDate}`);
+                console.log(`Age: ${result.ageDescription}`);
+                console.log(`Exact Age: ${result.exactAge} years`);
+                console.log(`Will be 32 years old: ${result.years >= 32}`);
+                
+                return result;
+            } catch (error) {
+                console.error('Error in example:', error.message);
+                return null;
+            }
+        }
+        
+        // Run the example
+        console.log('Example Calculation:');
+        runExample();
+        
+        // UI interaction function
+        function calculateAge() {
+            const birthDateInput = document.getElementById('birthDate').value;
+            const targetDateInput = document.getElementById('targetDate').value + '-01'; // Add day for Date object
+            
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                const result = AgeCalculator.calculate(birthDateInput, targetDateInput);
+                
+                const willBe32 = result.years >= 32;
+                const statusEmoji = willBe32 ? '✅' : '❌';
+                
+                resultDiv.innerHTML = `
+                    <div class="result">
+                        <h3>Age Calculation Result</h3>
+                        <p><strong>Birth Date:</strong> ${new Date(birthDateInput).toDateString()}</p>
+                        <p><strong>Target Date:</strong> ${new Date(targetDateInput).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</p>
+                        <p><strong>Age:</strong> ${result.ageDescription}</p>
+                        <p><strong>Exact Age:</strong> ${result.exactAge} years</p>
+                        <p><strong>Total Months:</strong> ${result.totalMonths} months</p>
+                        <p><strong>Will be 32 years old:</strong> ${statusEmoji} ${willBe32 ? 'Yes' : 'No'}</p>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h3>Error</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Initialize with example values
+        window.onload = function() {
+            calculateAge();
+        };
+    </script>
+</body>
+</html>

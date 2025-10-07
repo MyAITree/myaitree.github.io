@@ -26,6 +26,7 @@ To become the world's fastest sustainable problem-solving company.
 ### Education Projects
 - [HiLiter](https://chromewebstore.google.com/detail/amoiindcmmfjfpgahbbbdmjbklmkicdb?utm_source=item-share-cb)
 - [Qaizen Quiz Bot](https://t.me/QaizenBot)
+- [AgeGraze](https://myaitree.com/tools/upsc-tools/age32.html)
 
 
 #### Tools for QaiZen 
