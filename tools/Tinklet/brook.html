@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ReadFlow Pro - Focus Reading Mode</title>
+    <title>ReadFlow Pro - Click & Drag Highlighting</title>
     <style>
         * {
             margin: 0;
@@ -87,6 +87,7 @@
             margin-bottom: 25px;
             position: relative;
             box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+            user-select: none;
         }
         
         .text-content {
@@ -100,6 +101,13 @@
             border-radius: 4px;
             padding: 2px 4px;
             transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .manual-highlight {
+            background: linear-gradient(120deg, #a8e6cf 0%, #dcedc1 100%);
+            border-radius: 4px;
+            padding: 2px 4px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         
@@ -367,6 +375,31 @@
             background: linear-gradient(135deg, #e74c3c, #c0392b);
             box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.3);
         }
+        
+        .mode-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .mode-btn {
+            background: linear-gradient(135deg, #1abc9c, #16a085);
+            flex: 1;
+        }
+        
+        .mode-btn.active {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.3);
+        }
+        
+        .selection-info {
+            background: rgba(52, 152, 219, 0.1);
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -376,11 +409,19 @@
     <div class="container">
         <header>
             <h1>ReadFlow Pro</h1>
-            <p class="subtitle">Focus Reading Mode - Read Without Distraction</p>
+            <p class="subtitle">Click & Drag Highlighting - Mark Text Precisely</p>
         </header>
         
         <div class="content">
             <div class="controls">
+                <div class="control-group">
+                    <label>Reading Mode</label>
+                    <div class="mode-controls">
+                        <button id="flow-mode" class="mode-btn active">Flow Reading</button>
+                        <button id="select-mode" class="mode-btn">Click & Select</button>
+                    </div>
+                </div>
+                
                 <div class="control-group">
                     <label for="sensitivity">Reading Sensitivity</label>
                     <div class="slider-container">
@@ -406,6 +447,10 @@
                     </div>
                 </div>
                 
+                <div class="selection-info" id="selection-info">
+                    <strong>Selection Mode:</strong> Click to start highlighting, drag to extend selection
+                </div>
+                
                 <div class="progress-container">
                     <div class="progress-bar" id="progress-bar"></div>
                 </div>
@@ -414,25 +459,24 @@
                     <button id="start-btn">Start ReadFlow</button>
                     <button id="reset-btn">Reset</button>
                     <button id="toggle-cursor-btn">Show System Cursor</button>
+                    <button id="clear-highlights">Clear Manual Highlights</button>
                 </div>
             </div>
             
             <div class="text-container">
                 <div class="scroll-indicator" id="scroll-indicator">Infinite Scrolling Active</div>
                 <div class="text-content" id="text-content">
-                    <p>Welcome to ReadFlow Pro Focus Mode, the revolutionary reading assistant that eliminates distractions and keeps your eyes focused on what's ahead. With our advanced text fading and hiding features, previously read content gradually disappears from view, preventing your eyes from wandering back.</p>
+                    <p>Welcome to ReadFlow Pro with advanced Click & Drag Highlighting. This powerful feature allows you to precisely mark important text sections with manual highlighting while maintaining all the benefits of our flow reading technology.</p>
                     
-                    <p>The science behind this approach is clear: by reducing visual clutter and eliminating regression (the tendency to re-read text), reading speed and comprehension can improve significantly. Our focus modes help train your eyes to move forward consistently.</p>
+                    <p>In Selection Mode, simply click once to highlight text at your cursor position. Continue holding and dragging to extend your selection across multiple words, sentences, or paragraphs. This is perfect for marking key information, important quotes, or sections you want to review later.</p>
                     
-                    <p>Choose between three focus modes: Normal displays all text normally, Fade gradually grays out text you've already read, and Hide completely conceals previous text to create a truly forward-moving reading experience.</p>
+                    <p>The manual highlights persist separately from the automatic flow highlighting, allowing you to combine both approaches. Use flow reading for general progression through text, and manual selection for specific important passages.</p>
                     
-                    <p>Research in reading psychology shows that minimizing visual distractions can improve reading speed by up to 40% while maintaining or even improving comprehension. The focused approach helps break the habit of subvocalization and regression.</p>
+                    <p>Research shows that active reading techniques like highlighting improve information retention by up to 50%. By combining the focus of flow reading with the engagement of manual selection, you create a powerful reading and learning environment.</p>
                     
-                    <p>This is particularly valuable for speed reading practice, studying dense material, or any situation where maintaining forward momentum is crucial. The technology works seamlessly with our infinite scrolling to create an uninterrupted reading flow.</p>
+                    <p>Try switching between Flow Reading mode for continuous progression and Click & Select mode for precise highlighting. You can always clear manual highlights and start fresh, or keep them as visual markers of important content.</p>
                     
-                    <p>As you progress through the text, notice how your focus naturally remains ahead of the highlight. The disappearing text creates a psychological incentive to keep moving forward, training your brain to process information more efficiently.</p>
-                    
-                    <p>Experiment with the different focus modes to discover which works best for your reading style and the material you're working with. Many users find they can gradually increase their reading speed as they adapt to the focused environment.</p>
+                    <p>This dual-mode approach makes ReadFlow Pro ideal for studying, research, document review, or any situation where you need both efficient reading and precise text marking capabilities.</p>
                 </div>
             </div>
             
@@ -446,20 +490,20 @@
                     <div class="stat-label">Reading Time</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-value" id="reading-speed">0</div>
-                    <div class="stat-label">WPM</div>
+                    <div class="stat-value" id="manual-highlights">0</div>
+                    <div class="stat-label">Manual Highlights</div>
                 </div>
             </div>
             
             <div class="instructions">
-                <h3>Focus Mode Benefits</h3>
+                <h3>Dual Mode Operation</h3>
                 <ul>
-                    <li><strong>Normal Mode:</strong> All text remains visible (traditional reading)</li>
-                    <li><strong>Fade Mode:</strong> Previously read text gradually fades to gray</li>
-                    <li><strong>Hide Mode:</strong> Read text completely disappears from view</li>
-                    <li><strong>Reduces regression</strong> by preventing eyes from wandering back</li>
-                    <li><strong>Improves focus</strong> on current content being read</li>
-                    <li><strong>Increases reading speed</strong> by encouraging forward movement</li>
+                    <li><strong>Flow Reading Mode:</strong> Automatic highlighting controlled by mouse movement</li>
+                    <li><strong>Click & Select Mode:</strong> Manual highlighting with click and drag</li>
+                    <li><strong>Click once</strong> to highlight text at cursor position</li>
+                    <li><strong>Click and drag</strong> to extend selection across text</li>
+                    <li><strong>Manual highlights persist</strong> separately from flow highlights</li>
+                    <li><strong>Combine both modes</strong> for comprehensive reading and marking</li>
                 </ul>
             </div>
         </div>
@@ -467,11 +511,11 @@
         <div class="status-bar">
             <div>Status: <span id="status">Ready to Start</span></div>
             <div>Progress: <span id="progress">0%</span></div>
-            <div>Focus: <span id="focus-status">Normal</span></div>
+            <div>Mode: <span id="mode-status">Flow Reading</span></div>
         </div>
     </div>
     
-    <p class="demo-text">Experience focused reading - previously read text fades or disappears to keep your eyes moving forward</p>
+    <p class="demo-text">Try both modes: Flow Reading for continuous progression, Click & Select for precise highlighting</p>
 
     <script>
         class ReadFlowPro {
@@ -492,7 +536,13 @@
                 this.wordsRead = 0;
                 this.startTime = null;
                 this.readingTimer = null;
-                this.focusMode = 'normal'; // 'normal', 'fade', 'hide'
+                this.focusMode = 'normal';
+                this.readingMode = 'flow'; // 'flow' or 'select'
+                this.isSelecting = false;
+                this.selectionStart = 0;
+                this.selectionEnd = 0;
+                this.manualHighlights = [];
+                this.manualHighlightCount = 0;
                 
                 this.init();
             }
@@ -503,6 +553,44 @@
                 this.updateControls();
                 this.hideSystemCursor();
                 this.setupFocusButtons();
+                this.setupModeButtons();
+            }
+            
+            setupModeButtons() {
+                const flowMode = document.getElementById('flow-mode');
+                const selectMode = document.getElementById('select-mode');
+                const selectionInfo = document.getElementById('selection-info');
+                
+                flowMode.addEventListener('click', () => {
+                    this.setReadingMode('flow');
+                    flowMode.classList.add('active');
+                    selectMode.classList.remove('active');
+                    selectionInfo.style.display = 'none';
+                    document.getElementById('mode-status').textContent = 'Flow Reading';
+                });
+                
+                selectMode.addEventListener('click', () => {
+                    this.setReadingMode('select');
+                    selectMode.classList.add('active');
+                    flowMode.classList.remove('active');
+                    selectionInfo.style.display = 'block';
+                    document.getElementById('mode-status').textContent = 'Click & Select';
+                });
+                
+                // Clear highlights button
+                document.getElementById('clear-highlights').addEventListener('click', () => {
+                    this.clearManualHighlights();
+                });
+            }
+            
+            setReadingMode(mode) {
+                this.readingMode = mode;
+                
+                if (mode === 'flow' && this.isActive) {
+                    this.textContainer.requestPointerLock();
+                } else if (mode === 'select' && this.pointerLocked) {
+                    document.exitPointerLock();
+                }
             }
             
             setupFocusButtons() {
@@ -538,15 +626,15 @@
                     mode === 'normal' ? 'Normal' : 
                     mode === 'fade' ? 'Fade Read Text' : 'Hide Read Text';
                 
-                // Update the display with the new focus mode
                 if (this.isActive) {
-                    this.updateHighlight();
+                    this.updateDisplay();
                 }
             }
             
             calculateTextLength() {
                 const text = this.container.textContent || this.container.innerText;
                 this.totalChars = text.length;
+                this.originalText = text;
                 
                 // Count words for stats
                 this.totalWords = text.split(/\s+/).filter(word => word.length > 0).length;
@@ -555,8 +643,27 @@
             setupEventListeners() {
                 // Mouse movement with pointer lock for infinite movement
                 document.addEventListener('mousemove', (e) => {
-                    if (!this.isActive || !this.pointerLocked) return;
-                    this.handleMouseMove(e);
+                    if (!this.isActive) return;
+                    
+                    if (this.readingMode === 'flow' && this.pointerLocked) {
+                        this.handleFlowMouseMove(e);
+                    } else if (this.readingMode === 'select' && this.isSelecting) {
+                        this.handleSelectionMouseMove(e);
+                    }
+                });
+                
+                // Mouse down for selection mode
+                this.textContainer.addEventListener('mousedown', (e) => {
+                    if (this.readingMode === 'select' && this.isActive) {
+                        this.startSelection(e);
+                    }
+                });
+                
+                // Mouse up for selection mode
+                document.addEventListener('mouseup', (e) => {
+                    if (this.readingMode === 'select' && this.isSelecting) {
+                        this.finishSelection();
+                    }
                 });
                 
                 // Pointer lock event handlers
@@ -594,15 +701,15 @@
                     this.toggleCursor();
                 });
                 
-                // Click on text container to request pointer lock
-                this.textContainer.addEventListener('click', () => {
-                    if (this.isActive && !this.pointerLocked) {
+                // Click on text container to request pointer lock (flow mode only)
+                this.textContainer.addEventListener('click', (e) => {
+                    if (this.readingMode === 'flow' && this.isActive && !this.pointerLocked) {
                         this.textContainer.requestPointerLock();
                     }
                 });
             }
             
-            handleMouseMove(e) {
+            handleFlowMouseMove(e) {
                 // Use movementX for pointer lock (infinite movement)
                 const deltaX = e.movementX || 0;
                 
@@ -615,11 +722,82 @@
                 // Ensure position stays within bounds
                 this.currentPosition = Math.max(0, Math.min(this.totalChars, this.currentPosition));
                 
-                // Update highlight
-                this.updateHighlight();
+                // Update display
+                this.updateDisplay();
                 
                 // Update virtual cursor position (centered during pointer lock)
                 this.updateVirtualCursor(window.innerWidth / 2, window.innerHeight / 2);
+            }
+            
+            startSelection(e) {
+                this.isSelecting = true;
+                
+                // Get click position in text
+                const clickPos = this.getTextPositionFromEvent(e);
+                this.selectionStart = clickPos;
+                this.selectionEnd = clickPos;
+                
+                // Update display to show initial selection
+                this.updateDisplay();
+            }
+            
+            handleSelectionMouseMove(e) {
+                if (!this.isSelecting) return;
+                
+                // Get current mouse position in text
+                const currentPos = this.getTextPositionFromEvent(e);
+                this.selectionEnd = currentPos;
+                
+                // Update display to show extended selection
+                this.updateDisplay();
+            }
+            
+            finishSelection() {
+                if (!this.isSelecting) return;
+                
+                this.isSelecting = false;
+                
+                // Ensure start is before end
+                const start = Math.min(this.selectionStart, this.selectionEnd);
+                const end = Math.max(this.selectionStart, this.selectionEnd);
+                
+                // Add to manual highlights if selection has length
+                if (end > start) {
+                    this.manualHighlights.push({ start, end });
+                    this.manualHighlightCount++;
+                    document.getElementById('manual-highlights').textContent = this.manualHighlightCount;
+                }
+                
+                // Reset selection
+                this.selectionStart = 0;
+                this.selectionEnd = 0;
+                
+                // Update display without active selection
+                this.updateDisplay();
+            }
+            
+            getTextPositionFromEvent(e) {
+                // Simple approximation - in a real implementation you would use Range APIs
+                // For this demo, we'll use a simplified approach
+                const rect = this.container.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Approximate character position based on mouse position
+                const charsPerLine = 80; // Rough estimate
+                const lineHeight = 28; // Rough estimate based on font size and line height
+                
+                const line = Math.floor(y / lineHeight);
+                const charInLine = Math.floor(x / (rect.width / charsPerLine));
+                
+                return Math.min(this.totalChars, line * charsPerLine + charInLine);
+            }
+            
+            clearManualHighlights() {
+                this.manualHighlights = [];
+                this.manualHighlightCount = 0;
+                document.getElementById('manual-highlights').textContent = '0';
+                this.updateDisplay();
             }
             
             updateVirtualCursor(x, y) {
@@ -627,71 +805,91 @@
                 this.virtualCursor.style.top = y + 'px';
             }
             
-            updateHighlight() {
-                // Get the original text
-                const originalText = this.container.textContent || this.container.innerText;
+            updateDisplay() {
+                let formattedText = this.originalText;
                 
-                // Find the character at the current position
-                const highlightStart = Math.floor(this.currentPosition);
-                const highlightLength = 15 + this.highlightSpeed * 3;
-                const highlightEnd = Math.min(this.totalChars, highlightStart + highlightLength);
+                // Apply manual highlights first (they should be underneath)
+                this.manualHighlights.forEach(highlight => {
+                    const before = formattedText.substring(0, highlight.start);
+                    const highlighted = formattedText.substring(highlight.start, highlight.end);
+                    const after = formattedText.substring(highlight.end);
+                    
+                    formattedText = before + 
+                        `<span class="manual-highlight">${highlighted}</span>` + 
+                        after;
+                });
                 
-                // Create the text with appropriate focus mode styling
-                let formattedText = '';
+                // Apply current selection if in selection mode
+                if (this.readingMode === 'select' && this.isSelecting && this.selectionEnd > this.selectionStart) {
+                    const start = Math.min(this.selectionStart, this.selectionEnd);
+                    const end = Math.max(this.selectionStart, this.selectionEnd);
+                    
+                    const before = formattedText.substring(0, start);
+                    const highlighted = formattedText.substring(start, end);
+                    const after = formattedText.substring(end);
+                    
+                    formattedText = before + 
+                        `<span class="highlight">${highlighted}</span>` + 
+                        after;
+                }
                 
-                if (this.focusMode === 'normal') {
-                    // Normal mode - all text visible
-                    if (highlightStart > 0) {
-                        formattedText += originalText.substring(0, highlightStart);
-                    }
+                // Apply flow highlighting if in flow mode
+                if (this.readingMode === 'flow') {
+                    const highlightStart = Math.floor(this.currentPosition);
+                    const highlightLength = 15 + this.highlightSpeed * 3;
+                    const highlightEnd = Math.min(this.totalChars, highlightStart + highlightLength);
                     
-                    formattedText += `<span class="highlight">${originalText.substring(highlightStart, highlightEnd)}</span>`;
+                    // We need to be careful not to double-highlight text that's already manually highlighted
+                    // For simplicity in this demo, we'll just overlay the flow highlight
+                    const before = formattedText.substring(0, highlightStart);
+                    const highlighted = formattedText.substring(highlightStart, highlightEnd);
+                    const after = formattedText.substring(highlightEnd);
                     
-                    if (highlightEnd < this.totalChars) {
-                        formattedText += originalText.substring(highlightEnd);
-                    }
-                } 
-                else if (this.focusMode === 'fade') {
-                    // Fade mode - previously read text is grayed out
-                    if (highlightStart > 0) {
-                        formattedText += `<span class="read-text">${originalText.substring(0, highlightStart)}</span>`;
-                    }
+                    formattedText = before + 
+                        `<span class="highlight">${highlighted}</span>` + 
+                        after;
+                }
+                
+                // Apply focus mode styling
+                if (this.focusMode === 'fade') {
+                    // Simple implementation - in a real app you'd need more sophisticated text processing
+                    formattedText = formattedText.replace(/<span class="highlight">|<\/span>/g, '|');
+                    const readUntil = this.readingMode === 'flow' ? this.currentPosition : this.selectionEnd;
+                    const beforeRead = formattedText.substring(0, readUntil);
+                    const afterRead = formattedText.substring(readUntil);
                     
-                    formattedText += `<span class="highlight">${originalText.substring(highlightStart, highlightEnd)}</span>`;
+                    formattedText = `<span class="read-text">${beforeRead}</span>${afterRead}`;
+                    formattedText = formattedText.replace(/\|/g, '</span><span class="highlight">');
+                } else if (this.focusMode === 'hide') {
+                    // Similar simplified implementation for hide mode
+                    formattedText = formattedText.replace(/<span class="highlight">|<\/span>/g, '|');
+                    const readUntil = this.readingMode === 'flow' ? this.currentPosition : this.selectionEnd;
+                    const beforeRead = formattedText.substring(0, readUntil);
+                    const afterRead = formattedText.substring(readUntil);
                     
-                    if (highlightEnd < this.totalChars) {
-                        formattedText += originalText.substring(highlightEnd);
-                    }
-                } 
-                else if (this.focusMode === 'hide') {
-                    // Hide mode - previously read text is hidden
-                    if (highlightStart > 0) {
-                        formattedText += `<span class="focused-read-text">${originalText.substring(0, highlightStart)}</span>`;
-                    }
-                    
-                    formattedText += `<span class="highlight">${originalText.substring(highlightStart, highlightEnd)}</span>`;
-                    
-                    if (highlightEnd < this.totalChars) {
-                        formattedText += originalText.substring(highlightEnd);
-                    }
+                    formattedText = `<span class="focused-read-text">${beforeRead}</span>${afterRead}`;
+                    formattedText = formattedText.replace(/\|/g, '</span><span class="highlight">');
                 }
                 
                 // Update the container with the new HTML
                 this.container.innerHTML = formattedText;
                 
                 // Update words read
-                this.updateWordsRead(highlightEnd);
+                const readPosition = this.readingMode === 'flow' ? 
+                    Math.min(this.totalChars, this.currentPosition + 15 + this.highlightSpeed * 3) :
+                    this.selectionEnd;
+                this.updateWordsRead(readPosition);
                 
-                // Auto-scroll to keep highlighted text in view
-                this.autoScrollToHighlight(highlightStart);
+                // Auto-scroll to keep relevant text in view
+                const scrollPosition = this.readingMode === 'flow' ? this.currentPosition : this.selectionEnd;
+                this.autoScrollToHighlight(scrollPosition);
                 
                 // Update status and progress
                 this.updateStatus();
             }
             
             updateWordsRead(position) {
-                const text = this.container.textContent || this.container.innerText;
-                const textToPosition = text.substring(0, position);
+                const textToPosition = this.originalText.substring(0, position);
                 this.wordsRead = textToPosition.split(/\s+/).filter(word => word.length > 0).length;
                 document.getElementById('words-read').textContent = this.wordsRead;
                 
@@ -704,7 +902,7 @@
             }
             
             autoScrollToHighlight(charPosition) {
-                // Calculate approximate pixel position of the highlight
+                // Calculate approximate pixel position
                 const approxPixels = (charPosition / this.totalChars) * this.textContainer.scrollHeight;
                 
                 // Smoothly scroll to position
@@ -718,13 +916,15 @@
                 this.isActive = true;
                 this.currentPosition = 0;
                 this.startTime = Date.now();
-                document.getElementById('status').textContent = 'Active - Move mouse horizontally';
+                document.getElementById('status').textContent = 'Active';
                 this.showVirtualCursor();
                 
-                // Request pointer lock for infinite movement
-                this.textContainer.requestPointerLock();
+                // Request pointer lock if in flow mode
+                if (this.readingMode === 'flow') {
+                    this.textContainer.requestPointerLock();
+                }
                 
-                this.updateHighlight();
+                this.updateDisplay();
                 this.startReadingTimer();
             }
             
@@ -746,6 +946,9 @@
                 this.currentPosition = 0;
                 this.wordsRead = 0;
                 this.startTime = null;
+                this.isSelecting = false;
+                this.selectionStart = 0;
+                this.selectionEnd = 0;
                 clearInterval(this.readingTimer);
                 
                 // Exit pointer lock
@@ -753,9 +956,8 @@
                     document.exitPointerLock();
                 }
                 
-                // Reset to normal text display
-                const originalText = this.container.textContent || this.container.innerText;
-                this.container.innerHTML = originalText;
+                // Reset to original text
+                this.container.innerHTML = this.originalText;
                 
                 document.getElementById('status').textContent = 'Ready to Start';
                 document.getElementById('words-read').textContent = '0';
@@ -814,7 +1016,10 @@
             }
             
             updateStatus() {
-                const progress = Math.floor((this.currentPosition / this.totalChars) * 100);
+                const progress = this.readingMode === 'flow' ? 
+                    Math.floor((this.currentPosition / this.totalChars) * 100) :
+                    Math.floor((this.selectionEnd / this.totalChars) * 100);
+                    
                 document.getElementById('progress').textContent = progress + '%';
                 document.getElementById('progress-bar').style.width = progress + '%';
                 
