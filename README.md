@@ -36,11 +36,12 @@ To become the world's fastest sustainable problem-solving company.
 
 ## 🛠️ Tools 
 
-### Text-Centric Tools
+### Text-Centric Tools - Tinklet
 - [Print Md](https://myaitree.com/tools/print-md.html): Directly print chatgpt markdown text
 - [Md2Slides](https://myaitree.com/tools/md2slides.html): Divide the Markdown to slides
 - [RegrUs](https://myaitree.com/tools/regr-us.html): Regex to JSON converter - based on object based regex.
-- [Notica](https://myaitree.com/tools/teetot/notica.html): Block based text editor
+- [Notica](https://myaitree.com/tools/Tinklet/notica.html): Block based text editor
+- [Brook](https://myaitree.com/tools/Tinklet/brook.html): Stream reader and continuous flow reader
 
 #### Web Data Tool
 - [iFrame XPath](https://myaitree.com/tools/xpath/xpath-extractor.html): Extract xpath from the html pages - use the javascript code and copy paste it.
