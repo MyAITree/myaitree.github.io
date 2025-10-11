@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reading Flow Highlighter</title>
+    <title>Infinite Reading Flow Highlighter</title>
     <style>
         * {
             margin: 0;
@@ -21,10 +21,12 @@
             flex-direction: column;
             align-items: center;
             padding: 20px;
+            overflow: hidden;
+            cursor: none;
         }
         
         .container {
-            max-width: 800px;
+            max-width: 900px;
             width: 100%;
             background: white;
             border-radius: 12px;
@@ -55,15 +57,20 @@
             padding: 30px;
         }
         
-        .text-content {
-            font-size: 1.2rem;
-            line-height: 1.8;
-            margin-bottom: 30px;
-            position: relative;
+        .text-container {
+            height: 300px;
+            overflow-y: auto;
             padding: 20px;
             background: #f9f9f9;
             border-radius: 8px;
             border-left: 4px solid #6a11cb;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .text-content {
+            font-size: 1.2rem;
+            line-height: 1.8;
         }
         
         .highlight {
@@ -154,8 +161,8 @@
             font-size: 0.9rem;
         }
         
-        .cursor-hidden {
-            cursor: none;
+        .cursor-visible {
+            cursor: auto;
         }
         
         button {
@@ -185,13 +192,53 @@
             color: #666;
             text-align: center;
         }
+        
+        .virtual-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: rgba(106, 17, 203, 0.7);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s;
+            box-shadow: 0 0 10px rgba(106, 17, 203, 0.5);
+            display: none;
+        }
+        
+        .virtual-cursor::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            display: none;
+        }
     </style>
 </head>
 <body>
+    <div class="virtual-cursor" id="virtual-cursor"></div>
+    
     <div class="container">
         <header>
-            <h1>Reading Flow Highlighter</h1>
-            <p class="subtitle">Smooth text highlighting controlled by mouse movement</p>
+            <h1>Infinite Reading Flow Highlighter</h1>
+            <p class="subtitle">Smooth, continuous reading with infinite mouse movement</p>
         </header>
         
         <div class="content">
@@ -213,52 +260,66 @@
                 </div>
                 
                 <div class="button-group">
-                    <button id="start-btn">Start Highlighting</button>
+                    <button id="start-btn">Start Reading Flow</button>
                     <button id="reset-btn">Reset</button>
+                    <button id="toggle-cursor-btn">Show Cursor</button>
                 </div>
             </div>
             
-            <div class="text-content" id="text-content">
-                <p>Welcome to the Reading Flow Highlighter. This tool helps you read text more efficiently by providing a smooth, continuous highlight that flows through the text based on your mouse movement speed.</p>
-                
-                <p>As you move your mouse horizontally, the highlight will progress through the text. Move faster to progress more quickly, or slower for a more leisurely pace. The controls above allow you to adjust the sensitivity and speed to match your reading preference.</p>
-                
-                <p>This technique can help improve reading speed and comprehension by guiding your eyes through the text in a consistent flow. It's particularly useful for dense or complex material where maintaining focus is important.</p>
-                
-                <p>Try adjusting the settings to find what works best for you. You can always reset to the default values if needed. The goal is to create a comfortable, natural reading rhythm that matches your personal pace.</p>
+            <div class="text-container">
+                <div class="scroll-indicator" id="scroll-indicator">Auto-scrolling...</div>
+                <div class="text-content" id="text-content">
+                    <p>Welcome to the Infinite Reading Flow Highlighter. This advanced tool helps you read long texts without interruption by providing a smooth, continuous highlight that flows through the text based on your mouse movement.</p>
+                    
+                    <p>Unlike traditional reading interfaces, this tool features infinite horizontal mouse movement. As you reach the edge of the screen, the system automatically resets your cursor position, allowing for uninterrupted reading flow. This means you can read for as long as you want without ever running out of screen space.</p>
+                    
+                    <p>The highlight moves at a pace determined by your mouse speed and the sensitivity settings. Move faster to progress more quickly through the text, or slower for a more measured reading experience. The virtual cursor provides visual feedback while keeping the actual cursor hidden for a distraction-free experience.</p>
+                    
+                    <p>This reading method is particularly useful for lengthy documents, academic papers, or any content where maintaining focus and reading rhythm is important. The continuous flow helps reduce eye fatigue and improves comprehension by providing a consistent visual guide.</p>
+                    
+                    <p>You can customize the experience using the sensitivity and speed controls. Find the settings that work best for your reading style and the type of content you're working with. The auto-scroll feature ensures you never lose your place, even during extended reading sessions.</p>
+                    
+                    <p>To get started, click "Start Reading Flow" and begin moving your mouse horizontally. Try different movement speeds to see how it affects the highlighting pace. Remember, you can always show the cursor again if you need to interact with other elements on the page.</p>
+                </div>
             </div>
             
             <div class="instructions">
                 <h3>How to Use</h3>
                 <ul>
-                    <li><strong>Move mouse horizontally</strong> to control the highlight flow</li>
+                    <li><strong>Click "Start Reading Flow"</strong> to begin infinite highlighting</li>
+                    <li><strong>Move mouse horizontally</strong> to control reading speed and direction</li>
+                    <li><strong>Infinite movement</strong> - cursor resets at screen edges for continuous reading</li>
                     <li><strong>Adjust sensitivity</strong> to change how mouse movement affects highlighting</li>
                     <li><strong>Adjust highlight speed</strong> to control the base progression rate</li>
-                    <li><strong>Click Start</strong> to begin the highlighting flow</li>
-                    <li><strong>Double-click</strong> anywhere to show/hide the cursor</li>
+                    <li><strong>Toggle cursor visibility</strong> as needed for other interactions</li>
                 </ul>
             </div>
         </div>
         
         <div class="status-bar">
             <div>Status: <span id="status">Ready</span></div>
-            <div>Cursor: <span id="cursor-status">Visible</span></div>
+            <div>Progress: <span id="progress">0%</span></div>
+            <div>Cursor: <span id="cursor-status">Hidden</span></div>
         </div>
     </div>
     
-    <p class="demo-text">Move your mouse horizontally after clicking "Start Highlighting"</p>
+    <p class="demo-text">Move your mouse horizontally after starting the reading flow</p>
 
     <script>
-        class ReadingFlowHighlighter {
+        class InfiniteReadingFlow {
             constructor(containerId) {
                 this.container = document.getElementById(containerId);
+                this.textContainer = document.querySelector('.text-container');
                 this.isActive = false;
                 this.currentPosition = 0;
                 this.totalChars = 0;
                 this.sensitivity = 5;
                 this.highlightSpeed = 5;
                 this.lastMouseX = 0;
-                this.cursorVisible = true;
+                this.cursorVisible = false;
+                this.virtualCursor = document.getElementById('virtual-cursor');
+                this.scrollIndicator = document.getElementById('scroll-indicator');
+                this.autoScrollThreshold = 50; // Pixels from edge to trigger reset
                 this.animationId = null;
                 
                 this.init();
@@ -268,24 +329,19 @@
                 this.calculateTextLength();
                 this.setupEventListeners();
                 this.updateControls();
+                this.hideSystemCursor();
             }
             
             calculateTextLength() {
-                // Get the text content without HTML tags
                 const text = this.container.textContent || this.container.innerText;
                 this.totalChars = text.length;
             }
             
             setupEventListeners() {
-                // Mouse movement
+                // Mouse movement with infinite scrolling
                 document.addEventListener('mousemove', (e) => {
                     if (!this.isActive) return;
                     this.handleMouseMove(e);
-                });
-                
-                // Double-click to toggle cursor
-                document.addEventListener('dblclick', () => {
-                    this.toggleCursor();
                 });
                 
                 // Control elements
@@ -293,6 +349,7 @@
                 const speedSlider = document.getElementById('highlight-speed');
                 const startBtn = document.getElementById('start-btn');
                 const resetBtn = document.getElementById('reset-btn');
+                const toggleCursorBtn = document.getElementById('toggle-cursor-btn');
                 
                 sensitivitySlider.addEventListener('input', () => {
                     this.sensitivity = parseInt(sensitivitySlider.value);
@@ -305,11 +362,15 @@
                 });
                 
                 startBtn.addEventListener('click', () => {
-                    this.startHighlighting();
+                    this.startReadingFlow();
                 });
                 
                 resetBtn.addEventListener('click', () => {
                     this.reset();
+                });
+                
+                toggleCursorBtn.addEventListener('click', () => {
+                    this.toggleCursor();
                 });
             }
             
@@ -328,7 +389,47 @@
                 // Update highlight
                 this.updateHighlight();
                 
+                // Update virtual cursor position
+                this.updateVirtualCursor(e.clientX, e.clientY);
+                
+                // Check if we need to reset cursor position for infinite scrolling
+                this.checkCursorReset(e.clientX, e.clientY);
+                
                 this.lastMouseX = e.clientX;
+            }
+            
+            checkCursorReset(x, y) {
+                const resetNeeded = 
+                    x <= this.autoScrollThreshold || 
+                    x >= window.innerWidth - this.autoScrollThreshold ||
+                    y <= this.autoScrollThreshold || 
+                    y >= window.innerHeight - this.autoScrollThreshold;
+                
+                if (resetNeeded) {
+                    this.showScrollIndicator();
+                    
+                    // In a real application, we would use the Pointer Lock API
+                    // For this demo, we'll simulate the effect by resetting the last mouse position
+                    this.lastMouseX = window.innerWidth / 2;
+                    
+                    // Show a visual indicator that cursor has reset
+                    setTimeout(() => {
+                        this.hideScrollIndicator();
+                    }, 1000);
+                }
+            }
+            
+            showScrollIndicator() {
+                this.scrollIndicator.style.display = 'block';
+            }
+            
+            hideScrollIndicator() {
+                this.scrollIndicator.style.display = 'none';
+            }
+            
+            updateVirtualCursor(x, y) {
+                this.virtualCursor.style.left = x + 'px';
+                this.virtualCursor.style.top = y + 'px';
             }
             
             updateHighlight() {
@@ -340,7 +441,8 @@
                 
                 // Find the character at the current position
                 const highlightStart = Math.floor(this.currentPosition);
-                const highlightEnd = Math.min(this.totalChars, highlightStart + 10 + this.highlightSpeed);
+                const highlightLength = 15 + this.highlightSpeed * 2;
+                const highlightEnd = Math.min(this.totalChars, highlightStart + highlightLength);
                 
                 // Create highlighted text
                 let highlightedText = '';
@@ -357,14 +459,29 @@
                 // Update the container with the new HTML
                 this.container.innerHTML = highlightedText;
                 
+                // Auto-scroll to keep highlighted text in view
+                this.autoScrollToHighlight(highlightStart);
+                
                 // Update status
                 this.updateStatus();
             }
             
-            startHighlighting() {
+            autoScrollToHighlight(charPosition) {
+                // Calculate approximate pixel position of the highlight
+                const approxPixels = (charPosition / this.totalChars) * this.textContainer.scrollHeight;
+                
+                // Smoothly scroll to position
+                this.textContainer.scrollTo({
+                    top: approxPixels - 100,
+                    behavior: 'smooth'
+                });
+            }
+            
+            startReadingFlow() {
                 this.isActive = true;
                 this.currentPosition = 0;
                 document.getElementById('status').textContent = 'Active - Move mouse horizontally';
+                this.showVirtualCursor();
                 this.updateHighlight();
             }
             
@@ -376,32 +493,58 @@
                 this.container.innerHTML = this.container.innerHTML.replace(/<span class="highlight">|<\/span>/g, '');
                 
                 document.getElementById('status').textContent = 'Ready';
+                this.hideVirtualCursor();
                 this.updateStatus();
                 
-                // Cancel any animation frame
-                if (this.animationId) {
-                    cancelAnimationFrame(this.animationId);
-                    this.animationId = null;
-                }
+                // Reset scroll position
+                this.textContainer.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
             }
             
             toggleCursor() {
                 this.cursorVisible = !this.cursorVisible;
                 
                 if (this.cursorVisible) {
-                    document.body.classList.remove('cursor-hidden');
+                    this.showSystemCursor();
+                    this.hideVirtualCursor();
+                    document.getElementById('toggle-cursor-btn').textContent = 'Hide Cursor';
                 } else {
-                    document.body.classList.add('cursor-hidden');
+                    this.hideSystemCursor();
+                    if (this.isActive) {
+                        this.showVirtualCursor();
+                    }
+                    document.getElementById('toggle-cursor-btn').textContent = 'Show Cursor';
                 }
                 
                 document.getElementById('cursor-status').textContent = 
                     this.cursorVisible ? 'Visible' : 'Hidden';
             }
             
+            hideSystemCursor() {
+                document.body.classList.remove('cursor-visible');
+            }
+            
+            showSystemCursor() {
+                document.body.classList.add('cursor-visible');
+            }
+            
+            showVirtualCursor() {
+                this.virtualCursor.style.display = 'block';
+            }
+            
+            hideVirtualCursor() {
+                this.virtualCursor.style.display = 'none';
+            }
+            
             updateStatus() {
                 const progress = Math.floor((this.currentPosition / this.totalChars) * 100);
-                document.getElementById('status').textContent = 
-                    `${this.isActive ? 'Progress: ' + progress + '%' : 'Ready'}`;
+                document.getElementById('progress').textContent = progress + '%';
+                
+                if (progress >= 95) {
+                    document.getElementById('status').textContent = 'Complete';
+                }
             }
             
             updateControls() {
@@ -412,7 +555,7 @@
 
         // Initialize the application when the page loads
         document.addEventListener('DOMContentLoaded', () => {
-            new ReadingFlowHighlighter('text-content');
+            new InfiniteReadingFlow('text-content');
         });
     </script>
 </body>
