@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ReadFlow Pro - Infinite Reading Assistant</title>
+    <title>ReadFlow Pro - Focus Reading Mode</title>
     <style>
         * {
             margin: 0;
@@ -101,6 +101,17 @@
             padding: 2px 4px;
             transition: all 0.2s ease;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .read-text {
+            color: #95a5a6 !important;
+            transition: color 0.5s ease;
+        }
+        
+        .focused-read-text {
+            color: transparent !important;
+            background-color: #f8f9fa !important;
+            transition: all 0.5s ease;
         }
         
         .controls {
@@ -340,6 +351,22 @@
             font-size: 0.9rem;
             display: none;
         }
+        
+        .focus-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .focus-btn {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            flex: 1;
+        }
+        
+        .focus-btn.active {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -349,7 +376,7 @@
     <div class="container">
         <header>
             <h1>ReadFlow Pro</h1>
-            <p class="subtitle">Infinite Reading Assistant with Seamless Control</p>
+            <p class="subtitle">Focus Reading Mode - Read Without Distraction</p>
         </header>
         
         <div class="content">
@@ -370,6 +397,15 @@
                     </div>
                 </div>
                 
+                <div class="control-group">
+                    <label>Focus Mode</label>
+                    <div class="focus-controls">
+                        <button id="focus-off" class="focus-btn active">Normal</button>
+                        <button id="focus-fade" class="focus-btn">Fade Read Text</button>
+                        <button id="focus-hide" class="focus-btn">Hide Read Text</button>
+                    </div>
+                </div>
+                
                 <div class="progress-container">
                     <div class="progress-bar" id="progress-bar"></div>
                 </div>
@@ -384,19 +420,19 @@
             <div class="text-container">
                 <div class="scroll-indicator" id="scroll-indicator">Infinite Scrolling Active</div>
                 <div class="text-content" id="text-content">
-                    <p>Welcome to ReadFlow Pro, the revolutionary reading assistant that transforms how you consume text. With our infinite scrolling technology, you can read for hours without ever reaching the edge of your screen.</p>
+                    <p>Welcome to ReadFlow Pro Focus Mode, the revolutionary reading assistant that eliminates distractions and keeps your eyes focused on what's ahead. With our advanced text fading and hiding features, previously read content gradually disappears from view, preventing your eyes from wandering back.</p>
                     
-                    <p>The secret behind ReadFlow Pro is our advanced pointer lock technology. When activated, your mouse movements are captured directly by the application, allowing for truly infinite horizontal movement. As you read, the highlight flows smoothly through the text, guided by your mouse movements.</p>
+                    <p>The science behind this approach is clear: by reducing visual clutter and eliminating regression (the tendency to re-read text), reading speed and comprehension can improve significantly. Our focus modes help train your eyes to move forward consistently.</p>
                     
-                    <p>This innovative approach to reading eliminates the distractions of traditional scrolling and page turning. Your focus remains entirely on the content, while the technology handles the navigation seamlessly in the background.</p>
+                    <p>Choose between three focus modes: Normal displays all text normally, Fade gradually grays out text you've already read, and Hide completely conceals previous text to create a truly forward-moving reading experience.</p>
                     
-                    <p>Research shows that maintaining a consistent reading flow can improve comprehension by up to 30% and reading speed by 25%. ReadFlow Pro is designed specifically to enhance these aspects of your reading experience.</p>
+                    <p>Research in reading psychology shows that minimizing visual distractions can improve reading speed by up to 40% while maintaining or even improving comprehension. The focused approach helps break the habit of subvocalization and regression.</p>
                     
-                    <p>Customize your reading session with the sensitivity and speed controls. Find the perfect balance that matches your natural reading rhythm. The progress bar will help you track your journey through the text.</p>
+                    <p>This is particularly valuable for speed reading practice, studying dense material, or any situation where maintaining forward momentum is crucial. The technology works seamlessly with our infinite scrolling to create an uninterrupted reading flow.</p>
                     
-                    <p>Whether you're studying complex material, reading for pleasure, or analyzing important documents, ReadFlow Pro adapts to your needs. The infinite scrolling means you never have to break your concentration to adjust your position.</p>
+                    <p>As you progress through the text, notice how your focus naturally remains ahead of the highlight. The disappearing text creates a psychological incentive to keep moving forward, training your brain to process information more efficiently.</p>
                     
-                    <p>To begin your seamless reading experience, click "Start ReadFlow" and move your mouse horizontally. Discover a new way to read that feels natural, fluid, and entirely focused on the content.</p>
+                    <p>Experiment with the different focus modes to discover which works best for your reading style and the material you're working with. Many users find they can gradually increase their reading speed as they adapt to the focused environment.</p>
                 </div>
             </div>
             
@@ -416,14 +452,14 @@
             </div>
             
             <div class="instructions">
-                <h3>How to Use ReadFlow Pro</h3>
+                <h3>Focus Mode Benefits</h3>
                 <ul>
-                    <li><strong>Click "Start ReadFlow"</strong> to activate infinite scrolling mode</li>
-                    <li><strong>Move mouse horizontally</strong> to control reading speed and direction</li>
-                    <li><strong>True infinite movement</strong> - no screen edges to interrupt your flow</li>
-                    <li><strong>Adjust sensitivity</strong> to change how mouse movement affects highlighting</li>
-                    <li><strong>Adjust flow speed</strong> to control the base progression rate</li>
-                    <li><strong>Toggle cursor visibility</strong> as needed for other interactions</li>
+                    <li><strong>Normal Mode:</strong> All text remains visible (traditional reading)</li>
+                    <li><strong>Fade Mode:</strong> Previously read text gradually fades to gray</li>
+                    <li><strong>Hide Mode:</strong> Read text completely disappears from view</li>
+                    <li><strong>Reduces regression</strong> by preventing eyes from wandering back</li>
+                    <li><strong>Improves focus</strong> on current content being read</li>
+                    <li><strong>Increases reading speed</strong> by encouraging forward movement</li>
                 </ul>
             </div>
         </div>
@@ -431,11 +467,11 @@
         <div class="status-bar">
             <div>Status: <span id="status">Ready to Start</span></div>
             <div>Progress: <span id="progress">0%</span></div>
-            <div>Mode: <span id="mode-status">Standard</span></div>
+            <div>Focus: <span id="focus-status">Normal</span></div>
         </div>
     </div>
     
-    <p class="demo-text">Experience truly infinite reading flow - no screen edges to limit your reading session</p>
+    <p class="demo-text">Experience focused reading - previously read text fades or disappears to keep your eyes moving forward</p>
 
     <script>
         class ReadFlowPro {
@@ -456,6 +492,7 @@
                 this.wordsRead = 0;
                 this.startTime = null;
                 this.readingTimer = null;
+                this.focusMode = 'normal'; // 'normal', 'fade', 'hide'
                 
                 this.init();
             }
@@ -465,6 +502,46 @@
                 this.setupEventListeners();
                 this.updateControls();
                 this.hideSystemCursor();
+                this.setupFocusButtons();
+            }
+            
+            setupFocusButtons() {
+                const focusOff = document.getElementById('focus-off');
+                const focusFade = document.getElementById('focus-fade');
+                const focusHide = document.getElementById('focus-hide');
+                
+                focusOff.addEventListener('click', () => {
+                    this.setFocusMode('normal');
+                    this.updateFocusButtons(focusOff, focusFade, focusHide);
+                });
+                
+                focusFade.addEventListener('click', () => {
+                    this.setFocusMode('fade');
+                    this.updateFocusButtons(focusFade, focusOff, focusHide);
+                });
+                
+                focusHide.addEventListener('click', () => {
+                    this.setFocusMode('hide');
+                    this.updateFocusButtons(focusHide, focusOff, focusFade);
+                });
+            }
+            
+            updateFocusButtons(activeBtn, inactiveBtn1, inactiveBtn2) {
+                activeBtn.classList.add('active');
+                inactiveBtn1.classList.remove('active');
+                inactiveBtn2.classList.remove('active');
+            }
+            
+            setFocusMode(mode) {
+                this.focusMode = mode;
+                document.getElementById('focus-status').textContent = 
+                    mode === 'normal' ? 'Normal' : 
+                    mode === 'fade' ? 'Fade Read Text' : 'Hide Read Text';
+                
+                // Update the display with the new focus mode
+                if (this.isActive) {
+                    this.updateHighlight();
+                }
             }
             
             calculateTextLength() {
@@ -551,31 +628,56 @@
             }
             
             updateHighlight() {
-                // Clear any existing highlight
-                this.container.innerHTML = this.container.innerHTML.replace(/<span class="highlight">|<\/span>/g, '');
-                
-                // Create a text node representation to find the right position
-                const text = this.container.textContent || this.container.innerText;
+                // Get the original text
+                const originalText = this.container.textContent || this.container.innerText;
                 
                 // Find the character at the current position
                 const highlightStart = Math.floor(this.currentPosition);
                 const highlightLength = 15 + this.highlightSpeed * 3;
                 const highlightEnd = Math.min(this.totalChars, highlightStart + highlightLength);
                 
-                // Create highlighted text
-                let highlightedText = '';
-                if (highlightStart > 0) {
-                    highlightedText += text.substring(0, highlightStart);
-                }
+                // Create the text with appropriate focus mode styling
+                let formattedText = '';
                 
-                highlightedText += `<span class="highlight">${text.substring(highlightStart, highlightEnd)}</span>`;
-                
-                if (highlightEnd < this.totalChars) {
-                    highlightedText += text.substring(highlightEnd);
+                if (this.focusMode === 'normal') {
+                    // Normal mode - all text visible
+                    if (highlightStart > 0) {
+                        formattedText += originalText.substring(0, highlightStart);
+                    }
+                    
+                    formattedText += `<span class="highlight">${originalText.substring(highlightStart, highlightEnd)}</span>`;
+                    
+                    if (highlightEnd < this.totalChars) {
+                        formattedText += originalText.substring(highlightEnd);
+                    }
+                } 
+                else if (this.focusMode === 'fade') {
+                    // Fade mode - previously read text is grayed out
+                    if (highlightStart > 0) {
+                        formattedText += `<span class="read-text">${originalText.substring(0, highlightStart)}</span>`;
+                    }
+                    
+                    formattedText += `<span class="highlight">${originalText.substring(highlightStart, highlightEnd)}</span>`;
+                    
+                    if (highlightEnd < this.totalChars) {
+                        formattedText += originalText.substring(highlightEnd);
+                    }
+                } 
+                else if (this.focusMode === 'hide') {
+                    // Hide mode - previously read text is hidden
+                    if (highlightStart > 0) {
+                        formattedText += `<span class="focused-read-text">${originalText.substring(0, highlightStart)}</span>`;
+                    }
+                    
+                    formattedText += `<span class="highlight">${originalText.substring(highlightStart, highlightEnd)}</span>`;
+                    
+                    if (highlightEnd < this.totalChars) {
+                        formattedText += originalText.substring(highlightEnd);
+                    }
                 }
                 
                 // Update the container with the new HTML
-                this.container.innerHTML = highlightedText;
+                this.container.innerHTML = formattedText;
                 
                 // Update words read
                 this.updateWordsRead(highlightEnd);
@@ -651,8 +753,9 @@
                     document.exitPointerLock();
                 }
                 
-                // Clear highlight
-                this.container.innerHTML = this.container.innerHTML.replace(/<span class="highlight">|<\/span>/g, '');
+                // Reset to normal text display
+                const originalText = this.container.textContent || this.container.innerText;
+                this.container.innerHTML = originalText;
                 
                 document.getElementById('status').textContent = 'Ready to Start';
                 document.getElementById('words-read').textContent = '0';
@@ -682,18 +785,13 @@
                     }
                     document.getElementById('toggle-cursor-btn').textContent = 'Show System Cursor';
                 }
-                
-                document.getElementById('mode-status').textContent = 
-                    this.cursorVisible ? 'Standard' : 'Infinite Flow';
             }
             
             updateModeStatus() {
                 if (this.pointerLocked) {
-                    document.getElementById('mode-status').textContent = 'Infinite Flow';
                     this.modeIndicator.style.display = 'block';
                     this.scrollIndicator.style.display = 'block';
                 } else {
-                    document.getElementById('mode-status').textContent = 'Standard';
                     this.modeIndicator.style.display = 'none';
                     this.scrollIndicator.style.display = 'none';
                 }
