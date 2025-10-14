@@ -67,6 +67,11 @@ To become the world's fastest sustainable problem-solving company.
 
 ---
 
+## Blogs
+- [Time Awareness & Aim Management](https:/myaitree.com/blogs/01-ta-am.md): Time awareness & Aim Management
+
+---
+
 ## 🌳 Our Services
 
 1. **Business Due Dilligence**
