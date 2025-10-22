@@ -67,8 +67,9 @@ To become the world's fastest sustainable problem-solving company.
 
 ---
 
-## Blogs
+## BASEiQs Blogs
 - [Time Awareness & Aim Management](/blogs/01-ta-am.md): Time awareness & Aim Management
+- [What, How & Why of Life](/blogs/02-what-how-why.md): Have you ever asked yourself a question What do you want, How will you achieve and Why. While answers everytime are forgotten and were limiting. What if what you answer is completely incorrect.
 
 ---
 
