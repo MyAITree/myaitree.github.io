@@ -1,6 +1,3 @@
-Of course. Here is a complete rewrite designed to engage the reader in a process of discovery, building the key messages step-by-step to make them think and arrive at the conclusions themselves.
-
-***
 
 ### The Three Questions That Can Quiet the Noise
 
