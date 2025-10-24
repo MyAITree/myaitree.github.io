@@ -1,6 +1,3 @@
-Of course. Here is a blog post exploring the idea that the root of every problem is uncertainty, weaving in epistemology and other philosophical concepts.
-
-***
 
 ## The Unquiet Mind: How Our Fear of the Unknown Fuels Every Problem
 
