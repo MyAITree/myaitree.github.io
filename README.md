@@ -72,6 +72,7 @@ To become the world's fastest sustainable problem-solving company.
 - [Time Awareness & Aim Management](/blogs/01-ta-am.md): Time awareness & Aim Management
 - [What, How & Why of Life](/blogs/02-what-how-why.md): Have you ever asked yourself a question What do you want, How will you achieve and Why. While answers everytime are forgotten and were limiting. What if what you answer is completely incorrect.
 - [Uncertainty & Acceptance](/blogs/03-uncertainty-acceptance.md): The only problem in life and the only solution, both exists in the mind and starts from the mind. 
+- [Practice of Control](/blogs/04-practice-of-control.md): Spending capital on the What will reduce the control as one has to spend control to gain control. How to reclaim them in the breaks.
 
 ---
 
