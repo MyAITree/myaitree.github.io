@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus Window Application with Content Zoom</title>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .instructions {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .instructions h2 {
+            margin-bottom: 10px;
+        }
+        
+        .instructions ul {
+            margin-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .content-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        #contentArea {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            padding: 20px;
+            background: white;
+            color: #333;
+        }
+        
+        #drawingCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+            z-index: 10;
+        }
+        
+        .focus-window {
+            position: absolute;
+            border: 2px solid #00ffcc;
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.5);
+            border-radius: 8px;
+            overflow: hidden;
+            resize: both;
+            min-width: 200px;
+            min-height: 150px;
+            z-index: 20;
+        }
+        
+        .focus-window.active {
+            border-color: #ff3366;
+            box-shadow: 0 0 20px rgba(255, 51, 102, 0.7);
+            z-index: 30;
+        }
+        
+        .window-header {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 8px 12px;
+            cursor: move;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .window-title {
+            font-weight: bold;
+        }
+        
+        .window-controls button {
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            margin-left: 5px;
+        }
+        
+        .window-content {
+            padding: 15px;
+            height: calc(100% - 40px);
+            overflow: auto;
+        }
+        
+        .message-log {
+            height: 100%;
+            overflow-y: auto;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .message {
+            margin-bottom: 8px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .message.sent {
+            background: rgba(0, 255, 204, 0.2);
+            text-align: right;
+        }
+        
+        .message.received {
+            background: rgba(255, 51, 102, 0.2);
+        }
+        
+        .input-area {
+            display: flex;
+            margin-top: 10px;
+        }
+        
+        .input-area input {
+            flex-grow: 1;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px 0 0 5px;
+            color: white;
+        }
+        
+        .input-area button {
+            border-radius: 0 5px 5px 0;
+            padding: 8px 15px;
+        }
+        
+        .status-bar {
+            text-align: center;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .zoom-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .zoom-header {
+            width: 90%;
+            max-width: 1000px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .zoom-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .zoom-close {
+            background: rgba(255, 51, 102, 0.7);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .zoom-content {
+            width: 90%;
+            max-width: 1000px;
+            height: 80%;
+            background: white;
+            border-radius: 0 0 10px 10px;
+            overflow: auto;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .zoom-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .zoom-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .zoom-controls button {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .content-sample {
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .content-sample h2 {
+            color: #1a2a6c;
+            margin-bottom: 15px;
+        }
+        
+        .content-sample p {
+            margin-bottom: 15px;
+        }
+        
+        .content-sample ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .content-sample code {
+            background: #f5f5f5;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        
+        .content-sample .highlight-box {
+            background: #fffacd;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #ffd700;
+        }
+        
+        .loading-indicator {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Focus Window Application with Content Zoom</h1>
+            <p class="subtitle">Draw over content and zoom into focused areas</p>
+        </header>
+        
+        <div class="controls">
+            <button id="addWindowBtn">Add Focus Window</button>
+            <button id="clearCanvasBtn">Clear Drawing</button>
+            <button id="toggleDrawingBtn">Toggle Drawing</button>
+            <button id="zoomBtn">Zoom Active Window</button>
+            <button id="loadContentBtn">Load Sample Content</button>
+        </div>
+        
+        <div class="instructions">
+            <h2>How to Use:</h2>
+            <ul>
+                <li><strong>Add Focus Window:</strong> Create a new focus window that can be moved and resized</li>
+                <li><strong>Drawing:</strong> Click and drag on the canvas to draw (toggle on/off with button)</li>
+                <li><strong>Focus Navigation:</strong> Use arrow keys to switch between active windows</li>
+                <li><strong>Window Communication:</strong> Send messages between windows using the input area</li>
+                <li><strong>Resize Windows:</strong> Drag the bottom-right corner of any window to resize</li>
+                <li><strong>Zoom Feature:</strong> Click "Zoom Active Window" to focus on the selected window's content area</li>
+                <li><strong>Load Content:</strong> Add sample content to work with</li>
+            </ul>
+        </div>
+        
+        <div class="content-container">
+            <div id="contentArea">
+                <div class="content-sample" id="sampleContent" style="display: none;">
+                    <h2>Sample Content for Testing Focus Windows</h2>
+                    <p>This is sample content that you can use to test the focus window functionality. You can draw over this content and use the focus windows to zoom into specific areas.</p>
+                    
+                    <div class="highlight-box">
+                        <h3>Important Information</h3>
+                        <p>This highlighted section demonstrates how the zoom feature captures specific content areas.</p>
+                    </div>
+                    
+                    <h3>Key Features of this Application:</h3>
+                    <ul>
+                        <li>Interactive focus windows that can be moved and resized</li>
+                        <li>Drawing capabilities over any content</li>
+                        <li>Communication between windows</li>
+                        <li>Zoom functionality to focus on specific content areas using html2canvas</li>
+                        <li>Easy navigation between windows using arrow keys</li>
+                    </ul>
+                    
+                    <h3>How to Use the Zoom Feature:</h3>
+                    <p>Position a focus window over the content you want to examine closely. Then click the "Zoom" button on the window or use the "Zoom Active Window" button. The application will capture the content within that window using html2canvas and display an enlarged view.</p>
+                    
+                    <h3>Technical Details:</h3>
+                    <p>This application uses HTML5 Canvas for drawing and the html2canvas library for capturing content. The focus windows are implemented using absolute positioning and JavaScript for drag-and-drop functionality.</p>
+                    
+                    <p>You can add your own content to this area or use the "Load Sample Content" button to populate this section with example text and elements.</p>
+                    
+                    <div class="highlight-box">
+                        <h3>Another Important Section</h3>
+                        <p>This is another highlighted area that you can focus on with the zoom feature.</p>
+                        <p>Try positioning a focus window over this section and then zooming in to see the details.</p>
+                    </div>
+                </div>
+            </div>
+            <canvas id="drawingCanvas"></canvas>
+            <div class="loading-indicator" id="loadingIndicator">Capturing content...</div>
+            <!-- Focus windows will be dynamically added here -->
+        </div>
+        
+        <div class="status-bar" id="statusBar">
+            Active Window: None | Drawing: Enabled | Use Arrow Keys to Navigate
+        </div>
+    </div>
+
+    <div class="zoom-overlay" id="zoomOverlay">
+        <div class="zoom-header">
+            <div class="zoom-title" id="zoomTitle">Window Zoom</div>
+            <button class="zoom-close" id="zoomClose">X</button>
+        </div>
+        <div class="zoom-content" id="zoomContent">
+            <!-- Zoomed content will be displayed here -->
+        </div>
+        <div class="zoom-controls">
+            <button id="prevWindowBtn">Previous Window</button>
+            <button id="nextWindowBtn">Next Window</button>
+        </div>
+    </div>
+
+    <script>
+        class FocusWindowApplication {
+            constructor() {
+                this.windows = [];
+                this.activeWindowIndex = -1;
+                this.drawingEnabled = true;
+                this.isDrawing = false;
+                this.lastX = 0;
+                this.lastY = 0;
+                this.zoomActive = false;
+                this.zoomWindowIndex = -1;
+                
+                this.canvas = document.getElementById('drawingCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.contentArea = document.getElementById('contentArea');
+                this.statusBar = document.getElementById('statusBar');
+                this.zoomOverlay = document.getElementById('zoomOverlay');
+                this.zoomTitle = document.getElementById('zoomTitle');
+                this.zoomContent = document.getElementById('zoomContent');
+                this.loadingIndicator = document.getElementById('loadingIndicator');
+                
+                this.initCanvas();
+                this.setupEventListeners();
+                this.createInitialWindow();
+                
+                // Update status bar
+                this.updateStatusBar();
+            }
+            
+            initCanvas() {
+                // Set canvas dimensions to match container
+                const container = this.canvas.parentElement;
+                this.canvas.width = container.clientWidth;
+                this.canvas.height = container.clientHeight;
+                
+                // Set drawing style
+                this.ctx.strokeStyle = '#ff3366';
+                this.ctx.lineWidth = 3;
+                this.ctx.lineCap = 'round';
+                this.ctx.lineJoin = 'round';
+            }
+            
+            setupEventListeners() {
+                // Canvas drawing events
+                this.canvas.addEventListener('mousedown', this.startDrawing.bind(this));
+                this.canvas.addEventListener('mousemove', this.draw.bind(this));
+                this.canvas.addEventListener('mouseup', this.stopDrawing.bind(this));
+                this.canvas.addEventListener('mouseout', this.stopDrawing.bind(this));
+                
+                // Button events
+                document.getElementById('addWindowBtn').addEventListener('click', () => this.addWindow());
+                document.getElementById('clearCanvasBtn').addEventListener('click', () => this.clearCanvas());
+                document.getElementById('toggleDrawingBtn').addEventListener('click', () => this.toggleDrawing());
+                document.getElementById('zoomBtn').addEventListener('click', () => this.zoomActiveWindow());
+                document.getElementById('loadContentBtn').addEventListener('click', () => this.loadSampleContent());
+                document.getElementById('zoomClose').addEventListener('click', () => this.closeZoom());
+                document.getElementById('prevWindowBtn').addEventListener('click', () => this.navigateZoom(-1));
+                document.getElementById('nextWindowBtn').addEventListener('click', () => this.navigateZoom(1));
+                
+                // Keyboard events for window navigation
+                document.addEventListener('keydown', (e) => {
+                    if (this.zoomActive) {
+                        // Handle navigation in zoom mode
+                        if (e.key === 'Escape') {
+                            this.closeZoom();
+                        } else if (e.key === 'ArrowLeft') {
+                            this.navigateZoom(-1);
+                        } else if (e.key === 'ArrowRight') {
+                            this.navigateZoom(1);
+                        }
+                    } else {
+                        // Handle navigation in normal mode
+                        if (e.key.startsWith('Arrow')) {
+                            e.preventDefault();
+                            this.navigateWindows(e.key);
+                        }
+                    }
+                });
+                
+                // Handle window resize
+                window.addEventListener('resize', () => {
+                    this.initCanvas();
+                });
+            }
+            
+            loadSampleContent() {
+                const sampleContent = document.getElementById('sampleContent');
+                sampleContent.style.display = 'block';
+            }
+            
+            createInitialWindow() {
+                this.addWindow('Main Focus', 50, 50);
+                this.addWindow('Secondary Focus', 300, 100);
+            }
+            
+            addWindow(title = `Window ${this.windows.length + 1}`, x = 50, y = 50) {
+                const windowId = `window-${Date.now()}`;
+                const windowElement = document.createElement('div');
+                windowElement.className = 'focus-window';
+                windowElement.id = windowId;
+                windowElement.style.left = `${x}px`;
+                windowElement.style.top = `${y}px`;
+                
+                windowElement.innerHTML = `
+                    <div class="window-header">
+                        <div class="window-title">${title}</div>
+                        <div class="window-controls">
+                            <button class="close-btn">Close</button>
+                            <button class="zoom-in-btn">Zoom</button>
+                        </div>
+                    </div>
+                    <div class="window-content">
+                        <div class="message-log" id="${windowId}-messages">
+                            <div class="message received">Welcome to ${title}! Send a message to other windows.</div>
+                        </div>
+                        <div class="input-area">
+                            <input type="text" placeholder="Type a message..." id="${windowId}-input">
+                            <button class="send-btn">Send</button>
+                        </div>
+                    </div>
+                `;
+                
+                document.querySelector('.content-container').appendChild(windowElement);
+                
+                // Make window draggable
+                this.makeDraggable(windowElement);
+                
+                // Add event listeners for window controls
+                const closeBtn = windowElement.querySelector('.close-btn');
+                const zoomInBtn = windowElement.querySelector('.zoom-in-btn');
+                const sendBtn = windowElement.querySelector('.send-btn');
+                const input = windowElement.querySelector('input');
+                
+                closeBtn.addEventListener('click', () => this.removeWindow(windowId));
+                zoomInBtn.addEventListener('click', () => this.zoomWindow(windowId));
+                sendBtn.addEventListener('click', () => this.sendMessage(windowId));
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.sendMessage(windowId);
+                });
+                
+                // Add to windows array and set as active
+                const windowObj = {
+                    id: windowId,
+                    element: windowElement,
+                    title: title
+                };
+                
+                this.windows.push(windowObj);
+                this.setActiveWindow(this.windows.length - 1);
+                
+                return windowObj;
+            }
+            
+            removeWindow(windowId) {
+                const index = this.windows.findIndex(w => w.id === windowId);
+                if (index !== -1) {
+                    this.windows[index].element.remove();
+                    this.windows.splice(index, 1);
+                    
+                    // If we removed the active window, set a new active window
+                    if (this.activeWindowIndex === index) {
+                        if (this.windows.length > 0) {
+                            this.setActiveWindow(Math.max(0, index - 1));
+                        } else {
+                            this.activeWindowIndex = -1;
+                        }
+                    } else if (this.activeWindowIndex > index) {
+                        this.activeWindowIndex--;
+                    }
+                    
+                    this.updateStatusBar();
+                }
+            }
+            
+            setActiveWindow(index) {
+                // Remove active class from all windows
+                this.windows.forEach(w => w.element.classList.remove('active'));
+                
+                // Set new active window
+                if (index >= 0 && index < this.windows.length) {
+                    this.windows[index].element.classList.add('active');
+                    this.activeWindowIndex = index;
+                    this.updateStatusBar();
+                }
+            }
+            
+            navigateWindows(direction) {
+                if (this.windows.length === 0) return;
+                
+                let newIndex = this.activeWindowIndex;
+                
+                switch(direction) {
+                    case 'ArrowRight':
+                        newIndex = (this.activeWindowIndex + 1) % this.windows.length;
+                        break;
+                    case 'ArrowLeft':
+                        newIndex = (this.activeWindowIndex - 1 + this.windows.length) % this.windows.length;
+                        break;
+                    case 'ArrowUp':
+                        // For demonstration, cycle through windows
+                        newIndex = (this.activeWindowIndex + 1) % this.windows.length;
+                        break;
+                    case 'ArrowDown':
+                        // For demonstration, cycle through windows in reverse
+                        newIndex = (this.activeWindowIndex - 1 + this.windows.length) % this.windows.length;
+                        break;
+                }
+                
+                this.setActiveWindow(newIndex);
+            }
+            
+            makeDraggable(element) {
+                let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+                const header = element.querySelector('.window-header');
+                
+                header.onmousedown = dragMouseDown;
+                
+                function dragMouseDown(e) {
+                    e.preventDefault();
+                    // Get the mouse cursor position at startup
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    document.onmouseup = closeDragElement;
+                    document.onmousemove = elementDrag;
+                }
+                
+                function elementDrag(e) {
+                    e.preventDefault();
+                    // Calculate the new cursor position
+                    pos1 = pos3 - e.clientX;
+                    pos2 = pos4 - e.clientY;
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    
+                    // Set the element's new position
+                    element.style.top = (element.offsetTop - pos2) + "px";
+                    element.style.left = (element.offsetLeft - pos1) + "px";
+                }
+                
+                function closeDragElement() {
+                    // Stop moving when mouse button is released
+                    document.onmouseup = null;
+                    document.onmousemove = null;
+                }
+            }
+            
+            sendMessage(windowId) {
+                const windowObj = this.windows.find(w => w.id === windowId);
+                if (!windowObj) return;
+                
+                const input = document.getElementById(`${windowId}-input`);
+                const message = input.value.trim();
+                
+                if (message) {
+                    // Add message to sender's log
+                    this.addMessageToWindow(windowId, message, 'sent');
+                    
+                    // Send to all other windows
+                    this.windows.forEach(w => {
+                        if (w.id !== windowId) {
+                            this.addMessageToWindow(w.id, `${windowObj.title}: ${message}`, 'received');
+                        }
+                    });
+                    
+                    input.value = '';
+                }
+            }
+            
+            addMessageToWindow(windowId, message, type) {
+                const messageLog = document.getElementById(`${windowId}-messages`);
+                const messageElement = document.createElement('div');
+                messageElement.className = `message ${type}`;
+                messageElement.textContent = message;
+                messageLog.appendChild(messageElement);
+                messageLog.scrollTop = messageLog.scrollHeight;
+            }
+            
+            startDrawing(e) {
+                if (!this.drawingEnabled) return;
+                
+                this.isDrawing = true;
+                const rect = this.canvas.getBoundingClientRect();
+                this.lastX = e.clientX - rect.left;
+                this.lastY = e.clientY - rect.top;
+            }
+            
+            draw(e) {
+                if (!this.isDrawing || !this.drawingEnabled) return;
+                
+                const rect = this.canvas.getBoundingClientRect();
+                const currentX = e.clientX - rect.left;
+                const currentY = e.clientY - rect.top;
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(this.lastX, this.lastY);
+                this.ctx.lineTo(currentX, currentY);
+                this.ctx.stroke();
+                
+                this.lastX = currentX;
+                this.lastY = currentY;
+            }
+            
+            stopDrawing() {
+                this.isDrawing = false;
+            }
+            
+            clearCanvas() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            }
+            
+            toggleDrawing() {
+                this.drawingEnabled = !this.drawingEnabled;
+                this.updateStatusBar();
+            }
+            
+            zoomActiveWindow() {
+                if (this.activeWindowIndex >= 0) {
+                    this.zoomWindow(this.windows[this.activeWindowIndex].id);
+                }
+            }
+            
+            async zoomWindow(windowId) {
+                const index = this.windows.findIndex(w => w.id === windowId);
+                if (index === -1) return;
+                
+                this.zoomWindowIndex = index;
+                this.zoomActive = true;
+                
+                // Show loading indicator
+                this.loadingIndicator.style.display = 'block';
+                
+                // Update zoom view with captured content
+                await this.updateZoomView();
+                
+                this.zoomOverlay.style.display = 'flex';
+                this.loadingIndicator.style.display = 'none';
+                
+                // Update status bar
+                this.updateStatusBar();
+            }
+            
+            async updateZoomView() {
+                if (this.zoomWindowIndex < 0 || this.zoomWindowIndex >= this.windows.length) return;
+                
+                const windowObj = this.windows[this.zoomWindowIndex];
+                this.zoomTitle.textContent = `Zoom: ${windowObj.title}`;
+                
+                // Get the position and dimensions of the focus window
+                const windowRect = windowObj.element.getBoundingClientRect();
+                const contentRect = this.contentArea.getBoundingClientRect();
+                
+                // Calculate the content area that's visible through the focus window
+                const visibleLeft = Math.max(0, windowRect.left - contentRect.left);
+                const visibleTop = Math.max(0, windowRect.top - contentRect.top);
+                const visibleWidth = Math.min(windowRect.width, contentRect.width - visibleLeft);
+                const visibleHeight = Math.min(windowRect.height, contentRect.height - visibleTop);
+                
+                // Use html2canvas to capture the content area
+                try {
+                    const canvas = await html2canvas(this.contentArea, {
+                        x: visibleLeft,
+                        y: visibleTop,
+                        width: visibleWidth,
+                        height: visibleHeight,
+                        scale: 2, // Higher scale for better zoom quality
+                        useCORS: true,
+                        allowTaint: true,
+                        logging: false
+                    });
+                    
+                    // Convert canvas to image and display in zoom view
+                    const img = new Image();
+                    img.src = canvas.toDataURL();
+                    img.className = 'zoom-image';
+                    
+                    // Clear previous content and add the new image
+                    this.zoomContent.innerHTML = '';
+                    this.zoomContent.appendChild(img);
+                } catch (error) {
+                    console.error('Error capturing content:', error);
+                    this.zoomContent.innerHTML = `
+                        <div style="padding: 20px; color: #333;">
+                            <h3>Error capturing content</h3>
+                            <p>There was an error capturing the content. Please try again.</p>
+                            <p>Error details: ${error.message}</p>
+                        </div>
+                    `;
+                }
+            }
+            
+            navigateZoom(direction) {
+                if (this.windows.length === 0) return;
+                
+                let newIndex = (this.zoomWindowIndex + direction + this.windows.length) % this.windows.length;
+                this.zoomWindowIndex = newIndex;
+                this.updateZoomView();
+            }
+            
+            closeZoom() {
+                this.zoomActive = false;
+                this.zoomOverlay.style.display = 'none';
+                this.updateStatusBar();
+            }
+            
+            updateStatusBar() {
+                const activeWindow = this.activeWindowIndex >= 0 ? 
+                    this.windows[this.activeWindowIndex].title : 'None';
+                
+                let statusText = `Active Window: ${activeWindow} | Drawing: ${this.drawingEnabled ? 'Enabled' : 'Disabled'}`;
+                
+                if (this.zoomActive) {
+                    statusText += ` | Zoom Mode: ${this.windows[this.zoomWindowIndex].title} | Use Arrow Keys/Esc to navigate/exit`;
+                } else {
+                    statusText += ' | Use Arrow Keys to Navigate';
+                }
+                
+                this.statusBar.textContent = statusText;
+            }
+        }
+
+        // Initialize the application when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new FocusWindowApplication();
+        });
+    </script>
+</body>
+</html>

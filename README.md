@@ -51,10 +51,11 @@ To become the world's fastest sustainable problem-solving company.
 - [JSON modifier](https://myaitree.com/tools/json-modifier.html): Modifies structure of JSON
 - [React2Js](https://myaitree.com/tools/react2js.html): Convert React component 2 JSON
 
-### Audio/Visual Tools
-- [Voice Note](https://myaitree.com/tools/voice-note.html): Create voice notes quickly and share with anybody.
-- [ImageShare](https://myaitree.com/tools/image-share.html): Upload images and share with anyone.
-- [Csquare](https://myaitree.com/tools/canva-compare.html): Compare two images created on two canvases using fabric.js & Bootstrap.js
+### Audio/Visual/Graphical Tools - Gora
+- [Voice Note](https://myaitree.com/tools/Gora/voice-note.html): Create voice notes quickly and share with anybody.
+- [ImageShare](https://myaitree.com/tools/Gora/image-share.html): Upload images and share with anyone.
+- [Csquare](https://myaitree.com/tools/Gora/canva-compare.html): Compare two images created on two canvases using fabric.js & Bootstrap.js
+- [FocusWindow](https://myaitree.com/tools/Gora/focus-window.html): Create a focussed window over the page to travel from one part to another with actions.
 
 ### Number/Time-Based Tools
 
