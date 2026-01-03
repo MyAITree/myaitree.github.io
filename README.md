@@ -92,6 +92,8 @@ To become the world's fastest sustainable problem-solving company.
 - **Agile Delivery**: Iterative development that delivers continuous value
 - **Transparent Processes**: Clear communication and measurable outcomes
 
+
+
 ## 🌐 Connect With Us
 
 - Website: [myaitree.com](https://www.myaitree.com)
@@ -108,3 +110,8 @@ To become the world's fastest sustainable problem-solving company.
 ---
 
 "Growing intelligence, one line of code at a time." 🌱
+"If its not fun, we don't do it!"
+"Your Journey Our Power"
+- Coffee driven ☕️
+- Code driven 🧑🏻‍💻
+- Data driven 📈
