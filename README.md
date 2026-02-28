@@ -18,6 +18,8 @@ To become the world's fastest sustainable problem-solving company.
 ### E-Commerce Projects
 - [Cozy Kutumbh](https://www.cozykutumbh.com/)
 - [Mahavir Online](mahavir.online)
+- [Privacy Policy](/mahavir-pro/privacy-policy.md)
+- [Terms of Service](/mahavir-pro/terms-of-service.md)
 
 #### Tools for E-Comms
 - [BYOB](https://myaitree.com/tools/BoB-the-builder/byob.html)
