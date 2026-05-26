@@ -1,0 +1,863 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Georgia',serif;background:var(--color-background-primary);color:var(--color-text-primary);font-size:14px;line-height:1.7}
+.page{max-width:860px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.hero{text-align:center;padding:2.5rem 1rem 2rem;border-bottom:1px solid var(--color-border-secondary);margin-bottom:2.5rem}
+.hero-sub{font-size:0.72rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--color-text-secondary);margin-bottom:0.4rem}
+.hero-title{font-size:2.8rem;font-weight:400;color:var(--color-text-primary);line-height:1.1;margin-bottom:0.4rem}
+.hero-title em{color:#854F0B;font-style:italic}
+.hero-desc{font-size:0.9rem;color:var(--color-text-secondary);max-width:520px;margin:0.75rem auto 0;font-style:italic}
+.sec{margin-bottom:2.5rem}
+.sec-hdr{display:flex;align-items:baseline;gap:0.75rem;border-bottom:1px solid var(--color-border-tertiary);padding-bottom:0.4rem;margin-bottom:1.25rem}
+.sec-num{font-family:monospace;font-size:0.68rem;color:#854F0B;letter-spacing:0.1em}
+.sec-title{font-size:1.25rem;font-weight:500;color:var(--color-text-primary)}
+.sec-title-hi{font-size:0.82rem;color:var(--color-text-secondary);font-style:italic;font-weight:400}
+p{font-size:0.9rem;margin-bottom:0.65rem;color:var(--color-text-primary)}
+p:last-child{margin-bottom:0}
+.callout{background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-left:3px solid #854F0B;border-radius:0;padding:0.75rem 1rem;font-size:0.85rem;color:var(--color-text-secondary);margin:0.75rem 0;font-style:italic}
+
+.roadmap{display:flex;flex-direction:column;gap:0;margin:1rem 0}
+.rm-row{display:flex;align-items:stretch;gap:0}
+.rm-start{background:#FAEEDA;border:0.5px solid #EF9F27;border-radius:6px;padding:0.6rem 1rem;font-size:0.82rem;font-weight:500;color:#633806;text-align:center;flex:0 0 140px}
+.rm-arrow{display:flex;align-items:center;justify-content:center;width:28px;color:var(--color-text-secondary);font-size:1rem;flex-shrink:0}
+.rm-phases{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;flex:1}
+.rm-phase{border:0.5px solid var(--color-border-secondary);border-radius:6px;padding:0.5rem 0.6rem;font-size:0.78rem;background:var(--color-background-secondary)}
+.rm-phase.p1{border-left:3px solid #EF9F27;background:#FAEEDA}
+.rm-phase.p1 .ph-lbl{color:#633806}
+.rm-phase.p2{border-left:3px solid #7F77DD;background:#EEEDFE}
+.rm-phase.p2 .ph-lbl{color:#3C3489}
+.rm-phase.p3{border-left:3px solid #1D9E75;background:#E1F5EE}
+.rm-phase.p3 .ph-lbl{color:#085041}
+.rm-phase.p4{border-left:3px solid #D85A30;background:#FAECE7}
+.rm-phase.p4 .ph-lbl{color:#712B13}
+.ph-lbl{font-weight:500;font-size:0.75rem;margin-bottom:2px}
+.ph-ragas{font-size:0.72rem;color:var(--color-text-secondary)}
+.rm-end{margin-top:8px;background:#EAF3DE;border:0.5px solid #97C459;border-radius:6px;padding:0.5rem 1rem;font-size:0.82rem;color:#27500A;font-weight:500;text-align:center}
+
+.swara-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:1rem 0}
+.sw-cell{border:0.5px solid var(--color-border-secondary);border-radius:6px;padding:0.55rem 0.3rem;text-align:center;background:var(--color-background-secondary)}
+.sw-cell.fixed{background:#FAEEDA;border-color:#EF9F27}
+.sw-cell.vari{background:#E1F5EE;border-color:#5DCAA5}
+.sw-name{font-size:0.65rem;color:var(--color-text-secondary);font-family:monospace}
+.sw-abbr{font-size:1.1rem;font-weight:500;color:var(--color-text-primary);margin:2px 0}
+.sw-cell.fixed .sw-abbr{color:#633806}
+.sw-west{font-size:0.68rem;color:var(--color-text-secondary)}
+.sw-var{font-size:0.62rem;color:var(--color-text-secondary);margin-top:2px}
+
+.octave-row{display:flex;gap:0;border:0.5px solid var(--color-border-secondary);border-radius:6px;overflow:hidden;margin:0.4rem 0}
+.oc{flex:1;padding:0.5rem 0.3rem;text-align:center;font-family:monospace;font-size:0.78rem;border-right:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-primary)}
+.oc:last-child{border-right:none}
+.oc.low{background:#FAEEDA;color:#633806}
+.oc.mid{background:#E1F5EE;color:#085041}
+.oc.hi{background:#EEEDFE;color:#3C3489}
+
+.ex-block{background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-left:3px solid #854F0B;border-radius:0;padding:0.75rem 1rem;font-family:monospace;font-size:0.8rem;line-height:2;margin:0.5rem 0;color:var(--color-text-primary)}
+.ex-lbl{font-size:0.65rem;color:#854F0B;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.2rem;display:block}
+
+.thaat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:1rem 0}
+.thaat-card{border:0.5px solid var(--color-border-secondary);border-radius:8px;padding:0.75rem 0.9rem;background:var(--color-background-secondary)}
+.thaat-card h4{font-size:0.9rem;font-weight:500;color:var(--color-text-primary);margin-bottom:0.3rem}
+.thaat-notes{font-family:monospace;font-size:0.8rem;color:var(--color-text-secondary);margin-bottom:0.25rem}
+.thaat-meta{font-size:0.75rem;color:var(--color-text-secondary)}
+.badge{display:inline-block;padding:1px 8px;border-radius:20px;font-size:0.7rem;font-family:monospace;margin:1px}
+.b-amber{background:#FAEEDA;color:#633806;border:0.5px solid #EF9F27}
+.b-teal{background:#E1F5EE;color:#085041;border:0.5px solid #5DCAA5}
+.b-purple{background:#EEEDFE;color:#3C3489;border:0.5px solid #AFA9EC}
+.b-coral{background:#FAECE7;color:#712B13;border:0.5px solid #F0997B}
+.b-red{background:#FCEBEB;color:#791F1F;border:0.5px solid #F09595}
+.b-green{background:#EAF3DE;color:#27500A;border:0.5px solid #97C459}
+.b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-secondary)}
+.b-blue{background:#E6F1FB;color:#0C447C;border:0.5px solid #85B7EB}
+
+.taal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:1rem 0}
+.taal-card{border:0.5px solid var(--color-border-secondary);border-radius:8px;padding:0.65rem 0.8rem;background:var(--color-background-secondary);text-align:center}
+.taal-name{font-weight:500;font-size:0.88rem;color:var(--color-text-primary);margin-bottom:2px}
+.taal-beats{font-family:monospace;font-size:0.75rem;color:#854F0B;font-weight:500}
+.taal-struct{font-size:0.68rem;color:var(--color-text-secondary);margin-top:2px}
+.taal-card.main{border-color:#EF9F27;background:#FAEEDA}
+.taal-card.main .taal-name{color:#633806}
+
+.taal-strip{display:flex;gap:0;border:0.5px solid var(--color-border-secondary);border-radius:6px;overflow:hidden;margin:0.5rem 0;font-family:monospace;font-size:0.72rem}
+.ts-cell{flex:1;padding:0.4rem 0.25rem;text-align:center;border-right:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+.ts-cell:last-child{border-right:none}
+.ts-cell.sam{background:#FAEEDA;color:#633806;font-weight:500}
+.ts-cell.taali{background:#E1F5EE;color:#085041}
+.ts-cell.khali{background:#EEEDFE;color:#3C3489}
+.ts-beat{font-size:0.6rem;color:var(--color-text-secondary);display:block}
+.ts-syl{font-size:0.8rem;color:inherit}
+
+.phase-section{margin-bottom:2rem}
+.phase-hdr{display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;padding:0.6rem 0.9rem;border-radius:6px}
+.ph1{background:#FAEEDA;border:0.5px solid #EF9F27}
+.ph1 .ph-title{color:#633806}
+.ph2{background:#EEEDFE;border:0.5px solid #AFA9EC}
+.ph2 .ph-title{color:#3C3489}
+.ph3{background:#E1F5EE;border:0.5px solid #5DCAA5}
+.ph3 .ph-title{color:#085041}
+.ph4{background:#FAECE7;border:0.5px solid #F0997B}
+.ph4 .ph-title{color:#712B13}
+.ph-title{font-size:0.9rem;font-weight:500}
+.ph-desc{font-size:0.75rem;color:var(--color-text-secondary);margin-left:auto}
+
+.raga-card{border:0.5px solid var(--color-border-secondary);border-radius:8px;overflow:hidden;margin:0.75rem 0}
+.raga-hdr{padding:0.6rem 1rem;display:flex;align-items:center;gap:0.75rem;border-bottom:0.5px solid var(--color-border-secondary)}
+.raga-hdr.r1{background:#FAEEDA}
+.raga-hdr.r2{background:#EEEDFE}
+.raga-hdr.r3{background:#E1F5EE}
+.raga-hdr.r4{background:#FAECE7}
+.raga-name{font-size:1rem;font-weight:500;color:var(--color-text-primary)}
+.raga-body{padding:0.75rem 1rem;background:var(--color-background-secondary)}
+.raga-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:0.75rem}
+.meta-item{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:5px;padding:0.4rem 0.6rem}
+.meta-lbl{font-size:0.62rem;color:var(--color-text-secondary);font-family:monospace;letter-spacing:0.08em;text-transform:uppercase;display:block;margin-bottom:1px}
+.meta-val{font-size:0.82rem;color:var(--color-text-primary)}
+.raga-scale{font-family:monospace;font-size:0.82rem;margin:0.4rem 0;color:var(--color-text-primary)}
+.raga-scale span.hi{color:#854F0B;font-weight:500}
+.raga-scale span.ko{color:#3C3489;font-weight:500}
+.raga-scale span.te{color:#085041;font-weight:500}
+.pakad-block{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-left:2px solid #854F0B;border-radius:0;padding:0.4rem 0.75rem;font-family:monospace;font-size:0.82rem;margin:0.4rem 0;color:var(--color-text-primary)}
+.note-list{list-style:none;margin-top:0.4rem}
+.note-list li{font-size:0.82rem;padding:0.18rem 0;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary)}
+.note-list li:last-child{border-bottom:none}
+.note-list li::before{content:'·';color:#854F0B;margin-right:6px}
+.diff-stars{color:#854F0B;font-size:0.82rem}
+
+.bandish-table{width:100%;border-collapse:collapse;font-size:0.82rem}
+.bandish-table th{font-family:monospace;font-size:0.68rem;color:#854F0B;letter-spacing:0.1em;text-align:left;padding:0.35rem 0.65rem;border-bottom:0.5px solid #EF9F27;background:#FAEEDA}
+.bandish-table td{padding:0.5rem 0.65rem;border-bottom:0.5px solid var(--color-border-tertiary)}
+.bandish-table tr:last-child td{border-bottom:none}
+.bandish-table td:first-child{font-style:italic;color:var(--color-text-primary)}
+
+.ornament-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:1rem 0}
+.orn-card{border:0.5px solid var(--color-border-secondary);border-radius:6px;padding:0.6rem 0.8rem;background:var(--color-background-secondary)}
+.orn-name{font-weight:500;font-size:0.88rem;color:var(--color-text-primary);margin-bottom:3px}
+.orn-desc{font-size:0.8rem;color:var(--color-text-secondary)}
+
+.forms-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:1rem 0}
+.form-card{border:0.5px solid var(--color-border-secondary);border-radius:8px;overflow:hidden}
+.form-hdr{padding:0.5rem 0.8rem;font-size:0.85rem;font-weight:500}
+.form-hdr.fh1{background:#FAEEDA;color:#633806}
+.form-hdr.fh2{background:#EEEDFE;color:#3C3489}
+.form-hdr.fh3{background:#FCEBEB;color:#791F1F}
+.form-hdr.fh4{background:#E1F5EE;color:#085041}
+.form-body{padding:0.6rem 0.8rem;background:var(--color-background-secondary);font-size:0.8rem;color:var(--color-text-secondary)}
+
+.perf-flow{display:flex;flex-direction:column;gap:4px;margin:1rem 0}
+.pf-row{display:flex;align-items:center;gap:0.75rem}
+.pf-num{font-family:monospace;font-size:0.7rem;color:#854F0B;width:18px;flex-shrink:0;text-align:right}
+.pf-step{flex:1;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:4px;padding:0.4rem 0.75rem;font-size:0.82rem;color:var(--color-text-primary)}
+.pf-desc{font-size:0.72rem;color:var(--color-text-secondary);flex:0 0 180px}
+
+.glossary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:5px;margin:0.75rem 0}
+.gl-item{padding:0.4rem 0.65rem;border:0.5px solid var(--color-border-tertiary);border-radius:5px;background:var(--color-background-secondary);font-size:0.8rem}
+.gl-term{font-family:monospace;font-size:0.72rem;color:#854F0B;display:block;margin-bottom:1px;letter-spacing:0.04em}
+
+.week-table{width:100%;border-collapse:collapse;font-size:0.82rem}
+.week-table th{font-family:monospace;font-size:0.68rem;color:#854F0B;letter-spacing:0.1em;text-align:left;padding:0.35rem 0.65rem;background:#FAEEDA;border-bottom:0.5px solid #EF9F27}
+.week-table td{padding:0.5rem 0.65rem;border-bottom:0.5px solid var(--color-border-tertiary)}
+.week-table tr:last-child td{border-bottom:none}
+.week-table td:first-child{font-family:monospace;font-size:0.72rem;color:#854F0B;width:100px}
+
+.listen-table{width:100%;border-collapse:collapse;font-size:0.82rem}
+.listen-table th{font-family:monospace;font-size:0.68rem;color:#854F0B;text-align:left;padding:0.35rem 0.65rem;background:#FAEEDA;border-bottom:0.5px solid #EF9F27;letter-spacing:0.08em}
+.listen-table td{padding:0.5rem 0.65rem;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top}
+.listen-table tr:last-child td{border-bottom:none}
+.listen-table td:first-child{font-weight:500}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:0.75rem 0}
+.col-card{border:0.5px solid var(--color-border-secondary);border-radius:8px;padding:0.8rem 0.9rem;background:var(--color-background-secondary)}
+.col-card h4{font-size:0.9rem;font-weight:500;margin-bottom:0.5rem;padding-bottom:0.35rem;border-bottom:0.5px solid var(--color-border-tertiary)}
+.col-card ul{list-style:none;font-size:0.82rem}
+.col-card ul li{padding:0.2rem 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.col-card ul li:last-child{border-bottom:none}
+.col-card ul li::before{content:'◆';font-size:0.45rem;color:#854F0B;margin-right:6px;vertical-align:middle}
+
+.ornament{text-align:center;color:var(--color-text-secondary);margin:2rem 0 1rem;letter-spacing:0.3em}
+</style>
+
+<div class="page">
+
+<div class="hero">
+  <div class="hero-sub">Hindustani · North Indian Classical Music</div>
+  <div class="hero-title">Complete <em>Learning Notes</em></div>
+  <div class="hero-desc">"From the seven swaras to concert improvisation — a systematic guide through the Guru-Shishya tradition"</div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">01</span><span class="sec-title">Learning Roadmap <span class="sec-title-hi">(अभ्यास क्रम)</span></span></div>
+  <p>The path from beginner to concert performer follows a clear arc: foundational swaras → thaat theory → raga study in four progressive phases → improvisation and presentation.</p>
+  <div class="roadmap">
+    <div class="rm-row" style="margin-bottom:8px">
+      <div class="rm-start" style="display:flex;align-items:center;justify-content:center;flex-direction:column">
+        <div style="font-size:0.7rem;color:#854F0B;margin-bottom:2px">Begin with</div>
+        <div style="font-size:0.85rem;font-weight:500;color:#633806">Swaras + Saptak</div>
+        <div style="font-size:0.7rem;color:#854F0B;margin-top:2px">Then 10 Thaats + Taal</div>
+      </div>
+      <div class="rm-arrow">→</div>
+      <div class="rm-phases">
+        <div class="rm-phase p1"><div class="ph-lbl">Phase 1 — Foundation</div><div class="ph-ragas">Bhupali · Yaman · Bilawal · Bhairav · Bhairavi</div></div>
+        <div class="rm-phase p2"><div class="ph-lbl">Phase 2 — Core</div><div class="ph-ragas">Kafi · Desh · Bageshri · Khamaj · Durga</div></div>
+        <div class="rm-phase p3"><div class="ph-lbl">Phase 3 — Intermediate</div><div class="ph-ragas">Bhimpalasi · Maru Bihag · Kedar · Tilak Kamod</div></div>
+        <div class="rm-phase p4"><div class="ph-lbl">Phase 4 — Advanced</div><div class="ph-ragas">Marwa · Todi · Poorvi · Darbari · Shree</div></div>
+      </div>
+      <div class="rm-arrow">→</div>
+      <div class="rm-start" style="display:flex;align-items:center;justify-content:center;background:#EAF3DE;border-color:#97C459">
+        <div style="font-size:0.7rem;color:#27500A;margin-bottom:2px">Culminates in</div>
+        <div style="font-size:0.85rem;font-weight:500;color:#173404">Concert Presentation</div>
+        <div style="font-size:0.7rem;color:#27500A;margin-top:2px">Alaap · Jor · Taan</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">02</span><span class="sec-title">Swaras — The Seven Notes <span class="sec-title-hi">(सप्त स्वर)</span></span></div>
+  <p>The entire system of Hindustani music rests on seven notes — <em>Sapta Swara</em>. Sa and Pa are fixed. The others have natural (shuddh) and modified (komal/teevra) variants, giving 12 distinct pitches in total.</p>
+  <div class="swara-grid">
+    <div class="sw-cell fixed"><div class="sw-name">Shadja</div><div class="sw-abbr">Sa</div><div class="sw-west">C / Do</div><div class="sw-var">Fixed · no variant</div></div>
+    <div class="sw-cell vari"><div class="sw-name">Rishabh</div><div class="sw-abbr">Re</div><div class="sw-west">D / Re</div><div class="sw-var">Shuddh / Komal r</div></div>
+    <div class="sw-cell vari"><div class="sw-name">Gandhar</div><div class="sw-abbr">Ga</div><div class="sw-west">E / Mi</div><div class="sw-var">Shuddh / Komal g</div></div>
+    <div class="sw-cell vari"><div class="sw-name">Madhyam</div><div class="sw-abbr">Ma</div><div class="sw-west">F / Fa</div><div class="sw-var">Shuddh / Teevra M̄</div></div>
+    <div class="sw-cell fixed"><div class="sw-name">Pancham</div><div class="sw-abbr">Pa</div><div class="sw-west">G / Sol</div><div class="sw-var">Fixed · no variant</div></div>
+    <div class="sw-cell vari"><div class="sw-name">Dhaivat</div><div class="sw-abbr">Dha</div><div class="sw-west">A / La</div><div class="sw-var">Shuddh / Komal d</div></div>
+    <div class="sw-cell vari"><div class="sw-name">Nishad</div><div class="sw-abbr">Ni</div><div class="sw-west">B / Ti</div><div class="sw-var">Shuddh / Komal n</div></div>
+  </div>
+  <div class="callout">Notation convention: Capital = Shuddh (natural). Lowercase = Komal (flat). M̄ or M# = Teevra Madhyam (sharpened fourth — the only teevra note in Hindustani music).</div>
+
+  <p style="margin-top:1rem;margin-bottom:0.4rem;font-size:0.82rem;color:var(--color-text-secondary)">Three octaves (Saptak)</p>
+  <div class="octave-row">
+    <div class="oc low" style="flex:2">Mandra Saptak — lower octave<div style="font-size:0.65rem;margin-top:2px">Ṡ Ṙ Ġ Ṁ Ṗ Ḋ Ṅ (dots below)</div></div>
+    <div class="oc mid" style="flex:2">Madhya Saptak — middle octave<div style="font-size:0.65rem;margin-top:2px">S R G M P D N S'</div></div>
+    <div class="oc hi" style="flex:2">Taar Saptak — upper octave<div style="font-size:0.65rem;margin-top:2px">S' R' G' M' P' D' N' (dots above)</div></div>
+  </div>
+
+  <p style="margin-top:1.25rem;margin-bottom:0.5rem;font-size:0.88rem;font-weight:500">Daily swara exercises (Alankar)</p>
+  <div class="ex-block">
+    <span class="ex-lbl">1. Sarali (basic)</span>
+    S R G M | P D N S' | S' N D P | M G R S
+  </div>
+  <div class="ex-block">
+    <span class="ex-lbl">2. Janta</span>
+    SS RR GG MM | PP DD NN S'S' | (reverse descending)
+  </div>
+  <div class="ex-block">
+    <span class="ex-lbl">3. Daatu (skip)</span>
+    S G R M | G P M D | P N D S' | (back down)
+  </div>
+  <div class="ex-block">
+    <span class="ex-lbl">4. Alankar pattern</span>
+    S R G | R G M | G M P | M P D | P D N | D N S'  →  reverse
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">03</span><span class="sec-title">Thaats — The 10 Parent Scales <span class="sec-title-hi">(दस थाट)</span></span></div>
+  <p>The Thaat system was formalized by Pandit Vishnu Narayan Bhatkhande (early 20th century) to classify all ragas under 10 parent scales. Each thaat has 7 notes; ragas within a thaat may use fewer and apply different rules of movement.</p>
+  <div class="thaat-grid">
+    <div class="thaat-card"><h4>Bilawal <span class="badge b-green">All shuddh</span></h4><div class="thaat-notes">S R G M P D N</div><div class="thaat-meta">Morning · Bright, peaceful · Ragas: Bilawal, Deshkar, Durga</div></div>
+    <div class="thaat-card"><h4>Kalyan <span class="badge b-amber">Teevra Ma</span></h4><div class="thaat-notes">S R G <span style="color:#854F0B;font-weight:500">M̄</span> P D N</div><div class="thaat-meta">Evening · Devotional, serene · Ragas: Yaman, Bhupali, Hindol</div></div>
+    <div class="thaat-card"><h4>Khamaj <span class="badge b-teal">Komal Ni</span></h4><div class="thaat-notes">S R G M P D <span style="color:#3C3489;font-weight:500">n</span></div><div class="thaat-meta">Night · Romantic, light · Ragas: Khamaj, Desh, Jhinjhoti</div></div>
+    <div class="thaat-card"><h4>Bhairav <span class="badge b-purple">Komal Re, Dha</span></h4><div class="thaat-notes">S <span style="color:#3C3489;font-weight:500">r</span> G M P <span style="color:#3C3489;font-weight:500">d</span> N</div><div class="thaat-meta">Early morning · Austere, devotional · Ragas: Bhairav, Ahir Bhairav</div></div>
+    <div class="thaat-card"><h4>Bhairavi <span class="badge b-coral">All 4 komal</span></h4><div class="thaat-notes">S <span style="color:#3C3489;font-weight:500">r g</span> M P <span style="color:#3C3489;font-weight:500">d n</span></div><div class="thaat-meta">Any time (closing) · Pathos, longing · Ragas: Bhairavi, Malkauns</div></div>
+    <div class="thaat-card"><h4>Kafi <span class="badge b-purple">Komal Ga, Ni</span></h4><div class="thaat-notes">S R <span style="color:#3C3489;font-weight:500">g</span> M P D <span style="color:#3C3489;font-weight:500">n</span></div><div class="thaat-meta">Afternoon · Romantic, seasonal · Ragas: Kafi, Bageshri, Pilu</div></div>
+    <div class="thaat-card"><h4>Asavari <span class="badge b-purple">Komal Ga, Dha, Ni</span></h4><div class="thaat-notes">S R <span style="color:#3C3489;font-weight:500">g</span> M P <span style="color:#3C3489;font-weight:500">d n</span></div><div class="thaat-meta">Morning · Serious, melancholic · Ragas: Asavari, Jaunpuri</div></div>
+    <div class="thaat-card"><h4>Marwa <span class="badge b-amber">Teevra Ma</span> <span class="badge b-purple">Komal Re</span></h4><div class="thaat-notes">S <span style="color:#3C3489;font-weight:500">r</span> G <span style="color:#854F0B;font-weight:500">M̄</span> — D N</div><div class="thaat-meta">Sunset · Anxious, yearning · Pa absent · Ragas: Marwa, Puriya</div></div>
+    <div class="thaat-card"><h4>Poorvi <span class="badge b-red">Complex</span></h4><div class="thaat-notes">S <span style="color:#3C3489;font-weight:500">r</span> G <span style="color:#854F0B;font-weight:500">M̄</span> P <span style="color:#3C3489;font-weight:500">d</span> N</div><div class="thaat-meta">Sunset · Grave, intense · Ragas: Poorvi, Shree, Paraj</div></div>
+    <div class="thaat-card"><h4>Todi <span class="badge b-red">Most komal</span></h4><div class="thaat-notes">S <span style="color:#3C3489;font-weight:500">r g</span> <span style="color:#854F0B;font-weight:500">M̄</span> P <span style="color:#3C3489;font-weight:500">d</span> N</div><div class="thaat-meta">Late morning · Pensive, profound · Ragas: Miyan ki Todi, Gujari Todi</div></div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">04</span><span class="sec-title">Taal — Rhythmic Cycles <span class="sec-title-hi">(ताल)</span></span></div>
+  <p>Taal is the cyclical rhythmic framework. Each complete cycle is called an <em>Avartan</em>. The tabla player maintains the theka (standard syllable pattern) while the vocalist improvises across it.</p>
+  <div class="two-col">
+    <div class="col-card">
+      <h4>Key taal terms</h4>
+      <ul>
+        <li><strong>Matra</strong> — single beat unit</li>
+        <li><strong>Vibhag</strong> — grouping/section of beats</li>
+        <li><strong>Sam</strong> — beat 1; the point of resolution</li>
+        <li><strong>Khali</strong> — the empty/wave beat (lighter)</li>
+        <li><strong>Taali</strong> — clap beats (heavier sections)</li>
+        <li><strong>Theka</strong> — standard tabla syllable pattern</li>
+        <li><strong>Laya</strong> — tempo (Vilambit / Madhya / Drut)</li>
+      </ul>
+    </div>
+    <div class="col-card">
+      <h4>Common taals at a glance</h4>
+      <ul>
+        <li><strong>Teentaal</strong> — 16 beats · 4+4+4+4</li>
+        <li><strong>Ektaal</strong> — 12 beats · 2×6</li>
+        <li><strong>Jhaptaal</strong> — 10 beats · 2+3+2+3</li>
+        <li><strong>Rupak</strong> — 7 beats · 3+2+2</li>
+        <li><strong>Dadra</strong> — 6 beats · 3+3</li>
+        <li><strong>Kaharwa</strong> — 8 beats · 4+4</li>
+        <li><strong>Dhamaar</strong> — 14 beats · 5+2+3+4</li>
+      </ul>
+    </div>
+  </div>
+
+  <p style="margin:1rem 0 0.4rem;font-size:0.88rem;font-weight:500">Teentaal (16 beats) — the most important taal</p>
+  <div class="taal-strip">
+    <div class="ts-cell sam"><span class="ts-beat">1</span><span class="ts-syl">Dha</span></div>
+    <div class="ts-cell taali"><span class="ts-beat">2</span><span class="ts-syl">Dhin</span></div>
+    <div class="ts-cell taali"><span class="ts-beat">3</span><span class="ts-syl">Dhin</span></div>
+    <div class="ts-cell taali"><span class="ts-beat">4</span><span class="ts-syl">Dha</span></div>
+    <div class="ts-cell taali"><span class="ts-beat">5</span><span class="ts-syl">Dha</span></div>
+    <div class="ts-cell taali"><span class="ts-beat">6</span><span class="ts-syl">Dhin</span></div>
+    <div class="ts-cell taali"><span class="ts-beat">7</span><span class="ts-syl">Dhin</span></div>
+    <div class="ts-cell taali"><span class="ts-beat">8</span><span class="ts-syl">Dha</span></div>
+    <div class="ts-cell khali"><span class="ts-beat">9</span><span class="ts-syl">Dha</span></div>
+    <div class="ts-cell khali"><span class="ts-beat">10</span><span class="ts-syl">Tin</span></div>
+    <div class="ts-cell khali"><span class="ts-beat">11</span><span class="ts-syl">Tin</span></div>
+    <div class="ts-cell khali"><span class="ts-beat">12</span><span class="ts-syl">Ta</span></div>
+    <div class="ts-cell taali"><span class="ts-beat">13</span><span class="ts-syl">Ta</span></div>
+    <div class="ts-cell taali"><span class="ts-beat">14</span><span class="ts-syl">Dhin</span></div>
+    <div class="ts-cell taali"><span class="ts-beat">15</span><span class="ts-syl">Dhin</span></div>
+    <div class="ts-cell taali"><span class="ts-beat">16</span><span class="ts-syl">Dha</span></div>
+  </div>
+  <div style="display:flex;gap:12px;font-size:0.72rem;margin-top:4px">
+    <span style="background:#FAEEDA;color:#633806;padding:2px 8px;border-radius:4px">SAM = beat 1</span>
+    <span style="background:#E1F5EE;color:#085041;padding:2px 8px;border-radius:4px">Taali = clap sections</span>
+    <span style="background:#EEEDFE;color:#3C3489;padding:2px 8px;border-radius:4px">Khali = wave section (beats 9–12)</span>
+  </div>
+
+  <p style="margin:1rem 0 0.4rem;font-size:0.88rem;font-weight:500">Jhaptaal (10 beats)</p>
+  <div class="taal-strip">
+    <div class="ts-cell sam"><span class="ts-beat">1</span><span class="ts-syl">Dhin</span></div>
+    <div class="ts-cell taali"><span class="ts-beat">2</span><span class="ts-syl">Na</span></div>
+    <div class="ts-cell taali"><span class="ts-beat">3</span><span class="ts-syl">Dhin</span></div>
+    <div class="ts-cell taali"><span class="ts-beat">4</span><span class="ts-syl">Dhin</span></div>
+    <div class="ts-cell taali"><span class="ts-beat">5</span><span class="ts-syl">Na</span></div>
+    <div class="ts-cell khali"><span class="ts-beat">6</span><span class="ts-syl">Tin</span></div>
+    <div class="ts-cell khali"><span class="ts-beat">7</span><span class="ts-syl">Na</span></div>
+    <div class="ts-cell taali"><span class="ts-beat">8</span><span class="ts-syl">Dhin</span></div>
+    <div class="ts-cell taali"><span class="ts-beat">9</span><span class="ts-syl">Dhin</span></div>
+    <div class="ts-cell taali"><span class="ts-beat">10</span><span class="ts-syl">Na</span></div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">05</span><span class="sec-title">Ragas — Phase 1: Foundation <span class="sec-title-hi">(प्रारम्भिक)</span></span></div>
+  <div class="phase-hdr ph1"><span class="ph-title">Phase 1 — Foundation Ragas</span><span class="ph-desc">Begin here. Fewer notes, clear structures, universally taught first.</span></div>
+
+  <div class="raga-card">
+    <div class="raga-hdr r1"><span class="raga-name">Raga Bhupali</span><span class="badge b-amber" style="margin-left:auto">Kalyan</span><span class="badge b-teal">5 notes</span><span class="badge b-gray">Evening</span></div>
+    <div class="raga-body">
+      <div class="raga-meta">
+        <div class="meta-item"><span class="meta-lbl">Jati</span><span class="meta-val">Audav–Audav</span></div>
+        <div class="meta-item"><span class="meta-lbl">Vadi / Samvadi</span><span class="meta-val">Ga / Dha</span></div>
+        <div class="meta-item"><span class="meta-lbl">Time</span><span class="meta-val">Evening 6–9 PM</span></div>
+      </div>
+      <div class="raga-scale"><span class="ex-lbl">Aaroh</span>S R <span class="hi">G</span> P <span class="hi">D</span> S'</div>
+      <div class="raga-scale"><span class="ex-lbl">Avroh</span>S' <span class="hi">D</span> P <span class="hi">G</span> R S</div>
+      <div class="pakad-block"><span class="ex-lbl">Pakad</span>G R S · .D · S R G · P G · D P G · R S</div>
+      <ul class="note-list">
+        <li>Omits Ma and Ni entirely — their absence gives Bhupali its open, folk-like purity</li>
+        <li>Vadi is Ga — spend time on it; sustain with gentle andolan (oscillation)</li>
+        <li>Begin alaap from lower Dha: .D .P .D S R G...</li>
+        <li>Classic bandish: "Man Lago Mero Yaar Fakiri Mein" (Teentaal)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="raga-card">
+    <div class="raga-hdr r1"><span class="raga-name">Raga Yaman</span><span class="badge b-amber">Kalyan</span><span class="badge b-purple">All 7 notes</span><span class="badge b-gray">Evening</span></div>
+    <div class="raga-body">
+      <div class="raga-meta">
+        <div class="meta-item"><span class="meta-lbl">Jati</span><span class="meta-val">Sampurna–Sampurna</span></div>
+        <div class="meta-item"><span class="meta-lbl">Vadi / Samvadi</span><span class="meta-val">Ga / Ni</span></div>
+        <div class="meta-item"><span class="meta-lbl">Key note</span><span class="meta-val">Teevra Ma (M̄)</span></div>
+      </div>
+      <div class="raga-scale"><span class="ex-lbl">Aaroh</span>.N R G <span class="te">M̄</span> D N S'</div>
+      <div class="raga-scale"><span class="ex-lbl">Avroh</span>S' N D P <span class="te">M̄</span> G R S</div>
+      <div class="pakad-block"><span class="ex-lbl">Pakad</span>N R G R · G M̄ D N S'</div>
+      <ul class="note-list">
+        <li>Teevra Ma (M̄ / F#) is the soul of Yaman — komal Ma is strictly forbidden</li>
+        <li>Alaap begins from lower Ni: .N R G... — never directly from Sa</li>
+        <li>Pa is present but treated lightly; movement tends through Ma♯ → Dha directly</li>
+        <li>Classic bandish: "Eri Aali Piya Bin" (Teentaal, Vilambit)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="raga-card">
+    <div class="raga-hdr r1"><span class="raga-name">Raga Bilawal</span><span class="badge b-green">Bilawal</span><span class="badge b-gray">All shuddh</span><span class="badge b-gray">Morning</span></div>
+    <div class="raga-body">
+      <div class="raga-meta">
+        <div class="meta-item"><span class="meta-lbl">Jati</span><span class="meta-val">Sampurna–Shadav</span></div>
+        <div class="meta-item"><span class="meta-lbl">Vadi / Samvadi</span><span class="meta-val">Dha / Ga</span></div>
+        <div class="meta-item"><span class="meta-lbl">Time</span><span class="meta-val">Late morning</span></div>
+      </div>
+      <div class="raga-scale"><span class="ex-lbl">Aaroh</span>S R G M P D N S'</div>
+      <div class="raga-scale"><span class="ex-lbl">Avroh</span>S' N D P M G R S (Ga sometimes vakra)</div>
+      <div class="pakad-block"><span class="ex-lbl">Pakad</span>G M D · N D P · M G R S</div>
+      <ul class="note-list">
+        <li>All natural notes — ideal for understanding shuddh swaras before learning modifications</li>
+        <li>Dha is the vadi — rest on it and give it emphasis during alaap</li>
+        <li>In descent, Ga is sometimes skipped or used vakra (obliquely)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="raga-card">
+    <div class="raga-hdr r1"><span class="raga-name">Raga Bhairav</span><span class="badge b-purple">Komal Re + Dha</span><span class="badge b-gray">Dawn</span></div>
+    <div class="raga-body">
+      <div class="raga-meta">
+        <div class="meta-item"><span class="meta-lbl">Jati</span><span class="meta-val">Sampurna–Sampurna</span></div>
+        <div class="meta-item"><span class="meta-lbl">Vadi / Samvadi</span><span class="meta-val">Komal Dha / Komal Re</span></div>
+        <div class="meta-item"><span class="meta-lbl">Time</span><span class="meta-val">Sunrise · 6–9 AM</span></div>
+      </div>
+      <div class="raga-scale"><span class="ex-lbl">Aaroh</span>S <span class="ko">r</span> G M P <span class="ko">d</span> N S'</div>
+      <div class="raga-scale"><span class="ex-lbl">Avroh</span>S' N <span class="ko">d</span> P M G <span class="ko">r</span> S</div>
+      <div class="pakad-block"><span class="ex-lbl">Pakad</span>G r S · <span style="color:#3C3489">d</span> P M G · r S</div>
+      <ul class="note-list">
+        <li>Komal Re and komal Dha create a solemn, devotional quality unlike any other raga</li>
+        <li>Gandhar is shuddh — the tension between shuddh Ga and komal Re is musically crucial</li>
+        <li>This is a dawn raga — listen at sunrise to understand its emotional world</li>
+        <li>Classic bandish: "Jagat Janani Jai Jai"</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="raga-card">
+    <div class="raga-hdr r1"><span class="raga-name">Raga Bhairavi</span><span class="badge b-coral">All 4 komal notes</span><span class="badge b-gray">Closing raga</span></div>
+    <div class="raga-body">
+      <div class="raga-meta">
+        <div class="meta-item"><span class="meta-lbl">Jati</span><span class="meta-val">Sampurna (with liberties)</span></div>
+        <div class="meta-item"><span class="meta-lbl">Vadi / Samvadi</span><span class="meta-val">Ma / Sa</span></div>
+        <div class="meta-item"><span class="meta-lbl">Time</span><span class="meta-val">Any — always last</span></div>
+      </div>
+      <div class="raga-scale"><span class="ex-lbl">Aaroh</span>S <span class="ko">r g</span> M P <span class="ko">d n</span> S'</div>
+      <div class="raga-scale"><span class="ex-lbl">Avroh</span>S' <span class="ko">n d</span> P M <span class="ko">g r</span> S</div>
+      <div class="pakad-block"><span class="ex-lbl">Pakad</span><span style="color:#3C3489">g r</span> S · .n S · r <span style="color:#3C3489">g</span> M P <span style="color:#3C3489">d n</span> S'</div>
+      <ul class="note-list">
+        <li>The "farewell raga" — always performed at the end of every concert</li>
+        <li>Singers often use all 12 notes as ornaments — the most liberal raga</li>
+        <li>Deep mass of komal notes creates profound emotional longing (karuna rasa)</li>
+        <li>Thumri (semi-classical) style is very common in Bhairavi</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">06</span><span class="sec-title">Ragas — Phase 2: Core Ragas <span class="sec-title-hi">(मध्यम स्तर)</span></span></div>
+  <div class="phase-hdr ph2"><span class="ph-title">Phase 2 — Core Ragas</span><span class="ph-desc">Early intermediate. Introduces vakra movement and komal combinations.</span></div>
+
+  <div class="raga-card">
+    <div class="raga-hdr r2"><span class="raga-name">Raga Kafi</span><span class="badge b-purple">Komal Ga + Ni</span><span class="badge b-gray">Afternoon</span></div>
+    <div class="raga-body">
+      <div class="raga-meta">
+        <div class="meta-item"><span class="meta-lbl">Thaat</span><span class="meta-val">Kafi</span></div>
+        <div class="meta-item"><span class="meta-lbl">Vadi / Samvadi</span><span class="meta-val">Pa / Sa</span></div>
+        <div class="meta-item"><span class="meta-lbl">Rasa</span><span class="meta-val">Shringaar, Holi</span></div>
+      </div>
+      <div class="raga-scale"><span class="ex-lbl">Aaroh</span>S R <span class="ko">g</span> M P D <span class="ko">n</span> S'</div>
+      <div class="raga-scale"><span class="ex-lbl">Avroh</span>S' <span class="ko">n</span> D P M <span class="ko">g</span> R S</div>
+      <div class="pakad-block"><span class="ex-lbl">Pakad</span><span style="color:#3C3489">g</span> R S · .n .D S R <span style="color:#3C3489">g</span> · M P D <span style="color:#3C3489">n</span> S'</div>
+      <ul class="note-list">
+        <li>Associated with Holi songs, spring, and the folk tradition</li>
+        <li>Komal Ga and Ni give it a distinctly earthy, seasonal character</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="raga-card">
+    <div class="raga-hdr r2"><span class="raga-name">Raga Desh</span><span class="badge b-teal">Vakra ascent</span><span class="badge b-gray">Night · Monsoon</span></div>
+    <div class="raga-body">
+      <div class="raga-meta">
+        <div class="meta-item"><span class="meta-lbl">Thaat</span><span class="meta-val">Khamaj</span></div>
+        <div class="meta-item"><span class="meta-lbl">Vadi / Samvadi</span><span class="meta-val">Re / Pa</span></div>
+        <div class="meta-item"><span class="meta-lbl">Rasa</span><span class="meta-val">Monsoon, Shringaar</span></div>
+      </div>
+      <div class="raga-scale"><span class="ex-lbl">Aaroh (vakra)</span>S R M P N S' (Ga + Dha omitted ascending)</div>
+      <div class="raga-scale"><span class="ex-lbl">Avroh</span>S' N D P M G R S</div>
+      <div class="pakad-block"><span class="ex-lbl">Pakad</span>R M P · N D P M · G R S</div>
+      <ul class="note-list">
+        <li>Gateway raga for learning vakra (zigzag) melodic movement</li>
+        <li>The ascending line skips Ga and Dha — they appear only in descent</li>
+        <li>Beautiful monsoon raga; evokes the emotion of the rainy season</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="raga-card">
+    <div class="raga-hdr r2"><span class="raga-name">Raga Bageshri</span><span class="badge b-purple">Komal Ga + Ni</span><span class="badge b-gray">Midnight</span></div>
+    <div class="raga-body">
+      <div class="raga-meta">
+        <div class="meta-item"><span class="meta-lbl">Thaat</span><span class="meta-val">Kafi</span></div>
+        <div class="meta-item"><span class="meta-lbl">Vadi / Samvadi</span><span class="meta-val">Ma / Sa</span></div>
+        <div class="meta-item"><span class="meta-lbl">Rasa</span><span class="meta-val">Longing, separation</span></div>
+      </div>
+      <div class="raga-scale"><span class="ex-lbl">Aaroh (vakra)</span>S <span class="ko">g</span> M D <span class="ko">n</span> S' (Re and Pa omitted ascending)</div>
+      <div class="raga-scale"><span class="ex-lbl">Avroh</span>S' <span class="ko">n</span> D P M <span class="ko">g</span> R S</div>
+      <div class="pakad-block"><span class="ex-lbl">Pakad</span><span style="color:#3C3489">g</span> M D <span style="color:#3C3489">n</span> S' · S' <span style="color:#3C3489">n</span> D M <span style="color:#3C3489">g</span> · R S</div>
+      <ul class="note-list">
+        <li>Omission of Re and Pa in ascent gives it a mysterious, yearning quality</li>
+        <li>One of the most beloved ragas — expressive of deep separation (viraha)</li>
+        <li>Central learning: how vakra (oblique) movement creates emotional effect</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="raga-card">
+    <div class="raga-hdr r2"><span class="raga-name">Raga Durga</span><span class="badge b-green">Bilawal</span><span class="badge b-teal">5 notes</span><span class="badge b-gray">Evening</span></div>
+    <div class="raga-body">
+      <div class="raga-meta">
+        <div class="meta-item"><span class="meta-lbl">Jati</span><span class="meta-val">Audav–Audav</span></div>
+        <div class="meta-item"><span class="meta-lbl">Vadi / Samvadi</span><span class="meta-val">Re / Pa</span></div>
+        <div class="meta-item"><span class="meta-lbl">Rasa</span><span class="meta-val">Powerful, devotional</span></div>
+      </div>
+      <div class="raga-scale"><span class="ex-lbl">Aaroh</span>S R M P D S'</div>
+      <div class="raga-scale"><span class="ex-lbl">Avroh</span>S' D P M R S</div>
+      <ul class="note-list">
+        <li>Pentatonic like Bhupali but omits Ga and Ni instead of Ma and Ni</li>
+        <li>Studying Bhupali and Durga together teaches how omitted notes shape mood</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">07</span><span class="sec-title">Ragas — Phase 3: Intermediate <span class="sec-title-hi">(उन्नत)</span></span></div>
+  <div class="phase-hdr ph3"><span class="ph-title">Phase 3 — Intermediate Ragas</span><span class="ph-desc">Deeper emotional complexity; irregular structures; heavier ornaments.</span></div>
+
+  <div class="raga-card">
+    <div class="raga-hdr r3"><span class="raga-name">Raga Bhimpalasi</span><span class="badge b-purple">Komal Ga + Ni</span><span class="badge b-gray">Afternoon 3–6 PM</span></div>
+    <div class="raga-body">
+      <div class="raga-meta">
+        <div class="meta-item"><span class="meta-lbl">Thaat</span><span class="meta-val">Kafi</span></div>
+        <div class="meta-item"><span class="meta-lbl">Vadi / Samvadi</span><span class="meta-val">Ma / Sa</span></div>
+        <div class="meta-item"><span class="meta-lbl">Rasa</span><span class="meta-val">Shringaar, longing</span></div>
+      </div>
+      <div class="raga-scale"><span class="ex-lbl">Aaroh (vakra)</span>S <span class="ko">g</span> M P <span class="ko">n</span> S' (Re + Dha omitted ascending)</div>
+      <div class="raga-scale"><span class="ex-lbl">Avroh</span>S' <span class="ko">n</span> D P M <span class="ko">g</span> R S</div>
+      <div class="pakad-block"><span class="ex-lbl">Pakad</span>.<span style="color:#3C3489">n</span> S <span style="color:#3C3489">g</span> M · D P · M <span style="color:#3C3489">g</span> R S</div>
+      <ul class="note-list">
+        <li>Extremely emotionally rich — komal Ga and Ni create deep pathos</li>
+        <li>Vilambit (slow) Bhimpalasi is one of the most expressive forms in khayal</li>
+        <li>Re and Dha are omitted in ascent — they appear fully in descent</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="raga-card">
+    <div class="raga-hdr r3"><span class="raga-name">Raga Kedar</span><span class="badge b-amber">Both shuddh + teevra Ma</span><span class="badge b-gray">Evening</span></div>
+    <div class="raga-body">
+      <div class="raga-meta">
+        <div class="meta-item"><span class="meta-lbl">Thaat</span><span class="meta-val">Kalyan</span></div>
+        <div class="meta-item"><span class="meta-lbl">Vadi</span><span class="meta-val">Ma / M̄ (both used)</span></div>
+        <div class="meta-item"><span class="meta-lbl">Rasa</span><span class="meta-val">Devotion, dignity</span></div>
+      </div>
+      <div class="raga-scale"><span class="ex-lbl">Aaroh (vakra)</span>S M <span class="te">M̄</span> P · D P · S' (both Ma variants used)</div>
+      <div class="raga-scale"><span class="ex-lbl">Avroh</span>S' N D P <span class="te">M̄</span> G M R S</div>
+      <ul class="note-list">
+        <li>Unique: uses BOTH shuddh Ma and teevra Ma in the same raga</li>
+        <li>One of the "Panchratna" (five jewel) ragas — of great classical importance</li>
+        <li>Key learning: how both variants of the same note can coexist in one raga</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="raga-card">
+    <div class="raga-hdr r3"><span class="raga-name">Raga Jaunpuri</span><span class="badge b-purple">Komal Ga, Dha, Ni</span><span class="badge b-gray">Late morning</span></div>
+    <div class="raga-body">
+      <div class="raga-meta">
+        <div class="meta-item"><span class="meta-lbl">Thaat</span><span class="meta-val">Asavari</span></div>
+        <div class="meta-item"><span class="meta-lbl">Vadi / Samvadi</span><span class="meta-val">Komal Dha / Komal Ga</span></div>
+        <div class="meta-item"><span class="meta-lbl">Rasa</span><span class="meta-val">Pathos, gravity</span></div>
+      </div>
+      <div class="raga-scale"><span class="ex-lbl">Aaroh</span>S R <span class="ko">g</span> M P <span class="ko">d n</span> S'</div>
+      <div class="raga-scale"><span class="ex-lbl">Avroh</span>S' <span class="ko">n d</span> P M <span class="ko">g</span> R S</div>
+      <ul class="note-list">
+        <li>Often compared to Asavari — Jaunpuri has a heavier, more serious character</li>
+        <li>Three komal notes (Ga, Dha, Ni) create a deeply melancholic mood</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">08</span><span class="sec-title">Ragas — Phase 4: Advanced <span class="sec-title-hi">(विशेषज्ञ)</span></span></div>
+  <div class="phase-hdr ph4"><span class="ph-title">Phase 4 — Advanced Ragas</span><span class="ph-desc">Maximum complexity. Demand years of immersion before meaningful performance.</span></div>
+
+  <div class="raga-card">
+    <div class="raga-hdr r4"><span class="raga-name">Raga Marwa</span><span class="badge b-red">No Pa · Komal Re</span><span class="diff-stars">⭐⭐⭐⭐⭐</span></div>
+    <div class="raga-body">
+      <div class="raga-meta">
+        <div class="meta-item"><span class="meta-lbl">Thaat</span><span class="meta-val">Marwa</span></div>
+        <div class="meta-item"><span class="meta-lbl">Vadi / Samvadi</span><span class="meta-val">Komal Re / Dha</span></div>
+        <div class="meta-item"><span class="meta-lbl">Time</span><span class="meta-val">Sunset 6–7 PM</span></div>
+      </div>
+      <div class="raga-scale"><span class="ex-lbl">Aaroh</span>S <span class="ko">r</span> G <span class="te">M̄</span> D N S' (Pa completely absent)</div>
+      <div class="raga-scale"><span class="ex-lbl">Avroh</span>S' N D <span class="te">M̄</span> G <span class="ko">r</span> S</div>
+      <ul class="note-list">
+        <li>Pa is never used — its absence creates unresolved, floating tension</li>
+        <li>Komal Re against teevra Ma creates extreme dissonance and yearning</li>
+        <li>Evokes the anxiety of dusk — one of the most psychologically intense ragas</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="raga-card">
+    <div class="raga-hdr r4"><span class="raga-name">Raga Miyan ki Todi</span><span class="badge b-red">All komal + teevra Ma</span><span class="diff-stars">⭐⭐⭐⭐⭐</span></div>
+    <div class="raga-body">
+      <div class="raga-meta">
+        <div class="meta-item"><span class="meta-lbl">Thaat</span><span class="meta-val">Todi</span></div>
+        <div class="meta-item"><span class="meta-lbl">Vadi / Samvadi</span><span class="meta-val">Komal Dha / Komal Ga</span></div>
+        <div class="meta-item"><span class="meta-lbl">Time</span><span class="meta-val">Late morning</span></div>
+      </div>
+      <div class="raga-scale"><span class="ex-lbl">Aaroh</span>S <span class="ko">r g</span> <span class="te">M̄</span> P <span class="ko">d</span> N S'</div>
+      <div class="raga-scale"><span class="ex-lbl">Avroh</span>S' N <span class="ko">d</span> P <span class="te">M̄</span> <span class="ko">g r</span> S</div>
+      <ul class="note-list">
+        <li>Considered among the grandest ragas in the entire tradition</li>
+        <li>Created by Miyan Tansen — court musician of Emperor Akbar</li>
+        <li>All four variable notes are komal PLUS teevra Ma — maximum flatness with one sharpness</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="raga-card">
+    <div class="raga-hdr r4"><span class="raga-name">Raga Darbari Kanada</span><span class="badge b-red">Deep night · Very vakra</span><span class="diff-stars">⭐⭐⭐⭐⭐</span></div>
+    <div class="raga-body">
+      <div class="raga-meta">
+        <div class="meta-item"><span class="meta-lbl">Thaat</span><span class="meta-val">Asavari</span></div>
+        <div class="meta-item"><span class="meta-lbl">Vadi / Samvadi</span><span class="meta-val">Re / Pa</span></div>
+        <div class="meta-item"><span class="meta-lbl">Time</span><span class="meta-val">After midnight</span></div>
+      </div>
+      <div class="raga-scale"><span class="ex-lbl">Aaroh</span>S R <span class="ko">g</span> M P <span class="ko">d n</span> S'</div>
+      <div class="raga-scale"><span class="ex-lbl">Avroh (highly vakra)</span>S' <span class="ko">n d</span> P M <span class="ko">g</span> R <span class="ko">g</span> R S</div>
+      <ul class="note-list">
+        <li>Associated with Tansen; sung in Akbar's court — raga of royal dignity and grandeur</li>
+        <li>The andolan (oscillation) on Ga and Ni is its absolute hallmark — must be mastered</li>
+        <li>Heavy, slow raga — typically only presented in vilambit (very slow) tempo</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="raga-card">
+    <div class="raga-hdr r4"><span class="raga-name">Raga Malkauns</span><span class="badge b-coral">5 komal notes</span><span class="badge b-gray">Midnight</span><span class="diff-stars">⭐⭐⭐⭐</span></div>
+    <div class="raga-body">
+      <div class="raga-meta">
+        <div class="meta-item"><span class="meta-lbl">Jati</span><span class="meta-val">Audav–Audav</span></div>
+        <div class="meta-item"><span class="meta-lbl">Vadi / Samvadi</span><span class="meta-val">Ma / Sa</span></div>
+        <div class="meta-item"><span class="meta-lbl">Rasa</span><span class="meta-val">Heroic, fierce, contemplative</span></div>
+      </div>
+      <div class="raga-scale"><span class="ex-lbl">Aaroh</span>S <span class="ko">g</span> M <span class="ko">d n</span> S'</div>
+      <div class="raga-scale"><span class="ex-lbl">Avroh</span>S' <span class="ko">n d</span> M <span class="ko">g</span> S</div>
+      <ul class="note-list">
+        <li>Pentatonic with all komal notes and no Re or Pa — haunting, dark character</li>
+        <li>Despite its note simplicity, considered deeply profound — a raga of paradoxes</li>
+        <li>The absence of Re and Pa creates an otherworldly, suspended quality</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">09</span><span class="sec-title">Bandish — Structure &amp; Practice <span class="sec-title-hi">(बंदिश)</span></span></div>
+  <p>A bandish is a fixed composition set to a raga and taal. It is the primary learning tool — mastering a bandish internalises the raga's character, rhythm, and emotional world simultaneously.</p>
+  <div class="two-col">
+    <div class="col-card">
+      <h4>Parts of a bandish</h4>
+      <ul>
+        <li><strong>Sthai</strong> — main theme; lower + middle octave; sung first</li>
+        <li><strong>Antara</strong> — second part; explores upper octave</li>
+        <li><strong>Sanchari</strong> — optional third section; all three octaves</li>
+        <li><strong>Abhog</strong> — optional closing; returns to sthai theme</li>
+      </ul>
+    </div>
+    <div class="col-card">
+      <h4>Formats of bandish practice</h4>
+      <ul>
+        <li><strong>Vilambit Khayal</strong> — slow, 12–16 beat taal ⭐⭐⭐⭐</li>
+        <li><strong>Chota Khayal</strong> — fast tempo ⭐⭐⭐</li>
+        <li><strong>Sargam Geet</strong> — sing using swara names ⭐⭐</li>
+        <li><strong>Dhrupad</strong> — ancient, 4 parts, austere ⭐⭐⭐⭐⭐</li>
+        <li><strong>Tarana</strong> — rhythmic, non-lexical syllables ⭐⭐⭐⭐</li>
+        <li><strong>Thumri</strong> — light classical, emotional ⭐⭐⭐</li>
+      </ul>
+    </div>
+  </div>
+
+  <p style="margin:1rem 0 0.5rem;font-size:0.88rem;font-weight:500">Beginner bandish by raga</p>
+  <table class="bandish-table">
+    <tr><th>Raga</th><th>Bandish (sthai opening)</th><th>Taal</th></tr>
+    <tr><td>Bhupali</td><td>"Man Lago Mero Yaar Fakiri Mein"</td><td>Teentaal</td></tr>
+    <tr><td>Yaman</td><td>"Eri Aali Piya Bin"</td><td>Teentaal</td></tr>
+    <tr><td>Bilawal</td><td>"Baaje Re Baaje Dhol"</td><td>Teentaal</td></tr>
+    <tr><td>Bhairav</td><td>"Jagat Janani Jai Jai"</td><td>Teentaal</td></tr>
+    <tr><td>Bhairavi</td><td>"Babul Mora Naihar"</td><td>Dadra / Teentaal</td></tr>
+    <tr><td>Kafi</td><td>"Sakal Ban Phoolan Ki Raani"</td><td>Dadra</td></tr>
+    <tr><td>Bageshri</td><td>"Kahe Ri Na Bairi"</td><td>Teentaal</td></tr>
+    <tr><td>Bhimpalasi</td><td>"Mori Araj Suno"</td><td>Teentaal</td></tr>
+  </table>
+
+  <p style="margin:1.25rem 0 0.5rem;font-size:0.88rem;font-weight:500">How to learn a bandish — step by step</p>
+  <div class="perf-flow">
+    <div class="pf-row"><span class="pf-num">1</span><span class="pf-step">Learn Aaroh–Avroh — up and down the scale, in all three octaves</span><span class="pf-desc">Foundation of the raga's shape</span></div>
+    <div class="pf-row"><span class="pf-num">2</span><span class="pf-step">Learn the Pakad — the characteristic catch-phrase</span><span class="pf-desc">Identifies the raga instantly</span></div>
+    <div class="pf-row"><span class="pf-num">3</span><span class="pf-step">Learn the Sthai — first line, slow tempo</span><span class="pf-desc">Lower + middle octave</span></div>
+    <div class="pf-row"><span class="pf-num">4</span><span class="pf-step">Learn the Antara — second section</span><span class="pf-desc">Upper octave exploration</span></div>
+    <div class="pf-row"><span class="pf-num">5</span><span class="pf-step">Practice with Taal — begin with Teentaal at slow tempo</span><span class="pf-desc">Sam and khali awareness</span></div>
+    <div class="pf-row"><span class="pf-num">6</span><span class="pf-step">Alaap — free improvisation before taal begins</span><span class="pf-desc">No rhythm; pure melody</span></div>
+    <div class="pf-row"><span class="pf-num">7</span><span class="pf-step">Taan — practice fast melodic runs within the raga</span><span class="pf-desc">Seedhi → Vakra → Gamak</span></div>
+    <div class="pf-row"><span class="pf-num">8</span><span class="pf-step">Sargam — sing the bandish using swara names as lyrics</span><span class="pf-desc">Excellent ear training</span></div>
+    <div class="pf-row"><span class="pf-num">9</span><span class="pf-step">Layakari — explore rhythmic improvisation within the taal cycle</span><span class="pf-desc">Advanced rhythmic play</span></div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">10</span><span class="sec-title">Ornaments <span class="sec-title-hi">(अलंकार और गमक)</span></span></div>
+  <p>Ornaments are the expressive embellishments that bring a raga to life — the difference between stating a note and inhabiting it. Practice them in the order listed below.</p>
+  <div class="ornament-grid">
+    <div class="orn-card"><div class="orn-name">Meend</div><div class="orn-desc">Smooth glide between notes. Essential in slow alaap — the most fundamental ornament. Practice: Sa ~~~ Re ~~~ Ga (no jumps, pure continuous slide).</div></div>
+    <div class="orn-card"><div class="orn-name">Kan Swara</div><div class="orn-desc">Grace note — a brief touch from an adjacent note before the main note. Practise on each note of the aaroh with a grace note from below and above.</div></div>
+    <div class="orn-card"><div class="orn-name">Andolan</div><div class="orn-desc">Gentle oscillation on a sustained note. Different from gamak — subtle and slow. Hallmark of Darbari Kanada on komal Ga. Essential in slow khayal.</div></div>
+    <div class="orn-card"><div class="orn-name">Gamak</div><div class="orn-desc">Forceful, bouncing oscillation between two adjacent notes. Common in dhrupad style. More intense than andolan — a vigorous hammering quality.</div></div>
+    <div class="orn-card"><div class="orn-name">Murki</div><div class="orn-desc">Quick ornamental turn of 4 notes — e.g. G M G R. Used in thumri and fast passages. Creates a rapid, sparkling effect.</div></div>
+    <div class="orn-card"><div class="orn-name">Khatka</div><div class="orn-desc">Sharp flick to a higher note and back. Common in Khamaj, Desh. Creates a snapping, accent-like quality.</div></div>
+    <div class="orn-card"><div class="orn-name">Taan</div><div class="orn-desc">Fast melodic improvised run — the core of khayal performance. Types: Seedhi (straight), Vakra (curved), Sapaat (lightning), Gamak taan.</div></div>
+    <div class="orn-card"><div class="orn-name">Sargam</div><div class="orn-desc">Singing melodically with swara names (Sa Re Ga Ma...) as the lyrics. Both a practice tool and a performance device in khayal.</div></div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">11</span><span class="sec-title">Musical Forms <span class="sec-title-hi">(संगीत के प्रकार)</span></span></div>
+  <div class="forms-grid">
+    <div class="form-card"><div class="form-hdr fh1">Dhrupad</div><div class="form-body">Oldest major form. 4 sections: Sthai / Antara / Sanchari / Abhog. Austere, minimal ornamentation. Pakhawaj (barrel drum) accompaniment. Gateway to understanding raga in its most pure form.</div></div>
+    <div class="form-card"><div class="form-hdr fh2">Khayal</div><div class="form-body">Most popular modern form. Two parts: Vilambit (slow, 12–16 beat) + Drut (fast). Tabla accompaniment. Full ornamentation. Where most students spend the majority of their learning.</div></div>
+    <div class="form-card"><div class="form-hdr fh3">Thumri</div><div class="form-body">Semi-classical. Romantic and devotional. Much ornamentation; takes liberties with raga grammar. Common in light ragas: Bhairavi, Kafi, Khamaj. Gateway to understanding expressive freedom.</div></div>
+    <div class="form-card"><div class="form-hdr fh4">Tarana</div><div class="form-body">Rhythmic vocal form using non-lexical syllables (na ta dir dir). Fast tempo. A showcase of layakari and rhythmic precision. Often performed as the closing item in a concert, before Bhairavi.</div></div>
+  </div>
+
+  <p style="margin:1rem 0 0.5rem;font-size:0.88rem;font-weight:500">Concert performance order (khayal format)</p>
+  <div class="perf-flow">
+    <div class="pf-row"><span class="pf-num">1</span><span class="pf-step">Alaap — unmetered, free-tempo raga exploration</span><span class="pf-desc">No taal; pure melody</span></div>
+    <div class="pf-row"><span class="pf-num">2</span><span class="pf-step">Jor — rhythmic pulse introduced, still no taal cycle</span><span class="pf-desc">Bridges alaap and bandish</span></div>
+    <div class="pf-row"><span class="pf-num">3</span><span class="pf-step">Jhala — fast strumming or rapid pulse (instrumental)</span><span class="pf-desc">Building energy</span></div>
+    <div class="pf-row"><span class="pf-num">4</span><span class="pf-step">Vilambit Khayal — slow bandish with taal</span><span class="pf-desc">The main slow composition</span></div>
+    <div class="pf-row"><span class="pf-num">5</span><span class="pf-step">Drut Khayal — fast bandish</span><span class="pf-desc">Energetic climax</span></div>
+    <div class="pf-row"><span class="pf-num">6</span><span class="pf-step">Taan — fast melodic runs</span><span class="pf-desc">Technical virtuosity</span></div>
+    <div class="pf-row"><span class="pf-num">7</span><span class="pf-step">Sargam + Gamak / Layakari</span><span class="pf-desc">Rhythmic and melodic play</span></div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">12</span><span class="sec-title">Daily Riyaz <span class="sec-title-hi">(दैनिक रियाज़)</span></span></div>
+  <div class="col-card" style="margin-bottom:1rem">
+    <h4>Daily practice — 45–90 minutes</h4>
+    <ul>
+      <li><strong>0–5 min</strong> — Tanpura / shruti box setup + breathing and Sa practice</li>
+      <li><strong>5–15 min</strong> — Sarali swaras (Sa to Sa, all octaves)</li>
+      <li><strong>15–30 min</strong> — Alankar exercises (all 7 types, slow to medium)</li>
+      <li><strong>30–35 min</strong> — Aaroh–Avroh of current raga + Pakad practice</li>
+      <li><strong>35–50 min</strong> — Alaap (free, no taal; mandra → madhya → taar)</li>
+      <li><strong>50–60 min</strong> — Sthai then Antara in vilambit tempo with taal</li>
+      <li><strong>60–70 min</strong> — Full bandish at madhya (medium) speed</li>
+      <li><strong>70–80 min</strong> — Taan + Sargam + Gamak practice</li>
+    </ul>
+  </div>
+
+  <table class="week-table">
+    <tr><th>Day</th><th>Focus</th></tr>
+    <tr><td>Monday</td><td>Alankar and swara exercises; review current phase raga</td></tr>
+    <tr><td>Tuesday</td><td>Current raga — Alaap only; explore all three octaves</td></tr>
+    <tr><td>Wednesday</td><td>Bandish — Sthai deep practice with taal</td></tr>
+    <tr><td>Thursday</td><td>Bandish — full (Sthai + Antara); taal practice and sam awareness</td></tr>
+    <tr><td>Friday</td><td>Taan and ornamentation practice</td></tr>
+    <tr><td>Saturday</td><td>Full concert-style run-through of one complete raga</td></tr>
+    <tr><td>Sunday</td><td>Listening day — hear masters perform your current raga</td></tr>
+  </table>
+
+  <div class="two-col" style="margin-top:1rem">
+    <div class="col-card">
+      <h4>Year 1 milestones</h4>
+      <ul>
+        <li>All 7 swaras in 3 octaves, clear and in tune</li>
+        <li>Understand all 10 thaats and their note patterns</li>
+        <li>Master Teentaal clapping and theka</li>
+        <li>Complete Phase 1: all 5 beginner ragas</li>
+        <li>Sing one bandish in each Phase 1 raga</li>
+        <li>Introduce one Phase 2 raga</li>
+        <li>Distinguish komal/teevra notes by ear</li>
+      </ul>
+    </div>
+    <div class="col-card">
+      <h4>Year 2 milestones</h4>
+      <ul>
+        <li>Complete Phase 2 ragas (5 ragas)</li>
+        <li>Learn Jhaptaal and Ektaal</li>
+        <li>Perform alaap + bandish fluently in 8 ragas</li>
+        <li>Begin systematic taan practice</li>
+        <li>Attend or watch live concerts regularly</li>
+        <li>Begin one Phase 3 raga</li>
+        <li>Understand gharana stylistic differences</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">13</span><span class="sec-title">Recommended Listening</span></div>
+  <table class="listen-table">
+    <tr><th>Raga</th><th>Artists to listen to</th></tr>
+    <tr><td>Yaman</td><td>Pandit Bhimsen Joshi, Ustad Rashid Khan</td></tr>
+    <tr><td>Bhupali</td><td>Kishori Amonkar, Ustad Amjad Ali Khan (sarod)</td></tr>
+    <tr><td>Bhairav</td><td>Pandit Jasraj, Ustad Fayyaz Khan</td></tr>
+    <tr><td>Bhairavi</td><td>Begum Akhtar, Girija Devi (for thumri)</td></tr>
+    <tr><td>Bageshri</td><td>Ustad Bade Ghulam Ali Khan, Pandit Bhimsen Joshi</td></tr>
+    <tr><td>Bhimpalasi</td><td>Ustad Vilayat Khan (sitar), Parveen Sultana</td></tr>
+    <tr><td>Darbari Kanada</td><td>Ustad Amir Khan, Ustad Rashid Khan</td></tr>
+    <tr><td>Todi</td><td>Pandit Jasraj, Kishori Amonkar</td></tr>
+    <tr><td>Marwa</td><td>Ustad Vilayat Khan, Pandit Bhimsen Joshi</td></tr>
+    <tr><td>Malkauns</td><td>Ustad Amjad Ali Khan, Pandit Kumar Gandharva</td></tr>
+  </table>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">14</span><span class="sec-title">Glossary <span class="sec-title-hi">(शब्दावली)</span></span></div>
+  <div class="glossary-grid">
+    <div class="gl-item"><span class="gl-term">Aaroha</span>Ascending scale of a raga</div>
+    <div class="gl-item"><span class="gl-term">Avaroha</span>Descending scale of a raga</div>
+    <div class="gl-item"><span class="gl-term">Pakad</span>Characteristic signature phrase of a raga</div>
+    <div class="gl-item"><span class="gl-term">Vadi</span>Most important note — the "king note"</div>
+    <div class="gl-item"><span class="gl-term">Samvadi</span>Second most important note — "minister note"</div>
+    <div class="gl-item"><span class="gl-term">Jati</span>Audav (5) / Shadav (6) / Sampurna (7 notes)</div>
+    <div class="gl-item"><span class="gl-term">Vakra</span>Oblique / zigzag melodic movement</div>
+    <div class="gl-item"><span class="gl-term">Shuddh</span>Natural (unmodified) note</div>
+    <div class="gl-item"><span class="gl-term">Komal</span>Flat / softened note (lowered semitone)</div>
+    <div class="gl-item"><span class="gl-term">Teevra</span>Sharp / raised note (only Ma in Hindustani)</div>
+    <div class="gl-item"><span class="gl-term">Rasa</span>Emotional essence / aesthetic mood</div>
+    <div class="gl-item"><span class="gl-term">Sam</span>Beat 1 — the point of rhythmic resolution</div>
+    <div class="gl-item"><span class="gl-term">Khali</span>The empty / wave beat (lighter tabla section)</div>
+    <div class="gl-item"><span class="gl-term">Avartan</span>One complete cycle of a taal</div>
+    <div class="gl-item"><span class="gl-term">Theka</span>Standard tabla syllable pattern for a taal</div>
+    <div class="gl-item"><span class="gl-term">Laya</span>Tempo: Vilambit (slow) / Madhya / Drut (fast)</div>
+    <div class="gl-item"><span class="gl-term">Gharana</span>Stylistic school (Gwalior, Agra, Jaipur, Kirana…)</div>
+    <div class="gl-item"><span class="gl-term">Riyaz</span>Daily practice and discipline</div>
+    <div class="gl-item"><span class="gl-term">Tanpura</span>Drone instrument providing harmonic backdrop</div>
+    <div class="gl-item"><span class="gl-term">Shruti</span>Microtone; 22 shrutis in an octave</div>
+    <div class="gl-item"><span class="gl-term">Alaap</span>Free-tempo improvised exploration of a raga</div>
+    <div class="gl-item"><span class="gl-term">Taan</span>Fast melodic run within a raga</div>
+    <div class="gl-item"><span class="gl-term">Gamak</span>Forceful oscillation between notes</div>
+    <div class="gl-item"><span class="gl-term">Meend</span>Smooth glide between two notes</div>
+    <div class="gl-item"><span class="gl-term">Andolan</span>Gentle oscillation / vibrato on a single note</div>
+    <div class="gl-item"><span class="gl-term">Layakari</span>Rhythmic play within the taal cycle</div>
+    <div class="gl-item"><span class="gl-term">Sargam</span>Singing with swara names (Sa Re Ga Ma…)</div>
+    <div class="gl-item"><span class="gl-term">Khayal</span>Most popular Hindustani classical singing form</div>
+    <div class="gl-item"><span class="gl-term">Dhrupad</span>Oldest major form — austere, four-part</div>
+    <div class="gl-item"><span class="gl-term">Thumri</span>Light-classical semi-improvised romantic form</div>
+    <div class="gl-item"><span class="gl-term">Bandish</span>Fixed composition set to a raga and taal</div>
+    <div class="gl-item"><span class="gl-term">Sthai</span>First section of a bandish (lower–middle octave)</div>
+    <div class="gl-item"><span class="gl-term">Antara</span>Second section of a bandish (upper octave)</div>
+    <div class="gl-item"><span class="gl-term">Guru-Shishya</span>Teacher–student traditional lineage</div>
+  </div>
+</div>
+
+<div class="ornament">✦ &nbsp; ✦ &nbsp; ✦</div>
+<p style="text-align:center;font-size:0.75rem;color:var(--color-text-secondary);font-style:italic">Compiled for systematic Hindustani Classical Music study · Tradition: North Indian (Hindustani) · System: Bhatkhande notation<br>Resources: raag-hindustani.com · SwarGanga Music Foundation · chandrakantha.com</p>
+
+</div>

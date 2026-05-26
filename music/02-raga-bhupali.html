@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #1a6b5a;
+    --teal-light: #d4ede8;
+    --teal-dim: #1a5247;
+    --deep: #0d1a17;
+    --ink: #1a2a24;
+    --parchment: #F2F9F7;
+    --parchment2: #E6F4F0;
+    --sage: #3d6b58;
+    --rust: #7a3a1a;
+    --slate: #2d4a5c;
+    --border: rgba(26,107,90,0.2);
+    --border-strong: rgba(26,107,90,0.45);
+    --gold: #8B7A14;
+    --gold-light: #F5F0D0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--parchment);
+    color: var(--ink);
+    font-family: 'Libre Baskerville', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.75;
+  }
+  .page { max-width: 900px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+
+  /* HERO */
+  .hero {
+    text-align: center;
+    padding: 3rem 1rem 2.5rem;
+    border-bottom: 1px solid var(--border-strong);
+    margin-bottom: 3rem;
+    position: relative;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%; transform: translateX(-50%);
+    width: 200px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--teal), transparent);
+  }
+  .hero-devanagari { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--teal-dim); letter-spacing: 0.15em; margin-bottom: 0.4rem; font-style: italic; }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: 3.6rem; font-weight: 300; color: var(--ink); letter-spacing: -0.01em; line-height: 1.1; margin-bottom: 0.5rem; }
+  .hero-title em { color: var(--teal); font-style: italic; }
+  .hero-sub { font-size: 0.85rem; color: var(--teal-dim); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1.5rem; }
+  .hero-quote { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.05rem; color: #2a4a40; max-width: 600px; margin: 0 auto; line-height: 1.65; }
+  .hero-quote cite { display: block; font-size: 0.8rem; font-style: normal; color: var(--teal-dim); margin-top: 0.5rem; letter-spacing: 0.08em; }
+
+  /* SECTION */
+  .section { margin-bottom: 3rem; }
+  .section-header { display: flex; align-items: baseline; gap: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+  .section-number { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--teal-dim); letter-spacing: 0.1em; }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: 1.45rem; font-weight: 600; color: var(--ink); letter-spacing: 0.01em; }
+  .section-title-hindi { font-size: 0.9rem; color: var(--teal-dim); font-style: italic; font-weight: 400; }
+
+  /* REF TABLE */
+  .ref-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .ref-table tr { border-bottom: 1px solid var(--border); }
+  .ref-table tr:last-child { border-bottom: none; }
+  .ref-table td { padding: 0.6rem 0.75rem; }
+  .ref-table td:first-child { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--teal-dim); width: 220px; vertical-align: top; padding-top: 0.7rem; }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 0.75rem; font-family: 'DM Mono', monospace; margin: 1px 2px; }
+  .badge-teal { background: var(--teal-light); color: var(--teal-dim); border: 1px solid var(--border-strong); }
+  .badge-rust { background: #f9e8e0; color: var(--rust); border: 1px solid rgba(122,58,26,0.3); }
+  .badge-omit { background: #f0ede6; color: #888; border: 1px solid #ccc; text-decoration: line-through; }
+
+  /* SWAR GRID */
+  .swar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin: 1rem 0; }
+  .swar-cell { border: 1px solid var(--border); border-radius: 6px; padding: 0.65rem 0.4rem; text-align: center; background: var(--parchment2); position: relative; }
+  .swar-cell.active { background: var(--teal-light); border-color: var(--border-strong); }
+  .swar-cell.samvadi-cell { background: #d8eee8; border-color: rgba(26,107,90,0.55); }
+  .swar-cell.omitted { background: #f0ede6; opacity: 0.4; }
+  .swar-cell .swar-name { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--teal-dim); }
+  .swar-cell .swar-abbr { font-size: 1.1rem; font-weight: 700; color: var(--ink); margin: 2px 0; }
+  .swar-cell.active .swar-abbr { color: var(--teal); }
+  .swar-cell.samvadi-cell .swar-abbr { color: var(--sage); }
+  .swar-cell.omitted .swar-abbr { color: #bbb; text-decoration: line-through; }
+  .swar-cell .swar-west { font-size: 0.7rem; color: #5a7a6a; }
+  .swar-cell .swar-tag { font-size: 0.6rem; font-family: 'DM Mono', monospace; color: var(--teal); margin-top: 2px; }
+  .swar-cell.omitted .swar-tag { color: #aaa; }
+
+  /* NOTATION */
+  .notation { background: var(--parchment2); border: 1px solid var(--border); border-left: 3px solid var(--teal); border-radius: 4px; padding: 1rem 1.25rem; font-family: 'DM Mono', monospace; font-size: 0.85rem; line-height: 2; margin: 0.75rem 0; color: var(--ink); }
+  .notation .label { font-size: 0.7rem; color: var(--teal-dim); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.3rem; display: block; }
+  .hi { color: var(--teal); font-weight: 500; }
+  .sa { color: var(--sage); font-weight: 500; }
+  .dim { color: #888; }
+
+  /* OCTAVE ROWS */
+  .octave-row { display: flex; gap: 0; margin: 0.5rem 0; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); }
+  .oct-cell { flex: 1; padding: 0.55rem 0.3rem; text-align: center; font-family: 'DM Mono', monospace; font-size: 0.78rem; border-right: 1px solid var(--border); color: var(--ink); background: var(--parchment2); }
+  .oct-cell:last-child { border-right: none; }
+  .oct-cell.vadi { background: var(--teal-light); color: var(--teal); font-weight: 500; }
+  .oct-cell.samvadi { background: #d8eee8; color: var(--sage); font-weight: 500; }
+  .oct-cell.omit { background: #f0ede6; color: #bbb; opacity: 0.5; }
+
+  /* CHALAN FLOW */
+  .chalan-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 0; margin: 1rem 0; }
+  .chalan-node { padding: 0.5rem 0.75rem; text-align: center; border: 1px solid var(--border); font-family: 'DM Mono', monospace; font-size: 0.82rem; background: var(--parchment2); color: var(--ink); }
+  .chalan-node:first-child { border-radius: 6px 0 0 6px; }
+  .chalan-node:last-child { border-radius: 0 6px 6px 0; }
+  .chalan-node.n-vadi { background: var(--teal-light); color: var(--teal); border-color: var(--border-strong); font-weight: 500; }
+  .chalan-node.n-samvadi { background: #d8eee8; color: var(--sage); border-color: rgba(26,107,90,0.45); font-weight: 500; }
+  .chalan-node .node-name { font-size: 1rem; }
+  .chalan-node .node-label { font-size: 0.6rem; color: inherit; opacity: 0.75; }
+  .chalan-arrow { font-size: 1rem; color: var(--border-strong); padding: 0 2px; }
+
+  /* ALANKAR */
+  .alankar-block { margin: 0.6rem 0; }
+  .alankar-num { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--teal-dim); margin-bottom: 3px; letter-spacing: 0.1em; }
+
+  /* TWO COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 1rem 0; }
+  .col-card { border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.1rem; background: var(--parchment2); }
+  .col-card h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--ink); margin-bottom: 0.6rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
+  .col-card ul { list-style: none; font-size: 0.88rem; }
+  .col-card ul li { padding: 0.25rem 0; border-bottom: 1px solid rgba(26,107,90,0.08); }
+  .col-card ul li:last-child { border-bottom: none; }
+  .col-card ul li::before { content: '◆'; font-size: 0.5rem; color: var(--teal); margin-right: 6px; vertical-align: middle; }
+
+  /* RASA GRID */
+  .rasa-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 1rem 0; }
+  .rasa-card { border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1rem; background: var(--parchment2); }
+  .rasa-card .rasa-title { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; color: var(--teal-dim); margin-bottom: 0.35rem; }
+  .rasa-card .rasa-desc { font-size: 0.83rem; color: #2a4a3a; line-height: 1.55; }
+
+  /* PRAHAR */
+  .prahar-row { display: flex; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); margin: 1rem 0; }
+  .prahar-cell { flex: 1; padding: 0.65rem 0.5rem; text-align: center; border-right: 1px solid var(--border); font-size: 0.78rem; font-family: 'DM Mono', monospace; color: #888; background: var(--parchment2); }
+  .prahar-cell:last-child { border-right: none; }
+  .prahar-cell.highlight { background: var(--teal-light); color: var(--teal-dim); font-weight: 500; }
+  .prahar-cell .prahar-time { font-size: 0.65rem; display: block; margin-bottom: 2px; }
+
+  /* BANDISH */
+  .bandish-block { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 1rem 0; }
+  .bandish-header { background: var(--teal-light); padding: 0.6rem 1rem; font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--teal-dim); letter-spacing: 0.1em; border-bottom: 1px solid var(--border-strong); }
+  .bandish-body { padding: 0.75rem 1rem; background: var(--parchment2); }
+  .bandish-label { font-size: 0.7rem; font-family: 'DM Mono', monospace; color: var(--teal-dim); text-transform: uppercase; letter-spacing: 0.1em; margin: 0.5rem 0 0.2rem; }
+
+  /* MISTAKES */
+  .mistake-table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+  .mistake-table th { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--teal-dim); letter-spacing: 0.1em; text-align: left; padding: 0.4rem 0.75rem; border-bottom: 1px solid var(--border-strong); background: var(--teal-light); }
+  .mistake-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .mistake-table tr:last-child td { border-bottom: none; }
+  .mistake-table td:first-child { color: var(--rust); font-style: italic; }
+  .mistake-table td:last-child { color: #1a3028; }
+
+  /* ARTISTS */
+  .artist-card { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
+  .artist-card:last-child { border-bottom: none; }
+  .artist-initial { width: 38px; height: 38px; border-radius: 50%; background: var(--teal-light); border: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 0.9rem; color: var(--teal-dim); font-weight: 600; flex-shrink: 0; }
+  .artist-name { font-weight: 500; font-size: 0.92rem; color: var(--ink); }
+  .artist-detail { font-size: 0.8rem; color: #3a5a4a; }
+
+  /* GLOSSARY */
+  .glossary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 0.75rem 0; }
+  .gloss-item { padding: 0.5rem 0.75rem; border: 1px solid var(--border); border-radius: 5px; background: var(--parchment2); font-size: 0.83rem; }
+  .gloss-item strong { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--teal-dim); display: block; margin-bottom: 2px; }
+
+  /* WEEK TABLE */
+  .week-table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+  .week-table th { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--teal-dim); letter-spacing: 0.1em; text-align: left; padding: 0.35rem 0.75rem; border-bottom: 1px solid var(--border-strong); background: var(--teal-light); }
+  .week-table td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border); }
+  .week-table tr:last-child td { border-bottom: none; }
+  .week-table td:first-child { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--teal-dim); width: 120px; }
+
+  /* FILM TABLE */
+  .film-table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+  .film-table th { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--teal-dim); letter-spacing: 0.1em; text-align: left; padding: 0.35rem 0.75rem; border-bottom: 1px solid var(--border-strong); background: var(--teal-light); }
+  .film-table td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .film-table tr:last-child td { border-bottom: none; }
+  .film-table td:first-child { font-style: italic; color: var(--ink); }
+
+  /* SUMMARY */
+  .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 1rem 0; }
+  .summary-card { border: 1px solid var(--border); border-radius: 8px; padding: 1rem; background: var(--parchment2); }
+  .summary-card h4 { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--teal-dim); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .summary-card p { font-size: 0.85rem; color: var(--ink); line-height: 1.6; }
+
+  /* TAAN LABEL */
+  .taan-label { font-size: 0.78rem; font-family: 'DM Mono', monospace; color: var(--teal-dim); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.75rem; margin-bottom: 2px; }
+
+  .callout { background: var(--teal-light); border: 1px solid var(--border-strong); border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.87rem; color: var(--teal-dim); margin: 0.75rem 0; font-style: italic; }
+  .ornament { text-align: center; color: var(--teal-dim); margin: 2rem 0 1rem; font-size: 1.2rem; letter-spacing: 0.3em; }
+  p { margin-bottom: 0.75rem; font-size: 0.92rem; }
+  p:last-child { margin-bottom: 0; }
+
+  @media (max-width: 600px) {
+    .two-col, .rasa-grid, .glossary-grid, .summary-grid { grid-template-columns: 1fr; }
+    .swar-grid { grid-template-columns: repeat(4, 1fr); }
+    .hero-title { font-size: 2.4rem; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-devanagari">राग भूपाली — Hindustani Classical Music</div>
+    <div class="hero-title">Raga <em>Bhupali</em></div>
+    <div class="hero-sub">Comprehensive Practice Notes</div>
+    <blockquote class="hero-quote">
+      "Bhupali, by many measures, is a simple raga — yet a master can produce a high density of musical ideas with this limited palette; astonishing in its variety and complexity."
+      <cite>— Kirti Vashee, on Kishori Amonkar's rendition</cite>
+    </blockquote>
+  </div>
+
+  <!-- 1. PARICHAY -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">01</span>
+      <span class="section-title">Parichay <span class="section-title-hindi">(परिचय)</span> — Introduction</span>
+    </div>
+    <p>Raga Bhupali (also spelled Bhoopali, Bhopali, or Bhoop) is one of the most serene and fundamental ragas in Hindustani classical music. Named after the city of <strong>Bhopal</strong> in Madhya Pradesh, it belongs to the pentatonic tradition and is often the <strong>first raga taught to students</strong> of classical music. Its simplicity, purity, and emotional depth make it beloved by beginners and masters alike.</p>
+    <p>Bhupali uses only five notes (audav jati) — all pure and natural, with no sharp or flat modifications. This pentatonic palette gives it a rare clarity and open quality, making it one of the most recognisable ragas to the untrained ear and one of the most rewarding for the accomplished musician to develop.</p>
+    <div class="callout">
+      Despite its apparent simplicity, Bhupali is a raga of vast emotional depth. Its five notes span three octaves with infinite permutational possibility — the mark of a truly great raga is that its limitations become its strengths.
+    </div>
+  </div>
+
+  <!-- 2. QUICK REF -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">02</span>
+      <span class="section-title">Quick Reference Card</span>
+    </div>
+    <table class="ref-table">
+      <tr><td>Thaat</td><td><span class="badge badge-teal">Kalyan</span></td></tr>
+      <tr><td>Jati</td><td>Audav–Audav (Pentatonic — 5 notes ascending &amp; descending)</td></tr>
+      <tr><td>Aaroh</td><td><code>Sā  Re  Ga  Pa  Dha  Sā'</code></td></tr>
+      <tr><td>Avroh</td><td><code>Sā'  Dha  Pa  Ga  Re  Sā</code></td></tr>
+      <tr><td>Vadi (वादी)</td><td><strong>Ga</strong> (Gandhar) — the most important, most dwelt-upon note</td></tr>
+      <tr><td>Samvadi (संवादी)</td><td><strong>Dha</strong> (Dhaivat) — the second most important note</td></tr>
+      <tr><td>Varjit Swar</td><td><span class="badge badge-omit">Ma (Madhyam)</span> <span class="badge badge-omit">Ni (Nishad)</span> — omitted in both ascent &amp; descent</td></tr>
+      <tr><td>Gaayan Samay</td><td>Raat ka Pratham Prahar — <strong>Evening, 6–9 PM</strong> (just after sunset)</td></tr>
+      <tr><td>Rasa / Mood</td><td>Shant (शांत) — Peace, Serenity, Devotion, Calm Joy</td></tr>
+      <tr><td>Carnatic Equivalent</td><td><strong>Mohanam</strong> (also called Mohana)</td></tr>
+      <tr><td>Western Equivalent</td><td>Major Pentatonic Scale — C D E G A</td></tr>
+      <tr><td>Related Ragas</td><td>Deshkar (same notes, different chalan), Yaman (parent family), Hindol</td></tr>
+    </table>
+  </div>
+
+  <!-- 3. SWAR VISTAR -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">03</span>
+      <span class="section-title">Swar Vistar <span class="section-title-hindi">(स्वर विस्तार)</span> — Note Structure</span>
+    </div>
+    <p>All five swaras used are <em>shuddha</em> (natural/pure) — no komal (flat) or teevra (sharp) notes. Ma and Ni are completely omitted.</p>
+    <div class="swar-grid">
+      <div class="swar-cell">
+        <div class="swar-name">Shadaj</div>
+        <div class="swar-abbr">Sa</div>
+        <div class="swar-west">C</div>
+      </div>
+      <div class="swar-cell">
+        <div class="swar-name">Rishabh</div>
+        <div class="swar-abbr">Re</div>
+        <div class="swar-west">D</div>
+      </div>
+      <div class="swar-cell active">
+        <div class="swar-name">Gandhar</div>
+        <div class="swar-abbr">Ga</div>
+        <div class="swar-west">E</div>
+        <div class="swar-tag">VADI ★</div>
+      </div>
+      <div class="swar-cell omitted">
+        <div class="swar-name">Madhyam</div>
+        <div class="swar-abbr">Ma</div>
+        <div class="swar-west">F</div>
+        <div class="swar-tag">VARJIT</div>
+      </div>
+      <div class="swar-cell">
+        <div class="swar-name">Pancham</div>
+        <div class="swar-abbr">Pa</div>
+        <div class="swar-west">G</div>
+      </div>
+      <div class="swar-cell samvadi-cell">
+        <div class="swar-name">Dhaivat</div>
+        <div class="swar-abbr">Dha</div>
+        <div class="swar-west">A</div>
+        <div class="swar-tag">SAMVADI ★</div>
+      </div>
+      <div class="swar-cell omitted">
+        <div class="swar-name">Nishad</div>
+        <div class="swar-abbr">Ni</div>
+        <div class="swar-west">B</div>
+        <div class="swar-tag">VARJIT</div>
+      </div>
+    </div>
+    <p style="font-size:0.82rem; color: var(--teal-dim); margin-top:0.25rem;">With C as Sa: <em>C D E G A</em> — the major pentatonic scale. Ma (F) and Ni (B) are strictly forbidden.</p>
+  </div>
+
+  <!-- 4. AAROH AVROH + PAKAD -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">04</span>
+      <span class="section-title">Aaroh–Avroh aur Pakad</span>
+    </div>
+    <div class="notation">
+      <span class="label">Aaroh (आरोह) — Ascending</span>
+      Sā  Re  <span class="hi">Ga</span>  Pa  <span class="sa">Dha</span>  Sā'
+    </div>
+    <div class="notation">
+      <span class="label">Avroh (अवरोह) — Descending</span>
+      Sā'  <span class="sa">Dha</span>  Pa  <span class="hi">Ga</span>  Re  Sā
+    </div>
+    <div class="callout">
+      <strong>Note on Aaroh:</strong> Unlike many ragas, Bhupali's ascent and descent are entirely symmetrical — the same five notes in strict sequential order. This clean linearity is both its simplicity and its challenge: there is nowhere to hide; every phrase must be musically justified on its own terms.
+    </div>
+    <div class="notation">
+      <span class="label">Pakad (पकड़) — Characteristic Catch-phrase</span>
+      <span class="hi">G  R  S  .D</span>  ,  <span class="hi">S  R  G</span>  ,  <span class="hi">P  G</span>  ,  <span class="sa">D  P  G</span>  ,  R  S
+    </div>
+    <p style="font-size:0.82rem; color: var(--teal-dim);">Notation: <code>.D</code> = lower octave Dha, <code>S'</code> = upper octave Sa. The pakad immediately evokes Bhupali's gentle, settled character.</p>
+  </div>
+
+  <!-- 5. OCTAVE MAP -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">05</span>
+      <span class="section-title">Saptak Vistar <span class="section-title-hindi">(सप्तक विस्तार)</span> — Octave Map</span>
+    </div>
+    <p style="font-size:0.82rem; color:#5a7a6a; margin-bottom:0.5rem;">Mandra Saptak (lower octave)</p>
+    <div class="octave-row">
+      <div class="oct-cell">.Sa</div>
+      <div class="oct-cell">.Re</div>
+      <div class="oct-cell vadi">.Ga</div>
+      <div class="oct-cell omit">.Ma</div>
+      <div class="oct-cell">.Pa</div>
+      <div class="oct-cell samvadi">.Dha ★</div>
+      <div class="oct-cell omit">.Ni</div>
+    </div>
+    <p style="font-size:0.82rem; color:#5a7a6a; margin-bottom:0.5rem;">Madhya Saptak (middle octave)</p>
+    <div class="octave-row">
+      <div class="oct-cell">Sa</div>
+      <div class="oct-cell">Re</div>
+      <div class="oct-cell vadi">Ga ★</div>
+      <div class="oct-cell omit">Ma</div>
+      <div class="oct-cell">Pa</div>
+      <div class="oct-cell samvadi">Dha ★</div>
+      <div class="oct-cell omit">Ni</div>
+    </div>
+    <p style="font-size:0.82rem; color:#5a7a6a; margin-bottom:0.5rem;">Taar Saptak (upper octave)</p>
+    <div class="octave-row">
+      <div class="oct-cell">Sa'</div>
+      <div class="oct-cell">Re'</div>
+      <div class="oct-cell vadi">Ga' ★</div>
+      <div class="oct-cell omit">Ma'</div>
+      <div class="oct-cell">Pa'</div>
+      <div class="oct-cell samvadi">Dha'</div>
+      <div class="oct-cell omit">Ni'</div>
+    </div>
+    <p style="font-size:0.8rem; color: var(--teal-dim); margin-top:0.4rem;">Vadi (Ga) in teal. Samvadi (Dha) in sage green. Strikethrough cells (Ma, Ni) are varjit — forbidden notes.</p>
+  </div>
+
+  <!-- 6. CHALAN -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">06</span>
+      <span class="section-title">Chalan <span class="section-title-hindi">(चलन)</span> — Melodic Movement</span>
+    </div>
+    <div class="chalan-flow">
+      <div class="chalan-node"><div class="node-label">start</div><div class="node-name">.Dha</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node"><div class="node-label">shuddha</div><div class="node-name">Sa</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node"><div class="node-label">shuddha</div><div class="node-name">Re</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-vadi"><div class="node-label">VADI</div><div class="node-name">Ga ★</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node"><div class="node-label">shuddha</div><div class="node-name">Pa</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-samvadi"><div class="node-label">SAMVADI</div><div class="node-name">Dha ★</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node"><div class="node-label">taar</div><div class="node-name">Sā'</div></div>
+    </div>
+    <div class="col-card" style="margin-top:1rem;">
+      <h4>Key characteristics of Bhupali's chalan</h4>
+      <ul>
+        <li>Movement typically begins from <strong>lower Dha (.Dha)</strong> — this sweeping ascent from below Sa is deeply characteristic</li>
+        <li>Ga is the emotional heart: phrases resolve to, circle around, and linger on Ga with meend and gentle andolan</li>
+        <li>Dha–Sa movement is quintessential: <em>.Dha → Sa</em> (ascending) and <em>Sa → .Dha</em> (descending) are signature gestures</li>
+        <li>Avoid lingering on Re or Pa without quickly moving through them toward Ga or Dha</li>
+        <li>Gentle meend (glide) between notes — especially Ga → Re and Dha → Pa — defines Bhupali's vocal quality</li>
+        <li>The raga is <strong>purvanga-dominant</strong>: its centre of gravity lies in the lower half of the octave (Sa–Pa)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 7. ALANKARS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">07</span>
+      <span class="section-title">Alankars <span class="section-title-hindi">(अलंकार)</span> — Scale Exercises</span>
+    </div>
+    <p>Practice with tanpura drone. Begin slow (vilambit), build to madhya (medium). Remember: Ma and Ni must never appear.</p>
+
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 1 — Basic Aaroh–Avroh</div>
+      <div class="notation">S  R  <span class="hi">G</span>  P  <span class="sa">D</span>  S' | S'  <span class="sa">D</span>  P  <span class="hi">G</span>  R  S</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 2 — Step Pattern (Seedha)</div>
+      <div class="notation">S  R  |  R  <span class="hi">G</span>  |  <span class="hi">G</span>  P  |  P  <span class="sa">D</span>  |  <span class="sa">D</span>  S'<br>S'  <span class="sa">D</span>  |  <span class="sa">D</span>  P  |  P  <span class="hi">G</span>  |  <span class="hi">G</span>  R  |  R  S</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 3 — Skip Pattern</div>
+      <div class="notation">S  <span class="hi">G</span>  |  R  P  |  <span class="hi">G</span>  <span class="sa">D</span>  |  P  S'<br>S'  P  |  <span class="sa">D</span>  <span class="hi">G</span>  |  P  R  |  <span class="hi">G</span>  S</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 4 — Trikhand (Groups of 3)</div>
+      <div class="notation">S  R  <span class="hi">G</span>  |  R  <span class="hi">G</span>  P  |  <span class="hi">G</span>  P  <span class="sa">D</span>  |  P  <span class="sa">D</span>  S'<br>S'  <span class="sa">D</span>  P  |  <span class="sa">D</span>  P  <span class="hi">G</span>  |  P  <span class="hi">G</span>  R  |  <span class="hi">G</span>  R  S</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 5 — Chaukhand (Groups of 4)</div>
+      <div class="notation">S  R  <span class="hi">G</span>  P  |  R  <span class="hi">G</span>  P  <span class="sa">D</span>  |  <span class="hi">G</span>  P  <span class="sa">D</span>  S'<br>S'  <span class="sa">D</span>  P  <span class="hi">G</span>  |  <span class="sa">D</span>  P  <span class="hi">G</span>  R  |  P  <span class="hi">G</span>  R  S</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 6 — Vakra (Zigzag)</div>
+      <div class="notation">S  R  S  <span class="hi">G</span>  |  R  <span class="hi">G</span>  R  P  |  <span class="hi">G</span>  P  <span class="hi">G</span>  <span class="sa">D</span>  |  P  <span class="sa">D</span>  P  S'<br>S'  <span class="sa">D</span>  S'  P  |  <span class="sa">D</span>  P  <span class="sa">D</span>  <span class="hi">G</span>  |  P  <span class="hi">G</span>  P  R  |  <span class="hi">G</span>  R  <span class="hi">G</span>  S</div>
+    </div>
+  </div>
+
+  <!-- 8. ALAAP -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">08</span>
+      <span class="section-title">Alaap Kramanik <span class="section-title-hindi">(आलाप क्रमाणिक)</span> — Step-by-step Alaap</span>
+    </div>
+    <p>The alaap introduces the raga gradually, from lower octave to upper. No rhythm — pure melody.</p>
+
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 1 — Sthapana (establishing Sa)</div>
+      <div class="notation">S  R  S  –  ,  S  R  <span class="hi">G</span>  –  ,  P  –  <span class="hi">G</span>  –  ,  R  <span class="hi">G</span>  R  S  –</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 2 — Introducing Mandra Dha</div>
+      <div class="notation">S  R  S  –  ,  S  <span class="dim">.D</span>  <span class="dim">.P</span>  –  ,  <span class="dim">.P</span>  <span class="dim">.D</span>  S  R  <span class="hi">G</span>  –  ,  P  –  <span class="hi">G</span>  –  ,  <span class="sa">D</span>  P  <span class="hi">G</span>  –  ,  R  S  –</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 3 — Expanding to Pa and Dha</div>
+      <div class="notation">S  R  <span class="hi">G</span>  P  –  ,  <span class="hi">G</span>  P  <span class="sa">D</span>  –  ,  <span class="hi">G</span>  P  <span class="sa">D</span>  S'  –  ,  S'  <span class="sa">D</span>  P  –  ,  <span class="hi">G</span>  P  <span class="sa">D</span>  P  ,  <span class="hi">G</span>  R  ,  S  R  S  –</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 4 — Taar Saptak</div>
+      <div class="notation"><span class="hi">G</span>  P  <span class="sa">D</span>  –  ,  S'  –  S'  R'  S'  –  ,  S'  <span class="sa">D</span>  P  –  ,  <span class="hi">G</span>  P  <span class="sa">D</span>  S'  –</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 5 — Full range exploration</div>
+      <div class="notation">P  <span class="sa">D</span>  S'  –  ,  S'  R'  S'  –  ,  S'  R'  <span class="hi">G'</span>  R'  S'  –  ,  S'  <span class="sa">D</span>  P  –  ,  <span class="hi">G</span>  P  <span class="sa">D</span>  –  ,  P  <span class="sa">D</span>  S'  –</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 6 — Resolution</div>
+      <div class="notation"><span class="hi">G</span>  P  <span class="sa">D</span>  S'  –  ,  P  <span class="sa">D</span>  S'  –  ,  S'  R'  S'  –  ,  P  <span class="sa">D</span>  S'  R'  <span class="hi">G'</span>  –  ,  <span class="hi">G'</span>  R'  S'  –  ,  S'  <span class="sa">D</span>  P  ,  <span class="hi">G</span>  P  <span class="sa">D</span>  P  ,  <span class="hi">G</span>  P  <span class="hi">G</span>  R  S  –</div>
+    </div>
+  </div>
+
+  <!-- 9. SARGAM GEET -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">09</span>
+      <span class="section-title">Sargam Geet <span class="section-title-hindi">(सरगम गीत)</span></span>
+    </div>
+    <p>Sung using swara names as lyrics. Excellent for ear training and internalising the raga's shape and emotional quality.</p>
+    <div class="bandish-block">
+      <div class="bandish-header">SARGAM GEET — TEENTAAL (16 BEATS)</div>
+      <div class="bandish-body">
+        <div class="bandish-label">Sthai (स्थायी)</div>
+        <div class="notation" style="margin:0.3rem 0;">
+          <span class="hi">G  –  G  R</span>  |  <span class="hi">G</span>  P  <span class="sa">D</span>  P  |  <span class="hi">G  R  G  R</span>  |  S  R  S  –<br>
+          S  <span class="dim">.D</span>  –  S  |  –  R  <span class="hi">G</span>  –  |  S'  –  <span class="sa">D</span>  P  |  <span class="hi">G</span>  R  S  –
+        </div>
+        <div class="bandish-label">Antara (अंतरा)</div>
+        <div class="notation" style="margin:0.3rem 0;">
+          P  <span class="sa">D</span>  S'  –  |  S'  R'  S'  <span class="sa">D</span>  |  P  –  <span class="sa">D</span>  P  |  <span class="hi">G</span>  P  <span class="hi">G</span>  –<br>
+          <span class="hi">G</span>  P  <span class="sa">D</span>  S'  |  <span class="sa">D</span>  –  P  <span class="hi">G</span>  |  R  <span class="hi">G</span>  R  S  |  –  R  S  –
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. BANDISH -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">10</span>
+      <span class="section-title">Bandish <span class="section-title-hindi">(बंदिश)</span> — Compositions</span>
+    </div>
+
+    <div class="bandish-block">
+      <div class="bandish-header">BANDISH 1: "Namana Kara Chatur" — TEENTAAL (slow to medium)</div>
+      <div class="bandish-body">
+        <p style="font-size:0.82rem; color:#3a5a4a; margin-bottom:0.5rem;">A traditional bandish in devotional mood; one of the most widely performed compositions in Bhupali.</p>
+        <div class="bandish-label">Sthai</div>
+        <div class="notation" style="margin:0.3rem 0;">
+          Na–ma–  |  na  ka–ra  chu  |  tar  –  –  –  |  –  –  –  –<br>
+          <span class="hi">G  –  G  R</span>  |  <span class="hi">G</span>  P  <span class="sa">D</span>  P  |  <span class="hi">G  R  G  R</span>  |  S  R  S  –
+        </div>
+        <div class="bandish-label">Antara</div>
+        <div class="notation" style="margin:0.3rem 0;">
+          Chha–ya  |  gha–na–  na–  |  –  –  –  –  |  –  –  –  –<br>
+          P  <span class="sa">D</span>  S'  |  S'  –  R'  S'  |  <span class="sa">D</span>  –  P  <span class="hi">G</span>  |  R  <span class="hi">G</span>  R  S
+        </div>
+      </div>
+    </div>
+
+    <div class="bandish-block" style="margin-top:1rem;">
+      <div class="bandish-header">BANDISH 2: "Sahela Re" — EKTAL (12 beats) — Kishori Amonkar</div>
+      <div class="bandish-body">
+        <p style="font-size:0.82rem; color:#3a5a4a; margin-bottom:0.5rem;">A deeply devotional slow composition; one of the most celebrated renditions in Bhupali.</p>
+        <div class="bandish-label">Sthai</div>
+        <div class="notation" style="margin:0.3rem 0;">
+          Sa–  he–  |  la  re  –  –  |  Sa–  he–  |  la  re  –  –<br>
+          S  R  <span class="hi">G</span>  R  |  <span class="hi">G</span>  P  <span class="sa">D</span>  –  |  S'  –  <span class="sa">D</span>  P  |  <span class="hi">G</span>  R  S  –
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11. TAANS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">11</span>
+      <span class="section-title">Taan Prakar <span class="section-title-hindi">(तान प्रकार)</span> — Types of Taans</span>
+    </div>
+    <div class="taan-label">Seedhi Taan (straight)</div>
+    <div class="notation">S  R  <span class="hi">G</span>  P  <span class="sa">D</span>  S'  |  S'  <span class="sa">D</span>  P  <span class="hi">G</span>  R  S</div>
+
+    <div class="taan-label">Vakra Taan (curved)</div>
+    <div class="notation">S  R  <span class="hi">G</span>  R  <span class="hi">G</span>  P  <span class="hi">G</span>  P  <span class="sa">D</span>  P  <span class="sa">D</span>  S'<br>S'  <span class="sa">D</span>  P  <span class="sa">D</span>  P  <span class="hi">G</span>  P  <span class="hi">G</span>  R  <span class="hi">G</span>  R  S</div>
+
+    <div class="taan-label">Gamak Taan (with force/bounce)</div>
+    <div class="notation">S–R–<span class="hi">G</span>–P–<span class="sa">D</span>–S'  <span class="dim">(each note struck firmly with ornamental return)</span></div>
+
+    <div class="taan-label">Sapat Taan (lightning-fast straight run)</div>
+    <div class="notation">S  R  <span class="hi">G</span>  P  <span class="sa">D</span>  S'  S'  <span class="sa">D</span>  P  <span class="hi">G</span>  R  S  <span class="dim">(continuous, no break)</span></div>
+
+    <div class="taan-label">Khatka / Murki (ornamental flourish)</div>
+    <div class="notation">(<span class="hi">G R G</span>)P  &nbsp;  (P <span class="sa">D</span> P)S'  &nbsp;  (S'<span class="sa">D</span>S')P  &nbsp;  (<span class="sa">D</span>P<span class="sa">D</span>)<span class="hi">G</span></div>
+
+    <div class="taan-label">Meend Taan (with sustained glides)</div>
+    <div class="notation">S ~~~ <span class="hi">G</span>  |  <span class="hi">G</span> ~~~ P  |  P ~~~ <span class="sa">D</span>  |  <span class="sa">D</span> ~~~ S'  <span class="dim">(~~~ = meend; Bhupali excels in long glides)</span></div>
+  </div>
+
+  <!-- 12. BHUPALI vs DESHKAR -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">12</span>
+      <span class="section-title">Bhupali aur Deshkar — Key Differences</span>
+    </div>
+    <p>These two ragas share the <strong>same five notes</strong> (Sa Re Ga Pa Dha) but have distinctly different characters, thaats, and emotional worlds.</p>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>Raga Bhupali 🌅</h4>
+        <ul>
+          <li>Thaat: Kalyan</li>
+          <li>Vadi: Ga &nbsp;|&nbsp; Samvadi: Dha</li>
+          <li>Chalan begins from lower Dha (.Dha → Sa)</li>
+          <li>Purvanga dominant — lower half of octave</li>
+          <li>Mood: serene, devotional, domestic warmth</li>
+          <li>Meend: smooth, lyrical glides between notes</li>
+          <li>Alaap begins with .Dha → Sa gesture</li>
+          <li>Mnemonic: <em>quiet glow after sunset</em></li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>Raga Deshkar ☀️</h4>
+        <ul>
+          <li>Thaat: Bilawal</li>
+          <li>Vadi: Dha &nbsp;|&nbsp; Samvadi: Ga</li>
+          <li>Chalan begins from middle Sa, more upward</li>
+          <li>Uttaranga dominant — upper half of octave</li>
+          <li>Mood: brighter, lighter, open, expansive joy</li>
+          <li>Gamak: more defined, energetic strokes</li>
+          <li>Alaap moves quickly toward upper octave</li>
+          <li>Mnemonic: <em>brightness of open morning sky</em></li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout">
+      The quickest test: play Ga and Dha prominently. In Bhupali, Ga feels like <em>home</em> — phrases rest there. In Deshkar, Dha is the goal. Same notes; entirely different gravitational pull.
+    </div>
+  </div>
+
+  <!-- 13. RASA -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">13</span>
+      <span class="section-title">Rasa aur Bhaav <span class="section-title-hindi">(रस और भाव)</span> — Emotion &amp; Mood</span>
+    </div>
+    <div class="rasa-grid">
+      <div class="rasa-card">
+        <div class="rasa-title">Shant Rasa — शांत</div>
+        <div class="rasa-desc">The primary rasa of Bhupali — peace, inner stillness, meditative calm. It soothes and settles the mind. No other raga conveys serenity quite as purely.</div>
+      </div>
+      <div class="rasa-card">
+        <div class="rasa-title">Bhakti — भक्ति</div>
+        <div class="rasa-desc">Devotional surrender. Bhupali is frequently used in bhajans and kirtans — its simplicity and openness make it a natural vehicle for prayer and spiritual offering.</div>
+      </div>
+      <div class="rasa-card">
+        <div class="rasa-title">Shringaar — श्रृंगार (gentle)</div>
+        <div class="rasa-desc">Not the yearning of Yaman, but a quieter longing — nostalgic warmth, domestic contentment, the love between the familiar and the beloved.</div>
+      </div>
+      <div class="rasa-card">
+        <div class="rasa-title">Prakriti — प्रकृति</div>
+        <div class="rasa-desc">Evening ambience — the golden hour softening into dusk, a gentle evening breeze, the world settling into rest. Bhupali is nature's own evening hymn.</div>
+      </div>
+    </div>
+    <div class="callout">
+      Bhupali's five-note simplicity is its greatest emotional asset. Without the complexity of seven notes, every phrase carries more weight and every interval speaks more directly to the listener's heart.
+    </div>
+  </div>
+
+  <!-- 14. PRAHAR -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">14</span>
+      <span class="section-title">Samay Chakra <span class="section-title-hindi">(समय चक्र)</span> — Time Theory</span>
+    </div>
+    <div class="prahar-row">
+      <div class="prahar-cell"><span class="prahar-time">6–9 AM</span>1st Prahar</div>
+      <div class="prahar-cell"><span class="prahar-time">9 AM–12 PM</span>2nd Prahar</div>
+      <div class="prahar-cell"><span class="prahar-time">12–3 PM</span>3rd Prahar</div>
+      <div class="prahar-cell"><span class="prahar-time">3–6 PM</span>4th Prahar</div>
+      <div class="prahar-cell highlight"><span class="prahar-time">6–9 PM</span>★ BHUPALI ★</div>
+      <div class="prahar-cell"><span class="prahar-time">9 PM–12 AM</span>2nd Night</div>
+      <div class="prahar-cell"><span class="prahar-time">12–3 AM</span>3rd Night</div>
+      <div class="prahar-cell"><span class="prahar-time">3–6 AM</span>4th Night</div>
+    </div>
+    <p>Bhupali is an <strong>evening raga</strong>, ideally performed during the <em>first prahar of the night (6–9 PM)</em>, when the sky transitions from golden to deep blue — a mood the raga perfectly captures. Its pentatonic simplicity aligns with the theory that ragas using fewer notes suit transitional times of day — dawn and dusk — when nature itself is spare and contemplative.</p>
+  </div>
+
+  <!-- 15. CARNATIC -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">15</span>
+      <span class="section-title">Carnatic Connection — Mohanam <span class="section-title-hindi">(मोहनम्)</span></span>
+    </div>
+    <p>Raga Bhupali's exact Carnatic equivalent is <strong>Mohanam</strong> (also called Mohana). Both use the identical five notes of the major pentatonic scale. Mohanam is a <em>janya raga</em> derived from the 28th Melakarta, Harikambhoji.</p>
+    <table class="film-table" style="margin-top:0.75rem;">
+      <tr><th>Feature</th><th>Bhupali (Hindustani)</th><th>Mohanam (Carnatic)</th></tr>
+      <tr><td>Notes</td><td>Sa Re Ga Pa Dha</td><td>Sa Ri2 Ga3 Pa Dha2</td></tr>
+      <tr><td>Parent</td><td>Kalyan Thaat</td><td>Harikambhoji (28th Melakarta)</td></tr>
+      <tr><td>Time</td><td>6–9 PM (evening)</td><td>All times — auspicious, widely used</td></tr>
+      <tr><td>Jati</td><td>Audav–Audav (5–5)</td><td>Audava–Audava (5–5)</td></tr>
+      <tr><td>Famous works</td><td>Sahela Re (Kishori Amonkar)</td><td>Mohanam kritis (Thyagaraja, Dikshitar)</td></tr>
+    </table>
+  </div>
+
+  <!-- 16. FILM SONGS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">16</span>
+      <span class="section-title">Film Songs based on Bhupali</span>
+    </div>
+    <p>These popular Hindi film songs capture Bhupali's character and are excellent for ear training — recognising the raga by listening.</p>
+    <table class="film-table">
+      <tr><th>Song</th><th>Film</th><th>Year</th><th>Singer</th></tr>
+      <tr><td>Dekha Ek Khwab</td><td>Silsila</td><td>1981</td><td>Lata Mangeshkar, Kishore Kumar</td></tr>
+      <tr><td>Dil Hun Hun Kare</td><td>Rudaali</td><td>1993</td><td>Bhupen Hazarika</td></tr>
+      <tr><td>Jyoti Kalash Chhalke</td><td>Bhakta Prahlad</td><td>1946 (Marathi)</td><td>—</td></tr>
+      <tr><td>Sayonara Sayonara</td><td>Love in Tokyo</td><td>1966</td><td>Lata Mangeshkar</td></tr>
+      <tr><td>Ghanshyam Sundara</td><td>Amar Bhupali</td><td>1951</td><td>Lata Mangeshkar</td></tr>
+      <tr><td>O Palan Hare</td><td>Lagaan</td><td>2001</td><td>Lata Mangeshkar</td></tr>
+    </table>
+  </div>
+
+  <!-- 17. ARTISTS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">17</span>
+      <span class="section-title">Notable Artists — Recommended Listening</span>
+    </div>
+    <div class="artist-card">
+      <div class="artist-initial">KA</div>
+      <div>
+        <div class="artist-name">Kishori Amonkar</div>
+        <div class="artist-detail">Jaipur-Atrauli Gharana, vocal — her "Sahela Re" and "Pratham Sur Saadhe" are definitive Bhupali recordings; extraordinary meend and emotional depth</div>
+      </div>
+    </div>
+    <div class="artist-card">
+      <div class="artist-initial">BJ</div>
+      <div>
+        <div class="artist-name">Pandit Bhimsen Joshi</div>
+        <div class="artist-detail">Kirana Gharana, vocal — live concert renditions; his Bhupali has unmatched breadth and spontaneous vitality</div>
+      </div>
+    </div>
+    <div class="artist-card">
+      <div class="artist-initial">VK</div>
+      <div>
+        <div class="artist-name">Ustad Vilayat Khan</div>
+        <div class="artist-detail">Sitar — his evening raga recordings are masterclasses in restraint and lyrical phrasing; listen for the sitar's singing tone on Ga</div>
+      </div>
+    </div>
+    <div class="artist-card">
+      <div class="artist-initial">RS</div>
+      <div>
+        <div class="artist-name">Pandit Ravi Shankar</div>
+        <div class="artist-detail">Sitar — various live performances spanning decades; Bhupali was a signature raga in his concert repertoire</div>
+      </div>
+    </div>
+    <div class="artist-card">
+      <div class="artist-initial">HC</div>
+      <div>
+        <div class="artist-name">Hariprasad Chaurasia</div>
+        <div class="artist-detail">Bansuri (flute) — his Bhupali recordings reveal the raga's natural vocal quality; the flute's breath makes the meend especially beautiful</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 18. PRACTICE SCHEDULE -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">18</span>
+      <span class="section-title">Practice Schedule <span class="section-title-hindi">(अभ्यास क्रम)</span></span>
+    </div>
+    <div class="col-card" style="margin-bottom:1rem;">
+      <h4>Daily Practice — 45 Minutes</h4>
+      <ul>
+        <li><strong>0–5 min:</strong> Tanpura setup; Sa practice and settling into drone</li>
+        <li><strong>5–10 min:</strong> Alankar 1 — basic aaroh–avroh, very slow; check Ma and Ni are absent</li>
+        <li><strong>10–15 min:</strong> Alankars 2–3 — step and skip patterns</li>
+        <li><strong>15–23 min:</strong> Alaap phrases 1–3 (mandra to madhya saptak)</li>
+        <li><strong>23–30 min:</strong> Alaap phrases 4–6 (expand to taar, full resolution)</li>
+        <li><strong>30–35 min:</strong> Sargam geet with taal (Teentaal)</li>
+        <li><strong>35–40 min:</strong> Bandish sthai + antara</li>
+        <li><strong>40–45 min:</strong> Taans — seedhi and vakra</li>
+      </ul>
+    </div>
+    <table class="week-table">
+      <tr><th>Day</th><th>Focus</th></tr>
+      <tr><td>Monday</td><td>Alankars 1–3; basic aaroh–avroh; confirm no Ma or Ni</td></tr>
+      <tr><td>Tuesday</td><td>Alaap phrases 1–3 (mandra to madhya); .Dha → Sa opening</td></tr>
+      <tr><td>Wednesday</td><td>Alaap phrases 4–6 (full range); chalan study; Ga emphasis</td></tr>
+      <tr><td>Thursday</td><td>Sargam geet with taal; rhythmic placement and sam</td></tr>
+      <tr><td>Friday</td><td>Bandish sthai — learn and memorise</td></tr>
+      <tr><td>Saturday</td><td>Bandish antara + full composition with taal</td></tr>
+      <tr><td>Sunday</td><td>Free improvisation + listening to masters</td></tr>
+    </table>
+  </div>
+
+  <!-- 19. MISTAKES -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">19</span>
+      <span class="section-title">Common Mistakes to Avoid</span>
+    </div>
+    <table class="mistake-table">
+      <tr><th>Mistake</th><th>Correction</th></tr>
+      <tr>
+        <td>Singing Ma or Ni</td>
+        <td>These are strictly forbidden (varjit) in Bhupali. Even a passing Ma or Ni destroys the raga's identity immediately.</td>
+      </tr>
+      <tr>
+        <td>Treating it like a scale exercise</td>
+        <td>Always emphasise Ga as the emotional centre. A mechanical ascent/descent is not Bhupali — it is a scale. Every phrase needs intention.</td>
+      </tr>
+      <tr>
+        <td>Skipping the lower octave in alaap</td>
+        <td>Begin alaap from .Dha → Sa, not directly from middle Sa. This opening gesture is one of Bhupali's most important identifying features.</td>
+      </tr>
+      <tr>
+        <td>Rushing through Ga</td>
+        <td>Dwell on Ga with meend and andolan (subtle oscillation). Ga is the Vadi — the raga breathes through it. Never pass over it quickly.</td>
+      </tr>
+      <tr>
+        <td>Confusing with Deshkar</td>
+        <td>Bhupali emphasises purvanga (lower tetrachord, Ga-centric). Deshkar emphasises uttaranga (upper, Dha-centric). Know where the raga's centre of gravity lies.</td>
+      </tr>
+      <tr>
+        <td>Ignoring mood and bhaav</td>
+        <td>Bhupali is shant — contemplative and serene. Playing it as if it were a brisk, energetic raga misses its soul entirely. Maintain the bhaav throughout.</td>
+      </tr>
+      <tr>
+        <td>Weak or sloppy meend</td>
+        <td>Bhupali's pentatonic nature means each interval is wider — the meends (glides) between notes are longer and more exposed. Practise them with great care.</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 20. GLOSSARY -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">20</span>
+      <span class="section-title">Glossary of Key Terms</span>
+    </div>
+    <div class="glossary-grid">
+      <div class="gloss-item"><strong>Thaat</strong> Parent scale from which the raga is derived</div>
+      <div class="gloss-item"><strong>Jati</strong> Classification by number of notes — Audav = 5 notes</div>
+      <div class="gloss-item"><strong>Vadi</strong> Most important, most frequently used swara</div>
+      <div class="gloss-item"><strong>Samvadi</strong> Second most important swara (often a fourth or fifth from Vadi)</div>
+      <div class="gloss-item"><strong>Varjit</strong> Forbidden/omitted notes — Ma and Ni in Bhupali</div>
+      <div class="gloss-item"><strong>Aaroh</strong> Ascending scale</div>
+      <div class="gloss-item"><strong>Avroh</strong> Descending scale</div>
+      <div class="gloss-item"><strong>Pakad</strong> Characteristic catch-phrase that identifies the raga</div>
+      <div class="gloss-item"><strong>Chalan</strong> Melodic gait / movement pattern of the raga</div>
+      <div class="gloss-item"><strong>Alaap</strong> Slow, rhythm-free exploration and development of the raga</div>
+      <div class="gloss-item"><strong>Bandish</strong> Fixed composition set to a specific taal (rhythm cycle)</div>
+      <div class="gloss-item"><strong>Taan</strong> Fast melodic run; used in the latter part of a performance</div>
+      <div class="gloss-item"><strong>Meend</strong> Smooth glide between two notes — essential in Bhupali</div>
+      <div class="gloss-item"><strong>Andolan</strong> Gentle oscillating ornament on a sustained note</div>
+      <div class="gloss-item"><strong>Gamak</strong> Forceful, bouncing ornament on a note</div>
+      <div class="gloss-item"><strong>Murki</strong> Quick ornamental turn around a note</div>
+      <div class="gloss-item"><strong>Prahar</strong> A 3-hour time period (8 prahars = 24 hours)</div>
+      <div class="gloss-item"><strong>Saptak</strong> Octave — Mandra (lower), Madhya (middle), Taar (upper)</div>
+      <div class="gloss-item"><strong>Purvanga</strong> Lower half of the octave (Sa to Pa); Bhupali's domain</div>
+      <div class="gloss-item"><strong>Uttaranga</strong> Upper half of the octave (Pa to Sa'); Deshkar's domain</div>
+    </div>
+  </div>
+
+  <!-- 21. SUMMARY -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">21</span>
+      <span class="section-title">Summary at a Glance</span>
+    </div>
+    <div class="summary-grid">
+      <div class="summary-card">
+        <h4>Identity</h4>
+        <p>Thaat: Kalyan<br>Jati: Audav–Audav<br>Time: 6–9 PM (evening)<br>Family: Kalyan group</p>
+      </div>
+      <div class="summary-card">
+        <h4>Notes</h4>
+        <p>Sa Re <span style="color:var(--teal)">Ga</span> Pa <span style="color:var(--sage)">Dha</span><br>No Ma, No Ni (varjit)<br>All five notes shuddha<br>Pure pentatonic palette</p>
+      </div>
+      <div class="summary-card">
+        <h4>Emphasis</h4>
+        <p>Vadi: Ga (Gandhar)<br>Samvadi: Dha (Dhaivat)<br>Opens from lower .Dha<br>Pakad: GRS.D, SRG, PG, DPG</p>
+      </div>
+      <div class="summary-card">
+        <h4>Character</h4>
+        <p>Shant — peace &amp; serenity<br>Devotional warmth<br>Purvanga dominant<br>Simple palette, infinite depth</p>
+      </div>
+      <div class="summary-card">
+        <h4>Related</h4>
+        <p>Deshkar (same notes)<br>Mohanam (Carnatic)<br>Yaman (parent family)<br>Hindol (pentatonic cousin)</p>
+      </div>
+      <div class="summary-card">
+        <h4>Western equivalent</h4>
+        <p>Major Pentatonic Scale<br>C D E G A<br>No 4th, no 7th<br>Open, floating quality</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="ornament">✦ &nbsp; ✦ &nbsp; ✦</div>
+  <p style="text-align:center; font-size:0.78rem; color: var(--teal-dim); font-style:italic;">Notes compiled for Hindustani Classical Music practice. Supplement with a guru's guidance and regular listening to masters.<br>Sources: Artium Academy, Raag-Hindustani.com, Sharda.org, Ragajunglism.org, MusicianSelf.com</p>
+
+</div>
+</body>
+</html>
