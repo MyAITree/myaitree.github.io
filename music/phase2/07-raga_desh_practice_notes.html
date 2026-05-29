@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #0F7B6C;
+    --teal-light: #DAF2EE;
+    --teal-dim: #0A5A4E;
+    --ink: #101E1C;
+    --parchment: #F2FAF8;
+    --parchment2: #E3F5F1;
+    --rust: #7a3a1a;
+    --ko: #993C1D;
+    --amber: #854F0B;
+    --blue: #185FA5;
+    --border: rgba(15,123,108,0.18);
+    --border-strong: rgba(15,123,108,0.42);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--parchment); color: var(--ink); font-family: 'Libre Baskerville', Georgia, serif; font-size: 15px; line-height: 1.75; }
+  .page { max-width: 900px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+
+  .hero { text-align: center; padding: 2.8rem 1rem 2.3rem; border-bottom: 1px solid var(--border-strong); margin-bottom: 3rem; position: relative; }
+  .hero::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 200px; height: 2px; background: linear-gradient(90deg, transparent, var(--teal), transparent); }
+  .hero-devanagari { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--teal-dim); letter-spacing: 0.15em; margin-bottom: 0.4rem; font-style: italic; }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: 3.6rem; font-weight: 300; color: var(--ink); line-height: 1.1; margin-bottom: 0.5rem; }
+  .hero-title em { color: var(--teal); font-style: italic; }
+  .hero-sub { font-size: 0.85rem; color: var(--teal-dim); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1.5rem; }
+  .hero-quote { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.05rem; color: #0f2820; max-width: 620px; margin: 0 auto; line-height: 1.65; }
+  .hero-quote cite { display: block; font-size: 0.8rem; font-style: normal; color: var(--teal-dim); margin-top: 0.5rem; letter-spacing: 0.08em; }
+
+  .section { margin-bottom: 3rem; }
+  .section-header { display: flex; align-items: baseline; gap: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+  .section-number { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--teal-dim); letter-spacing: 0.1em; }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: 1.45rem; font-weight: 600; color: var(--ink); }
+  .section-title-hindi { font-size: 0.9rem; color: var(--teal-dim); font-style: italic; font-weight: 400; }
+
+  .ref-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .ref-table tr { border-bottom: 1px solid var(--border); }
+  .ref-table tr:last-child { border-bottom: none; }
+  .ref-table td { padding: 0.6rem 0.75rem; }
+  .ref-table td:first-child { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--teal-dim); width: 220px; vertical-align: top; padding-top: 0.7rem; }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 0.75rem; font-family: 'DM Mono', monospace; margin: 1px 2px; }
+  .b-teal { background: var(--teal-light); color: var(--teal-dim); border: 1px solid var(--border-strong); }
+  .b-ko { background: #FAECE7; color: #712B13; border: 1px solid rgba(153,60,29,0.35); }
+  .b-amber { background: #faeeda; color: #633806; border: 1px solid rgba(133,79,11,0.4); }
+  .b-blue { background: #E6F1FB; color: #0C447C; border: 1px solid rgba(24,95,165,0.35); }
+  .b-gray { background: var(--parchment2); color: #444; border: 1px solid rgba(0,0,0,0.12); }
+
+  .swar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin: 1rem 0; }
+  .swar-cell { border: 1px solid var(--border); border-radius: 6px; padding: 0.65rem 0.4rem; text-align: center; background: var(--parchment2); }
+  .swar-cell.vadi { background: var(--teal-light); border-color: var(--border-strong); }
+  .swar-cell.samvadi { background: #c0e8e2; border-color: rgba(15,123,108,0.45); }
+  .swar-cell.absent { background: #f5f0ea; border-color: rgba(0,0,0,0.08); opacity: 0.42; }
+  .swar-cell.dual { background: #FFF8E8; border-color: rgba(133,79,11,0.4); }
+  .swar-name { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--teal-dim); }
+  .swar-abbr { font-size: 1.1rem; font-weight: 700; color: var(--ink); margin: 2px 0; }
+  .swar-cell.vadi .swar-abbr { color: var(--teal); }
+  .swar-cell.samvadi .swar-abbr { color: var(--teal-dim); }
+  .swar-cell.absent .swar-abbr { color: #bbb; }
+  .swar-cell.dual .swar-abbr { color: var(--amber); }
+  .swar-west { font-size: 0.7rem; color: #3a6058; }
+  .swar-tag { font-size: 0.6rem; font-family: 'DM Mono', monospace; margin-top: 2px; color: inherit; }
+
+  .notation { background: var(--parchment2); border: 1px solid var(--border); border-left: 3px solid var(--teal); border-radius: 4px; padding: 1rem 1.25rem; font-family: 'DM Mono', monospace; font-size: 0.85rem; line-height: 2; margin: 0.75rem 0; color: var(--ink); }
+  .notation .label { font-size: 0.7rem; color: var(--teal-dim); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.3rem; display: block; }
+  .hi { color: var(--teal); font-weight: 500; }
+  .re { color: #0C447C; font-weight: 500; }
+  .ko { color: #993C1D; font-weight: 500; }
+  .ni-s { color: var(--amber); font-weight: 500; }
+  .dim { color: #888; }
+
+  .octave-row { display: flex; gap: 0; margin: 0.5rem 0; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); }
+  .oct-cell { flex: 1; padding: 0.55rem 0.3rem; text-align: center; font-family: 'DM Mono', monospace; font-size: 0.78rem; border-right: 1px solid var(--border); color: var(--ink); background: var(--parchment2); }
+  .oct-cell:last-child { border-right: none; }
+  .oct-cell.vadi { background: var(--teal-light); color: var(--teal); font-weight: 500; }
+  .oct-cell.samvadi { background: #c0e8e2; color: var(--teal-dim); font-weight: 500; }
+  .oct-cell.absent { background: #f0ede6; color: #bbb; opacity: 0.5; }
+  .oct-cell.dual { background: #FFF8E8; color: var(--amber); font-weight: 500; }
+  .oct-cell.ko { background: #FAECE7; color: #712B13; font-weight: 500; }
+
+  .chalan-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 0; margin: 1rem 0; }
+  .chalan-node { padding: 0.5rem 0.75rem; text-align: center; border: 1px solid var(--border); font-family: 'DM Mono', monospace; font-size: 0.82rem; background: var(--parchment2); color: var(--ink); }
+  .chalan-node:first-child { border-radius: 6px 0 0 6px; }
+  .chalan-node:last-child { border-radius: 0 6px 6px 0; }
+  .chalan-node.n-vadi { background: var(--teal-light); color: var(--teal); border-color: var(--border-strong); font-weight: 500; }
+  .chalan-node.n-samvadi { background: #c0e8e2; color: var(--teal-dim); border-color: rgba(15,123,108,0.45); font-weight: 500; }
+  .chalan-node.n-ko { background: #FAECE7; color: #712B13; border-color: rgba(153,60,29,0.4); font-weight: 500; }
+  .chalan-node.n-dual { background: #FFF8E8; color: var(--amber); border-color: rgba(133,79,11,0.4); font-weight: 500; }
+  .chalan-node .node-name { font-size: 1rem; }
+  .chalan-node .node-label { font-size: 0.6rem; color: inherit; opacity: 0.75; }
+  .chalan-arrow { font-size: 1rem; color: var(--border-strong); padding: 0 2px; }
+
+  .alankar-block { margin: 0.6rem 0; }
+  .alankar-num { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--teal-dim); margin-bottom: 3px; letter-spacing: 0.1em; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 1rem 0; }
+  .col-card { border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.1rem; background: var(--parchment2); }
+  .col-card h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--ink); margin-bottom: 0.6rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
+  .col-card ul { list-style: none; font-size: 0.88rem; }
+  .col-card ul li { padding: 0.25rem 0; border-bottom: 1px solid rgba(15,123,108,0.08); }
+  .col-card ul li:last-child { border-bottom: none; }
+  .col-card ul li::before { content: '◆'; font-size: 0.5rem; color: var(--teal); margin-right: 6px; vertical-align: middle; }
+
+  .rasa-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 1rem 0; }
+  .rasa-card { border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1rem; background: var(--parchment2); }
+  .rasa-card .rasa-title { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; color: var(--teal-dim); margin-bottom: 0.35rem; }
+  .rasa-card .rasa-desc { font-size: 0.83rem; color: #0f2820; line-height: 1.55; }
+
+  .prahar-row { display: flex; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); margin: 1rem 0; }
+  .prahar-cell { flex: 1; padding: 0.65rem 0.5rem; text-align: center; border-right: 1px solid var(--border); font-size: 0.78rem; font-family: 'DM Mono', monospace; color: #888; background: var(--parchment2); }
+  .prahar-cell:last-child { border-right: none; }
+  .prahar-cell.highlight { background: var(--teal-light); color: var(--teal-dim); font-weight: 500; }
+  .prahar-cell .prahar-time { font-size: 0.65rem; display: block; margin-bottom: 2px; }
+
+  .bandish-block { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 1rem 0; }
+  .bandish-header { background: var(--teal-light); padding: 0.6rem 1rem; font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--teal-dim); letter-spacing: 0.1em; border-bottom: 1px solid var(--border-strong); }
+  .bandish-body { padding: 0.75rem 1rem; background: var(--parchment2); }
+  .bandish-label { font-size: 0.7rem; font-family: 'DM Mono', monospace; color: var(--teal-dim); text-transform: uppercase; letter-spacing: 0.1em; margin: 0.5rem 0 0.2rem; }
+
+  .callout { background: var(--teal-light); border: 1px solid var(--border-strong); border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.87rem; color: var(--teal-dim); margin: 0.75rem 0; font-style: italic; }
+
+  .mistake-table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+  .mistake-table th { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--teal-dim); letter-spacing: 0.1em; text-align: left; padding: 0.4rem 0.75rem; border-bottom: 1px solid var(--border-strong); background: var(--teal-light); }
+  .mistake-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .mistake-table tr:last-child td { border-bottom: none; }
+  .mistake-table td:first-child { color: var(--rust); font-style: italic; }
+  .mistake-table td:last-child { color: #101E1C; }
+
+  .artist-card { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
+  .artist-card:last-child { border-bottom: none; }
+  .artist-initial { width: 38px; height: 38px; border-radius: 50%; background: var(--teal-light); border: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 0.9rem; color: var(--teal-dim); font-weight: 600; flex-shrink: 0; }
+  .artist-name { font-weight: 500; font-size: 0.92rem; color: var(--ink); }
+  .artist-detail { font-size: 0.8rem; color: #1a4038; }
+
+  .film-table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+  .film-table th { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--teal-dim); letter-spacing: 0.1em; text-align: left; padding: 0.35rem 0.75rem; border-bottom: 1px solid var(--border-strong); background: var(--teal-light); }
+  .film-table td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .film-table tr:last-child td { border-bottom: none; }
+  .film-table td:first-child { font-style: italic; }
+
+  .glossary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 0.75rem 0; }
+  .gloss-item { padding: 0.5rem 0.75rem; border: 1px solid var(--border); border-radius: 5px; background: var(--parchment2); font-size: 0.83rem; }
+  .gloss-item strong { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--teal-dim); display: block; margin-bottom: 2px; }
+
+  .week-table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+  .week-table th { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--teal-dim); letter-spacing: 0.1em; text-align: left; padding: 0.35rem 0.75rem; border-bottom: 1px solid var(--border-strong); background: var(--teal-light); }
+  .week-table td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border); }
+  .week-table tr:last-child td { border-bottom: none; }
+  .week-table td:first-child { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--teal-dim); width: 120px; }
+
+  .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 1rem 0; }
+  .summary-card { border: 1px solid var(--border); border-radius: 8px; padding: 1rem; background: var(--parchment2); }
+  .summary-card h4 { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--teal-dim); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .summary-card p { font-size: 0.85rem; color: var(--ink); line-height: 1.6; }
+
+  .taan-label { font-size: 0.78rem; font-family: 'DM Mono', monospace; color: var(--teal-dim); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.75rem; margin-bottom: 2px; }
+  .ornament { text-align: center; color: var(--teal-dim); margin: 2rem 0 1rem; letter-spacing: 0.3em; }
+  p { margin-bottom: 0.75rem; font-size: 0.92rem; }
+  p:last-child { margin-bottom: 0; }
+
+  @media (max-width: 600px) {
+    .two-col, .rasa-grid, .glossary-grid, .summary-grid { grid-template-columns: 1fr; }
+    .swar-grid { grid-template-columns: repeat(4, 1fr); }
+    .hero-title { font-size: 2.4rem; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-devanagari">राग देश — Hindustani Classical Music</div>
+    <div class="hero-title">Raga <em>Desh</em></div>
+    <div class="hero-sub">Comprehensive Practice Notes</div>
+    <blockquote class="hero-quote">
+      "Rapid ascent and leisurely descent are the chief characteristics of Desh — and make it easy to identify even for beginners. The meend from Ma to Re via Ga is one of the most vital features: a slow, aching glide that captures the very soul of the monsoon."
+      <cite>— After Subodh Agrawal, Songs of Yore; MusicMaster; Wikipedia</cite>
+    </blockquote>
+  </div>
+
+  <!-- 1. PARICHAY -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">01</span><span class="section-title">Parichay <span class="section-title-hindi">(परिचय)</span> — Introduction</span></div>
+    <p>Raga Desh (also spelled Des) is one of the most lyrical, accessible, and emotionally immediate ragas in Hindustani classical music. It belongs to the <strong>Khamaj Thaat</strong> and is classified as Audav-Sampurna (5 notes ascending, 7 descending) — a structure that gives it one of its most distinctive qualities: a rapid, pentatonic ascent paired with a leisurely, ornamented descent through all seven notes.</p>
+    <p>Desh is deeply associated with the <strong>monsoon season</strong> and carries a mood of romantic longing, yearning tenderness, and the bittersweet joy of rain. It has also found its way into India's most iconic patriotic music — <em>Vande Mataram</em> is set in Raga Desh. Desh has strong roots in folk melody, which gives it an inherent sweetness and wide popular appeal.</p>
+    <div class="callout">
+      <strong>The dual Nishad — the defining feature of Desh:</strong> Desh uses <em>shuddha Ni (B♮) in the ascent</em> and <em>komal Ni (B♭) in the descent</em>. This single structural feature — two different forms of the same note depending on direction — is both Desh's most identifying characteristic and its most important pedagogical challenge. Getting this right is the key to Desh.
+    </div>
+  </div>
+
+  <!-- 2. QUICK REF -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">02</span><span class="section-title">Quick Reference Card</span></div>
+    <table class="ref-table">
+      <tr><td>Thaat</td><td><span class="badge b-teal">Khamaj</span> — Desh belongs to the Khamaj family</td></tr>
+      <tr><td>Jati</td><td>Audav–Sampurna (5 notes ascending, 7 notes descending)</td></tr>
+      <tr><td>Aaroh</td><td><code>.Ni  Sā  Re  Ma  Pa  <span style="color:#854F0B">Ni</span>  Sā'</code> — Ga and Dha are <em>omitted</em> ascending; shuddha Ni used</td></tr>
+      <tr><td>Avroh</td><td><code>Sā'  <span style="color:#993C1D">n</span>  Dha  Pa  Dha  Ma  Ga  Re  Pa  Ma  Ga  Re  Ga  .Ni  Sā</code> — komal Ni used; all 7 notes present</td></tr>
+      <tr><td>Vadi (वादी)</td><td><strong>Re</strong> (shuddha Rishabh) — the most prominent note; the raga frequently rests here</td></tr>
+      <tr><td>Samvadi (संवादी)</td><td><strong>Pa</strong> (Pancham) — the second most important note</td></tr>
+      <tr><td>Varjit in Aaroh</td><td><span class="badge b-gray">Ga (Gandhar)</span> <span class="badge b-gray">Dha (Dhaivat)</span> — omitted in ascent only; both used in descent</td></tr>
+      <tr><td>Dual Nishad</td><td><span class="badge b-amber">Shuddha Ni (B♮)</span> in aaroh &nbsp;|&nbsp; <span class="badge b-ko">Komal Ni (B♭)</span> in avroh — this is the defining structural rule</td></tr>
+      <tr><td>Vishranti Sthan</td><td><strong>Re</strong> (primary resting note) — phrases resolve to and pause on Re far more than any other note</td></tr>
+      <tr><td>Gaayan Samay</td><td>Raat ka Dwitiya Prahar — <strong>Night, 9 PM–12 AM</strong></td></tr>
+      <tr><td>Season</td><td>Varsha (Monsoon) — deeply associated with the rainy season; also used in patriotic contexts</td></tr>
+      <tr><td>Rasa / Mood</td><td>Shringaar (श्रृंगार) — romantic longing; Varsha (monsoon yearning); patriotic fervour; sweet devotion</td></tr>
+      <tr><td>Carnatic Equivalent</td><td><strong>Desh</strong> in Carnatic music is a different raga; the closest relative is <strong>Kharaharapriya</strong> — though not identical</td></tr>
+      <tr><td>Related ragas</td><td>Tilak Kamod (closest cousin), Khamaj, Sorath (nearly extinct), Jhinjhoti, Desh-Khamaj</td></tr>
+    </table>
+  </div>
+
+  <!-- 3. SWAR VISTAR -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">03</span><span class="section-title">Swar Vistar <span class="section-title-hindi">(स्वर विस्तार)</span> — Note Structure</span></div>
+    <p>Desh's note structure is its most distinctive feature. Five notes in ascent (Sa Re Ma Pa Ni), all seven in descent — with Ga and Dha appearing only going down, and Ni changing form between the two directions.</p>
+    <div class="swar-grid">
+      <div class="swar-cell"><div class="swar-name">Shadaj</div><div class="swar-abbr">Sa</div><div class="swar-west">C</div><div class="swar-tag">both</div></div>
+      <div class="swar-cell vadi"><div class="swar-name">Rishabh</div><div class="swar-abbr">Re</div><div class="swar-west">D ♮</div><div class="swar-tag">VADI ★</div></div>
+      <div class="swar-cell absent"><div class="swar-name">Gandhar</div><div class="swar-abbr">Ga</div><div class="swar-west">E ♮</div><div class="swar-tag">avroh only</div></div>
+      <div class="swar-cell"><div class="swar-name">Madhyam</div><div class="swar-abbr">Ma</div><div class="swar-west">F ♮</div><div class="swar-tag">both</div></div>
+      <div class="swar-cell samvadi"><div class="swar-name">Pancham</div><div class="swar-abbr">Pa</div><div class="swar-west">G ♮</div><div class="swar-tag">SAMVADI ★</div></div>
+      <div class="swar-cell absent"><div class="swar-name">Dhaivat</div><div class="swar-abbr">Dha</div><div class="swar-west">A ♮</div><div class="swar-tag">avroh only</div></div>
+      <div class="swar-cell dual"><div class="swar-name">Nishad</div><div class="swar-abbr">Ni/n</div><div class="swar-west">B♮ / B♭</div><div class="swar-tag">N↑ · n↓ DUAL</div></div>
+    </div>
+    <p style="font-size:0.82rem;color:var(--teal-dim);margin-top:0.25rem">All notes shuddha except Ni, which changes form: shuddha N (B♮) in ascent, komal n (B♭) in descent. Ga and Dha (strikethrough cells) are absent in ascent but appear in descent. Vadi Re in teal; Samvadi Pa in lighter teal; dual Ni in amber.</p>
+  </div>
+
+  <!-- 4. AAROH AVROH -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">04</span><span class="section-title">Aaroh–Avroh aur Pakad</span></div>
+    <div class="notation"><span class="label">Aaroh (आरोह) — Ascending · 5 notes only</span>
+<span class="dim">.Ni</span>  Sā  <span class="re">Re</span>  Ma  <span class="hi">Pa</span>  <span class="ni-s">Ni</span>  Sā'
+<span class="dim">(Ga and Dha are completely absent; shuddha Ni used here)</span></div>
+    <div class="notation"><span class="label">Avroh (अवरोह) — Descending · all 7 notes</span>
+Sā'  <span class="ko">n</span>  Dha  ,  <span class="hi">Pa</span>  Dha  Ma  Ga  <span class="re">Re</span>  ,  <span class="hi">Pa</span>  Ma  Ga  ,  <span class="re">Re</span>  Ga  .Ni  Sā
+<span class="dim">(komal n used now; Dha and Ga appear; Re is the primary resting/resolution note)</span></div>
+    <div class="callout">
+      <strong>The key structural rule — memorise this:</strong> In the ascent, skip Ga and Dha entirely, and use shuddha Ni (B♮). In the descent, use all seven notes, and switch to komal Ni (B♭). This is non-negotiable — getting the Ni wrong in either direction immediately destroys the raga's identity.
+    </div>
+    <div class="notation"><span class="label">Pakad (पकड़) — Characteristic Catch-phrase</span>
+<span class="re">Re</span>  ,  Ma  <span class="hi">Pa</span>  <span class="ni-s">Ni</span>  Sā'  ,  Sā'  <span class="re">Re'</span>  <span class="ko">n</span>  Dha  <span class="hi">Pa</span>  ,  Ma  Ga  <span class="re">Re</span>
+<span class="dim">(Re as the opening anchor; ascent through Pa Ni to Sa'; graceful descent with komal n through Dha to Pa then meend Ma→Ga→Re)</span></div>
+    <div class="notation"><span class="label">The Defining Meend — practise daily</span>
+Ma  ~~~  Ga  ~~~  <span class="re">Re</span>
+<span class="dim">(The slow glide from Ma down through Ga to Re is the single most vital feature of Desh. This meend in descent defines the raga. Without it, Desh sounds like a scale.)</span></div>
+  </div>
+
+  <!-- 5. OCTAVE MAP -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">05</span><span class="section-title">Saptak Vistar <span class="section-title-hindi">(सप्तक विस्तार)</span> — Octave Map</span></div>
+    <p style="font-size:0.82rem;color:#3a6058;margin-bottom:0.5rem">Aaroh — 5 notes only (Ga and Dha absent; shuddha Ni)</p>
+    <div class="octave-row">
+      <div class="oct-cell">Sa</div>
+      <div class="oct-cell samvadi">Re ★</div>
+      <div class="oct-cell absent">Ga ✕</div>
+      <div class="oct-cell">Ma</div>
+      <div class="oct-cell vadi">Pa ★</div>
+      <div class="oct-cell absent">Dha ✕</div>
+      <div class="oct-cell dual">Ni ♮ ↑</div>
+    </div>
+    <p style="font-size:0.82rem;color:#3a6058;margin-bottom:0.5rem">Avroh — all 7 notes (komal Ni; Ga and Dha now present)</p>
+    <div class="octave-row">
+      <div class="oct-cell">Sa</div>
+      <div class="oct-cell samvadi">Re ★</div>
+      <div class="oct-cell">Ga ↓</div>
+      <div class="oct-cell">Ma</div>
+      <div class="oct-cell vadi">Pa ★</div>
+      <div class="oct-cell">Dha ↓</div>
+      <div class="oct-cell ko">n ♭ ↓</div>
+    </div>
+    <p style="font-size:0.8rem;color:var(--teal-dim);margin-top:0.4rem">Vadi (Re) in teal. Samvadi (Pa) in lighter teal. Absent-in-aaroh notes (Ga, Dha) shown faded above; they appear in full in descent. Dual Ni: shuddha (amber) going up, komal (rust) going down.</p>
+  </div>
+
+  <!-- 6. CHALAN -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">06</span><span class="section-title">Chalan <span class="section-title-hindi">(चलन)</span> — Melodic Movement</span></div>
+    <p style="font-size:0.88rem;font-weight:500;margin-bottom:0.5rem">Ascending direction:</p>
+    <div class="chalan-flow">
+      <div class="chalan-node"><div class="node-label">lower</div><div class="node-name">.Ni</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node"><div class="node-label">tonic</div><div class="node-name">Sa</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-vadi"><div class="node-label">VADI</div><div class="node-name">Re ★</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node"><div class="node-label">shuddha</div><div class="node-name">Ma</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-samvadi"><div class="node-label">SAMVADI</div><div class="node-name">Pa ★</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-dual"><div class="node-label">shuddha Ni↑</div><div class="node-name">Ni♮</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node"><div class="node-label">taar</div><div class="node-name">Sā'</div></div>
+    </div>
+    <p style="font-size:0.88rem;font-weight:500;margin:0.75rem 0 0.5rem">Descending direction:</p>
+    <div class="chalan-flow">
+      <div class="chalan-node"><div class="node-label">taar</div><div class="node-name">Sā'</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-ko"><div class="node-label">komal Ni↓</div><div class="node-name">n♭</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node"><div class="node-label">shuddha</div><div class="node-name">Dha</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-samvadi"><div class="node-label">SAMVADI</div><div class="node-name">Pa ★</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node"><div class="node-label">meend ~~~</div><div class="node-name">Ma→Ga→</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-vadi"><div class="node-label">VADI rest</div><div class="node-name">Re ★</div></div>
+    </div>
+    <div class="two-col" style="margin-top:1rem">
+      <div class="col-card">
+        <h4>Key melodic rules</h4>
+        <ul>
+          <li><strong>Re is the emotional heart</strong> — the raga frequently pauses, rests, and resolves on Re; it is the vishranti sthan (primary resting note)</li>
+          <li><strong>Skip Ga and Dha going up</strong> — the ascent is strictly pentatonic: Sa Re Ma Pa Ni Sa'</li>
+          <li><strong>The meend Ma→Ga→Re</strong> is the raga's single most identifying ornament — slow, aching, essential</li>
+          <li><strong>Shuddha Ni ascending / komal Ni descending</strong> — the Ni switch is the structural hallmark; never confuse the two directions</li>
+          <li>Dha and Ga appear only in descent — they give the avroh its richness and roundedness</li>
+          <li>Desh has Sa–Pa and Sa–Ma bhaav (harmonic relationships) — very consonant, very pleasing</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>Character and feel</h4>
+        <ul>
+          <li>Rapid ascent + leisurely descent = Desh's most immediately identifiable structural quality</li>
+          <li>The contrast between the sparkling, quick rise and the slow, meend-rich descent captures the mood of rain: sudden downpour, then flowing rivers</li>
+          <li>Re as vadi gives the raga an open, seeking quality — phrases reach upward and return gently to Re</li>
+          <li>Strong folk roots — Desh should feel natural and flowing, not laboured</li>
+          <li>The raga is wide in emotional range: from agonizingly sombre to playfully romantic (as its film songs demonstrate)</li>
+          <li>Desh is a Raag-ang raga — its distinctive phrase pattern can appear in other ragas as a characteristic colour</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. ALANKARS -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">07</span><span class="section-title">Alankars <span class="section-title-hindi">(अलंकार)</span> — Scale Exercises</span></div>
+    <p>Practise with tanpura drone. Focus especially on: (1) skipping Ga and Dha in ascent, (2) switching to komal Ni in descent, (3) the meend from Ma to Re via Ga.</p>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 1 — Core Aaroh–Avroh</div>
+      <div class="notation"><span class="dim">.Ni</span>  S  <span class="re">R</span>  M  <span class="hi">P</span>  <span class="ni-s">Ni</span>  S' | S'  <span class="ko">n</span>  Dha  <span class="hi">P</span>  Dha  M  Ga  <span class="re">R</span>  ,  <span class="hi">P</span>  M  Ga  <span class="re">R</span>  Ga  .Ni  S
+<span class="dim">(always skip Ga + Dha going up; switch Ni going down)</span></div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 2 — Aaroh step pattern (5 notes only)</div>
+      <div class="notation">S  <span class="re">R</span>  |  <span class="re">R</span>  M  |  M  <span class="hi">P</span>  |  <span class="hi">P</span>  <span class="ni-s">Ni</span>  |  <span class="ni-s">Ni</span>  S'  |  <span class="dim">(no Ga, no Dha at all going up)</span></div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 3 — Avroh step pattern (7 notes with meend)</div>
+      <div class="notation">S'  <span class="ko">n</span>  |  <span class="ko">n</span>  Dha  |  Dha  <span class="hi">P</span>  |  <span class="hi">P</span>  M  |  M ~~~  Ga  ~~~  <span class="re">R</span>  |  <span class="re">R</span>  Ga  |  Ga  .Ni  |  .Ni  S
+<span class="dim">(~~~ = slow meend; the Ma→Ga→Re glide is the critical passage)</span></div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 4 — Trikhand aaroh (5 notes)</div>
+      <div class="notation">S  <span class="re">R</span>  M  |  <span class="re">R</span>  M  <span class="hi">P</span>  |  M  <span class="hi">P</span>  <span class="ni-s">Ni</span>  |  <span class="hi">P</span>  <span class="ni-s">Ni</span>  S'
+<span class="dim">(Ga and Dha remain absent throughout all ascending alankars)</span></div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 5 — Trikhand avroh (7 notes)</div>
+      <div class="notation">S'  <span class="ko">n</span>  Dha  |  <span class="ko">n</span>  Dha  <span class="hi">P</span>  |  Dha  <span class="hi">P</span>  M  |  <span class="hi">P</span>  M  Ga  |  M  Ga  <span class="re">R</span>  |  Ga  <span class="re">R</span>  S</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 6 — Signature aaroh phrase (practise daily)</div>
+      <div class="notation"><span class="dim">.Ni</span>  S  <span class="re">R</span>  ,  M  <span class="hi">P</span>  <span class="ni-s">Ni</span>  S'  ,  S'  <span class="re">R'</span>  <span class="ko">n</span>  Dha  <span class="hi">P</span>  ,  M ~~~  Ga ~~~  <span class="re">R</span>  –
+<span class="dim">(full arc: ascent skipping Ga/Dha, quick turnaround at Sa', descent with komal n and the meend)</span></div>
+    </div>
+  </div>
+
+  <!-- 8. ALAAP -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">08</span><span class="section-title">Alaap Kramanik <span class="section-title-hindi">(आलाप क्रमाणिक)</span> — Step-by-step Alaap</span></div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 1 — Sthapana (from lower Ni)</div>
+      <div class="notation"><span class="dim">.Ni</span>  S  –  ,  S  <span class="re">R</span>  –  ,  <span class="re">R</span>  S  –  ,  <span class="dim">.Ni</span>  S  <span class="re">R</span>  –  ,  <span class="re">R</span>  S  <span class="dim">.Ni</span>  S  –</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 2 — Introducing Ma and Pa</div>
+      <div class="notation">S  <span class="re">R</span>  M  –  ,  <span class="re">R</span>  M  <span class="hi">P</span>  –  ,  <span class="hi">P</span>  M  Ga  <span class="re">R</span>  –  ,  Ga  <span class="re">R</span>  S  –
+<span class="dim">(Ga appears in the descent here — note it only moves downward)</span></div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 3 — Introducing shuddha Ni and the turnaround</div>
+      <div class="notation"><span class="re">R</span>  M  <span class="hi">P</span>  <span class="ni-s">Ni</span>  –  ,  <span class="ni-s">Ni</span>  S'  –  ,  S'  <span class="ko">n</span>  Dha  <span class="hi">P</span>  –  ,  M ~~~ Ga ~~~  <span class="re">R</span>  –</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 4 — Full pakad with meend</div>
+      <div class="notation"><span class="re">R</span>  ,  M  <span class="hi">P</span>  <span class="ni-s">Ni</span>  S'  ,  S'  <span class="re">R'</span>  <span class="ko">n</span>  Dha  <span class="hi">P</span>  ,  M ~~~ Ga ~~~  <span class="re">R</span>  –
+<span class="dim">(this is the complete Desh pakad shape — essential; practise until effortless)</span></div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 5 — Taar saptak exploration</div>
+      <div class="notation"><span class="hi">P</span>  <span class="ni-s">Ni</span>  S'  –  ,  S'  <span class="re">R'</span>  –  ,  <span class="re">R'</span>  <span class="ko">n'</span>  Dha'  <span class="hi">P'</span>  –  ,  M'  Ga'  <span class="re">R'</span>  S'  –</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 6 — Full range resolution</div>
+      <div class="notation"><span class="dim">.Ni</span>  S  <span class="re">R</span>  M  <span class="hi">P</span>  <span class="ni-s">Ni</span>  S'  <span class="re">R'</span>  <span class="ko">n'</span>  Dha'  <span class="hi">P'</span>  M' ~~~ Ga' ~~~ <span class="re">R'</span>  S'  <span class="ko">n</span>  Dha  <span class="hi">P</span>  M ~~~ Ga ~~~ <span class="re">R</span>  –
+<span class="dim">(full sweep — rapid ascent skipping Ga/Dha; ornamented descent with meends at both octave levels)</span></div>
+    </div>
+  </div>
+
+  <!-- 9. SARGAM GEET -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">09</span><span class="section-title">Sargam Geet <span class="section-title-hindi">(सरगम गीत)</span></span></div>
+    <div class="bandish-block">
+      <div class="bandish-header">SARGAM GEET — TEENTAAL (16 BEATS)</div>
+      <div class="bandish-body">
+        <div class="bandish-label">Sthai (स्थायी)</div>
+        <div class="notation" style="margin:0.3rem 0">
+          <span class="re">R</span>  –  <span class="re">R</span>  M  |  <span class="hi">P</span>  <span class="ni-s">Ni</span>  S'  –  |  S'  <span class="re">R'</span>  <span class="ko">n</span>  Dha  |  <span class="hi">P</span>  –  M  Ga<br>
+          <span class="re">R</span>  –  Ga  .Ni  |  S  <span class="re">R</span>  M  <span class="hi">P</span>  |  <span class="hi">P</span>  M  Ga  <span class="re">R</span>  |  –  <span class="re">R</span>  –  –
+        </div>
+        <div class="bandish-label">Antara (अंतरा)</div>
+        <div class="notation" style="margin:0.3rem 0">
+          <span class="hi">P</span>  <span class="ni-s">Ni</span>  S'  <span class="re">R'</span>  |  <span class="re">R'</span>  <span class="ko">n'</span>  Dha'  <span class="hi">P'</span>  |  M'  –  Ga'  <span class="re">R'</span>  |  S'  –  <span class="ko">n</span>  Dha<br>
+          <span class="hi">P</span>  Dha  M  Ga  |  <span class="re">R</span>  Ga  <span class="re">R</span>  S  |  <span class="dim">.Ni</span>  S  <span class="re">R</span>  –  |  –  <span class="re">R</span>  –  –
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. BANDISH -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">10</span><span class="section-title">Bandish <span class="section-title-hindi">(बंदिश)</span> — Compositions</span></div>
+    <div class="bandish-block">
+      <div class="bandish-header">VANDE MATARAM — India's National Song · Raga Desh</div>
+      <div class="bandish-body">
+        <p style="font-size:0.82rem;color:#1a4038;margin-bottom:0.5rem">Composed by Bankim Chandra Chatterjee (1882); original musical setting attributed to Jadunath Bhattacharya. The most iconic composition in Raga Desh — used to illustrate the raga's structure even in academic contexts. Vande Mataram shows both the rapid pentatonic ascent and the slow, meend-rich descent in action.</p>
+        <div class="bandish-label">How the melody maps to the raga</div>
+        <div class="notation" style="margin:0.3rem 0">
+          Van–de  Ma–  |  ta–ram  –  (ascent: Sa → Pa)
+          S  <span class="re">R</span>  M  |  <span class="hi">P</span>  –  –
+
+          Van–de  Ma–  |  ta–ram  –  (ascent: Ma → Sa')
+          M  <span class="hi">P</span>  <span class="ni-s">Ni</span>  |  S'  –  –
+
+          Su–ja–lam  |  su–phe–lam  (descent: n Dha Pa; meend Ma→Ga→Re)
+          <span class="ko">n</span>  Dha  <span class="hi">P</span>  |  M ~~~ Ga ~~~ <span class="re">R</span>
+
+<span class="dim">(The first "Vande Mataram" takes Sa→Pa; the second takes Ma→Sa'. The rapid ascent and leisurely descent of Desh are perfectly illustrated in these opening phrases.)</span>
+        </div>
+      </div>
+    </div>
+    <div class="bandish-block" style="margin-top:1rem">
+      <div class="bandish-header">BANDISH 1: "Nain More Taras Rahe" — TEENTAAL (vilambit)</div>
+      <div class="bandish-body">
+        <p style="font-size:0.82rem;color:#1a4038;margin-bottom:0.5rem">A traditional vilambit khayal composition in Desh — expressive of longing and the monsoon mood.</p>
+        <div class="bandish-label">Sthai</div>
+        <div class="notation" style="margin:0.3rem 0">
+          Nain  mo–re  |  ta–ras  ra–he  |  –  –  –  –  |  –  –  –  –<br>
+          <span class="re">R</span>  –  M  <span class="hi">P</span>  |  <span class="ni-s">Ni</span>  S'  <span class="ko">n</span>  Dha  |  <span class="hi">P</span>  M  Ga  <span class="re">R</span>  |  –  <span class="re">R</span>  –  –
+        </div>
+      </div>
+    </div>
+    <div class="bandish-block" style="margin-top:1rem">
+      <div class="bandish-header">BANDISH 2: "Dukh Ke Ab Din Beetat Naahin" — K.L. Saigal (Devdas, 1935)</div>
+      <div class="bandish-body">
+        <p style="font-size:0.82rem;color:#1a4038;margin-bottom:0.5rem">One of the most iconic Desh film compositions — an agonisingly sombre rendering that demonstrates the raga's capacity for deep grief alongside its monsoon romanticism.</p>
+        <div class="bandish-label">Opening musical phrase</div>
+        <div class="notation" style="margin:0.3rem 0">
+          Dukh  ke  ab  |  din  bee–tat  naa–hin<br>
+          <span class="re">R</span>  M  <span class="hi">P</span>  |  <span class="ni-s">Ni</span>  S'  <span class="ko">n</span>  Dha  <span class="hi">P</span>  M ~~~  Ga ~~~  <span class="re">R</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11. TAANS -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">11</span><span class="section-title">Taan Prakar <span class="section-title-hindi">(तान प्रकार)</span> — Types of Taans</span></div>
+    <div class="callout">All taans in Desh must respect the structural rules: no Ga or Dha in ascending runs; switch to komal Ni in descending runs. The meend Ma→Ga→Re should end every taan section.</div>
+    <div class="taan-label">Seedhi Taan (straight — aaroh only)</div>
+    <div class="notation">S  <span class="re">R</span>  M  <span class="hi">P</span>  <span class="ni-s">Ni</span>  S'  <span class="dim">(no Ga or Dha — strict pentatonic ascent)</span></div>
+    <div class="taan-label">Seedhi Taan (straight — full arc)</div>
+    <div class="notation"><span class="dim">.Ni</span>  S  <span class="re">R</span>  M  <span class="hi">P</span>  <span class="ni-s">Ni</span>  S'  |  S'  <span class="ko">n</span>  Dha  <span class="hi">P</span>  M  Ga  <span class="re">R</span>  S</div>
+    <div class="taan-label">Vakra Taan (curved — keeping Ga and Dha in descent only)</div>
+    <div class="notation">S  <span class="re">R</span>  M  <span class="re">R</span>  M  <span class="hi">P</span>  M  <span class="hi">P</span>  <span class="ni-s">Ni</span>  <span class="hi">P</span>  <span class="ni-s">Ni</span>  S'  |  S'  <span class="ko">n</span>  Dha  <span class="ko">n</span>  Dha  <span class="hi">P</span>  Dha  <span class="hi">P</span>  M  <span class="hi">P</span>  M  Ga  M  Ga  <span class="re">R</span></div>
+    <div class="taan-label">Gamak Taan</div>
+    <div class="notation">S–<span class="re">R</span>–M–<span class="hi">P</span>–<span class="ni-s">Ni</span>–S'  <span class="dim">(ascending with bounce; no Ga or Dha)</span></div>
+    <div class="taan-label">Sapat Taan (fast — aaroh then avroh)</div>
+    <div class="notation">S  <span class="re">R</span>  M  <span class="hi">P</span>  <span class="ni-s">Ni</span>  S'  S'  <span class="ko">n</span>  Dha  <span class="hi">P</span>  M  Ga  <span class="re">R</span>  S  <span class="dim">(note the Ni switch mid-run)</span></div>
+    <div class="taan-label">Meend Taan (the defining Desh ornament)</div>
+    <div class="notation">M  ~~~  Ga  ~~~  <span class="re">R</span>  –  ,  <span class="hi">P</span>  Dha  M  ~~~  Ga  ~~~  <span class="re">R</span>  –  <span class="dim">(slow, aching glide — the soul of Desh)</span></div>
+  </div>
+
+  <!-- 12. DESH VS TILAK KAMOD -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">12</span><span class="section-title">Desh aur Tilak Kamod — Key Differences</span></div>
+    <p>Tilak Kamod is Desh's closest cousin — the two ragas are frequently confused. Both are Khamaj thaat, both use similar note sets, and both are night ragas. Careful attention to specific phrases and ornamental treatment is required to keep them distinct.</p>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>Raga Desh 🌧️</h4>
+        <ul>
+          <li>Thaat: Khamaj</li>
+          <li>Jati: Audav–Sampurna (5↑ / 7↓)</li>
+          <li>Vadi: Re &nbsp;|&nbsp; Samvadi: Pa</li>
+          <li>Ni: shuddha in aaroh, komal in avroh</li>
+          <li>Ga and Dha absent in ascent</li>
+          <li>Key meend: <em>Ma → Ga → Re</em></li>
+          <li>Re is the primary vishranti (resting) note</li>
+          <li>Mood: monsoon longing, patriotic, tender</li>
+          <li>Patriotic associations: Vande Mataram</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>Raga Tilak Kamod 🌙</h4>
+        <ul>
+          <li>Thaat: Khamaj</li>
+          <li>Jati: Audav–Sampurna (similar structure)</li>
+          <li>Vadi: Re &nbsp;|&nbsp; Samvadi: Pa (same)</li>
+          <li>Uses primarily shuddha Ni (komal Ni rare)</li>
+          <li>Ga used in ascending runs (key difference)</li>
+          <li>Key phrase: <em>.Pa .Ni Sa Re Ga Sa Re Pa Ma Ga Sa</em></li>
+          <li>Sa is also a strong resting note (not just Re)</li>
+          <li>Mood: lighter, more romantic, playful</li>
+          <li>Sorath is related to Desh; Tilak Kamod to Khamaj</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>The quickest test:</strong> If Gandhar appears in the ascending line → it is Tilak Kamod. If the ascent skips Ga entirely → it is Desh. The presence or absence of Ga in the aaroh is the single most reliable way to tell them apart.
+    </div>
+  </div>
+
+  <!-- 13. RASA -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">13</span><span class="section-title">Rasa aur Bhaav <span class="section-title-hindi">(रस और भाव)</span> — Emotion &amp; Mood</span></div>
+    <div class="rasa-grid">
+      <div class="rasa-card"><div class="rasa-title">Shringaar — Monsoon Longing</div><div class="rasa-desc">Romantic yearning at its most natural — the ache of separation evoked by the onset of rain. The meend from Ma to Re via Ga is the musical embodiment of tears falling slowly. Desh is rain itself made melody.</div></div>
+      <div class="rasa-card"><div class="rasa-title">Desh Bhakti — Patriotism</div><div class="rasa-desc">Uniquely among major ragas, Desh has a strong patriotic association. Vande Mataram — India's national song — is set in this raga, giving it a cultural resonance beyond purely aesthetic contexts.</div></div>
+      <div class="rasa-card"><div class="rasa-title">Bhakti — Devotional</div><div class="rasa-desc">Desh is widely used in bhajans for its humble, soulful character. The raga's sweetness and the folk-like quality of its pentatonic ascent make it naturally suited to devotional compositions.</div></div>
+      <div class="rasa-card"><div class="rasa-title">Prakriti — Monsoon Nature</div><div class="rasa-desc">The rapid ascent is the sudden downpour; the leisurely, ornamented descent is water flowing gently over rocks. Desh mirrors the rhythm of the Indian monsoon in its very structure.</div></div>
+    </div>
+    <div class="callout">
+      Playing with differing emphasis on the ascent and descent allows composers to use Desh to express a wide range of emotions — from agonizingly sombre (Dukh Ke Ab Din) to playfully romantic (Piya Tose Naina). This emotional versatility is a rare quality in ragas of this structure.
+    </div>
+  </div>
+
+  <!-- 14. PRAHAR -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">14</span><span class="section-title">Samay Chakra <span class="section-title-hindi">(समय चक्र)</span> — Time Theory</span></div>
+    <div class="prahar-row">
+      <div class="prahar-cell"><span class="prahar-time">6–9 AM</span>1st Prahar</div>
+      <div class="prahar-cell"><span class="prahar-time">9 AM–12 PM</span>2nd Prahar</div>
+      <div class="prahar-cell"><span class="prahar-time">12–3 PM</span>3rd Prahar</div>
+      <div class="prahar-cell"><span class="prahar-time">3–6 PM</span>4th Prahar</div>
+      <div class="prahar-cell"><span class="prahar-time">6–9 PM</span>1st Night</div>
+      <div class="prahar-cell highlight"><span class="prahar-time">9 PM–12 AM</span>★ DESH ★</div>
+      <div class="prahar-cell"><span class="prahar-time">12–3 AM</span>3rd Night</div>
+      <div class="prahar-cell"><span class="prahar-time">3–6 AM</span>4th Night</div>
+    </div>
+    <p>Desh is a <strong>night raga</strong> — second prahar of the night (9 PM–midnight). The raga's monsoon association connects it with rainy evenings, the sound of rain on rooftops, and the contemplative mood of a wet night. Like several Khamaj-thaat ragas, it has strong semi-classical associations and may be heard in thumri contexts at various hours.</p>
+  </div>
+
+  <!-- 15. FILM SONGS -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">15</span><span class="section-title">Notable Compositions &amp; Film Songs</span></div>
+    <table class="film-table">
+      <tr><th>Song / Composition</th><th>Film / Context</th><th>Year</th><th>Singer / Notes</th></tr>
+      <tr><td>Vande Mataram</td><td>National song of India</td><td>1882 / 1950</td><td>Bankim Chandra Chatterjee; set in pure Desh; definitive raga illustration</td></tr>
+      <tr><td>Dukh Ke Ab Din Beetat Naahin</td><td>Devdas</td><td>1935</td><td>K.L. Saigal / Timir Baran — agonisingly sombre Desh</td></tr>
+      <tr><td>Piya Tose Naina Laage Re</td><td>Guide</td><td>1965</td><td>Lata Mangeshkar / S.D. Burman — romantic Desh</td></tr>
+      <tr><td>Baje Sargam Har Taraf Se</td><td>Doordarshan special</td><td>1985</td><td>Multiple classical singers — iconic Desh-based patriotic composition</td></tr>
+      <tr><td>Mile Sur Mera Tumhara</td><td>Doordarshan national integration</td><td>1988</td><td>Opening by Pandit Bhimsen Joshi — Desh-influenced</td></tr>
+      <tr><td>Mora Gora Ang Lai Le</td><td>Bandini</td><td>1963</td><td>Lata Mangeshkar / S.D. Burman — devotional Desh</td></tr>
+    </table>
+    <p style="font-size:0.82rem;color:var(--teal-dim);margin-top:0.5rem">Desh is one of the ragas most extensively used in Rabindrasangeet (Tagore songs) — dozens of his compositions are set in this raga, making it unusually important in the Bengal musical tradition.</p>
+  </div>
+
+  <!-- 16. ARTISTS -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">16</span><span class="section-title">Notable Artists — Recommended Listening</span></div>
+    <div class="artist-card">
+      <div class="artist-initial">BJ</div>
+      <div><div class="artist-name">Pandit Bhimsen Joshi</div><div class="artist-detail">Kirana Gharana, vocal — his Desh recordings are the benchmark; listen especially to vilambit khayal renditions where the meend on Ma→Ga→Re is given its full weight</div></div>
+    </div>
+    <div class="artist-card">
+      <div class="artist-initial">SK</div>
+      <div><div class="artist-name">Pandit Shivkumar Sharma</div><div class="artist-detail">Santoor — "breathtaking" is how his Desh is described; the raga's lyrical quality suits the santoor's resonance especially well; essential listening</div></div>
+    </div>
+    <div class="artist-card">
+      <div class="artist-initial">RK</div>
+      <div><div class="artist-name">Ustad Rashid Khan</div><div class="artist-detail">Rampur-Sahaswan Gharana, vocal — his Desh recordings are celebrated for emotional depth and precise meend rendering; recommended for learning the avroh structure</div></div>
+    </div>
+    <div class="artist-card">
+      <div class="artist-initial">HC</div>
+      <div><div class="artist-name">Hariprasad Chaurasia</div><div class="artist-detail">Bansuri (flute) — the flowing, lyrical character of Desh maps beautifully onto the bansuri; his monsoon ragas recordings include Desh among the finest available</div></div>
+    </div>
+    <div class="artist-card">
+      <div class="artist-initial">GJ</div>
+      <div><div class="artist-name">Girija Devi</div><div class="artist-detail">Thumri — Banaras tradition; her Desh thumri recordings demonstrate the raga's emotional versatility, from devotional to playfully romantic</div></div>
+    </div>
+  </div>
+
+  <!-- 17. PRACTICE SCHEDULE -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">17</span><span class="section-title">Practice Schedule <span class="section-title-hindi">(अभ्यास क्रम)</span></span></div>
+    <div class="col-card" style="margin-bottom:1rem">
+      <h4>Daily Practice — 50 Minutes</h4>
+      <ul>
+        <li><strong>0–5 min:</strong> Tanpura setup; establish Re and Pa as the raga's dual centres</li>
+        <li><strong>5–12 min:</strong> Alankar 1 — core aaroh–avroh; focus on the Ni switch; no Ga or Dha going up</li>
+        <li><strong>12–18 min:</strong> Alankars 2–4 — step patterns; confirm ascending rule is absolutely clear</li>
+        <li><strong>18–28 min:</strong> Alaap phrases 1–3; lower octave .Ni Sa Re; Re as resting note</li>
+        <li><strong>28–38 min:</strong> Alaap phrases 4–6; full arc with meend; shuddha/komal Ni in context</li>
+        <li><strong>38–44 min:</strong> Sargam geet with Teentaal; maintain the structural rules in rhythm</li>
+        <li><strong>44–50 min:</strong> Meend taans — slow the Ma→Ga→Re glide until it feels natural and expressive</li>
+      </ul>
+    </div>
+    <table class="week-table">
+      <tr><th>Day</th><th>Focus</th></tr>
+      <tr><td>Monday</td><td>Alankars only; drill the ascending rule (no Ga/Dha) and the Ni switch until automatic</td></tr>
+      <tr><td>Tuesday</td><td>Alaap phrases 1–3; establish Re as the primary resting note; lower octave opening</td></tr>
+      <tr><td>Wednesday</td><td>Alaap phrases 4–6; meend practice; full range with proper direction-dependent rules</td></tr>
+      <tr><td>Thursday</td><td>Sargam geet with taal; focus on placing the Ni switch correctly within the beat cycle</td></tr>
+      <tr><td>Friday</td><td>Bandish sthai — Vande Mataram or "Nain More Taras Rahe"; learn melodic structure</td></tr>
+      <tr><td>Saturday</td><td>Bandish antara + full composition; compare the raga's sombre and romantic ranges</td></tr>
+      <tr><td>Sunday</td><td>Listening — ideally on a rainy evening; Bhimsen Joshi or Shivkumar Sharma recordings</td></tr>
+    </table>
+  </div>
+
+  <!-- 18. MISTAKES -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">18</span><span class="section-title">Common Mistakes to Avoid</span></div>
+    <table class="mistake-table">
+      <tr><th>Mistake</th><th>Correction</th></tr>
+      <tr><td>Using Ga or Dha in the aaroh</td><td>The ascent in Desh is strictly pentatonic — Sa Re Ma Pa Ni Sa'. Ga and Dha are completely absent going up. Even a brief passing Ga in the ascent turns the raga toward Tilak Kamod or Khamaj.</td></tr>
+      <tr><td>Using komal Ni in the aaroh</td><td>The ascending Ni is always shuddha (B♮). Komal Ni (B♭) belongs exclusively to the avroh. Using komal Ni going up is one of the most common errors and immediately destroys the raga's structure.</td></tr>
+      <tr><td>Using shuddha Ni in the avroh</td><td>The descending Ni is always komal (B♭). The transition — S' → n → Dha → Pa — is a signature descending phrase; using shuddha Ni there makes it sound like Bilawal or Yaman family.</td></tr>
+      <tr><td>Neglecting the Ma→Ga→Re meend</td><td>This slow glide from Ma through Ga to Re is the single most vital feature of Desh. Every phrase that descends through this region should honour this meend. Without it, Desh has no soul.</td></tr>
+      <tr><td>Not resting on Re</td><td>Re is the vadi and the vishranti sthan — phrases must pause, linger, and resolve on Re far more than any other note. Treating Re as a passing note denudes the raga of its identity.</td></tr>
+      <tr><td>Confusing with Tilak Kamod</td><td>The quickest test: if Ga appears in the ascending line, it is Tilak Kamod. If the ascent is strict Sa Re Ma Pa Ni, it is Desh. Also: Tilak Kamod uses almost exclusively shuddha Ni; Desh switches Ni by direction.</td></tr>
+      <tr><td>Ignoring the asymmetry of ascent vs descent</td><td>The rapid ascent and leisurely descent are not just structural facts — they are the emotional character of the raga. The ascent should feel like a sudden burst of energy (like rainfall beginning); the descent should feel like water flowing slowly and richly.</td></tr>
+    </table>
+  </div>
+
+  <!-- 19. GLOSSARY -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">19</span><span class="section-title">Glossary of Key Terms</span></div>
+    <div class="glossary-grid">
+      <div class="gloss-item"><strong>Audav–Sampurna</strong>Jati classification: 5 notes in aaroh (audav), 7 notes in avroh (sampurna) — Desh's defining structural category</div>
+      <div class="gloss-item"><strong>Dual Nishad</strong>Using two forms of the same note depending on direction — shuddha Ni (B♮) ascending, komal Ni (B♭) descending. Desh's signature rule.</div>
+      <div class="gloss-item"><strong>Varjit in Aaroh</strong>Notes omitted only in the ascending scale — Ga and Dha in Desh are varjit in aaroh; they appear freely in avroh</div>
+      <div class="gloss-item"><strong>Vishranti Sthan</strong>Resting note(s) — where phrases pause and resolve. Re is the primary vishranti sthan in Desh</div>
+      <div class="gloss-item"><strong>Vadi</strong>Most important note — Re (shuddha Rishabh) in Desh</div>
+      <div class="gloss-item"><strong>Samvadi</strong>Second most important note — Pa (Pancham) in Desh</div>
+      <div class="gloss-item"><strong>Meend</strong>Smooth glide between notes — the Ma→Ga→Re meend is Desh's defining ornament</div>
+      <div class="gloss-item"><strong>Raag-ang raga</strong>A raga whose distinct phrase-pattern can colour another raga — Desh is sometimes used this way due to its strong melodic signature</div>
+      <div class="gloss-item"><strong>Varsha raga</strong>A monsoon raga — Desh is one of the primary Varsha ragas in Hindustani tradition</div>
+      <div class="gloss-item"><strong>Khamaj Thaat</strong>Parent scale of Desh — S R G M P D n (komal Ni) — Desh belongs to this family</div>
+      <div class="gloss-item"><strong>Tilak Kamod</strong>Desh's closest cousin — same thaat, similar structure, but uses Ga in ascent (the key distinction)</div>
+      <div class="gloss-item"><strong>Sorath</strong>An older raga almost identical to Desh but with weak Gandhar — nearly extinct; Desh's popularity eclipsed it</div>
+      <div class="gloss-item"><strong>Aaroh</strong>Ascending scale — in Desh, strictly pentatonic: Sa Re Ma Pa Ni</div>
+      <div class="gloss-item"><strong>Avroh</strong>Descending scale — in Desh, all 7 notes with komal Ni</div>
+      <div class="gloss-item"><strong>Prahar</strong>A 3-hour time period — Desh: 2nd prahar of night (9 PM–12 AM)</div>
+      <div class="gloss-item"><strong>Bhaav</strong>Emotional/aesthetic mood — Desh: monsoon longing, patriotism, devotional sweetness</div>
+    </div>
+  </div>
+
+  <!-- 20. SUMMARY -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">20</span><span class="section-title">Summary at a Glance</span></div>
+    <div class="summary-grid">
+      <div class="summary-card"><h4>Identity</h4><p>Thaat: Khamaj<br>Jati: Audav–Sampurna<br>Time: Night · 9 PM–12 AM<br>Season: Monsoon (Varsha)</p></div>
+      <div class="summary-card"><h4>Notes</h4><p>↑ Sa <span style="color:var(--teal)">Re</span> Ma <span style="color:var(--teal)">Pa</span> <span style="color:var(--amber)">Ni♮</span> (5 notes)<br>↓ Sa <span style="color:var(--teal)">Re</span> Ga Ma <span style="color:var(--teal)">Pa</span> Dha <span style="color:#993C1D">n♭</span> (7 notes)<br>Dual Ni · Ga+Dha avroh only</p></div>
+      <div class="summary-card"><h4>Emphasis</h4><p>Vadi: Re (primary rest)<br>Samvadi: Pa<br>Opens from lower .Ni<br>Meend: Ma→Ga→Re ~~~</p></div>
+      <div class="summary-card"><h4>Character</h4><p>Monsoon longing<br>Patriotic (Vande Mataram)<br>Rapid ascent / leisurely descent<br>Wide emotional range</p></div>
+      <div class="summary-card"><h4>Related</h4><p>Tilak Kamod (closest cousin)<br>Khamaj (parent thaat raga)<br>Sorath (near-extinct relative)<br>Jhinjhoti, Desh-Khamaj</p></div>
+      <div class="summary-card"><h4>Pedagogical key</h4><p>Master the dual Ni rule first<br>Ga + Dha absent in ascent<br>Meend Ma→Ga→Re is the soul<br>Re is the resting note</p></div>
+    </div>
+  </div>
+
+  <div class="ornament">✦ &nbsp; ✦ &nbsp; ✦</div>
+  <p style="text-align:center;font-size:0.78rem;color:var(--teal-dim);font-style:italic">Compiled with verified sources: Wikipedia, MusicMaster, Songs of Yore, Sohamkorade Raga Database, Chandrakantha.com, Riyaz App<br>Notes for Hindustani Classical Music practice. Best listened to on a monsoon evening.</p>
+
+</div>
+</body>
+</html>

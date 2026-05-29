@@ -80,8 +80,19 @@ To become the world's fastest sustainable problem-solving company.
 
 ## Music
 - [Hindu classical Music Overall](/music/01-Hindu-Classical-Music.html)
+
+### Phase 1
 - [1. Raga Bhupali](/music/02-raga-bhupali.html)
 - [2. Raga Yaman](/music/03-raga-yaman.html)
+
+
+---
+
+## Philosophers
+
+### Bhakti Kal
+- [Kabir](/philosophers/bhakti-kal/kabir_interactive_notes.html)
+
 
 ---
 

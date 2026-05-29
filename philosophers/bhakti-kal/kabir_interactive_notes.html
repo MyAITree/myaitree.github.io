@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Noto+Sans+Devanagari:wght@400;600&display=swap');
+
+  :root {
+    --saffron: #E8651A;
+    --deep-saffron: #C4480D;
+    --turmeric: #D4A017;
+    --cream: #FAF3E0;
+    --parchment: #F2E8C9;
+    --ink: #1C1208;
+    --ink-light: #3D2B0E;
+    --smoke: #8B7355;
+    --terracotta: #B5572A;
+    --lotus: #C97B5A;
+    --indigo: #2D3561;
+    --moss: #4A5840;
+    --pale-gold: #F5DFA0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'EB Garamond', Georgia, serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    background: var(--ink);
+    padding: 56px 40px 44px;
+    text-align: center;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 40%, #3D2B0E 0%, #1C1208 100%);
+  }
+  .hero-mandala {
+    position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
+    width: 320px; height: 320px; opacity: 0.06;
+    background: radial-gradient(circle, var(--turmeric) 1px, transparent 1px) 0 0 / 18px 18px,
+                radial-gradient(circle, var(--saffron) 1px, transparent 1px) 9px 9px / 18px 18px;
+  }
+  .hero-tag {
+    position: relative;
+    display: inline-block;
+    font-family: 'EB Garamond', serif;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--turmeric);
+    margin-bottom: 18px;
+    border: 1px solid rgba(212,160,23,0.35);
+    padding: 4px 14px;
+    border-radius: 2px;
+  }
+  .hero h1 {
+    position: relative;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(44px, 9vw, 80px);
+    font-weight: 900;
+    color: var(--cream);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .hero h1 span { color: var(--saffron); }
+  .hero-devanagari {
+    position: relative;
+    font-family: 'Noto Sans Devanagari', sans-serif;
+    font-size: 22px;
+    color: rgba(250,243,224,0.45);
+    margin-top: 10px;
+    letter-spacing: 0.06em;
+  }
+  .hero-dates {
+    position: relative;
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    color: rgba(250,243,224,0.5);
+    font-size: 15px;
+    margin-top: 6px;
+  }
+  .hero-tagline {
+    position: relative;
+    margin-top: 22px;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--pale-gold);
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+    opacity: 0.88;
+  }
+
+  /* ── NAV TABS ── */
+  .tabs-wrap {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--ink-light);
+    border-bottom: 2px solid var(--saffron);
+    display: flex; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs-wrap::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex: 0 0 auto;
+    font-family: 'EB Garamond', serif;
+    font-size: 13.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(250,243,224,0.6);
+    padding: 13px 22px;
+    border: none; background: none; cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { color: var(--pale-gold); }
+  .tab-btn.active { color: var(--saffron); border-bottom-color: var(--saffron); }
+
+  /* ── CONTENT ── */
+  .content { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; position: relative; z-index: 1; }
+  .section { display: none; animation: fadeUp 0.35s ease; }
+  .section.active { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── TYPOGRAPHY ── */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+    line-height: 1.15;
+  }
+  .section-sub {
+    font-style: italic;
+    color: var(--smoke);
+    font-size: 16px;
+    margin-bottom: 32px;
+    border-bottom: 1px solid rgba(139,115,85,0.25);
+    padding-bottom: 18px;
+  }
+  p { font-size: 17px; line-height: 1.75; color: var(--ink-light); margin-bottom: 16px; }
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 21px;
+    color: var(--deep-saffron);
+    margin: 32px 0 12px;
+  }
+  h4 {
+    font-family: 'EB Garamond', serif;
+    font-size: 16px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--smoke);
+    margin: 24px 0 8px;
+  }
+
+  /* ── DOHA CARD ── */
+  .doha-card {
+    background: var(--parchment);
+    border-left: 4px solid var(--saffron);
+    border-radius: 0 8px 8px 0;
+    padding: 24px 28px 20px;
+    margin: 24px 0;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .doha-card::before {
+    content: '"';
+    font-family: 'Playfair Display', serif;
+    font-size: 120px;
+    color: var(--saffron);
+    opacity: 0.08;
+    position: absolute;
+    top: -18px; left: 12px;
+    line-height: 1;
+  }
+  .doha-card:hover { box-shadow: 0 6px 28px rgba(232,101,26,0.15); transform: translateX(3px); }
+  .doha-hindi {
+    font-family: 'Noto Sans Devanagari', sans-serif;
+    font-size: 18px;
+    color: var(--ink);
+    line-height: 1.8;
+    margin-bottom: 12px;
+  }
+  .doha-roman {
+    font-style: italic;
+    color: var(--smoke);
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .doha-translation {
+    font-size: 16px;
+    color: var(--ink-light);
+    line-height: 1.65;
+    border-top: 1px solid rgba(139,115,85,0.2);
+    padding-top: 10px;
+    margin-top: 10px;
+  }
+  .doha-theme {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    background: rgba(181,87,42,0.1);
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+  .doha-analysis {
+    display: none;
+    background: rgba(212,160,23,0.08);
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-top: 12px;
+    font-size: 15px;
+    color: var(--ink-light);
+    line-height: 1.65;
+    border-left: 3px solid var(--turmeric);
+  }
+  .doha-analysis.open { display: block; animation: fadeUp 0.25s ease; }
+  .doha-toggle {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--saffron);
+    cursor: pointer;
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    user-select: none;
+  }
+  .doha-toggle::after { content: '▾'; transition: transform 0.2s; }
+  .doha-toggle.open::after { transform: rotate(180deg); }
+
+  /* ── INFO GRID ── */
+  .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin: 24px 0; }
+  .info-cell {
+    background: var(--parchment);
+    border-radius: 8px;
+    padding: 18px 20px;
+    border-top: 3px solid var(--saffron);
+  }
+  .info-label {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--smoke);
+    margin-bottom: 6px;
+  }
+  .info-value { font-size: 16px; color: var(--ink); line-height: 1.5; }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; padding-left: 28px; margin: 24px 0; }
+  .timeline::before { content: ''; position: absolute; left: 7px; top: 6px; bottom: 6px; width: 2px; background: linear-gradient(to bottom, var(--saffron), var(--turmeric)); border-radius: 2px; }
+  .tl-item { position: relative; margin-bottom: 28px; }
+  .tl-dot { position: absolute; left: -24px; top: 5px; width: 12px; height: 12px; background: var(--saffron); border-radius: 50%; border: 2px solid var(--cream); }
+  .tl-year { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--saffron); margin-bottom: 4px; }
+  .tl-title { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--ink); margin-bottom: 6px; }
+  .tl-text { font-size: 15.5px; color: var(--ink-light); line-height: 1.65; }
+
+  /* ── CONCEPT CARDS ── */
+  .concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; margin: 24px 0; }
+  .concept-card {
+    border-radius: 10px;
+    padding: 22px 22px 18px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s;
+  }
+  .concept-card:hover { transform: translateY(-3px); }
+  .concept-card.nirguna { background: linear-gradient(135deg, #2D3561 0%, #1a2040 100%); color: white; }
+  .concept-card.saguna  { background: linear-gradient(135deg, #C4480D 0%, #8B2E05 100%); color: white; }
+  .concept-card.maya    { background: linear-gradient(135deg, #4A5840 0%, #2e3828 100%); color: white; }
+  .concept-card.guru    { background: linear-gradient(135deg, #8B6914 0%, #5a4309 100%); color: white; }
+  .concept-icon { font-size: 28px; margin-bottom: 12px; }
+  .concept-title { font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 8px; }
+  .concept-body { font-size: 14.5px; line-height: 1.65; opacity: 0.88; }
+
+  /* ── WORKS TABLE ── */
+  .works-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15.5px; }
+  .works-table th { background: var(--ink); color: var(--cream); padding: 10px 16px; text-align: left; font-family: 'EB Garamond', serif; font-weight: 500; letter-spacing: 0.06em; font-size: 13px; text-transform: uppercase; }
+  .works-table td { padding: 12px 16px; border-bottom: 1px solid rgba(139,115,85,0.18); vertical-align: top; }
+  .works-table tr:nth-child(even) td { background: rgba(242,232,201,0.4); }
+  .works-table tr:hover td { background: rgba(232,101,26,0.06); }
+
+  /* ── LANGUAGE BOX ── */
+  .lang-box {
+    display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0;
+  }
+  .lang-tag {
+    font-size: 13px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid;
+    font-family: 'EB Garamond', serif;
+    letter-spacing: 0.06em;
+  }
+  .lang-tag.primary   { border-color: var(--saffron); background: rgba(232,101,26,0.1); color: var(--deep-saffron); }
+  .lang-tag.secondary { border-color: var(--smoke);   background: rgba(139,115,85,0.1); color: var(--smoke); }
+
+  /* ── INFLUENCE MAP ── */
+  .influence-row { display: flex; flex-wrap: wrap; gap: 12px; margin: 16px 0; }
+  .influence-chip {
+    font-size: 13.5px;
+    padding: 8px 18px;
+    border-radius: 4px;
+    background: var(--parchment);
+    color: var(--ink-light);
+    border: 1px solid rgba(139,115,85,0.25);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .influence-chip .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── QUIZ ── */
+  .quiz-card { background: var(--parchment); border-radius: 10px; padding: 26px 28px; margin: 20px 0; border: 1px solid rgba(139,115,85,0.2); }
+  .quiz-q { font-family: 'Playfair Display', serif; font-size: 19px; color: var(--ink); margin-bottom: 18px; line-height: 1.4; }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-opt {
+    padding: 12px 18px;
+    border-radius: 6px;
+    border: 1.5px solid rgba(139,115,85,0.3);
+    background: white;
+    font-size: 15.5px;
+    color: var(--ink-light);
+    cursor: pointer;
+    transition: all 0.18s;
+    text-align: left;
+  }
+  .quiz-opt:hover { border-color: var(--saffron); background: rgba(232,101,26,0.05); }
+  .quiz-opt.correct { background: rgba(74,88,64,0.12); border-color: var(--moss); color: var(--moss); }
+  .quiz-opt.wrong   { background: rgba(196,72,13,0.08); border-color: var(--terracotta); color: var(--terracotta); }
+  .quiz-feedback { margin-top: 14px; padding: 12px 16px; border-radius: 6px; font-size: 15px; line-height: 1.6; display: none; }
+  .quiz-feedback.show { display: block; animation: fadeUp 0.25s ease; }
+  .quiz-feedback.correct { background: rgba(74,88,64,0.1); color: var(--moss); border-left: 3px solid var(--moss); }
+  .quiz-feedback.wrong   { background: rgba(196,72,13,0.08); color: var(--terracotta); border-left: 3px solid var(--terracotta); }
+  .quiz-next { margin-top: 16px; background: var(--saffron); color: white; border: none; padding: 10px 24px; border-radius: 6px; font-family: 'EB Garamond', serif; font-size: 15px; cursor: pointer; display: none; transition: background 0.2s; }
+  .quiz-next:hover { background: var(--deep-saffron); }
+  .quiz-next.show { display: inline-block; }
+  .quiz-score { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--saffron); text-align: center; margin: 20px 0 8px; }
+  .quiz-done { text-align: center; padding: 24px; }
+
+  /* ── PULL QUOTE ── */
+  .pull-quote {
+    margin: 36px 0;
+    padding: 28px 36px;
+    background: var(--ink);
+    border-radius: 8px;
+    color: var(--cream);
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-style: italic;
+    line-height: 1.6;
+    text-align: center;
+    position: relative;
+  }
+  .pull-quote::before {
+    content: '❧';
+    display: block;
+    font-style: normal;
+    color: var(--saffron);
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  .pull-quote .attr { font-family: 'EB Garamond', serif; font-size: 14px; color: var(--smoke); margin-top: 14px; letter-spacing: 0.1em; text-transform: uppercase; font-style: normal; display: block; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--parchment); }
+  ::-webkit-scrollbar-thumb { background: var(--lotus); border-radius: 3px; }
+
+  .badge {
+    display: inline-block; font-size: 11px; padding: 2px 9px;
+    border-radius: 3px; letter-spacing: 0.1em; text-transform: uppercase;
+    font-family: 'EB Garamond', serif; margin-left: 8px; vertical-align: middle;
+  }
+  .badge-oral  { background: rgba(45,53,97,0.12);  color: var(--indigo); }
+  .badge-text  { background: rgba(74,88,64,0.12);  color: var(--moss); }
+  .badge-sikh  { background: rgba(212,160,23,0.15); color: #7a5c00; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-mandala"></div>
+  <div class="hero-tag">Sant · Poet · Mystic · Weaver</div>
+  <h1>Ka<span>bir</span></h1>
+  <div class="hero-devanagari">कबीर</div>
+  <div class="hero-dates">c. 1440 – 1518 CE &nbsp;·&nbsp; Varanasi (Kashi)</div>
+  <div class="hero-tagline">"The weaver who threaded the loom of the universe with a single word — and called it God."</div>
+</div>
+
+<!-- NAV -->
+<div class="tabs-wrap">
+  <button class="tab-btn active" onclick="showTab('life')">Life & Context</button>
+  <button class="tab-btn" onclick="showTab('philosophy')">Philosophy</button>
+  <button class="tab-btn" onclick="showTab('dohas')">Dohas & Sakhis</button>
+  <button class="tab-btn" onclick="showTab('works')">Works & Language</button>
+  <button class="tab-btn" onclick="showTab('influence')">Legacy</button>
+  <button class="tab-btn" onclick="showTab('quiz')">Test Yourself</button>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- ══ LIFE ══ -->
+  <div class="section active" id="tab-life">
+    <div class="section-title">Life & Historical Context</div>
+    <div class="section-sub">The weaver-saint of Kashi — biography, legend, and the world he inhabited</div>
+
+    <div class="info-grid">
+      <div class="info-cell"><div class="info-label">Born</div><div class="info-value">c. 1440 CE<br>Varanasi (Kashi)</div></div>
+      <div class="info-cell"><div class="info-label">Died</div><div class="info-value">c. 1518 CE<br>Maghar, UP</div></div>
+      <div class="info-cell"><div class="info-label">Caste / Trade</div><div class="info-value">Julaha (Muslim weaver)<br>Low-caste artisan</div></div>
+      <div class="info-cell"><div class="info-label">Tradition</div><div class="info-value">Nirguna Sant Bhakti<br>Sikh, Kabir Panthi</div></div>
+      <div class="info-cell"><div class="info-label">Guru</div><div class="info-value">Ramananda<br>(disputed, legendary)</div></div>
+      <div class="info-cell"><div class="info-label">Disciples</div><div class="info-value">Kabir Panthi sect<br>~1.4 crore members today</div></div>
+    </div>
+
+    <h3>The Legend of Birth</h3>
+    <p>Kabir's origins are shrouded in legend rather than verifiable history — which is itself fitting for a poet who distrusted all institutional claims to truth. The most widespread account says he was born to a widow Brahmin woman, who abandoned him at the Lahartara pond in Varanasi. He was found and raised by Niru and Nima, a Muslim weaver couple of the Julaha caste.</p>
+    <p>This story — Brahmin birth, Muslim upbringing, Hindu city — encodes the central paradox of Kabir's life: he belonged fully to no community, and therefore criticized all of them with equal freedom.</p>
+
+    <div class="pull-quote">
+      "I am neither Hindu nor Muslim. The one who created me — I live by that breath alone."
+      <span class="attr">— Kabir, Bijak</span>
+    </div>
+
+    <h3>Historical Timeline</h3>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">c. 1440</div>
+        <div class="tl-title">Birth at Lahartara, Varanasi</div>
+        <div class="tl-text">Found floating on a lotus leaf by Niru and Nima, according to legend. Raised in the Julaha (Muslim weaver) community. Varanasi is simultaneously the holiest city for Hindus and a major centre of Muslim culture — Kabir absorbs both.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">c. 1455</div>
+        <div class="tl-title">Discipleship under Ramananda</div>
+        <div class="tl-text">Kabir allegedly obtained initiation from the Vaishnava saint Ramananda by lying on the steps of the Panchganga ghat before dawn, so that Ramananda stepped on him and exclaimed "Ram! Ram!" — Kabir took this as his mantra. Most scholars consider this legendary but symbolically true.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">1440–1518</div>
+        <div class="tl-title">Life as a weaver-teacher in Varanasi</div>
+        <div class="tl-text">He continued working as a weaver throughout his life, composing dohas and pads orally while at the loom. He gathered disciples from both Hindu and Muslim communities. He faced opposition from orthodox clergy of both faiths.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">c. 1500s</div>
+        <div class="tl-title">Conflict with the Sultan and the Brahmins</div>
+        <div class="tl-text">Legend records that the Sultan of Delhi and local Brahmins both tried to have Kabir killed or expelled, but miraculous events frustrated their attempts — a tiger that refused to attack him, flowers that fell from the sky. These stories encode his social transgression: he was dangerous to both establishments.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">c. 1518</div>
+        <div class="tl-title">Death at Maghar — the final provocation</div>
+        <div class="tl-text">Kabir deliberately chose to die in Maghar — a town considered inauspicious for death, where Hindus believed dying would lead to rebirth as a donkey. His choice was a final act of poetry: mocking the geography of salvation. After his death, Hindus and Muslims both claimed his body; according to legend, they found only flowers under the sheet, which were divided between the two communities. Both a samadhi and a dargah mark the site today.</div>
+      </div>
+    </div>
+
+    <h3>Social World</h3>
+    <p>Kabir lived during the early Lodhi Sultanate period, at the cusp between the Delhi Sultanate and the Mughal Empire. Varanasi was a city of intense Hindu-Muslim friction but also of syncretic culture — Sufi khanqahs and Brahmin ghats existed side by side. The Bhakti movement was spreading across the subcontinent, and low-caste saints (Raidas the cobbler, Chokhamela the Mahar) were already challenging caste-based access to God. Kabir was the most radical of them.</p>
+  </div>
+
+  <!-- ══ PHILOSOPHY ══ -->
+  <div class="section" id="tab-philosophy">
+    <div class="section-title">Philosophy & Theology</div>
+    <div class="section-sub">Kabir's thought — a systematic iconoclasm that drew from everywhere and bowed to nothing</div>
+
+    <p>Kabir cannot be claimed by any single philosophical school — and he would have been pleased by that. His thought draws from Vaishnava Bhakti, Sufi Islam, Nath yoga, and Siddha tantra, but reduces all of them to a single irreducible proposition: <strong>the Divine is formless, nameless, and immediately available to any person regardless of caste, religion, or learning.</strong></p>
+
+    <div class="concept-grid">
+      <div class="concept-card nirguna">
+        <div class="concept-icon">∞</div>
+        <div class="concept-title">Nirguna Brahman</div>
+        <div class="concept-body">God without attributes, form, or name. Not Ram the prince, not Allah the law-giver — but the formless absolute that underlies all existence. Kabir uses the names Ram, Hari, Allah interchangeably to show they are all fingers pointing at the same moon.</div>
+      </div>
+      <div class="concept-card saguna">
+        <div class="concept-icon">🔥</div>
+        <div class="concept-title">Anti-Ritual Stance</div>
+        <div class="concept-body">Kabir systematically mocks pilgrimage, fasting, idol worship, reading scriptures, circumcision, janeu (sacred thread), and caste rules as substitutes for genuine inner transformation. External practice without inner stillness is, for him, a lie.</div>
+      </div>
+      <div class="concept-card maya">
+        <div class="concept-icon">🌊</div>
+        <div class="concept-title">Maya & Illusion</div>
+        <div class="concept-body">The world is maya — not unreal, but misread. We see differences (caste, religion, body) where there is only the one. The task of the seeker is to see through the veil — not by retreat from the world, but by looking more clearly at it.</div>
+      </div>
+      <div class="concept-card guru">
+        <div class="concept-icon">🪔</div>
+        <div class="concept-title">The Guru's Role</div>
+        <div class="concept-body">The Satguru (true teacher) is not an institutional authority but the inner guide who points the seeker to the Shabad (the Word, the divine sound within). Kabir uses the Guru extensively in his poetry — sometimes as a real teacher, sometimes as an internal awakener.</div>
+      </div>
+    </div>
+
+    <h3>The Shabad — Divine Sound</h3>
+    <p>Influenced by the Nath and Siddha tradition, Kabir places enormous emphasis on <strong>Shabad</strong> (the Word, the divine sound or vibration). This is not scripture or spoken language — it is the primordial sound underlying existence, heard only in inner stillness. This idea connects him to Islamic Sufi concepts of <em>kalam</em> (divine speech) and Vaishnava ideas of <em>naad</em> (cosmic sound).</p>
+
+    <div class="doha-card">
+      <div class="doha-theme">On the Shabad</div>
+      <div class="doha-hindi">शब्द बिना सुरती आन्धी, शब्द बिना ज्ञान उजाड़ ।<br>शब्द बिना संसार है, जो जल बिन खाली ताड़ ।</div>
+      <div class="doha-roman">Shabad bina surati aandhi, shabad bina gyaan ujaad.<br>Shabad bina sansaar hai, jo jal bin khaali taar.</div>
+      <div class="doha-translation">Without the Word, consciousness is a storm; without the Word, knowledge is a wasteland.<br>The world without the Word is like a palm tree without water.</div>
+      <div class="doha-toggle" onclick="toggleAnalysis(this)">Literary Analysis</div>
+      <div class="doha-analysis">Kabir uses anaphora (repetition of "shabad bina") to structurally enact the very lack he describes — the verse feels incomplete without the word being spoken. The palm tree (taar) image is precise: it grows in the desert, appears self-sufficient, but without water is hollow at its core — exactly how Kabir sees ritual religion.</div>
+    </div>
+
+    <h3>Ulta-Bansi — Upside-Down Speech</h3>
+    <p>Kabir inherits from the Siddha tradition the technique of <strong>ulta-bansi</strong> (inverted flute / paradoxical speech) — deliberately impossible or contradictory statements that cannot be understood by the rational mind and must be felt through intuition. They also served to encrypt meaning from hostile authorities.</p>
+
+    <div class="doha-card">
+      <div class="doha-theme">Ulta-Bansi</div>
+      <div class="doha-hindi">बिन पानी साबुन बिना, निर्मल करे सुभाव ।<br>कहत कबीर कैसे बने, मन के मैले नाव ।</div>
+      <div class="doha-roman">Bin paani saabun bina, nirmal kare subhav.<br>Kahat Kabir kaise bane, mann ke maile naav.</div>
+      <div class="doha-translation">Without water, without soap — it purifies the inner nature.<br>Kabir says: how can a boat with a dirty mind float?</div>
+      <div class="doha-toggle" onclick="toggleAnalysis(this)">Literary Analysis</div>
+      <div class="doha-analysis">The paradox of purification "without water or soap" points to inner, spiritual cleansing — the kind no external ritual can achieve. The boat metaphor is devastatingly practical: a dirty mind (mann ke maile) is the actual obstruction to liberation, not one's caste or religious identity.</div>
+    </div>
+
+    <h3>Critique of Both Religions</h3>
+    <p>Kabir is unusual in attacking <em>both</em> Hindu ritualism and Islamic legalism with equal sharpness, from within — he had insider knowledge of both traditions. This double critique is what makes him irreducible to either community.</p>
+
+    <div class="doha-card">
+      <div class="doha-theme">On Hindu idol worship</div>
+      <div class="doha-hindi">पाहन पूजे हरि मिले, तो मैं पूजूँ पहाड़ ।<br>याते तो चाकी भली, पीस खाये संसार ।</div>
+      <div class="doha-roman">Pahan puje Hari mile, to main pujoon pahad.<br>Yate to chaaki bhalee, pees khaye sansaar.</div>
+      <div class="doha-translation">If worshipping a stone brings God, then I shall worship a mountain.<br>Better still the millstone — at least it grinds grain to feed the world.</div>
+      <div class="doha-toggle" onclick="toggleAnalysis(this)">Literary Analysis</div>
+      <div class="doha-analysis">The escalating logic is darkly comic: if a small stone idol works, a mountain must work better — the absurdity exposes the premise. The millstone then introduces a utilitarian corrective: even a mundane object that produces something useful is more honourable than idle devotion. Kabir doesn't just dismiss religion — he demands it be accountable to practical human welfare.</div>
+    </div>
+
+    <div class="doha-card">
+      <div class="doha-theme">On Islamic ritual</div>
+      <div class="doha-hindi">कांकर पाथर जोरि के, मस्जिद लई बनाय ।<br>ता चढ़ि मुल्ला बांग दे, क्या बहरा हुआ खुदाय ।</div>
+      <div class="doha-roman">Kaankar pathar jori ke, masjid lai banay.<br>Ta chadhi mulla baang de, kya bahra hua Khudaay.</div>
+      <div class="doha-translation">Stacking pebbles and stones, you build a mosque.<br>Then the mullah climbs and shouts the call to prayer — is God deaf?</div>
+      <div class="doha-toggle" onclick="toggleAnalysis(this)">Literary Analysis</div>
+      <div class="doha-analysis">The architectural metaphor reduces the mosque to its physical components (pebbles and stones) — demystifying the sacred building without denying its utility. The mullah's shouting then becomes comic: the louder the call, the more it implies God cannot hear. Kabir's theology assumes a God of inner stillness — any loud external practice is, by definition, aimed at the wrong direction.</div>
+    </div>
+  </div>
+
+  <!-- ══ DOHAS ══ -->
+  <div class="section" id="tab-dohas">
+    <div class="section-title">Dohas, Sakhis & Pads</div>
+    <div class="section-sub">Click each poem to reveal literary analysis — explore the full range of Kabir's verse</div>
+
+    <h3>On Death and Impermanence</h3>
+    <div class="doha-card">
+      <div class="doha-theme">Mortality</div>
+      <div class="doha-hindi">कबीरा खड़ा बज़ार में, लिए लुकाठी हाथ ।<br>जो घर बारे आपना, चले हमारे साथ ।</div>
+      <div class="doha-roman">Kabira khada bazaar mein, liye lukaathi haath.<br>Jo ghar baare aapna, chale hamare saath.</div>
+      <div class="doha-translation">Kabir stands in the marketplace, torch in hand:<br>"Whoever burns down their own house — come, walk with me."</div>
+      <div class="doha-toggle" onclick="toggleAnalysis(this)">Literary Analysis</div>
+      <div class="doha-analysis">One of the most dramatic self-portraits in Indian poetry. Kabir places himself in the bazaar — the centre of worldly transaction — and issues a call to renunciation. "Burning one's house" is metaphorical: destroying attachment to ego, property, family identity. The torch signals both destruction and illumination. The poem operates as a public challenge, recruiting for a dangerous inner journey.</div>
+    </div>
+
+    <div class="doha-card">
+      <div class="doha-theme">Time & Urgency</div>
+      <div class="doha-hindi">काल करे सो आज कर, आज करे सो अब ।<br>पल में प्रलय होएगी, बहुरि करेगा कब ।</div>
+      <div class="doha-roman">Kaal kare so aaj kar, aaj kare so ab.<br>Pal mein pralay hoyegi, bahuri karega kab.</div>
+      <div class="doha-translation">What tomorrow demands, do today. What today demands, do now.<br>In a moment, dissolution will come — when will you act again?</div>
+      <div class="doha-toggle" onclick="toggleAnalysis(this)">Literary Analysis</div>
+      <div class="doha-analysis">The temporal compression is masterful: tomorrow → today → now → never. Each clause contracts the window of action until it collapses into pralay (dissolution, death, cosmic destruction). The final rhetorical question has no answer — which is the answer. This doha is possibly the most widely quoted Kabir verse in popular culture; it has been adopted into motivational speech but its original context is entirely about spiritual practice, not productivity.</div>
+    </div>
+
+    <h3>On the Self & Ego</h3>
+    <div class="doha-card">
+      <div class="doha-theme">Self-Knowledge</div>
+      <div class="doha-hindi">बुरा जो देखन मैं चला, बुरा न मिलया कोय ।<br>जो दिल खोजा आपना, मुझसा बुरा न कोय ।</div>
+      <div class="doha-roman">Bura jo dekhan main chala, bura na milya koye.<br>Jo dil khoja aapna, mujhsa bura na koye.</div>
+      <div class="doha-translation">I set out to find wickedness in the world — I found none.<br>When I searched my own heart, none was worse than me.</div>
+      <div class="doha-toggle" onclick="toggleAnalysis(this)">Literary Analysis</div>
+      <div class="doha-analysis">A perfect chiasmus: the outward search that returns inward. The grammar enacts the movement — the first line scans the world and finds it clear; the second turns the eye back and finds the searcher guilty. Kabir doesn't use this as self-flagellation but as epistemological instruction: the inner world is the only domain of genuine investigation. This is his version of "know thyself."</div>
+    </div>
+
+    <div class="doha-card">
+      <div class="doha-theme">Pride & Ego</div>
+      <div class="doha-hindi">जब मैं था तब हरि नहीं, अब हरि हैं मैं नाहि ।<br>सब अँधियारा मिट गया, दीपक देखा माहि ।</div>
+      <div class="doha-roman">Jab main tha tab Hari nahin, ab Hari hain main naahi.<br>Sab andhiyaara mit gaya, deepak dekha maahi.</div>
+      <div class="doha-translation">When I was, God was not; now God is, and I am not.<br>All darkness has dissolved — I saw the lamp within.</div>
+      <div class="doha-toggle" onclick="toggleAnalysis(this)">Literary Analysis</div>
+      <div class="doha-analysis">This is Kabir's most concise statement of mystical union. The structure is logical but the logic is inverted: the ego (main) and God (Hari) cannot coexist in the same space. When ego dissolves, the divine fills the space — like a lamp dissolving darkness. The "lamp within" (deepak dekha maahi) is the atman — not a metaphor but an interior event. Structurally, the doha enacts what it describes: "I" appears in line one and disappears in line two.</div>
+    </div>
+
+    <h3>On Love & The Divine</h3>
+    <div class="doha-card">
+      <div class="doha-theme">Love / Prem</div>
+      <div class="doha-hindi">पोथी पढ़ि पढ़ि जग मुआ, पंडित भया न कोय ।<br>ढाई आखर प्रेम का, पढ़े सो पंडित होय ।</div>
+      <div class="doha-roman">Pothi padhi padhi jag mua, pandit bhaya na koye.<br>Dhaai aakhar prem ka, padhe so pandit hoye.</div>
+      <div class="doha-translation">The world died reading book after book — no one became truly learned.<br>Whoever reads the two-and-a-half letters of love — that one becomes a pandit.</div>
+      <div class="doha-toggle" onclick="toggleAnalysis(this)">Literary Analysis</div>
+      <div class="doha-analysis">"Dhaai aakhar" (two and a half letters) is a precise word-count of the Hindi word "prem" (प-र-म), which indeed has two full syllables and one half — a beautiful literalism that makes the abstract suddenly measurable. The pandit (learned scholar) is redefined by Kabir from someone who has read the most to someone who has understood the least amount of the most important thing. This is one of the most anti-elitist statements in Indian literary history.</div>
+    </div>
+
+    <h3>On the Guru & Knowledge</h3>
+    <div class="doha-card">
+      <div class="doha-theme">Guru</div>
+      <div class="doha-hindi">गुरु गोविंद दोनों खड़े, काके लागूं पाय ।<br>बलिहारी गुरु आपने, गोविंद दियो बताय ।</div>
+      <div class="doha-roman">Guru Govind dono khade, kaake laagoon paay.<br>Balhari guru aapne, Govind diyo bataay.</div>
+      <div class="doha-translation">Both the Guru and God stand before me — whose feet shall I touch first?<br>Blessed is my Guru — he showed me God.</div>
+      <div class="doha-toggle" onclick="toggleAnalysis(this)">Literary Analysis</div>
+      <div class="doha-analysis">A theological problem posed and resolved within two lines. The dilemma (which to honour first — God or teacher?) is solved by sequence: the Guru comes first because without him, God would be invisible. This is not idolatry of the teacher but a pedagogical point — unmediated access to the absolute requires the mediating function of instruction. The resolution also encodes Kabir's view that the Guru is not separate from the divine but is its manifestation in time.</div>
+    </div>
+
+    <div class="doha-card">
+      <div class="doha-theme">False Learning</div>
+      <div class="doha-hindi">पाँच पहर धंधे गया, तीन पहर गया सोय ।<br>एक पहर हरि नाम बिन, मुक्ता कैसे होय ।</div>
+      <div class="doha-roman">Paanch pahar dhandhe gaya, teen pahar gaya soye.<br>Ek pahar Hari naam bin, mukta kaise hoye.</div>
+      <div class="doha-translation">Five watches of the day go to business, three to sleep.<br>With not even one watch for God's name — how will liberation come?</div>
+      <div class="doha-toggle" onclick="toggleAnalysis(this)">Literary Analysis</div>
+      <div class="doha-analysis">Kabir uses the traditional eight-pahar (watch) division of the Indian day as his structural framework — the arithmetic is both precise and damning. The human life is calculated, found wanting, and the rhetorical question at the end refuses to provide false comfort. This is not ascetic withdrawal — Kabir accepts business and sleep — but a demand for even minimal spiritual attention within ordinary life.</div>
+    </div>
+  </div>
+
+  <!-- ══ WORKS ══ -->
+  <div class="section" id="tab-works">
+    <div class="section-title">Works, Language & Literary Forms</div>
+    <div class="section-sub">The textual tradition — manuscripts, oral transmission, and Kabir's multilingual poetry</div>
+
+    <h3>Primary Works</h3>
+    <table class="works-table">
+      <tr><th>Work</th><th>Preserved By</th><th>Content</th><th>Status</th></tr>
+      <tr>
+        <td><strong>Bijak</strong></td>
+        <td>Kabir Panthi sect <span class="badge badge-text">Text</span></td>
+        <td>The most authoritative collection; three parts: Ramain (verses), Shabda (songs), Sakhi (couplets). Radical, anti-ritual in tone.</td>
+        <td>Primary scripture of Kabir Panth</td>
+      </tr>
+      <tr>
+        <td><strong>Kabir Granthavali</strong></td>
+        <td>Dadu Panthi tradition <span class="badge badge-text">Text</span></td>
+        <td>Another major manuscript tradition; somewhat more devotional in tone. Used by scholars for textual comparison.</td>
+        <td>Major scholarly source</td>
+      </tr>
+      <tr>
+        <td><strong>Adi Granth</strong></td>
+        <td>Sikh scripture <span class="badge badge-sikh">Sikh</span></td>
+        <td>Contains 541 of Kabir's compositions compiled by Guru Arjan Dev in 1604. Considered highly reliable — earliest written source.</td>
+        <td>Most authenticated text</td>
+      </tr>
+      <tr>
+        <td><strong>Sakhi Sangrah</strong></td>
+        <td>Oral tradition <span class="badge badge-oral">Oral</span></td>
+        <td>Collections of sakhis (witness verses) preserved in various regional traditions across Rajasthan, Bihar, UP.</td>
+        <td>Variable authenticity</td>
+      </tr>
+      <tr>
+        <td><strong>Pads / Bhajans</strong></td>
+        <td>Folk tradition <span class="badge badge-oral">Oral</span></td>
+        <td>Sung lyrics set to classical ragas; still performed in devotional music. Many composed post-Kabir and attributed to him.</td>
+        <td>Mixed authenticity</td>
+      </tr>
+    </table>
+
+    <h3>Literary Forms Used by Kabir</h3>
+    <div class="info-grid">
+      <div class="info-cell">
+        <div class="info-label">Doha</div>
+        <div class="info-value">Two-line rhyming couplet. 24 matras (syllabic units) total. The primary form — epigrammatic, self-contained, memorable. Kabir's dohas function as standalone philosophical utterances.</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">Sakhi</div>
+        <div class="info-value">"Witness" verse — a doha used specifically as a teaching device or testimony. The sakhi testifies to inner experience. Derived from Sanskrit <em>saksha</em> (witness). Kabir's sakhis are his most anti-institutional verses.</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">Pad</div>
+        <div class="info-value">Multi-stanza lyric set to a classical raga. Usually begins with a refrain (<em>tek</em>) repeated between verses. More emotionally expansive than the doha — Kabir's pads often carry devotional ecstasy and mystical vision.</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">Ramain</div>
+        <div class="info-value">Longer verses in chaupai metre (four-foot couplets). Used for extended philosophical argument. Found primarily in the Bijak.</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">Shabda</div>
+        <div class="info-value">Song-poems; the term overlaps with "pad" but is used specifically in the Bijak section. Emphasis on the Shabad (divine Word) as content and the sung performance as form.</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">Ulta-Bansi</div>
+        <div class="info-value">"Inverted speech" — paradoxical, impossible images inherited from Siddha tradition. Not a separate form but a rhetorical mode used within dohas and pads to bypass rational understanding.</div>
+      </div>
+    </div>
+
+    <h3>Language — Sadhukkadi / Panchmel Khichdi</h3>
+    <p>Kabir's language is famously heterogeneous — a mixture deliberately constructed to be pan-regional and anti-elite. No single dialect can claim it; no single community can own it. Scholars call it:</p>
+    <div class="lang-box">
+      <span class="lang-tag primary">Sadhukkadi</span>
+      <span class="lang-tag primary">Panchmel Khichdi</span>
+      <span class="lang-tag primary">Sant Bhasha</span>
+      <span class="lang-tag secondary">Khari Boli elements</span>
+      <span class="lang-tag secondary">Brajbhasha elements</span>
+      <span class="lang-tag secondary">Awadhi elements</span>
+      <span class="lang-tag secondary">Rajasthani elements</span>
+      <span class="lang-tag secondary">Punjabi elements</span>
+      <span class="lang-tag secondary">Persian / Arabic loanwords</span>
+    </div>
+    <p>This linguistic plurality was a political choice: Sanskrit was the language of Brahmin authority; Persian was the language of Mughal power. Kabir's mixed vernacular belonged to neither and could be understood by all. His use of Islamic theological terms (Allah, Khuda, Khudai) within Vaishnava devotional structures was itself a statement about the unity of traditions.</p>
+
+    <h3>A Pad — Extended Example</h3>
+    <div class="doha-card">
+      <div class="doha-theme">Pad on Liberation</div>
+      <div class="doha-hindi">मन रे, जागत रहो भाई ।<br>गाफिल होकर जात गँवाओ, सुरति न जाय बहाई ।।<br>जो जागे सो पावे हरि को, सोते गई उमराई ।<br>कहत कबीर सुनो भाई साधो, यह जिंदगी न लाई ।।</div>
+      <div class="doha-roman">Man re, jaagat raho bhaai.<br>Gaafil hokar jaat ganvaao, surati na jaay bahaai.<br>Jo jaage so paave Hari ko, sote gayi umraayi.<br>Kahat Kabir suno bhaai saadho, yeh zindagi na laayi.</div>
+      <div class="doha-translation">O mind, stay awake, brother!<br>In heedlessness you lose your birth, let your awareness wash away.<br>The one who stays awake finds God; the one who sleeps — their life is gone.<br>Kabir says, listen O brother seekers: this life shall not come again.</div>
+      <div class="doha-toggle" onclick="toggleAnalysis(this)">Literary Analysis</div>
+      <div class="doha-analysis">The address to "man re" (O mind) is characteristic of Kabir — the mind is not the enemy but the primary student. "Jaagat raho" (stay awake) operates on multiple levels: physical wakefulness, moral vigilance, and the mystical state of inner awakening (surati — the awakened, attending consciousness). The pad builds urgency from line to line, culminating in "yeh zindagi na laayi" — this life shall not come again, a statement of singular opportunity that makes the closing feel like a door clicking shut.</div>
+    </div>
+  </div>
+
+  <!-- ══ INFLUENCE ══ -->
+  <div class="section" id="tab-influence">
+    <div class="section-title">Legacy & Influence</div>
+    <div class="section-sub">500 years of Kabir — how one weaver's verses rewired Indian culture</div>
+
+    <div class="pull-quote">
+      "Kabir belongs to all centuries and all religions equally — which is why every century and religion has tried to own him."
+      <span class="attr">— Hazari Prasad Dwivedi, critic</span>
+    </div>
+
+    <h3>Immediate Disciples & Kabir Panth</h3>
+    <p>Kabir's followers formed the <strong>Kabir Panth</strong> — a sect that today claims approximately 14 million members, spread across Chhattisgarh, UP, Bihar, Madhya Pradesh, and the diaspora. The Panth has no temples, no idol worship, and no caste hierarchy — structurally embodying Kabir's teachings. Their main text is the Bijak.</p>
+
+    <h3>Influence on Sikhism</h3>
+    <p>Guru Nanak (the founder of Sikhism) was deeply influenced by Kabir's thought, and the Adi Granth compiled by Guru Arjan Dev (1604) includes 541 of Kabir's compositions — more than any other non-Sikh poet. Kabir's nirguna theology and rejection of caste are structural to Sikh doctrine. Scholars consider Kabir one of the primary intellectual ancestors of the Sikh tradition.</p>
+
+    <h3>Influence on Later Hindi Literature</h3>
+    <div class="influence-row">
+      <div class="influence-chip"><div class="dot" style="background:var(--saffron)"></div> Dadu Dayal (1544–1603) — extended the Sant tradition</div>
+      <div class="influence-chip"><div class="dot" style="background:var(--indigo)"></div> Raidas / Ravidas — cobbler-saint, parallel Nirguna voice</div>
+      <div class="influence-chip"><div class="dot" style="background:var(--moss)"></div> Malukadas — 17th c. sant poet</div>
+      <div class="influence-chip"><div class="dot" style="background:var(--terracotta)"></div> Surdas — absorbs some Kabir critique of orthodoxy</div>
+      <div class="influence-chip"><div class="dot" style="background:var(--turmeric)"></div> Nagarjun — 20th c. radical poet, cites Kabir directly</div>
+      <div class="influence-chip"><div class="dot" style="background:var(--lotus)"></div> Nirala — free verse rebellion echoes Kabir's form-breaking</div>
+    </div>
+
+    <h3>20th Century Reception</h3>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">1917</div>
+        <div class="tl-title">Rabindranath Tagore's translation</div>
+        <div class="tl-text">Tagore translated 100 poems of Kabir into English (with Evelyn Underhill), introducing Kabir to Western readership for the first time. The translations are loose but historically pivotal.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">1950s–70s</div>
+        <div class="tl-title">Hazari Prasad Dwivedi's scholarship</div>
+        <div class="tl-text">The critic and novelist Dwivedi produced the most rigorous scholarly study of Kabir in Hindi — <em>Kabir</em> (1942) — arguing for Kabir's Brahmin birth, which sparked a controversy that continues. He placed Kabir within the Nath tradition.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">1980s</div>
+        <div class="tl-title">Purushottam Agrawal's revisionist scholarship</div>
+        <div class="tl-text">Agrawal's <em>Akath Kahani Prem Ki</em> (2009) read Kabir as a poet of the city — Varanasi's bazaar culture, artisan community, and urban heterodoxy rather than a forest renunciant.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2000s–present</div>
+        <div class="tl-title">Kabir Project & contemporary music</div>
+        <div class="tl-text">Shabnam Virmani's Kabir Project (films, recordings) documented folk Kabir traditions across Rajasthan, Malwa, and Kutch. Musicians like Kumar Gandharva, Abida Parveen, Prahlad Tipanya, and Beaver Sheppard brought Kabir to global audiences.</div>
+      </div>
+    </div>
+
+    <h3>Contemporary Relevance</h3>
+    <p>Kabir's dohas are quoted in Indian courtrooms, political speeches, school textbooks, and WhatsApp forwards — often stripped of their radicalism. The domestication of Kabir (making him a gentle sage of harmony) is itself a subject of scholarly critique: the real Kabir was confrontational, not soothing. His critique of organised religion, caste hierarchy, and empty ritual has lost none of its relevance in contemporary India.</p>
+
+    <div class="doha-card">
+      <div class="doha-theme">Closing — on the journey</div>
+      <div class="doha-hindi">माटी कहे कुम्हार से, तू क्या रौंदे मोहि ।<br>एक दिन ऐसा आएगा, मैं रौंदूँगी तोहि ।</div>
+      <div class="doha-roman">Maati kahe kumhaar se, tu kya raunde mohi.<br>Ek din aisa aayega, main roundungi tohi.</div>
+      <div class="doha-translation">The clay says to the potter: "Why do you trample me?<br>A day shall come when I shall trample you."</div>
+      <div class="doha-toggle" onclick="toggleAnalysis(this)">Literary Analysis</div>
+      <div class="doha-analysis">The clay speaks — Kabir gives voice to the voiceless material, inverting the power relation between creator and creation. The poem is also about mortality (the earth reclaims all bodies) and about caste (the low are trampled but shall outlast those who trample). The clay's patient certainty carries no anger, only the factual confidence of the inevitable. It is Kabir's most quietly devastating poem about death.</div>
+    </div>
+  </div>
+
+  <!-- ══ QUIZ ══ -->
+  <div class="section" id="tab-quiz">
+    <div class="section-title">Test Yourself</div>
+    <div class="section-sub">Ten questions on Kabir's life, poetry, philosophy, and legacy</div>
+    <div id="quiz-container"></div>
+  </div>
+
+</div><!-- /content -->
+
+<script>
+// ── TABS ──
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ── ANALYSIS TOGGLE ──
+function toggleAnalysis(btn) {
+  const analysis = btn.nextElementSibling;
+  const open = analysis.classList.toggle('open');
+  btn.classList.toggle('open', open);
+  btn.textContent = open ? 'Hide Analysis' : 'Literary Analysis';
+  btn.classList.toggle('open');
+}
+
+// ── QUIZ ──
+const questions = [
+  {
+    q: "Kabir is said to have obtained initiation from Ramananda by a clever trick. What was it?",
+    opts: ["He disguised himself as a Brahmin", "He lay on the ghaat steps so Ramananda stepped on him and cried 'Ram!'", "He sang outside the ashram for seven days", "He sent a letter written in Sanskrit"],
+    correct: 1,
+    explain: "The legend says Kabir lay on the Panchganga ghat steps before dawn so Ramananda accidentally stepped on him and exclaimed 'Ram! Ram!' — Kabir took this as his mantra and his initiation."
+  },
+  {
+    q: "What is 'Sadhukkadi' or 'Panchmel Khichdi'?",
+    opts: ["A type of loom used by weavers", "A Hindi festival associated with Kabir", "Kabir's composite multi-dialect language mixing Hindi, Persian, Punjabi, and Rajasthani", "A commentary on the Bijak"],
+    correct: 2,
+    explain: "Sadhukkadi (or Panchmel Khichdi — 'mixed five-grain dish') refers to Kabir's deliberate linguistic mixture: Khari Boli, Brajbhasha, Awadhi, Rajasthani, Punjabi, and Persian-Arabic words. It was a political choice to belong to no single tradition."
+  },
+  {
+    q: "Kabir chose to die in Maghar rather than Varanasi. Why was this significant?",
+    opts: ["Maghar was closer to his birthplace", "Hindu belief held that dying in Maghar led to rebirth as a donkey — Kabir was mocking geography-based salvation", "The Sultan had banished him from Varanasi", "His disciples lived in Maghar"],
+    correct: 1,
+    explain: "Kabir's death in Maghar was his final provocation: popular belief held that dying there (rather than in Varanasi) was inauspicious. By choosing it, he made a philosophical statement — liberation does not depend on where you die but on what you are inside."
+  },
+  {
+    q: "The Adi Granth (Sikh scripture) contains compositions by Kabir. How many?",
+    opts: ["41", "108", "541", "1100"],
+    correct: 2,
+    explain: "Guru Arjan Dev's Adi Granth (1604) contains 541 of Kabir's compositions — more than any non-Sikh poet included. This makes it the earliest and most authoritative written source for Kabir's poetry."
+  },
+  {
+    q: "In the famous doha 'Dhaai aakhar prem ka' — what does 'dhaai aakhar' (two-and-a-half letters) refer to?",
+    opts: ["A fragment of a Sanskrit mantra", "The actual syllable count of the Hindi word 'prem' (love)", "A reference to the Quran's opening verse", "An alchemical formula"],
+    correct: 1,
+    explain: "The word 'prem' (प-र-म) in Hindi has exactly two full syllables and one half — 'dhaai aakhar' is a precise count. Kabir makes love quantifiable (and measurable) to contrast it with the endless books scholars read to become 'pundits'."
+  },
+  {
+    q: "Kabir's poetry technique of 'ulta-bansi' (inverted flute) refers to:",
+    opts: ["Playing a flute upside-down as a ritual act", "Deliberately paradoxical or impossible imagery that cannot be understood rationally", "A musical raga associated with Kabir's pads", "Writing poetry from right to left"],
+    correct: 1,
+    explain: "Ulta-bansi (inverted/upside-down speech) is a rhetorical mode inherited from the Siddha Buddhist poets — deliberately paradoxical images that bypass rational understanding and must be grasped intuitively. It also served to encrypt meaning from hostile religious authorities."
+  },
+  {
+    q: "Which of the following best describes Kabir's attitude toward both Hinduism and Islam?",
+    opts: ["He was secretly a Hindu who used Islamic imagery to gain Muslim followers", "He combined both into a new religion he called 'Kabir Dharma'", "He critiqued the external rituals and orthodoxy of both with equal sharpness, arguing both pointed to the same formless God", "He was indifferent to both and only cared about personal poetry"],
+    correct: 2,
+    explain: "Kabir attacked Hindu idol worship and pilgrimage as sharply as he attacked Islamic legalism and the mullah's call to prayer — mocking both from a position of intimate knowledge of each. His argument: both traditions point to the same formless God, whose access requires inner transformation, not ritual compliance."
+  },
+  {
+    q: "The doha 'Maati kahe kumhaar se' (The clay speaks to the potter) is primarily about:",
+    opts: ["The craft of pottery as a spiritual metaphor only", "Mortality, the inevitability of death, and (implicitly) the reversal of power between oppressor and oppressed", "The importance of making useful objects", "A debate between two artisans"],
+    correct: 1,
+    explain: "The clay's speech to the potter works on three levels: mortality (the earth reclaims all bodies), caste critique (the low-caste artisan trampled but assured of ultimate reclamation), and the folly of pride (the potter who shapes others will himself be shaped by the earth). All three meanings coexist."
+  },
+  {
+    q: "What happened — according to legend — when Hindus and Muslims both claimed Kabir's body after his death?",
+    opts: ["A long legal dispute in the Mughal court", "His body split in two and each community got half", "They found only flowers under the funeral sheet; the flowers were divided between the two communities", "A river divided the two groups, ending the dispute"],
+    correct: 2,
+    explain: "The legend says when both communities lifted the funeral sheet to claim the body, they found only flowers — which were then divided between them. Both a samadhi (Hindu) and a dargah (Muslim) stand at Maghar today, making it a site of literal shared devotion."
+  },
+  {
+    q: "Which scholar produced the first major modern critical study of Kabir, titled simply 'Kabir' (1942)?",
+    opts: ["Ramchandra Shukla", "Hazari Prasad Dwivedi", "Purushottam Agrawal", "Sumitranandan Pant"],
+    correct: 1,
+    explain: "Hazari Prasad Dwivedi's 'Kabir' (1942) was the landmark scholarly study that placed Kabir within the Nath tradition and argued (controversially) for a Brahmin-origin theory. Dwivedi's work defined academic Kabir studies for decades."
+  }
+];
+
+let current = 0, score = 0, answered = false;
+
+function renderQuestion() {
+  if (current >= questions.length) {
+    document.getElementById('quiz-container').innerHTML = `
+      <div class="quiz-done">
+        <div class="quiz-score">${score} / ${questions.length}</div>
+        <p style="font-size:18px;color:var(--ink-light)">${score >= 8 ? 'Excellent — Kabir would be grudgingly impressed.' : score >= 5 ? 'A solid understanding. Keep reading the dohas.' : 'Return to the dohas — the lamp awaits.'}</p>
+        <button class="quiz-next show" onclick="restartQuiz()" style="margin-top:20px">Try Again</button>
+      </div>`;
+    return;
+  }
+  const q = questions[current];
+  document.getElementById('quiz-container').innerHTML = `
+    <div class="quiz-card">
+      <div style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--smoke);margin-bottom:12px">Question ${current+1} of ${questions.length} &nbsp;·&nbsp; Score: ${score}</div>
+      <div class="quiz-q">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((o,i) => `<button class="quiz-opt" onclick="answer(${i})">${o}</button>`).join('')}
+      </div>
+      <div class="quiz-feedback" id="qfeedback"></div>
+      <button class="quiz-next" id="qnext" onclick="nextQuestion()">Next Question →</button>
+    </div>`;
+  answered = false;
+}
+
+function answer(i) {
+  if (answered) return;
+  answered = true;
+  const q = questions[current];
+  const opts = document.querySelectorAll('.quiz-opt');
+  const fb = document.getElementById('qfeedback');
+  const nxt = document.getElementById('qnext');
+  opts.forEach((o, idx) => {
+    o.disabled = true;
+    if (idx === q.correct) o.classList.add('correct');
+    else if (idx === i && i !== q.correct) o.classList.add('wrong');
+  });
+  const correct = i === q.correct;
+  if (correct) score++;
+  fb.className = `quiz-feedback show ${correct ? 'correct' : 'wrong'}`;
+  fb.textContent = (correct ? '✓ Correct. ' : '✗ Not quite. ') + q.explain;
+  nxt.classList.add('show');
+}
+
+function nextQuestion() { current++; renderQuestion(); }
+function restartQuiz() { current = 0; score = 0; renderQuestion(); }
+
+renderQuestion();
+</script>
+</body>
+</html>

@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --grn: #1A7A4A;
+    --grn-light: #DFF2E9;
+    --grn-dim: #0F5733;
+    --ink: #141F18;
+    --parchment: #F2FAF5;
+    --parchment2: #E4F5EC;
+    --rust: #7a3a1a;
+    --ko: #993C1D;
+    --purple: #534AB7;
+    --border: rgba(26,122,74,0.18);
+    --border-strong: rgba(26,122,74,0.42);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--parchment); color: var(--ink); font-family: 'Libre Baskerville', Georgia, serif; font-size: 15px; line-height: 1.75; }
+  .page { max-width: 900px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+
+  .hero { text-align: center; padding: 2.8rem 1rem 2.3rem; border-bottom: 1px solid var(--border-strong); margin-bottom: 3rem; position: relative; }
+  .hero::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 200px; height: 2px; background: linear-gradient(90deg, transparent, var(--grn), transparent); }
+  .hero-devanagari { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--grn-dim); letter-spacing: 0.15em; margin-bottom: 0.4rem; font-style: italic; }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: 3.6rem; font-weight: 300; color: var(--ink); line-height: 1.1; margin-bottom: 0.5rem; }
+  .hero-title em { color: var(--grn); font-style: italic; }
+  .hero-sub { font-size: 0.85rem; color: var(--grn-dim); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1.5rem; }
+  .hero-quote { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.05rem; color: #1a3525; max-width: 600px; margin: 0 auto; line-height: 1.65; }
+  .hero-quote cite { display: block; font-size: 0.8rem; font-style: normal; color: var(--grn-dim); margin-top: 0.5rem; letter-spacing: 0.08em; }
+
+  .section { margin-bottom: 3rem; }
+  .section-header { display: flex; align-items: baseline; gap: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+  .section-number { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--grn-dim); letter-spacing: 0.1em; }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: 1.45rem; font-weight: 600; color: var(--ink); }
+  .section-title-hindi { font-size: 0.9rem; color: var(--grn-dim); font-style: italic; font-weight: 400; }
+
+  .ref-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .ref-table tr { border-bottom: 1px solid var(--border); }
+  .ref-table tr:last-child { border-bottom: none; }
+  .ref-table td { padding: 0.6rem 0.75rem; }
+  .ref-table td:first-child { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--grn-dim); width: 220px; vertical-align: top; padding-top: 0.7rem; }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 0.75rem; font-family: 'DM Mono', monospace; margin: 1px 2px; }
+  .b-grn { background: var(--grn-light); color: var(--grn-dim); border: 1px solid var(--border-strong); }
+  .b-ko { background: #FAECE7; color: #712B13; border: 1px solid rgba(153,60,29,0.35); }
+  .b-pur { background: #EEEDFE; color: #3C3489; border: 1px solid rgba(83,74,183,0.35); }
+  .b-amber { background: #faeeda; color: #633806; border: 1px solid rgba(133,79,11,0.4); }
+  .b-gray { background: var(--parchment2); color: #555; border: 1px solid rgba(0,0,0,0.12); }
+
+  .swar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin: 1rem 0; }
+  .swar-cell { border: 1px solid var(--border); border-radius: 6px; padding: 0.65rem 0.4rem; text-align: center; background: var(--parchment2); }
+  .swar-cell.vadi { background: var(--grn-light); border-color: var(--border-strong); }
+  .swar-cell.samvadi { background: #c8ecd8; border-color: rgba(26,122,74,0.45); }
+  .swar-cell.komal-cell { background: #FAECE7; border-color: rgba(153,60,29,0.4); }
+  .swar-name { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--grn-dim); }
+  .swar-abbr { font-size: 1.1rem; font-weight: 700; color: var(--ink); margin: 2px 0; }
+  .swar-cell.vadi .swar-abbr { color: var(--grn); }
+  .swar-cell.samvadi .swar-abbr { color: var(--grn-dim); }
+  .swar-cell.komal-cell .swar-abbr { color: #712B13; }
+  .swar-west { font-size: 0.7rem; color: #3a6050; }
+  .swar-tag { font-size: 0.6rem; font-family: 'DM Mono', monospace; margin-top: 2px; color: inherit; }
+
+  .notation { background: var(--parchment2); border: 1px solid var(--border); border-left: 3px solid var(--grn); border-radius: 4px; padding: 1rem 1.25rem; font-family: 'DM Mono', monospace; font-size: 0.85rem; line-height: 2; margin: 0.75rem 0; color: var(--ink); }
+  .notation .label { font-size: 0.7rem; color: var(--grn-dim); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.3rem; display: block; }
+  .hi { color: var(--grn); font-weight: 500; }
+  .ko { color: #993C1D; font-weight: 500; }
+  .sa { color: var(--purple); font-weight: 500; }
+  .dim { color: #888; }
+
+  .octave-row { display: flex; gap: 0; margin: 0.5rem 0; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); }
+  .oct-cell { flex: 1; padding: 0.55rem 0.3rem; text-align: center; font-family: 'DM Mono', monospace; font-size: 0.78rem; border-right: 1px solid var(--border); color: var(--ink); background: var(--parchment2); }
+  .oct-cell:last-child { border-right: none; }
+  .oct-cell.vadi { background: var(--grn-light); color: var(--grn); font-weight: 500; }
+  .oct-cell.samvadi { background: #c8ecd8; color: var(--grn-dim); font-weight: 500; }
+  .oct-cell.ko { background: #FAECE7; color: #712B13; font-weight: 500; }
+
+  .chalan-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 0; margin: 1rem 0; }
+  .chalan-node { padding: 0.5rem 0.75rem; text-align: center; border: 1px solid var(--border); font-family: 'DM Mono', monospace; font-size: 0.82rem; background: var(--parchment2); color: var(--ink); }
+  .chalan-node:first-child { border-radius: 6px 0 0 6px; }
+  .chalan-node:last-child { border-radius: 0 6px 6px 0; }
+  .chalan-node.n-vadi { background: var(--grn-light); color: var(--grn); border-color: var(--border-strong); font-weight: 500; }
+  .chalan-node.n-samvadi { background: #c8ecd8; color: var(--grn-dim); border-color: rgba(26,122,74,0.45); font-weight: 500; }
+  .chalan-node.n-ko { background: #FAECE7; color: #712B13; border-color: rgba(153,60,29,0.4); font-weight: 500; }
+  .chalan-node .node-name { font-size: 1rem; }
+  .chalan-node .node-label { font-size: 0.6rem; color: inherit; opacity: 0.75; }
+  .chalan-arrow { font-size: 1rem; color: var(--border-strong); padding: 0 2px; }
+
+  .alankar-block { margin: 0.6rem 0; }
+  .alankar-num { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--grn-dim); margin-bottom: 3px; letter-spacing: 0.1em; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 1rem 0; }
+  .col-card { border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.1rem; background: var(--parchment2); }
+  .col-card h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--ink); margin-bottom: 0.6rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
+  .col-card ul { list-style: none; font-size: 0.88rem; }
+  .col-card ul li { padding: 0.25rem 0; border-bottom: 1px solid rgba(26,122,74,0.08); }
+  .col-card ul li:last-child { border-bottom: none; }
+  .col-card ul li::before { content: '◆'; font-size: 0.5rem; color: var(--grn); margin-right: 6px; vertical-align: middle; }
+
+  .rasa-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 1rem 0; }
+  .rasa-card { border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1rem; background: var(--parchment2); }
+  .rasa-card .rasa-title { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; color: var(--grn-dim); margin-bottom: 0.35rem; }
+  .rasa-card .rasa-desc { font-size: 0.83rem; color: #1a3a28; line-height: 1.55; }
+
+  .prahar-row { display: flex; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); margin: 1rem 0; }
+  .prahar-cell { flex: 1; padding: 0.65rem 0.5rem; text-align: center; border-right: 1px solid var(--border); font-size: 0.78rem; font-family: 'DM Mono', monospace; color: #888; background: var(--parchment2); }
+  .prahar-cell:last-child { border-right: none; }
+  .prahar-cell.highlight { background: var(--grn-light); color: var(--grn-dim); font-weight: 500; }
+  .prahar-cell .prahar-time { font-size: 0.65rem; display: block; margin-bottom: 2px; }
+
+  .bandish-block { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 1rem 0; }
+  .bandish-header { background: var(--grn-light); padding: 0.6rem 1rem; font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--grn-dim); letter-spacing: 0.1em; border-bottom: 1px solid var(--border-strong); }
+  .bandish-body { padding: 0.75rem 1rem; background: var(--parchment2); }
+  .bandish-label { font-size: 0.7rem; font-family: 'DM Mono', monospace; color: var(--grn-dim); text-transform: uppercase; letter-spacing: 0.1em; margin: 0.5rem 0 0.2rem; }
+
+  .callout { background: var(--grn-light); border: 1px solid var(--border-strong); border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.87rem; color: var(--grn-dim); margin: 0.75rem 0; font-style: italic; }
+
+  .family-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 1rem 0; }
+  .fam-card { border: 1px solid var(--border); border-radius: 7px; padding: 0.7rem 0.8rem; background: var(--parchment2); }
+  .fam-name { font-size: 0.88rem; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+  .fam-desc { font-size: 0.78rem; color: #1a3a28; }
+  .fam-note { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--grn-dim); margin-top: 3px; }
+
+  .mistake-table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+  .mistake-table th { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--grn-dim); letter-spacing: 0.1em; text-align: left; padding: 0.4rem 0.75rem; border-bottom: 1px solid var(--border-strong); background: var(--grn-light); }
+  .mistake-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .mistake-table tr:last-child td { border-bottom: none; }
+  .mistake-table td:first-child { color: var(--rust); font-style: italic; }
+  .mistake-table td:last-child { color: #141F18; }
+
+  .artist-card { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
+  .artist-card:last-child { border-bottom: none; }
+  .artist-initial { width: 38px; height: 38px; border-radius: 50%; background: var(--grn-light); border: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 0.9rem; color: var(--grn-dim); font-weight: 600; flex-shrink: 0; }
+  .artist-name { font-weight: 500; font-size: 0.92rem; color: var(--ink); }
+  .artist-detail { font-size: 0.8rem; color: #2a4a38; }
+
+  .film-table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+  .film-table th { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--grn-dim); letter-spacing: 0.1em; text-align: left; padding: 0.35rem 0.75rem; border-bottom: 1px solid var(--border-strong); background: var(--grn-light); }
+  .film-table td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .film-table tr:last-child td { border-bottom: none; }
+  .film-table td:first-child { font-style: italic; }
+
+  .glossary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 0.75rem 0; }
+  .gloss-item { padding: 0.5rem 0.75rem; border: 1px solid var(--border); border-radius: 5px; background: var(--parchment2); font-size: 0.83rem; }
+  .gloss-item strong { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--grn-dim); display: block; margin-bottom: 2px; }
+
+  .week-table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+  .week-table th { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--grn-dim); letter-spacing: 0.1em; text-align: left; padding: 0.35rem 0.75rem; border-bottom: 1px solid var(--border-strong); background: var(--grn-light); }
+  .week-table td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border); }
+  .week-table tr:last-child td { border-bottom: none; }
+  .week-table td:first-child { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--grn-dim); width: 120px; }
+
+  .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 1rem 0; }
+  .summary-card { border: 1px solid var(--border); border-radius: 8px; padding: 1rem; background: var(--parchment2); }
+  .summary-card h4 { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--grn-dim); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .summary-card p { font-size: 0.85rem; color: var(--ink); line-height: 1.6; }
+
+  .taan-label { font-size: 0.78rem; font-family: 'DM Mono', monospace; color: var(--grn-dim); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.75rem; margin-bottom: 2px; }
+  .ornament { text-align: center; color: var(--grn-dim); margin: 2rem 0 1rem; letter-spacing: 0.3em; }
+  p { margin-bottom: 0.75rem; font-size: 0.92rem; }
+  p:last-child { margin-bottom: 0; }
+
+  @media (max-width: 600px) {
+    .two-col, .rasa-grid, .glossary-grid, .summary-grid, .family-grid { grid-template-columns: 1fr; }
+    .swar-grid { grid-template-columns: repeat(4, 1fr); }
+    .hero-title { font-size: 2.4rem; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-devanagari">राग काफ़ी — Hindustani Classical Music</div>
+    <div class="hero-title">Raga <em>Kafi</em></div>
+    <div class="hero-sub">Comprehensive Practice Notes</div>
+    <blockquote class="hero-quote">
+      "Kafi's dominant theme is love, together with the passions aroused — it is perhaps more like a compendium of interlinked folk tunes than a formally codified raga: free-roaming, romantic, and joyously untamed."
+      <cite>— After Faqirullah's Raga Darpan (1666); Ragajunglism</cite>
+    </blockquote>
+  </div>
+
+  <!-- 1 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">01</span><span class="section-title">Parichay <span class="section-title-hindi">(परिचय)</span> — Introduction</span></div>
+    <p>Raga Kafi is the <strong>Ashraya Raga</strong> (principal raga) of the Kafi Thaat — the scale that gives its thaat its name. According to Bhatkhande, its name first appears in the Raga Tarangini of Lochana Pandit, who lived in the Mithila district around the 15th century CE. It uses all seven notes, with komal Gandhar and komal Nishad as its defining characteristic notes.</p>
+    <p>Kafi is unique among major ragas for its deep roots in folk tradition. Folk music in Tappa, Hori, Dadra, Kirtan, and Bhajans from different parts of India have been composed in this raga. This folk lineage makes it one of the most naturally accessible ragas — yet also one of the most difficult to render in <em>pure</em> form, because contamination with vivadi swaras is par for the course, and a pure version of Kafi is seldom heard in performance; almost all instances fall to the "Mishra Kafi" lot.</p>
+    <div class="callout">
+      <strong>Kafi and the Kshudra Raga tradition:</strong> Rajan Parrikar categorises Kafi as a <em>kshudra raga</em> — a "light" raga where strict conformity to etiquette is not expected. Kafi offers expansive freedoms — its free-roaming melodies may borrow from affiliated ragas as well as drawing on a wide range of light-classical styles such as thumri, bhajan, dadra, and ghazal. This freedom is Kafi's greatest gift and its greatest challenge.
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">02</span><span class="section-title">Quick Reference Card</span></div>
+    <table class="ref-table">
+      <tr><td>Thaat</td><td><span class="badge b-grn">Kafi</span> — Kafi is the Ashraya Raga of its own thaat</td></tr>
+      <tr><td>Jati</td><td>Sampurna–Sampurna (all 7 notes in both ascent and descent)</td></tr>
+      <tr><td>Aaroh</td><td><code>Sā  Re  <span style="color:#712B13">g</span>  Ma  Pa  Dha  <span style="color:#712B13">n</span>  Sā'</code></td></tr>
+      <tr><td>Avroh</td><td><code>Sā'  <span style="color:#712B13">n</span>  Dha  Pa  Ma  <span style="color:#712B13">g</span>  Re  Sā</code></td></tr>
+      <tr><td>Vadi (वादी)</td><td><strong>Pa</strong> (Pancham) — the most prominent, most dwelt-upon note</td></tr>
+      <tr><td>Samvadi (संवादी)</td><td><strong>Re</strong> (shuddha Rishabh) — the second most important note</td></tr>
+      <tr><td>Komal Swaras</td><td><span class="badge b-ko">komal Ga (g)</span> <span class="badge b-ko">komal Ni (n)</span> — both are defining notes of Kafi</td></tr>
+      <tr><td>Shuddha Swaras</td><td>Re, Ma, Pa, Dha — all shuddha. <span class="badge b-amber">Note:</span> In Mishra Kafi, shuddha Ga and shuddha Ni may appear as ornaments</td></tr>
+      <tr><td>Gaayan Samay</td><td>Raat ka Dwitiya Prahar — <strong>Night, 9 PM–12 AM</strong></td></tr>
+      <tr><td>Season</td><td>Spring — especially associated with <strong>Holi</strong> and the festive season</td></tr>
+      <tr><td>Rasa / Mood</td><td>Shringaar (श्रृंगार) — romantic love, both union and separation; folk festivity; Holi spirit</td></tr>
+      <tr><td>Forms most used</td><td>Thumri, Hori, Dadra, Ghazal, Bhajan — light-classical forms are Kafi's natural home</td></tr>
+      <tr><td>Carnatic Equivalent</td><td><strong>Kharaharapriya</strong> (22nd Melakarta)</td></tr>
+      <tr><td>Western Equivalent</td><td>Dorian Mode — C D E♭ F G A B♭ (a "palindromic" scale beloved in jazz, blues, and folk)</td></tr>
+      <tr><td>Related ragas</td><td>Bhimpalasi, Bageshri, Bahar, Pilu, Dhanashri, Brindavani Sarang, Jog, Megh</td></tr>
+    </table>
+  </div>
+
+  <!-- 3 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">03</span><span class="section-title">Swar Vistar <span class="section-title-hindi">(स्वर विस्तार)</span> — Note Structure</span></div>
+    <p>Kafi uses all seven notes. Two are komal — Ga and Ni — while Re, Ma, Pa, and Dha are shuddha. In Mishra Kafi, shuddha Ga and shuddha Ni may appear as ornamental grace notes, which is where much of the raga's expressive richness comes from.</p>
+    <div class="swar-grid">
+      <div class="swar-cell"><div class="swar-name">Shadaj</div><div class="swar-abbr">Sa</div><div class="swar-west">C</div></div>
+      <div class="swar-cell samvadi"><div class="swar-name">Rishabh</div><div class="swar-abbr">Re</div><div class="swar-west">D ♮</div><div class="swar-tag">SAMVADI ★</div></div>
+      <div class="swar-cell komal-cell"><div class="swar-name">Gandhar</div><div class="swar-abbr">g</div><div class="swar-west">E♭</div><div class="swar-tag">komal ★</div></div>
+      <div class="swar-cell"><div class="swar-name">Madhyam</div><div class="swar-abbr">Ma</div><div class="swar-west">F ♮</div><div class="swar-tag">shuddha</div></div>
+      <div class="swar-cell vadi"><div class="swar-name">Pancham</div><div class="swar-abbr">Pa</div><div class="swar-west">G ♮</div><div class="swar-tag">VADI ★</div></div>
+      <div class="swar-cell"><div class="swar-name">Dhaivat</div><div class="swar-abbr">Dha</div><div class="swar-west">A ♮</div><div class="swar-tag">shuddha</div></div>
+      <div class="swar-cell komal-cell"><div class="swar-name">Nishad</div><div class="swar-abbr">n</div><div class="swar-west">B♭</div><div class="swar-tag">komal ★</div></div>
+    </div>
+    <p style="font-size:0.82rem;color:var(--grn-dim);margin-top:0.25rem">With C as Sa: <em>C D E♭ F G A B♭</em> — the Dorian mode. The Dorian mode is a "palindromic" scale beloved in jazz, blues, rock, pop, and funk — making Kafi one of the most universally resonant ragas in world music.</p>
+    <div class="callout">
+      <strong>Pure Kafi vs Mishra Kafi:</strong> In pure Kafi, only komal Ga and komal Ni are used. In Mishra Kafi — the form almost always heard in performance — shuddha Ga (G♯) and shuddha Ni (B♮) may be touched as ornamental grace notes (<em>kan swaras</em>), giving the raga its characteristic emotional variety and folk richness. Kafi comes in several flavours — Sindh Kafi (a touch of komal Dha), Zilla Kafi (with shuddha Ga), and others.
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">04</span><span class="section-title">Aaroh–Avroh aur Pakad</span></div>
+    <div class="notation"><span class="label">Aaroh (आरोह) — Ascending (pure Kafi)</span>
+Sā  Re  <span class="ko">g</span>  Ma  Pa  Dha  <span class="ko">n</span>  Sā'</div>
+    <div class="notation"><span class="label">Avroh (अवरोह) — Descending (pure Kafi)</span>
+Sā'  <span class="ko">n</span>  Dha  Pa  Ma  <span class="ko">g</span>  Re  Sā</div>
+    <div class="notation"><span class="label">Pakad (पकड़) — Pure Kafi</span>
+S  R  <span class="ko">g</span>  Ma  <span class="hi">P</span>  ,  Ma  <span class="ko">g</span>  R  ,  <span class="ko">g</span>  R  S
+<span class="dim">(Pa is the vadi — phrases settle on Pa and radiate outward from it)</span></div>
+    <div class="notation"><span class="label">Pakad — Mishra Kafi (performed form)</span>
+Ma  <span class="hi">P</span>  Dha  ,  Ma  <span class="hi">P</span>  (Ma)  <span class="ko">g</span>  R  ,  <span class="ko">g</span>  R  S  ,  <span class="dim">.n .D .P .D .n</span>  S
+<span class="dim">(mPD; mP(m)gR are the most characteristic mid-scale pakad patterns in Mishra Kafi)</span></div>
+    <div class="notation"><span class="label">Chalan (चलन)</span>
+S  S  R  R  <span class="ko">g  g</span>  Ma  Ma  <span class="hi">P</span>  –  –  Dha  Ma  <span class="hi">P</span>  <span class="ko">g</span>  R  R  <span class="ko">n</span>  Dha  <span class="ko">n</span>  <span class="hi">P</span>  Dha  Ma  <span class="hi">P</span>  S  <span class="ko">n</span>  Dha  <span class="hi">P</span>  Ma  <span class="ko">g</span>  R  S</div>
+  </div>
+
+  <!-- 5 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">05</span><span class="section-title">Saptak Vistar <span class="section-title-hindi">(सप्तक विस्तार)</span> — Octave Map</span></div>
+    <p style="font-size:0.82rem;color:#3a6050;margin-bottom:0.5rem">Mandra Saptak (lower octave)</p>
+    <div class="octave-row">
+      <div class="oct-cell">.Sa</div><div class="oct-cell samvadi">.Re</div><div class="oct-cell ko">.g</div><div class="oct-cell">.Ma</div><div class="oct-cell vadi">.Pa ★</div><div class="oct-cell">.Dha</div><div class="oct-cell ko">.n</div>
+    </div>
+    <p style="font-size:0.82rem;color:#3a6050;margin-bottom:0.5rem">Madhya Saptak (middle octave)</p>
+    <div class="octave-row">
+      <div class="oct-cell">Sa</div><div class="oct-cell samvadi">Re ★</div><div class="oct-cell ko">g ★</div><div class="oct-cell">Ma</div><div class="oct-cell vadi">Pa ★</div><div class="oct-cell">Dha</div><div class="oct-cell ko">n ★</div>
+    </div>
+    <p style="font-size:0.82rem;color:#3a6050;margin-bottom:0.5rem">Taar Saptak (upper octave)</p>
+    <div class="octave-row">
+      <div class="oct-cell">Sa'</div><div class="oct-cell samvadi">Re'</div><div class="oct-cell ko">g'</div><div class="oct-cell">Ma'</div><div class="oct-cell vadi">Pa'</div><div class="oct-cell">Dha'</div><div class="oct-cell ko">n'</div>
+    </div>
+    <p style="font-size:0.8rem;color:var(--grn-dim);margin-top:0.4rem">Vadi (Pa) in green. Samvadi (Re) in lighter green. Komal notes (g, n) in rust. Kafi expands freely across all three octaves; it is not predominantly purvanga or uttaranga — it roams.</p>
+  </div>
+
+  <!-- 6 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">06</span><span class="section-title">Chalan <span class="section-title-hindi">(चलन)</span> — Melodic Movement</span></div>
+    <div class="chalan-flow">
+      <div class="chalan-node"><div class="node-label">lower</div><div class="node-name">.n</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node"><div class="node-label">lower</div><div class="node-name">.Dha</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node"><div class="node-label">shuddha</div><div class="node-name">Sa</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-samvadi"><div class="node-label">SAMVADI</div><div class="node-name">Re ★</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-ko"><div class="node-label">komal</div><div class="node-name">g ★</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node"><div class="node-label">shuddha</div><div class="node-name">Ma</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-vadi"><div class="node-label">VADI</div><div class="node-name">Pa ★</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node"><div class="node-label">shuddha</div><div class="node-name">Dha</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-ko"><div class="node-label">komal</div><div class="node-name">n ★</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node"><div class="node-label">taar</div><div class="node-name">Sā'</div></div>
+    </div>
+    <div class="two-col" style="margin-top:1rem">
+      <div class="col-card">
+        <h4>Key characteristics of Kafi's chalan</h4>
+        <ul>
+          <li><strong>Pa is vadi</strong> — phrases settle on Pa and radiate outward; it is the emotional anchor</li>
+          <li><strong>mPD and mP(m)gR</strong> are the most characteristic mid-scale pakad patterns — practise these daily</li>
+          <li>Alaap often opens from lower octave: <em>.n .D .P .D .n → Sa</em></li>
+          <li>Komal Ga next to shuddha Re is Kafi's defining interval — the raga "sits" in this space</li>
+          <li>Phrases end on Re and Sa frequently — Re as samvadi is a common resting point</li>
+          <li>In Mishra Kafi, shuddha Ga/Ni appear briefly as grace notes — this is expected and adds expressiveness</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>The folk-classical continuum</h4>
+        <ul>
+          <li>Kafi is unique: it sits at the exact intersection of classical and folk music</li>
+          <li>The same scale underlies innumerable Holi songs, bhajans, thumris, and dadras</li>
+          <li>This means the raga has enormous tonal range — from dhrupad gravity to light dadra playfulness</li>
+          <li>A pure Kafi khayal is a serious undertaking; a Mishra Kafi thumri is relaxed and free</li>
+          <li>Both are equally valid — knowing when to do which is the art</li>
+          <li>The Kafi thaat is described as the "most crowded" in Hindustani music due to the large number of related ragas</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">07</span><span class="section-title">Alankars <span class="section-title-hindi">(अलंकार)</span> — Scale Exercises</span></div>
+    <p>Practise with tanpura drone. Maintain komal Ga and komal Ni throughout. Begin slowly; Pa is the vadi — let phrases naturally gravitate toward it.</p>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 1 — Basic Aaroh–Avroh</div>
+      <div class="notation">S  R  <span class="ko">g</span>  Ma  <span class="hi">P</span>  Dha  <span class="ko">n</span>  S' | S'  <span class="ko">n</span>  Dha  <span class="hi">P</span>  Ma  <span class="ko">g</span>  R  S</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 2 — Step Pattern</div>
+      <div class="notation">S  R  |  R  <span class="ko">g</span>  |  <span class="ko">g</span>  Ma  |  Ma  <span class="hi">P</span>  |  <span class="hi">P</span>  Dha  |  Dha  <span class="ko">n</span>  |  <span class="ko">n</span>  S'<br>S'  <span class="ko">n</span>  |  <span class="ko">n</span>  Dha  |  Dha  <span class="hi">P</span>  |  <span class="hi">P</span>  Ma  |  Ma  <span class="ko">g</span>  |  <span class="ko">g</span>  R  |  R  S</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 3 — Skip Pattern</div>
+      <div class="notation">S  <span class="ko">g</span>  |  R  Ma  |  <span class="ko">g</span>  <span class="hi">P</span>  |  Ma  Dha  |  <span class="hi">P</span>  <span class="ko">n</span>  |  Dha  S'<br>S'  Dha  |  <span class="ko">n</span>  <span class="hi">P</span>  |  Dha  Ma  |  <span class="hi">P</span>  <span class="ko">g</span>  |  Ma  R  |  <span class="ko">g</span>  S</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 4 — Trikhand (Groups of 3)</div>
+      <div class="notation">S  R  <span class="ko">g</span>  |  R  <span class="ko">g</span>  Ma  |  <span class="ko">g</span>  Ma  <span class="hi">P</span>  |  Ma  <span class="hi">P</span>  Dha  |  <span class="hi">P</span>  Dha  <span class="ko">n</span>  |  Dha  <span class="ko">n</span>  S'<br>S'  <span class="ko">n</span>  Dha  |  <span class="ko">n</span>  Dha  <span class="hi">P</span>  |  Dha  <span class="hi">P</span>  Ma  |  <span class="hi">P</span>  Ma  <span class="ko">g</span>  |  Ma  <span class="ko">g</span>  R  |  <span class="ko">g</span>  R  S</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 5 — Chaukhand (Groups of 4)</div>
+      <div class="notation">S  R  <span class="ko">g</span>  Ma  |  R  <span class="ko">g</span>  Ma  <span class="hi">P</span>  |  <span class="ko">g</span>  Ma  <span class="hi">P</span>  Dha  |  Ma  <span class="hi">P</span>  Dha  <span class="ko">n</span>  |  <span class="hi">P</span>  Dha  <span class="ko">n</span>  S'<br>S'  <span class="ko">n</span>  Dha  <span class="hi">P</span>  |  <span class="ko">n</span>  Dha  <span class="hi">P</span>  Ma  |  Dha  <span class="hi">P</span>  Ma  <span class="ko">g</span>  |  <span class="hi">P</span>  Ma  <span class="ko">g</span>  R  |  Ma  <span class="ko">g</span>  R  S</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 6 — Signature mPD cell (practise daily)</div>
+      <div class="notation">Ma  <span class="hi">P</span>  Dha  ,  Ma  <span class="hi">P</span>  (Ma)  <span class="ko">g</span>  R  ,  <span class="ko">g</span>  R  S  ,  <span class="dim">.n .D .P</span>  Ma  <span class="hi">P</span>  Dha  <span class="ko">n</span>  S'
+<span class="dim">(mPD; mP(m)gR = the most characteristic Kafi phrases; commit these to muscle memory)</span></div>
+    </div>
+  </div>
+
+  <!-- 8 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">08</span><span class="section-title">Alaap Kramanik <span class="section-title-hindi">(आलाप क्रमाणिक)</span> — Step-by-step Alaap</span></div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 1 — Sthapana</div>
+      <div class="notation">S  R  S  –  ,  S  R  <span class="ko">g</span>  –  ,  <span class="ko">g</span>  R  S  –  ,  R  <span class="ko">g</span>  R  S  –</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 2 — Introducing lower octave</div>
+      <div class="notation"><span class="dim">.n</span>  <span class="dim">.D</span>  <span class="dim">.P</span>  <span class="dim">.D</span>  <span class="dim">.n</span>  S  –  ,  S  R  <span class="ko">g</span>  R  –  ,  <span class="ko">g</span>  R  S  –</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 3 — Introducing Ma and Pa (vadi)</div>
+      <div class="notation">S  R  <span class="ko">g</span>  Ma  –  ,  Ma  <span class="hi">P</span>  –  ,  Ma  <span class="hi">P</span>  Ma  <span class="ko">g</span>  R  –  ,  <span class="ko">g</span>  R  S  –</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 4 — The mPD cell and upper movement</div>
+      <div class="notation">Ma  <span class="hi">P</span>  Dha  –  ,  <span class="ko">n</span>  Dha  <span class="hi">P</span>  –  ,  Ma  <span class="hi">P</span>  (Ma)  <span class="ko">g</span>  R  –  ,  S  –</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 5 — Taar saptak</div>
+      <div class="notation"><span class="hi">P</span>  Dha  <span class="ko">n</span>  S'  –  ,  S'  <span class="ko">n</span>  Dha  <span class="hi">P</span>  –  ,  S'  R'  <span class="ko">g'</span>  R'  S'  –  ,  <span class="ko">n</span>  Dha  <span class="hi">P</span>  Ma  <span class="ko">g</span>  R  S  –</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 6 — Full resolution</div>
+      <div class="notation">S'  <span class="ko">n</span>  Dha  <span class="hi">P</span>  Ma  <span class="hi">P</span>  Dha  <span class="ko">n</span>  S'  –  ,  <span class="ko">g'</span>  R'  S'  –  ,  <span class="ko">n</span>  Dha  <span class="hi">P</span>  ,  Ma  <span class="hi">P</span>  (Ma)  <span class="ko">g</span>  R  ,  <span class="ko">g</span>  R  S  –</div>
+    </div>
+  </div>
+
+  <!-- 9 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">09</span><span class="section-title">Sargam Geet <span class="section-title-hindi">(सरगम गीत)</span></span></div>
+    <div class="bandish-block">
+      <div class="bandish-header">SARGAM GEET — TEENTAAL (16 BEATS)</div>
+      <div class="bandish-body">
+        <div class="bandish-label">Sthai (स्थायी)</div>
+        <div class="notation" style="margin:0.3rem 0">
+          S  S  R  R  |  <span class="ko">g  g</span>  Ma  Ma  |  <span class="hi">P</span>  –  <span class="hi">P</span>  Ma  |  <span class="hi">P</span>  Dha  <span class="ko">n</span>  S'<br>
+          <span class="ko">n</span>  Dha  <span class="hi">P</span>  Ma  |  <span class="ko">g  g</span>  R  R  |  R  <span class="hi">P</span>  Ma  <span class="hi">P</span>  |  Ma  <span class="ko">g</span>  R  S
+        </div>
+        <div class="bandish-label">Antara (अंतरा)</div>
+        <div class="notation" style="margin:0.3rem 0">
+          Ma  Ma  <span class="hi">P</span>  Dha  |  <span class="ko">n</span>  <span class="ko">g'</span>  R'  S'  |  <span class="ko">n</span>  –  <span class="ko">n</span>  S'  |  Dha  <span class="ko">n</span>  S'  R'<br>
+          <span class="ko">g'</span>  R'  S'  –  |  Dha  <span class="hi">P</span>  –  |  S'  <span class="ko">n</span>  Dha  <span class="hi">P</span>  |  Ma  <span class="ko">g</span>  R  S
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">10</span><span class="section-title">Bandish <span class="section-title-hindi">(बंदिश)</span> — Compositions</span></div>
+    <div class="bandish-block">
+      <div class="bandish-header">BANDISH 1: "Sakal Ban Phool Rahi Sarson" — DADRA / TEENTAAL</div>
+      <div class="bandish-body">
+        <p style="font-size:0.82rem;color:#2a4a38;margin-bottom:0.5rem">One of the most iconic compositions in Kafi — a celebration of spring and the Holi season. Evokes the mustard fields in full bloom.</p>
+        <div class="bandish-label">Sthai</div>
+        <div class="notation" style="margin:0.3rem 0">
+          Sa–kal  ban  |  phool  ra–hi  |  sar–son  –  –  |  –  –  –  –<br>
+          S  S  R  <span class="ko">g</span>  |  R  <span class="ko">g</span>  Ma  Ma  |  <span class="hi">P</span>  –  –  –  |  –  –  –  –
+        </div>
+        <div class="bandish-label">Antara</div>
+        <div class="notation" style="margin:0.3rem 0">
+          Am–ba  pa–ke  |  bo–le  ko–yal  |  –  –  –  –  |  –  –  –  –<br>
+          <span class="hi">P</span>  Dha  <span class="ko">n</span>  S'  |  <span class="ko">n</span>  S'  <span class="ko">n</span>  Dha  |  <span class="hi">P</span>  Ma  <span class="ko">g</span>  R  |  S  –  –  –
+        </div>
+      </div>
+    </div>
+    <div class="bandish-block" style="margin-top:1rem">
+      <div class="bandish-header">BANDISH 2: "Madhur Dhun Sunake" — TEENTAAL (vilambit khayal)</div>
+      <div class="bandish-body">
+        <p style="font-size:0.82rem;color:#2a4a38;margin-bottom:0.5rem">A classical khayal composition; evokes the sweet sound of Krishna's flute in the Braj region.</p>
+        <div class="bandish-label">Sthai</div>
+        <div class="notation" style="margin:0.3rem 0">
+          Ma–dhur  dhun  |  su–na–ke  man  |  har–sha–i  mu–  |  ra–li  ki  dhun<br>
+          S  S  R  <span class="ko">g</span>  |  R  <span class="ko">g</span>  Ma  Ma  |  <span class="hi">P</span>  –  <span class="hi">P</span>  Ma  |  <span class="hi">P</span>  Dha  <span class="ko">n</span>  S'
+        </div>
+      </div>
+    </div>
+    <div class="bandish-block" style="margin-top:1rem">
+      <div class="bandish-header">HORI in KAFI — "Rang Na Daro" (Thumri / Hori style)</div>
+      <div class="bandish-body">
+        <p style="font-size:0.82rem;color:#2a4a38;margin-bottom:0.5rem">Hori and thumri compositions are among the most natural home for Kafi — the spring raga is used extensively for Holi songs. These are typically set to Deepchandi, Dhamar, Jat, or Kaherwa taal.</p>
+        <div class="bandish-label">Sthai (Hori style — Kaherwa 8 beats)</div>
+        <div class="notation" style="margin:0.3rem 0">
+          Rang  na  |  da–ro  –  |  Sha–mji  –  |  –  –<br>
+          <span class="ko">g</span>  R  |  S  –  |  <span class="dim">.n .D</span>  <span class="hi">P</span>  |  Ma  <span class="ko">g</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">11</span><span class="section-title">Taan Prakar <span class="section-title-hindi">(तान प्रकार)</span> — Types of Taans</span></div>
+    <div class="callout">Kafi's taans are often lighter and more playful than those of more austere ragas — reflecting its folk and thumri heritage. Fast taans with quick komal-shuddha shifts (as in Mishra Kafi) are very characteristic.</div>
+    <div class="taan-label">Seedhi Taan (straight)</div>
+    <div class="notation">S  R  <span class="ko">g</span>  Ma  <span class="hi">P</span>  Dha  <span class="ko">n</span>  S' | S'  <span class="ko">n</span>  Dha  <span class="hi">P</span>  Ma  <span class="ko">g</span>  R  S</div>
+    <div class="taan-label">Vakra Taan (curved)</div>
+    <div class="notation">S  R  <span class="ko">g</span>  R  <span class="ko">g</span>  Ma  <span class="ko">g</span>  Ma  <span class="hi">P</span>  Ma  <span class="hi">P</span>  Dha  <span class="hi">P</span>  Dha  <span class="ko">n</span>  S'<br>S'  <span class="ko">n</span>  Dha  <span class="ko">n</span>  Dha  <span class="hi">P</span>  Dha  <span class="hi">P</span>  Ma  <span class="hi">P</span>  Ma  <span class="ko">g</span>  Ma  <span class="ko">g</span>  R  S</div>
+    <div class="taan-label">Gamak Taan</div>
+    <div class="notation">S–R–<span class="ko">g</span>–Ma–<span class="hi">P</span>–Dha–<span class="ko">n</span>–S'  <span class="dim">(each note with bounce; characteristic in khayal)</span></div>
+    <div class="taan-label">Sapat Taan (lightning fast)</div>
+    <div class="notation">S  R  <span class="ko">g</span>  Ma  <span class="hi">P</span>  Dha  <span class="ko">n</span>  S'  S'  <span class="ko">n</span>  Dha  <span class="hi">P</span>  Ma  <span class="ko">g</span>  R  S  <span class="dim">(continuous)</span></div>
+    <div class="taan-label">Mishra Kafi taan (with ornamental shuddha Ga touch)</div>
+    <div class="notation">S  R  <span class="ko">g</span>  (G)  <span class="ko">g</span>  Ma  <span class="hi">P</span>  Dha  <span class="ko">n</span>  (N)  <span class="ko">n</span>  S'
+<span class="dim">((G) and (N) = brief ornamental touches of shuddha Ga and shuddha Ni — characteristic of Mishra Kafi)</span></div>
+    <div class="taan-label">mPD signature taan</div>
+    <div class="notation">Ma  <span class="hi">P</span>  Dha  <span class="ko">n</span>  S'  ,  S'  <span class="ko">n</span>  Dha  <span class="hi">P</span>  Ma  (Ma)  <span class="ko">g</span>  R  ,  <span class="ko">g</span>  R  S  <span class="dim">(the core Kafi melodic identity)</span></div>
+  </div>
+
+  <!-- 12 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">12</span><span class="section-title">The Kafi Thaat Family</span></div>
+    <p>Kafi Thaat is known to be crowded with numerous similar ragas, so it is very important to pay attention to their pakads, otherwise one may inadvertently impinge upon them and thus may spoil the performance. Below are the most important Kafi-family ragas and how they differ.</p>
+    <div class="family-grid">
+      <div class="fam-card">
+        <div class="fam-name">Bhimpalasi</div>
+        <div class="fam-desc">Kafi thaat, audav jati — omits Re and Dha in ascent. Vadi is Ma. Afternoon raga (3–6 PM). Deeply emotional — longing and shringaar.</div>
+        <div class="fam-note">S g M P n S' | S' n D P M g R S</div>
+      </div>
+      <div class="fam-card">
+        <div class="fam-name">Bageshri</div>
+        <div class="fam-desc">Kafi thaat — omits Re and Pa in ascent. Vadi is Ma. Late night (9 PM–12 AM). Yearning, separation. One of the most beloved ragas.</div>
+        <div class="fam-note">S g M D n S' | S' n D P M g R S</div>
+      </div>
+      <div class="fam-card">
+        <div class="fam-name">Bahar</div>
+        <div class="fam-desc">Kafi thaat — spring raga, like Kafi. Uses both Ni variants. Season: spring/Basant. Often paired with Bahar for seasonal concerts.</div>
+        <div class="fam-note">S R g M P D N n S'</div>
+      </div>
+      <div class="fam-card">
+        <div class="fam-name">Pilu</div>
+        <div class="fam-desc">Closely related to Mishra Kafi. Very light, uses many swaras freely. Almost entirely in thumri/dadra form. Beloved in Banaras tradition.</div>
+        <div class="fam-note">Freely uses all 12 notes</div>
+      </div>
+      <div class="fam-card">
+        <div class="fam-name">Jog</div>
+        <div class="fam-desc">Kafi thaat — pentatonic (omits Re and Dha). Vadi is Ma. Night raga. Mystical, introspective character. Often used in Sufi music.</div>
+        <div class="fam-note">S g M P n S' | audav</div>
+      </div>
+      <div class="fam-card">
+        <div class="fam-name">Megh / Malhar</div>
+        <div class="fam-desc">Kafi thaat — the monsoon ragas. Both use komal Ni. Evoke rain and the rainy season. Megh is the parent of the Malhar family.</div>
+        <div class="fam-note">S R g M P D n S'</div>
+      </div>
+    </div>
+    <div class="two-col" style="margin-top:1rem">
+      <div class="col-card">
+        <h4>Kafi vs Bhimpalasi</h4>
+        <ul>
+          <li>Both are Kafi thaat with komal Ga and Ni</li>
+          <li>Kafi is sampurna (all 7 notes); Bhimpalasi omits Re and Dha in ascent</li>
+          <li>Kafi: vadi is Pa, samvadi is Re; Bhimpalasi: vadi is Ma, samvadi is Sa</li>
+          <li>Kafi is night (9–12 PM); Bhimpalasi is afternoon (3–6 PM)</li>
+          <li>Kafi is lighter, folk-linked; Bhimpalasi is more formal and melancholic</li>
+          <li>Distinguishing test: if Re and Dha appear freely in ascent → Kafi; if skipped → Bhimpalasi</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>Kafi vs Bageshri</h4>
+        <ul>
+          <li>Both are Kafi thaat with komal Ga and Ni</li>
+          <li>Kafi is sampurna; Bageshri omits Re and Pa in ascent</li>
+          <li>Kafi: vadi Pa; Bageshri: vadi Ma</li>
+          <li>Both performed at night — Kafi: 9–12 PM; Bageshri: around midnight</li>
+          <li>Kafi is lighter and more festive; Bageshri is deeply yearning and romantic</li>
+          <li>Bageshri's Pa-less ascent gives it a hollow, longing quality Kafi does not have</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 13 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">13</span><span class="section-title">Rasa aur Bhaav <span class="section-title-hindi">(रस और भाव)</span> — Emotion &amp; Mood</span></div>
+    <div class="rasa-grid">
+      <div class="rasa-card"><div class="rasa-title">Shringaar — श्रृंगार</div><div class="rasa-desc">The primary rasa of Kafi — romantic love in both its forms: the joy of union and the ache of separation. Faqirullah's 1666 Raga Darpan describes Kafi's dominant theme as "love, together with the passions aroused."</div></div>
+      <div class="rasa-card"><div class="rasa-title">Holi / Vasant — होली / वसंत</div><div class="rasa-desc">Kafi is the spring raga, used extensively for Holi compositions. Its folk-festive quality makes it the natural musical embodiment of the festival of colours — playful, communal, and joyful.</div></div>
+      <div class="rasa-card"><div class="rasa-title">Bhakti — भक्ति</div><div class="rasa-desc">Kafi underlies countless bhajans, kirtans, and devotional compositions — particularly those addressed to Krishna in the Braj tradition. Its folk roots make it deeply accessible as a vehicle for devotion.</div></div>
+      <div class="rasa-card"><div class="rasa-title">Prakriti — प्रकृति</div><div class="rasa-desc">Spring in full bloom — <em>sakal ban phool rahi sarson</em> — mustard fields turning golden, the cuckoo calling, the air fragrant with new blossoms. Kafi is nature's own spring song.</div></div>
+    </div>
+  </div>
+
+  <!-- 14 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">14</span><span class="section-title">Samay Chakra <span class="section-title-hindi">(समय चक्र)</span> — Time Theory</span></div>
+    <div class="prahar-row">
+      <div class="prahar-cell"><span class="prahar-time">6–9 AM</span>1st Prahar</div>
+      <div class="prahar-cell"><span class="prahar-time">9 AM–12 PM</span>2nd Prahar</div>
+      <div class="prahar-cell"><span class="prahar-time">12–3 PM</span>3rd Prahar</div>
+      <div class="prahar-cell"><span class="prahar-time">3–6 PM</span>4th Prahar</div>
+      <div class="prahar-cell"><span class="prahar-time">6–9 PM</span>1st Night</div>
+      <div class="prahar-cell highlight"><span class="prahar-time">9 PM–12 AM</span>★ KAFI ★</div>
+      <div class="prahar-cell"><span class="prahar-time">12–3 AM</span>3rd Night</div>
+      <div class="prahar-cell"><span class="prahar-time">3–6 AM</span>4th Night</div>
+    </div>
+    <p>Kafi is a <strong>night raga</strong> — second prahar of the night (9 PM–midnight). However, as a light-classical and folk-influenced raga, it is frequently performed outside this canonical time, particularly in festive contexts (Holi concerts, spring gatherings) and in thumri performances. The raga is performed during any season.</p>
+  </div>
+
+  <!-- 15 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">15</span><span class="section-title">Carnatic Connection — Kharaharapriya</span></div>
+    <p>Kharaharapriya is the 22nd Melakarta raga in Carnatic music, and the Kafi thaat of Hindustani music is its equivalent. Its Western equivalent is the Dorian mode.</p>
+    <table class="film-table" style="margin-top:0.75rem">
+      <tr><th>Feature</th><th>Kafi (Hindustani)</th><th>Kharaharapriya (Carnatic)</th></tr>
+      <tr><td>Notes</td><td>Sa Re g Ma Pa Dha n (komal Ga + Ni)</td><td>Sa Ri2 Ga2 Ma1 Pa Dha2 Ni2</td></tr>
+      <tr><td>Parent</td><td>Kafi Thaat (Ashraya Raga)</td><td>22nd Melakarta</td></tr>
+      <tr><td>Western</td><td>Dorian Mode — C D E♭ F G A B♭</td><td>Dorian Mode</td></tr>
+      <tr><td>Character</td><td>Folk-classical, romantic, festive</td><td>Invokes karuna rasa (pathos)</td></tr>
+      <tr><td>Status</td><td>Light, liberal — Mishra form common</td><td>Full Melakarta — widely used in classical kritis</td></tr>
+    </table>
+  </div>
+
+  <!-- 16 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">16</span><span class="section-title">Film Songs based on Kafi</span></div>
+    <table class="film-table">
+      <tr><th>Song</th><th>Film</th><th>Year</th><th>Singer / MD</th></tr>
+      <tr><td>Biraj Mein Holi Khelat Nand Lal</td><td>Godaan</td><td>1963</td><td>Mohammad Rafi / Ravi Shankar</td></tr>
+      <tr><td>Ghayal Hiraniya</td><td>Munimji</td><td>1955</td><td>Lata Mangeshkar / S.D. Burman</td></tr>
+      <tr><td>Piya Tose Naina Laage Re</td><td>Guide</td><td>1965</td><td>Lata Mangeshkar / S.D. Burman</td></tr>
+      <tr><td>Mora Gora Ang Lai Le</td><td>Bandini</td><td>1963</td><td>Lata Mangeshkar / S.D. Burman</td></tr>
+      <tr><td>Hori Ho Brij Raja Dulare</td><td>Non-film Hori</td><td>—</td><td>K.L. Saigal</td></tr>
+    </table>
+  </div>
+
+  <!-- 17 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">17</span><span class="section-title">Notable Artists — Recommended Listening</span></div>
+    <div class="artist-card">
+      <div class="artist-initial">UK</div>
+      <div><div class="artist-name">Pandit Ulhas Kashalkar</div><div class="artist-detail">Gwalior / Jaipur / Agra lineage, vocal — his 2001 Kafi concert recording is considered essential listening for the raga's khayal form</div></div>
+    </div>
+    <div class="artist-card">
+      <div class="artist-initial">SD</div>
+      <div><div class="artist-name">Siddheshwari Devi</div><div class="artist-detail">Thumri — Banaras tradition; her Kafi thumri recordings (1983) are definitive examples of the raga's romantic and folk character in the light-classical tradition</div></div>
+    </div>
+    <div class="artist-card">
+      <div class="artist-initial">SG</div>
+      <div><div class="artist-name">Shobha Gurtu</div><div class="artist-detail">Thumri and Dadra — her Kafi recordings capture the playful, festive spirit of the raga; also known for Holi-themed compositions</div></div>
+    </div>
+    <div class="artist-card">
+      <div class="artist-initial">BA</div>
+      <div><div class="artist-name">Begum Akhtar</div><div class="artist-detail">Ghazal and Thumri — her rendering of Kafi thumri "Jab Se Shyam Sidhare" is a landmark recording; the raga's romantic quality suits her style perfectly</div></div>
+    </div>
+    <div class="artist-card">
+      <div class="artist-initial">BK</div>
+      <div><div class="artist-name">Ustad Bahadur Khan</div><div class="artist-detail">Sarod — his 1987 Kafi instrumental recording showcases the raga's folk-classical range across all three octaves</div></div>
+    </div>
+    <div class="artist-card">
+      <div class="artist-initial">AC</div>
+      <div><div class="artist-name">Ajoy Chakraborty</div><div class="artist-detail">Vocal — his Mishra Kafi thumri recordings are excellent for understanding how the mixed form works in practice; also recommended for his study approach to the raga</div></div>
+    </div>
+  </div>
+
+  <!-- 18 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">18</span><span class="section-title">Practice Schedule <span class="section-title-hindi">(अभ्यास क्रम)</span></span></div>
+    <div class="col-card" style="margin-bottom:1rem">
+      <h4>Daily Practice — 50 Minutes</h4>
+      <ul>
+        <li><strong>0–5 min:</strong> Tanpura setup; establish Pa as the gravitational centre of the drone environment</li>
+        <li><strong>5–12 min:</strong> Alankars 1–3 — pure Kafi only; confirm komal Ga and Ni are accurate</li>
+        <li><strong>12–18 min:</strong> Alankars 4–6 — mPD cell; let Pa feel like home</li>
+        <li><strong>18–28 min:</strong> Alaap phrases 1–3; lower octave opening .n .D .P → Sa</li>
+        <li><strong>28–38 min:</strong> Alaap phrases 4–6; mPD cell and taar saptak</li>
+        <li><strong>38–44 min:</strong> Sargam geet with Teentaal</li>
+        <li><strong>44–50 min:</strong> Thumri or Hori practice — allow Mishra Kafi freedom; compare with pure form</li>
+      </ul>
+    </div>
+    <table class="week-table">
+      <tr><th>Day</th><th>Focus</th></tr>
+      <tr><td>Monday</td><td>Alankars in pure Kafi only; accuracy of komal Ga and Ni is non-negotiable</td></tr>
+      <tr><td>Tuesday</td><td>Alaap phrases 1–3; mPD cell; lower octave opening</td></tr>
+      <tr><td>Wednesday</td><td>Alaap phrases 4–6; full range; compare pure Kafi vs Mishra Kafi phrases</td></tr>
+      <tr><td>Thursday</td><td>Sargam geet with taal; Pa as vadi — keep returning to it</td></tr>
+      <tr><td>Friday</td><td>Bandish "Sakal Ban" — sthai in vilambit tempo</td></tr>
+      <tr><td>Saturday</td><td>Bandish antara + Hori or thumri practice in Mishra Kafi</td></tr>
+      <tr><td>Sunday</td><td>Listening — Siddheshwari Devi thumri; Ulhas Kashalkar khayal; compare the two worlds</td></tr>
+    </table>
+  </div>
+
+  <!-- 19 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">19</span><span class="section-title">Common Mistakes to Avoid</span></div>
+    <table class="mistake-table">
+      <tr><th>Mistake</th><th>Correction</th></tr>
+      <tr><td>Using shuddha Ga or Ni in pure Kafi</td><td>In pure Kafi, both Ga and Ni are strictly komal. Shuddha Ga and Ni only appear in Mishra Kafi, and only briefly as ornamental grace notes — never as resting notes.</td></tr>
+      <tr><td>Neglecting Pa as the vadi</td><td>Pa is the vadi — the gravitational centre of Kafi. Phrases must radiate from Pa and return to it. Treating Pa as a passing note weakens the raga's identity entirely.</td></tr>
+      <tr><td>Confusing Kafi with Bhimpalasi</td><td>Kafi uses all 7 notes freely in ascent. Bhimpalasi omits Re and Dha in ascent. If you hear Re and Dha prominently in ascent, it is Kafi; if they disappear going up, it is Bhimpalasi.</td></tr>
+      <tr><td>Treating Mishra Kafi as the "correct" form</td><td>Mishra Kafi is the commonly heard form, but the student must know pure Kafi first. Learn the boundaries before taking liberties — otherwise the ornamental shuddha notes become errors, not embellishments.</td></tr>
+      <tr><td>Playing with gravity in a light raga</td><td>Kafi is a folk-linked, festive raga — its natural character is lighter, more playful, and more romantic than a grave raga like Bhairav or Marwa. Imposing heavy, slow khayal treatment on Kafi misrepresents it. Match the form to the mood.</td></tr>
+      <tr><td>Neglecting the mPD cell</td><td>The phrases mPD and mP(m)gR are Kafi's most characteristic melodic gestures. Not using them makes a Kafi performance sound generic and raga-less. Practise them until they feel natural.</td></tr>
+      <tr><td>Ignoring the lower octave opening</td><td>Kafi's alaap should open from the lower octave: .n .D .P .D .n → Sa. Beginning directly from middle Sa misses the raga's lower-register character.</td></tr>
+    </table>
+  </div>
+
+  <!-- 20 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">20</span><span class="section-title">Glossary of Key Terms</span></div>
+    <div class="glossary-grid">
+      <div class="gloss-item"><strong>Ashraya Raga</strong>The parent raga that names a thaat — Kafi is the Ashraya Raga of Kafi Thaat</div>
+      <div class="gloss-item"><strong>Mishra Kafi</strong>The mixed form of Kafi — where shuddha Ga and Ni appear briefly as ornaments; the most commonly heard form in performance</div>
+      <div class="gloss-item"><strong>Kshudra Raga</strong>A "light" raga where strict conformity to etiquette is not expected — Kafi is classified thus by many authorities</div>
+      <div class="gloss-item"><strong>Hori</strong>A Holi song — a light-classical or folk composition in spring ragas, typically Kafi; set to Dhamar or Deepchandi taal</div>
+      <div class="gloss-item"><strong>Thumri</strong>Light-classical semi-improvised form — Kafi's most natural performance context after khayal</div>
+      <div class="gloss-item"><strong>Dadra</strong>Light 6-beat rhythmic form — often used for Kafi compositions; playful and folk-influenced</div>
+      <div class="gloss-item"><strong>Vivadi swara</strong>A "forbidden" note whose presence technically violates raga grammar — in Kafi, shuddha Ga and Ni are vivadi in pure form but ornamental in Mishra Kafi</div>
+      <div class="gloss-item"><strong>Dorian Mode</strong>Western equivalent of Kafi's scale — C D E♭ F G A B♭; beloved in jazz, blues, and folk worldwide</div>
+      <div class="gloss-item"><strong>Vadi</strong>Most important note — Pa (Pancham) in Kafi</div>
+      <div class="gloss-item"><strong>Samvadi</strong>Second most important note — Re in Kafi</div>
+      <div class="gloss-item"><strong>mPD cell</strong>The signature Kafi phrase: Ma–Pa–Dha; the most identifying melodic gesture of the raga</div>
+      <div class="gloss-item"><strong>Sampurna</strong>All 7 notes used — Kafi's jati is Sampurna–Sampurna</div>
+      <div class="gloss-item"><strong>Komal</strong>Flat/lowered note — g (E♭) and n (B♭) in Kafi</div>
+      <div class="gloss-item"><strong>Kan swara</strong>Grace note — brief ornamental touch; how shuddha Ga/Ni appear in Mishra Kafi</div>
+      <div class="gloss-item"><strong>Prahar</strong>A 3-hour time period — Kafi: 2nd prahar of night (9 PM–12 AM)</div>
+      <div class="gloss-item"><strong>Kharaharapriya</strong>Carnatic equivalent of Kafi — 22nd Melakarta raga</div>
+    </div>
+  </div>
+
+  <!-- 21 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">21</span><span class="section-title">Summary at a Glance</span></div>
+    <div class="summary-grid">
+      <div class="summary-card"><h4>Identity</h4><p>Thaat: Kafi (Ashraya Raga)<br>Jati: Sampurna–Sampurna<br>Time: Night · 9 PM–12 AM<br>Season: Spring / Holi</p></div>
+      <div class="summary-card"><h4>Notes</h4><p>Sa Re <span style="color:#993C1D">g</span> Ma <span style="color:var(--grn)">Pa</span> Dha <span style="color:#993C1D">n</span><br>Komal: g (E♭) and n (B♭)<br>Shuddha: Re Ma Pa Dha<br>Scale: C D E♭ F G A B♭</p></div>
+      <div class="summary-card"><h4>Emphasis</h4><p>Vadi: Pa (Pancham)<br>Samvadi: Re (Rishabh)<br>Opens from lower .n .D .P<br>Cell: mPD ; mP(m)gR</p></div>
+      <div class="summary-card"><h4>Character</h4><p>Shringaar — romantic love<br>Spring / Holi festivity<br>Folk-classical continuum<br>Mostly heard as Mishra Kafi</p></div>
+      <div class="summary-card"><h4>Related</h4><p>Bhimpalasi, Bageshri, Bahar<br>Pilu, Jog, Megh, Malhar<br>Kharaharapriya (Carnatic)<br>Most crowded thaat family</p></div>
+      <div class="summary-card"><h4>Western equivalent</h4><p>Dorian Mode<br>C D E♭ F G A B♭<br>Palindromic scale<br>Jazz · blues · rock · folk</p></div>
+    </div>
+  </div>
+
+  <div class="ornament">✦ &nbsp; ✦ &nbsp; ✦</div>
+  <p style="text-align:center;font-size:0.78rem;color:var(--grn-dim);font-style:italic">Compiled with verified sources: Wikipedia, Ragajunglism, Parrikar Archive, Sangeetapriya, Chandrakantha.com, MeetKalakar<br>Notes for Hindustani Classical Music practice. Supplement with guru's guidance and regular listening.</p>
+
+</div>
+</body>
+</html>
