@@ -82,8 +82,10 @@ To become the world's fastest sustainable problem-solving company.
 - [Hindu classical Music Overall](/music/01-Hindu-Classical-Music.html)
 
 ### Phase 1
-- [1. Raga Bhupali](/music/02-raga-bhupali.html)
-- [2. Raga Yaman](/music/03-raga-yaman.html)
+- [1. Raga Bhupali](/music/phase1/02-raga-bhupali.html)
+- [2. Raga Yaman](/music/phase1/03-raga-yaman.html)
+- [3. Raga Bilawal](/music/phase1/04-raga-bilawal.html)
+- [4. Raga Bhairav](/music/phase1/05-raga-bhairav.html)
 
 
 ---
