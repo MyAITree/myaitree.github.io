@@ -87,6 +87,20 @@ To become the world's fastest sustainable problem-solving company.
 - [3. Raga Bilawal](/music/phase1/04-raga-bilawal.html)
 - [4. Raga Bhairav](/music/phase1/05-raga-bhairav.html)
 
+### Phase 2
+- [1. Raga Kafi](/music/phase2/06-raga_kafi_practice_notes.html)
+- [2. Raga Desh](/music/phase2/07-raga_desh_practice_notes.html)
+- [3. Raga Bageshri](/music/phase2/08-raga_bageshri_practice_notes.html)
+
+
+## Bollywood Songs Swarlipi
+- [Bollywood Songs by Raga](/music/bollywood_song_swaralipi.html)
+
+
+## Instruments
+- [Guitar](/music/instruments/guitar_learning_notes.html)
+- [Harmonica](/music/instruments/harmonica_comprehensive_guide.html)
+- [Bansuri](/music/instruments/bansuri_comprehensive_guide.html)
 
 ---
 

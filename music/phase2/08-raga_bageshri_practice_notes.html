@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ind: #6B4C9A;
+    --ind-light: #EDE8F8;
+    --ind-dim: #4A2F7A;
+    --ink: #1A1428;
+    --parchment: #F6F3FC;
+    --parchment2: #EDE8F8;
+    --rust: #7a3a1a;
+    --ko: #993C1D;
+    --teal: #0F7B6C;
+    --amber: #854F0B;
+    --border: rgba(107,76,154,0.18);
+    --border-strong: rgba(107,76,154,0.42);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--parchment); color: var(--ink); font-family: 'Libre Baskerville', Georgia, serif; font-size: 15px; line-height: 1.75; }
+  .page { max-width: 900px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+
+  .hero { text-align: center; padding: 2.8rem 1rem 2.3rem; border-bottom: 1px solid var(--border-strong); margin-bottom: 3rem; position: relative; }
+  .hero::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 200px; height: 2px; background: linear-gradient(90deg, transparent, var(--ind), transparent); }
+  .hero-devanagari { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--ind-dim); letter-spacing: 0.15em; margin-bottom: 0.4rem; font-style: italic; }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: 3.6rem; font-weight: 300; color: var(--ink); line-height: 1.1; margin-bottom: 0.5rem; }
+  .hero-title em { color: var(--ind); font-style: italic; }
+  .hero-sub { font-size: 0.85rem; color: var(--ind-dim); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1.5rem; }
+  .hero-quote { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.05rem; color: #251840; max-width: 610px; margin: 0 auto; line-height: 1.65; }
+  .hero-quote cite { display: block; font-size: 0.8rem; font-style: normal; color: var(--ind-dim); margin-top: 0.5rem; letter-spacing: 0.08em; }
+
+  .section { margin-bottom: 3rem; }
+  .section-header { display: flex; align-items: baseline; gap: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+  .section-number { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--ind-dim); letter-spacing: 0.1em; }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: 1.45rem; font-weight: 600; color: var(--ink); }
+  .section-title-hindi { font-size: 0.9rem; color: var(--ind-dim); font-style: italic; font-weight: 400; }
+
+  .ref-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .ref-table tr { border-bottom: 1px solid var(--border); }
+  .ref-table tr:last-child { border-bottom: none; }
+  .ref-table td { padding: 0.6rem 0.75rem; }
+  .ref-table td:first-child { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--ind-dim); width: 220px; vertical-align: top; padding-top: 0.7rem; }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 0.75rem; font-family: 'DM Mono', monospace; margin: 1px 2px; }
+  .b-ind { background: var(--ind-light); color: var(--ind-dim); border: 1px solid var(--border-strong); }
+  .b-ko { background: #FAECE7; color: #712B13; border: 1px solid rgba(153,60,29,0.35); }
+  .b-teal { background: #DAF2EE; color: #0A5A4E; border: 1px solid rgba(15,123,108,0.4); }
+  .b-amber { background: #faeeda; color: #633806; border: 1px solid rgba(133,79,11,0.4); }
+  .b-gray { background: var(--parchment2); color: #555; border: 1px solid rgba(0,0,0,0.12); }
+
+  .swar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin: 1rem 0; }
+  .swar-cell { border: 1px solid var(--border); border-radius: 6px; padding: 0.65rem 0.4rem; text-align: center; background: var(--parchment2); }
+  .swar-cell.vadi { background: var(--ind-light); border-color: var(--border-strong); }
+  .swar-cell.samvadi { background: #ddd8f5; border-color: rgba(107,76,154,0.45); }
+  .swar-cell.komal-cell { background: #FAECE7; border-color: rgba(153,60,29,0.4); }
+  .swar-cell.absent { background: #f0ede6; border-color: rgba(0,0,0,0.08); opacity: 0.42; }
+  .swar-name { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--ind-dim); }
+  .swar-abbr { font-size: 1.1rem; font-weight: 700; color: var(--ink); margin: 2px 0; }
+  .swar-cell.vadi .swar-abbr { color: var(--ind); }
+  .swar-cell.samvadi .swar-abbr { color: var(--ind-dim); }
+  .swar-cell.komal-cell .swar-abbr { color: #712B13; }
+  .swar-cell.absent .swar-abbr { color: #bbb; }
+  .swar-west { font-size: 0.7rem; color: #4a3a6a; }
+  .swar-tag { font-size: 0.6rem; font-family: 'DM Mono', monospace; margin-top: 2px; color: inherit; }
+
+  .notation { background: var(--parchment2); border: 1px solid var(--border); border-left: 3px solid var(--ind); border-radius: 4px; padding: 1rem 1.25rem; font-family: 'DM Mono', monospace; font-size: 0.85rem; line-height: 2; margin: 0.75rem 0; color: var(--ink); }
+  .notation .label { font-size: 0.7rem; color: var(--ind-dim); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.3rem; display: block; }
+  .hi { color: var(--ind); font-weight: 500; }
+  .ko { color: #993C1D; font-weight: 500; }
+  .ma { color: var(--ind); font-weight: 700; }
+  .dha { color: var(--teal); font-weight: 500; }
+  .dim { color: #888; }
+
+  .octave-row { display: flex; gap: 0; margin: 0.5rem 0; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); }
+  .oct-cell { flex: 1; padding: 0.55rem 0.3rem; text-align: center; font-family: 'DM Mono', monospace; font-size: 0.78rem; border-right: 1px solid var(--border); color: var(--ink); background: var(--parchment2); }
+  .oct-cell:last-child { border-right: none; }
+  .oct-cell.vadi { background: var(--ind-light); color: var(--ind); font-weight: 500; }
+  .oct-cell.samvadi { background: #ddd8f5; color: var(--ind-dim); font-weight: 500; }
+  .oct-cell.ko { background: #FAECE7; color: #712B13; font-weight: 500; }
+  .oct-cell.absent { background: #f0ede6; color: #bbb; opacity: 0.5; }
+  .oct-cell.dha-c { background: #DAF2EE; color: #0A5A4E; font-weight: 500; }
+
+  .chalan-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 0; margin: 1rem 0; }
+  .chalan-node { padding: 0.5rem 0.75rem; text-align: center; border: 1px solid var(--border); font-family: 'DM Mono', monospace; font-size: 0.82rem; background: var(--parchment2); color: var(--ink); }
+  .chalan-node:first-child { border-radius: 6px 0 0 6px; }
+  .chalan-node:last-child { border-radius: 0 6px 6px 0; }
+  .chalan-node.n-vadi { background: var(--ind-light); color: var(--ind); border-color: var(--border-strong); font-weight: 500; }
+  .chalan-node.n-samvadi { background: #ddd8f5; color: var(--ind-dim); border-color: rgba(107,76,154,0.45); font-weight: 500; }
+  .chalan-node.n-ko { background: #FAECE7; color: #712B13; border-color: rgba(153,60,29,0.4); font-weight: 500; }
+  .chalan-node.n-dha { background: #DAF2EE; color: #0A5A4E; border-color: rgba(15,123,108,0.4); font-weight: 500; }
+  .chalan-node .node-name { font-size: 1rem; }
+  .chalan-node .node-label { font-size: 0.6rem; color: inherit; opacity: 0.75; }
+  .chalan-arrow { font-size: 1rem; color: var(--border-strong); padding: 0 2px; }
+
+  .alankar-block { margin: 0.6rem 0; }
+  .alankar-num { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--ind-dim); margin-bottom: 3px; letter-spacing: 0.1em; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 1rem 0; }
+  .col-card { border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.1rem; background: var(--parchment2); }
+  .col-card h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--ink); margin-bottom: 0.6rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
+  .col-card ul { list-style: none; font-size: 0.88rem; }
+  .col-card ul li { padding: 0.25rem 0; border-bottom: 1px solid rgba(107,76,154,0.08); }
+  .col-card ul li:last-child { border-bottom: none; }
+  .col-card ul li::before { content: '◆'; font-size: 0.5rem; color: var(--ind); margin-right: 6px; vertical-align: middle; }
+
+  .rasa-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 1rem 0; }
+  .rasa-card { border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1rem; background: var(--parchment2); }
+  .rasa-card .rasa-title { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; color: var(--ind-dim); margin-bottom: 0.35rem; }
+  .rasa-card .rasa-desc { font-size: 0.83rem; color: #1a1428; line-height: 1.55; }
+
+  .prahar-row { display: flex; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); margin: 1rem 0; }
+  .prahar-cell { flex: 1; padding: 0.65rem 0.5rem; text-align: center; border-right: 1px solid var(--border); font-size: 0.78rem; font-family: 'DM Mono', monospace; color: #888; background: var(--parchment2); }
+  .prahar-cell:last-child { border-right: none; }
+  .prahar-cell.highlight { background: var(--ind-light); color: var(--ind-dim); font-weight: 500; }
+  .prahar-cell .prahar-time { font-size: 0.65rem; display: block; margin-bottom: 2px; }
+
+  .bandish-block { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 1rem 0; }
+  .bandish-header { background: var(--ind-light); padding: 0.6rem 1rem; font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--ind-dim); letter-spacing: 0.1em; border-bottom: 1px solid var(--border-strong); }
+  .bandish-body { padding: 0.75rem 1rem; background: var(--parchment2); }
+  .bandish-label { font-size: 0.7rem; font-family: 'DM Mono', monospace; color: var(--ind-dim); text-transform: uppercase; letter-spacing: 0.1em; margin: 0.5rem 0 0.2rem; }
+
+  .callout { background: var(--ind-light); border: 1px solid var(--border-strong); border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.87rem; color: var(--ind-dim); margin: 0.75rem 0; font-style: italic; }
+
+  .family-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 1rem 0; }
+  .fam-card { border: 1px solid var(--border); border-radius: 7px; padding: 0.7rem 0.8rem; background: var(--parchment2); }
+  .fam-name { font-size: 0.88rem; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+  .fam-desc { font-size: 0.78rem; color: #251840; }
+  .fam-note { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--ind-dim); margin-top: 3px; }
+
+  .mistake-table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+  .mistake-table th { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--ind-dim); letter-spacing: 0.1em; text-align: left; padding: 0.4rem 0.75rem; border-bottom: 1px solid var(--border-strong); background: var(--ind-light); }
+  .mistake-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .mistake-table tr:last-child td { border-bottom: none; }
+  .mistake-table td:first-child { color: var(--rust); font-style: italic; }
+
+  .artist-card { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
+  .artist-card:last-child { border-bottom: none; }
+  .artist-initial { width: 38px; height: 38px; border-radius: 50%; background: var(--ind-light); border: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 0.9rem; color: var(--ind-dim); font-weight: 600; flex-shrink: 0; }
+  .artist-name { font-weight: 500; font-size: 0.92rem; color: var(--ink); }
+  .artist-detail { font-size: 0.8rem; color: #3a2860; }
+
+  .film-table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+  .film-table th { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--ind-dim); letter-spacing: 0.1em; text-align: left; padding: 0.35rem 0.75rem; border-bottom: 1px solid var(--border-strong); background: var(--ind-light); }
+  .film-table td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .film-table tr:last-child td { border-bottom: none; }
+  .film-table td:first-child { font-style: italic; }
+
+  .glossary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 0.75rem 0; }
+  .gloss-item { padding: 0.5rem 0.75rem; border: 1px solid var(--border); border-radius: 5px; background: var(--parchment2); font-size: 0.83rem; }
+  .gloss-item strong { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--ind-dim); display: block; margin-bottom: 2px; }
+
+  .week-table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+  .week-table th { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--ind-dim); letter-spacing: 0.1em; text-align: left; padding: 0.35rem 0.75rem; border-bottom: 1px solid var(--border-strong); background: var(--ind-light); }
+  .week-table td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border); }
+  .week-table tr:last-child td { border-bottom: none; }
+  .week-table td:first-child { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--ind-dim); width: 120px; }
+
+  .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 1rem 0; }
+  .summary-card { border: 1px solid var(--border); border-radius: 8px; padding: 1rem; background: var(--parchment2); }
+  .summary-card h4 { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--ind-dim); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .summary-card p { font-size: 0.85rem; color: var(--ink); line-height: 1.6; }
+
+  .taan-label { font-size: 0.78rem; font-family: 'DM Mono', monospace; color: var(--ind-dim); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.75rem; margin-bottom: 2px; }
+  .ornament { text-align: center; color: var(--ind-dim); margin: 2rem 0 1rem; letter-spacing: 0.3em; }
+  p { margin-bottom: 0.75rem; font-size: 0.92rem; }
+  p:last-child { margin-bottom: 0; }
+
+  @media (max-width: 600px) {
+    .two-col, .rasa-grid, .glossary-grid, .summary-grid, .family-grid { grid-template-columns: 1fr; }
+    .swar-grid { grid-template-columns: repeat(4, 1fr); }
+    .hero-title { font-size: 2.4rem; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-devanagari">राग बागेश्री — Hindustani Classical Music</div>
+    <div class="hero-title">Raga <em>Bageshri</em></div>
+    <div class="hero-sub">Comprehensive Practice Notes</div>
+    <blockquote class="hero-quote">
+      "Bageshri is yearning, pathos, prayer, and the call to a beloved. The suspended figure waiting at midnight for the lover who has not returned — that is Bageshri's world entirely. Its beauty lies precisely in what is absent: Re and Pa omitted in ascent, leaving the raga hollow, aching, expectant."
+      <cite>— After Parrikar Archive; Wholisticwellnessspace; Songs of Yore</cite>
+    </blockquote>
+  </div>
+
+  <!-- 1 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">01</span><span class="section-title">Parichay <span class="section-title-hindi">(परिचय)</span> — Introduction</span></div>
+    <p>Raga Bageshri (also Bageshree, Vagishvari) is one of the most emotionally compelling ragas in Hindustani classical music. Belonging to the <strong>Kafi Thaat</strong>, it is a night raga of the second prahar — traditionally performed around midnight — and its mood is one of deep romantic longing, viraha (the pain of separation), and quiet, nocturnal yearning.</p>
+    <p>Its structure is deceptively simple: five notes in the ascending scale, all seven in descent — with the crucial omission of Rishabh (Re) and Pancham (Pa) going up. This structural absence is not incidental; it is the raga's emotional source. The missing Re and Pa create a hollow, searching quality in the aaroh — phrases reach upward through an incomplete scale, as if looking for something just out of reach.</p>
+    <div class="callout">
+      <strong>The DhaMA sangati — the raga's most identifying gesture:</strong> The phrase Dha–Ma (Dhaivat moving to Madhyam) is called the <em>prabal sangati</em> of Bageshri — its most characteristic and powerful interval. This Dha–Ma movement, approached from komal Ni above and descending to Ma, is the single phrase that most immediately identifies Bageshri to the trained ear. Practise it until it becomes second nature.
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">02</span><span class="section-title">Quick Reference Card</span></div>
+    <table class="ref-table">
+      <tr><td>Thaat</td><td><span class="badge b-ind">Kafi</span></td></tr>
+      <tr><td>Jati</td><td>Audav–Sampurna (5 notes ascending, 7 notes descending)</td></tr>
+      <tr><td>Aaroh</td><td><code>Sā  <span style="color:#6B4C9A">g</span>  Ma  <span style="color:#0F7B6C">Dha</span>  <span style="color:#993C1D">n</span>  Sā'</code> — Re and Pa are <em>varjit</em> (omitted) in ascent</td></tr>
+      <tr><td>Avroh</td><td><code>Sā'  <span style="color:#993C1D">n</span>  <span style="color:#0F7B6C">Dha</span>  Ma  Pa  <span style="color:#0F7B6C">Dha</span>  Ma  <span style="color:#6B4C9A">g</span>  Re  Sā</code> — Pa appears vakra (obliquely) in descent only</td></tr>
+      <tr><td>Vadi (वादी)</td><td><strong>Ma</strong> (Madhyam) — the most important, most dwelt-upon note; the raga's anchor</td></tr>
+      <tr><td>Samvadi (संवादी)</td><td><strong>Sa</strong> (Shadaj) — the second most important note</td></tr>
+      <tr><td>Varjit Swar</td><td><span class="badge b-gray">Re (Rishabh)</span> <span class="badge b-gray">Pa (Pancham)</span> — both omitted in aaroh; Pa appears only vakra in avroh</td></tr>
+      <tr><td>Komal Swaras</td><td><span class="badge b-ko">komal Ga (g)</span> <span class="badge b-ko">komal Ni (n)</span> — both with andolan (gentle oscillation)</td></tr>
+      <tr><td>Vishesh Sangati</td><td><span class="badge b-teal">Dha–Ma</span> — the most characteristic interval; the raga's identifying gesture</td></tr>
+      <tr><td>Nyaas Swaras</td><td>Purvanga: komal Ga (g) &nbsp;|&nbsp; Uttaranga: Dha — these are the primary resting notes in each half</td></tr>
+      <tr><td>Gaayan Samay</td><td>Madhya Raatri — <strong>Midnight, 9 PM–12 AM</strong> (second prahar of night)</td></tr>
+      <tr><td>Rasa / Mood</td><td>Shringaar (viraha) — deep romantic separation; nocturnal yearning; quiet, dignified grief</td></tr>
+      <tr><td>Carnatic Equivalent</td><td><strong>Nattakurinji</strong> (closely related); some cite Charukesi as partial equivalent</td></tr>
+      <tr><td>Related ragas</td><td>Rageshri (closest cousin), Malgunji, Bhimpalasi, Kafi, Shahana Kanada, Bageshri Kanada</td></tr>
+    </table>
+  </div>
+
+  <!-- 3 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">03</span><span class="section-title">Swar Vistar <span class="section-title-hindi">(स्वर विस्तार)</span> — Note Structure</span></div>
+    <p>Bageshri uses all seven notes but with strong restrictions on which appear in each direction. Two notes are komal (g and n), two are omitted in ascent (Re and Pa), and Pa appears only obliquely in descent. Ma is the vadi — the centre everything radiates from and returns to.</p>
+    <div class="swar-grid">
+      <div class="swar-cell samvadi"><div class="swar-name">Shadaj</div><div class="swar-abbr">Sa</div><div class="swar-west">C</div><div class="swar-tag">SAMVADI ★</div></div>
+      <div class="swar-cell absent"><div class="swar-name">Rishabh</div><div class="swar-abbr">Re</div><div class="swar-west">D</div><div class="swar-tag">varjit in aaroh</div></div>
+      <div class="swar-cell komal-cell"><div class="swar-name">Gandhar</div><div class="swar-abbr">g</div><div class="swar-west">E♭</div><div class="swar-tag">komal + andolan</div></div>
+      <div class="swar-cell vadi"><div class="swar-name">Madhyam</div><div class="swar-abbr">Ma</div><div class="swar-west">F</div><div class="swar-tag">VADI ★</div></div>
+      <div class="swar-cell absent"><div class="swar-name">Pancham</div><div class="swar-abbr">Pa</div><div class="swar-west">G</div><div class="swar-tag">vakra in avroh only</div></div>
+      <div class="swar-cell" style="background:#DAF2EE;border-color:rgba(15,123,108,0.4)"><div class="swar-name">Dhaivat</div><div class="swar-abbr" style="color:#0A5A4E">Dha</div><div class="swar-west">A</div><div class="swar-tag" style="color:#0A5A4E">Dha-Ma sangati ★</div></div>
+      <div class="swar-cell komal-cell"><div class="swar-name">Nishad</div><div class="swar-abbr">n</div><div class="swar-west">B♭</div><div class="swar-tag">komal + andolan</div></div>
+    </div>
+    <p style="font-size:0.82rem;color:var(--ind-dim);margin-top:0.25rem">Vadi Ma in purple; Samvadi Sa in light purple; Dha (the sangati partner of Ma) in teal; komal notes in rust. Faded cells (Re, Pa) are absent in ascent — Re appears in avroh, Pa only vakra in avroh.</p>
+    <div class="callout">
+      <strong>Andolan on g and n:</strong> Both komal Ga and komal Ni must be sung with andolan (gentle oscillation). Additionally: komal Ga takes a <em>kan</em> (grace note) of Madhyam, and komal Ni takes a kan of Dhaivat or Shadaj. These ornamental touches are mandatory — without them, Bageshri loses its characteristic expressive quality.
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">04</span><span class="section-title">Aaroh–Avroh aur Pakad</span></div>
+    <div class="notation"><span class="label">Aaroh (आरोह) — Ascending · 5 notes, Re and Pa absent</span>
+Sā  <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="dha">Dha</span>  <span class="ko">n</span>  Sā'
+<span class="dim">(Re and Pa are completely absent going up; the scale leaps: Sa → komal Ga → Ma → Dha → komal Ni → Sa')</span></div>
+    <div class="notation"><span class="label">Avroh (अवरोह) — Descending · all 7 notes, Pa used vakra</span>
+Sā'  <span class="ko">n</span>  <span class="dha">Dha</span>  <span class="ma">Ma</span>  Pa  <span class="dha">Dha</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  Sā
+<span class="dim">(Pa appears only sandwiched: Ma → Pa → Dha → Ma — never approached directly from above or below freely)</span></div>
+    <div class="callout">
+      <strong>Pa in Bageshri — the vakra rule:</strong> Pa is omitted in aaroh and is used only <em>vakra</em> (obliquely) in avroh. The typical vakra usage is: <code>Ma Pa Dha Ma</code> or <code>Pa Dha Ma g Re Sa</code>. Pa never opens or closes a phrase — it appears only in the middle, cushioned between two instances of Ma or Dha. This oblique treatment of Pa is one of Bageshri's most distinctive structural features.
+    </div>
+    <div class="notation"><span class="label">Pakad (पकड़) — Characteristic Catch-phrase</span>
+<span class="dha">Dha</span>  <span class="ko">n</span>  Sā  ,  <span class="ma">Ma</span>  ,  <span class="ma">Ma</span>  Pa  <span class="dha">Dha</span>  ,  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  Sā
+<span class="dim">(Dha n Sa = the opening gesture from Uttaranga; Ma Pa Dha Ma g Re Sa = the complete avroh pakad)</span></div>
+    <div class="notation"><span class="label">DhaMa Sangati — the defining interval (practise daily)</span>
+<span class="dha">Dha</span>  ~~~  <span class="ma">Ma</span>  –  ,  <span class="ko">n</span>  <span class="dha">Dha</span>  <span class="ma">Ma</span>  –  ,  <span class="dha">Dha</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  Sā
+<span class="dim">(~~~ = meend; the Dha–Ma interval is the most characteristic and identifying feature of Bageshri)</span></div>
+  </div>
+
+  <!-- 5 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">05</span><span class="section-title">Saptak Vistar <span class="section-title-hindi">(सप्तक विस्तार)</span> — Octave Map</span></div>
+    <p style="font-size:0.82rem;color:#4a3a6a;margin-bottom:0.5rem">Aaroh — 5 notes only (Re and Pa completely absent)</p>
+    <div class="octave-row">
+      <div class="oct-cell samvadi">Sa ★</div>
+      <div class="oct-cell absent">Re ✕</div>
+      <div class="oct-cell ko">g ★</div>
+      <div class="oct-cell vadi">Ma ★</div>
+      <div class="oct-cell absent">Pa ✕</div>
+      <div class="oct-cell dha-c">Dha</div>
+      <div class="oct-cell ko">n ★</div>
+    </div>
+    <p style="font-size:0.82rem;color:#4a3a6a;margin-bottom:0.5rem">Avroh — all 7 notes (Pa used vakra: Ma Pa Dha Ma)</p>
+    <div class="octave-row">
+      <div class="oct-cell samvadi">Sa ★</div>
+      <div class="oct-cell">Re ↓</div>
+      <div class="oct-cell ko">g ★</div>
+      <div class="oct-cell vadi">Ma ★</div>
+      <div class="oct-cell" style="background:#FFF8E8;color:#633806">Pa (vakra)</div>
+      <div class="oct-cell dha-c">Dha</div>
+      <div class="oct-cell ko">n ★</div>
+    </div>
+    <p style="font-size:0.8rem;color:var(--ind-dim);margin-top:0.4rem">Vadi Ma in purple. Samvadi Sa in light purple. Dha in teal (DhaMa sangati partner). Komal notes in rust. Faded above = absent in ascent. Pa in amber = vakra use only. Bageshri is <em>purvanga-pradhan</em> — the lower half of the octave (Sa–Pa) is its centre of gravity, with komal Ga as the primary resting note in purvanga.</p>
+  </div>
+
+  <!-- 6 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">06</span><span class="section-title">Chalan <span class="section-title-hindi">(चलन)</span> — Melodic Movement</span></div>
+    <p style="font-size:0.88rem;font-weight:500;margin-bottom:0.5rem">Ascending direction (5 notes — Re and Pa absent):</p>
+    <div class="chalan-flow">
+      <div class="chalan-node n-samvadi"><div class="node-label">SAMVADI</div><div class="node-name">Sa ★</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-ko"><div class="node-label">komal~</div><div class="node-name">g ★</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-vadi"><div class="node-label">VADI</div><div class="node-name">Ma ★</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-dha"><div class="node-label">sangati</div><div class="node-name">Dha</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-ko"><div class="node-label">komal~</div><div class="node-name">n ★</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node"><div class="node-label">taar</div><div class="node-name">Sā'</div></div>
+    </div>
+    <p style="font-size:0.88rem;font-weight:500;margin:0.75rem 0 0.5rem">Descending direction (all 7 notes — Pa vakra):</p>
+    <div class="chalan-flow">
+      <div class="chalan-node"><div class="node-label">taar</div><div class="node-name">Sā'</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-ko"><div class="node-label">komal~</div><div class="node-name">n</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-dha"><div class="node-label">sangati</div><div class="node-name">Dha</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-vadi"><div class="node-label">VADI</div><div class="node-name">Ma ★</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node" style="background:#FFF8E8;color:#633806;border-color:rgba(133,79,11,0.4)"><div class="node-label">vakra only</div><div class="node-name">Pa</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-dha"><div class="node-label">sangati</div><div class="node-name">Dha</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-vadi"><div class="node-label">VADI</div><div class="node-name">Ma</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-ko"><div class="node-label">komal~</div><div class="node-name">g</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node"><div class="node-label">Re ↓</div><div class="node-name">Re</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-samvadi"><div class="node-label">SAMVADI</div><div class="node-name">Sa ★</div></div>
+    </div>
+    <div class="two-col" style="margin-top:1rem">
+      <div class="col-card">
+        <h4>Key melodic rules</h4>
+        <ul>
+          <li><strong>Re and Pa absent in aaroh</strong> — the ascent jumps: Sa → komal Ga → Ma → Dha → komal Ni → Sa'. Never introduce Re or Pa going up.</li>
+          <li><strong>Pa is vakra in avroh</strong> — Pa appears only in the pattern Ma Pa Dha Ma; never used freely</li>
+          <li><strong>DhaMa sangati is the defining interval</strong> — every significant phrase either arrives at or departs from this Dha–Ma pair</li>
+          <li><strong>Komal Ga is the primary nyaas in purvanga</strong> — phrases in the lower half rest on komal Ga</li>
+          <li><strong>Dha is the nyaas in uttaranga</strong> — phrases in the upper half rest on Dha</li>
+          <li><strong>Andolan on g and n</strong> — both komal notes must oscillate; g takes a Ma kan; n takes a Dha or Sa kan</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>Character and feel</h4>
+        <ul>
+          <li>The raga is purvanga-pradhan — its emotional weight lies in the lower half, Sa to Pa</li>
+          <li>The missing Re and Pa create a hollow, searching aaroh — the emotional source of viraha (separation)</li>
+          <li>Ma as vadi means every phrase gravitates toward Ma — the raga "breathes" through Madhyam</li>
+          <li>Alaap should be slow, patient, and meditative — this is a midnight raga of deep contemplation</li>
+          <li>The DhaMa movement should feel like a slow exhalation — never rushed</li>
+          <li>Bageshri is often likened to a woman waiting alone at midnight — dignified in her grief, not showy</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">07</span><span class="section-title">Alankars <span class="section-title-hindi">(अलंकार)</span> — Scale Exercises</span></div>
+    <p>Practise slowly with tanpura drone. Focus on: (1) no Re or Pa in ascent, (2) Pa only vakra in descent, (3) andolan on g and n, (4) DhaMa sangati as the emotional heart of every phrase.</p>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 1 — Core Aaroh–Avroh</div>
+      <div class="notation">S  <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="dha">Dha</span>  <span class="ko">n</span>  S' | S'  <span class="ko">n</span>  <span class="dha">Dha</span>  <span class="ma">Ma</span>  Pa  <span class="dha">Dha</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S
+<span class="dim">(no Re or Pa going up; Pa only appears in descent as Ma–Pa–Dha–Ma)</span></div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 2 — Aaroh step (5 notes only)</div>
+      <div class="notation">S  <span class="ko">g</span>  |  <span class="ko">g</span>  <span class="ma">Ma</span>  |  <span class="ma">Ma</span>  <span class="dha">Dha</span>  |  <span class="dha">Dha</span>  <span class="ko">n</span>  |  <span class="ko">n</span>  S'  <span class="dim">(Re and Pa absent throughout)</span></div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 3 — Avroh step (7 notes, Pa vakra)</div>
+      <div class="notation">S'  <span class="ko">n</span>  |  <span class="ko">n</span>  <span class="dha">Dha</span>  |  <span class="dha">Dha</span>  <span class="ma">Ma</span>  |  <span class="ma">Ma</span>  Pa  <span class="dha">Dha</span>  <span class="ma">Ma</span>  |  <span class="ma">Ma</span>  <span class="ko">g</span>  |  <span class="ko">g</span>  Re  |  Re  S</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 4 — DhaMa sangati cell (practise daily)</div>
+      <div class="notation"><span class="dha">Dha</span>  <span class="ko">n</span>  S  ,  <span class="ma">Ma</span>  –  ,  <span class="ko">n</span>  <span class="dha">Dha</span>  <span class="ma">Ma</span>  –  ,  <span class="dha">Dha</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S  –
+<span class="dim">(this is the complete Bageshri pakad shape — master this phrase first)</span></div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 5 — Trikhand aaroh (5 notes)</div>
+      <div class="notation">S  <span class="ko">g</span>  <span class="ma">Ma</span>  |  <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="dha">Dha</span>  |  <span class="ma">Ma</span>  <span class="dha">Dha</span>  <span class="ko">n</span>  |  <span class="dha">Dha</span>  <span class="ko">n</span>  S'
+<span class="dim">(all ascending — Re and Pa never appear)</span></div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 6 — Trikhand avroh (7 notes with Pa vakra)</div>
+      <div class="notation">S'  <span class="ko">n</span>  <span class="dha">Dha</span>  |  <span class="ko">n</span>  <span class="dha">Dha</span>  <span class="ma">Ma</span>  |  <span class="dha">Dha</span>  <span class="ma">Ma</span>  Pa  <span class="dha">Dha</span>  <span class="ma">Ma</span>  |  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  |  <span class="ko">g</span>  Re  S</div>
+    </div>
+  </div>
+
+  <!-- 8 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">08</span><span class="section-title">Alaap Kramanik <span class="section-title-hindi">(आलाप क्रमाणिक)</span> — Step-by-step Alaap</span></div>
+    <p>Bageshri's alaap must be slow and unhurried. Begin from the lower octave. Every phrase should feel like it is searching — reaching upward through an incomplete scale, settling on Ma or komal Ga, then descending with the characteristic DhaMa movement.</p>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 1 — Sthapana (establishing Sa and komal Ga)</div>
+      <div class="notation">S  <span class="ko">g</span>  S  –  ,  S  <span class="ko">g</span>  <span class="ma">Ma</span>  –  ,  <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  –  ,  <span class="ko">g</span>  S  –</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 2 — Introducing lower octave .n .Dha</div>
+      <div class="notation"><span class="dim">.n</span>  <span class="dim">.D</span>  S  –  ,  S  <span class="ko">g</span>  <span class="ma">Ma</span>  –  ,  <span class="ma">Ma</span>  <span class="ko">g</span>  S  –  ,  <span class="dim">.n</span>  S  <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  S  –</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 3 — Establishing DhaMa sangati</div>
+      <div class="notation">S  <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="dha">Dha</span>  –  ,  <span class="dha">Dha</span>  <span class="ma">Ma</span>  –  ,  <span class="ko">n</span>  <span class="dha">Dha</span>  <span class="ma">Ma</span>  –  ,  <span class="dha">Dha</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S  –</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 4 — Introducing komal Ni and Pa vakra</div>
+      <div class="notation"><span class="ma">Ma</span>  <span class="dha">Dha</span>  <span class="ko">n</span>  –  ,  <span class="ko">n</span>  <span class="dha">Dha</span>  –  ,  <span class="ma">Ma</span>  Pa  <span class="dha">Dha</span>  <span class="ma">Ma</span>  –  ,  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S  –
+<span class="dim">(Ma Pa Dha Ma = the vakra Pa usage; note Pa is sandwiched, never leading a phrase)</span></div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 5 — Taar saptak</div>
+      <div class="notation"><span class="dha">Dha</span>  <span class="ko">n</span>  S'  –  ,  S'  <span class="ko">g'</span>  <span class="ma">Ma'</span>  –  ,  <span class="ma">Ma'</span>  <span class="ko">g'</span>  S'  –  ,  <span class="ko">n</span>  <span class="dha">Dha</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S  –</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 6 — Full resolution</div>
+      <div class="notation">S  <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="dha">Dha</span>  <span class="ko">n</span>  S'  –  ,  <span class="ko">n</span>  <span class="dha">Dha</span>  <span class="ma">Ma</span>  Pa  <span class="dha">Dha</span>  <span class="ma">Ma</span>  –  ,  <span class="dha">Dha</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S  –
+<span class="dim">(full arc: ascent skipping Re/Pa → Pa vakra in descent → resolve on Sa via komal g Re Sa)</span></div>
+    </div>
+  </div>
+
+  <!-- 9 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">09</span><span class="section-title">Sargam Geet <span class="section-title-hindi">(सरगम गीत)</span></span></div>
+    <div class="bandish-block">
+      <div class="bandish-header">SARGAM GEET — TEENTAAL (16 BEATS)</div>
+      <div class="bandish-body">
+        <div class="bandish-label">Sthai (स्थायी)</div>
+        <div class="notation" style="margin:0.3rem 0">
+          <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="dha">Dha</span>  <span class="ko">n</span>  |  S  –  <span class="dha">Dha</span>  <span class="ma">Ma</span>  |  <span class="ko">n</span>  <span class="dha">Dha</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  |  Re  S  –  –<br>
+          <span class="dim">.n  .D</span>  S  <span class="ko">g</span>  |  <span class="ma">Ma</span>  <span class="dha">Dha</span>  <span class="ko">n</span>  S'  |  <span class="ko">n</span>  <span class="dha">Dha</span>  <span class="ma">Ma</span>  Pa  |  <span class="dha">Dha</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  Re
+        </div>
+        <div class="bandish-label">Antara (अंतरा)</div>
+        <div class="notation" style="margin:0.3rem 0">
+          <span class="ko">n</span>  S'  <span class="ko">g'</span>  <span class="ma">Ma'</span>  |  <span class="dha">Dha'</span>  <span class="ko">n'</span>  S'  –  |  <span class="ko">n</span>  <span class="dha">Dha</span>  <span class="ma">Ma</span>  <span class="dha">Dha</span>  |  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S<br>
+          <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="dha">Dha</span>  <span class="ko">n</span>  |  S'  –  <span class="ko">n</span>  <span class="dha">Dha</span>  |  <span class="ma">Ma</span>  Pa  <span class="dha">Dha</span>  <span class="ma">Ma</span>  |  <span class="ko">g</span>  Re  S  –
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">10</span><span class="section-title">Bandish <span class="section-title-hindi">(बंदिश)</span> — Compositions</span></div>
+    <div class="bandish-block">
+      <div class="bandish-header">BANDISH 1: "Kahe Ri Na Bairi" — TEENTAAL (vilambit)</div>
+      <div class="bandish-body">
+        <p style="font-size:0.82rem;color:#251840;margin-bottom:0.5rem">One of the most famous traditional compositions in Bageshri — a thumri-influenced khayal addressed to a faithless beloved. The text embodies Bageshri's central theme: viraha (separation) and the ache of waiting.</p>
+        <div class="bandish-label">Sthai</div>
+        <div class="notation" style="margin:0.3rem 0">
+          Ka–he  ri  |  na  bai–ri  |  –  –  –  –  |  –  –  –  –<br>
+          <span class="ko">g</span>  <span class="ma">Ma</span>  |  <span class="dha">Dha</span>  <span class="ko">n</span>  S  |  –  –  –  –  |  –  –  –  –
+        </div>
+        <div class="bandish-label">Antara</div>
+        <div class="notation" style="margin:0.3rem 0">
+          <span class="ko">n</span>  S'  <span class="ko">g'</span>  <span class="ma">Ma'</span>  |  <span class="ko">n</span>  <span class="dha">Dha</span>  <span class="ma">Ma</span>  Pa  |  <span class="dha">Dha</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  |  S  –  –  –
+        </div>
+      </div>
+    </div>
+    <div class="bandish-block" style="margin-top:1rem">
+      <div class="bandish-header">BANDISH 2: "Maano Na Maano Hamri Baat" — TEENTAAL (medium)</div>
+      <div class="bandish-body">
+        <p style="font-size:0.82rem;color:#251840;margin-bottom:0.5rem">Another widely performed Bageshri composition — a plea to the beloved to trust the singer's love. The sthai centres on the DhaMa sangati.</p>
+        <div class="bandish-label">Sthai</div>
+        <div class="notation" style="margin:0.3rem 0">
+          Maa–no  na  |  maa–no  ham–ri  |  baat  –  –  –  |  –  –  –  –<br>
+          <span class="dha">Dha</span>  <span class="ko">n</span>  S  |  <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="dha">Dha</span>  <span class="ma">Ma</span>  |  <span class="ko">g</span>  Re  S  –  |  –  –  –  –
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">11</span><span class="section-title">Taan Prakar <span class="section-title-hindi">(तान प्रकार)</span> — Types of Taans</span></div>
+    <div class="callout">All taans in Bageshri must strictly maintain the Re and Pa rule: no Re or Pa in ascending runs; Pa only vakra (Ma Pa Dha Ma) in descending runs. Taans in Bageshri have a characteristically searching, hollow quality due to these omissions.</div>
+    <div class="taan-label">Seedhi Taan (straight — aaroh)</div>
+    <div class="notation">S  <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="dha">Dha</span>  <span class="ko">n</span>  S'  <span class="dim">(strict pentatonic — no Re or Pa)</span></div>
+    <div class="taan-label">Seedhi Taan (full arc)</div>
+    <div class="notation">S  <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="dha">Dha</span>  <span class="ko">n</span>  S'  |  S'  <span class="ko">n</span>  <span class="dha">Dha</span>  <span class="ma">Ma</span>  Pa  <span class="dha">Dha</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S</div>
+    <div class="taan-label">Vakra Taan (curved)</div>
+    <div class="notation">S  <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="dha">Dha</span>  <span class="ma">Ma</span>  <span class="dha">Dha</span>  <span class="ko">n</span>  <span class="dha">Dha</span>  <span class="ko">n</span>  S'<br>S'  <span class="ko">n</span>  <span class="dha">Dha</span>  <span class="ko">n</span>  <span class="dha">Dha</span>  <span class="ma">Ma</span>  Pa  <span class="dha">Dha</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S</div>
+    <div class="taan-label">DhaMa Taan (the signature Bageshri taan)</div>
+    <div class="notation"><span class="ko">n</span>  <span class="dha">Dha</span>  <span class="ko">n</span>  <span class="dha">Dha</span>  <span class="ma">Ma</span>  <span class="dha">Dha</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  <span class="ko">g</span>  Re  S  <span class="dim">(Dha–Ma oscillation as taan — very characteristic)</span></div>
+    <div class="taan-label">Sapat Taan (fast)</div>
+    <div class="notation">S  <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="dha">Dha</span>  <span class="ko">n</span>  S'  S'  <span class="ko">n</span>  <span class="dha">Dha</span>  <span class="ma">Ma</span>  Pa  <span class="dha">Dha</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S  <span class="dim">(continuous — note Pa only mid-descent)</span></div>
+    <div class="taan-label">Meend Taan (slow glides — characteristic of vilambit Bageshri)</div>
+    <div class="notation"><span class="dha">Dha</span>  ~~~  <span class="ma">Ma</span>  –  ,  <span class="ko">n</span>  ~~~  <span class="dha">Dha</span>  ~~~  <span class="ma">Ma</span>  –  ,  <span class="ma">Ma</span>  ~~~  <span class="ko">g</span>  ~~~  Re  ~~~  S  <span class="dim">(~~~ = meend; slow is preferred)</span></div>
+  </div>
+
+  <!-- 12 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">12</span><span class="section-title">Bageshri aur Rageshri — Key Differences</span></div>
+    <p>Rageshri is Bageshri's closest relative and the most common source of confusion. Both are Kafi thaat night ragas with similar note usage. Careful attention to Pa usage and the presence of certain notes distinguishes them.</p>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>Raga Bageshri 🌙</h4>
+        <ul>
+          <li>Kafi Thaat; Audav–Sampurna</li>
+          <li>Vadi: Ma &nbsp;|&nbsp; Samvadi: Sa</li>
+          <li>Varjit in aaroh: Re and Pa</li>
+          <li>Pa appears vakra only: Ma Pa Dha Ma</li>
+          <li>Defining sangati: <em>Dha–Ma</em></li>
+          <li>Komal Ga and komal Ni — both with andolan</li>
+          <li>Mood: viraha (separation), midnight longing</li>
+          <li>Mnemonic: waiting in stillness for the beloved who did not return</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>Raga Rageshri 🌛</h4>
+        <ul>
+          <li>Khamaj Thaat (not Kafi)</li>
+          <li>Vadi: Ga (shuddha!) &nbsp;|&nbsp; Samvadi: Ni</li>
+          <li>Varjit in aaroh: Re and Pa (same)</li>
+          <li>Pa completely absent — even in avroh</li>
+          <li>Uses shuddha Ga (Bageshri uses komal Ga)</li>
+          <li>Uses komal Ni in descent (like Bageshri) but shuddha Ni may also appear</li>
+          <li>Mood: lighter, more hopeful — romantic but not grief-stricken</li>
+          <li>Quickest test: shuddha Ga → Rageshri; komal Ga → Bageshri</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>The definitive test:</strong> Play Ga. If it is <em>komal</em> (E♭), it is Bageshri. If it is <em>shuddha</em> (E♮), it is Rageshri. This single note distinguishes them immediately. Additionally: Rageshri has no Pa at all, even in descent — Bageshri uses Pa vakra in descent.
+    </div>
+    <div class="family-grid" style="margin-top:1rem">
+      <div class="fam-card">
+        <div class="fam-name">Malgunji</div>
+        <div class="fam-desc">Mix of Khamaj and Bageshri. Uses shuddha Ga in aaroh (vs komal Ga in Bageshri). Also uses both Nishads. Night raga.</div>
+        <div class="fam-note">S G m D n S' | S' n D P m G m g R S</div>
+      </div>
+      <div class="fam-card">
+        <div class="fam-name">Bhimpalasi</div>
+        <div class="fam-desc">Kafi thaat cousin. Omits Re and Dha in aaroh (vs Re and Pa in Bageshri). Vadi: Ma (same). Afternoon raga — not midnight.</div>
+        <div class="fam-note">S g M P n S' | S' n D P M g R S</div>
+      </div>
+      <div class="fam-card">
+        <div class="fam-name">Bageshri Kanada</div>
+        <div class="fam-desc">Bageshri with Kanada ang elements added — some phrases borrow from Darbari/Adana Kanada. Rarer, more complex. Night raga.</div>
+        <div class="fam-note">Bageshri + Kanada phrases</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 13 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">13</span><span class="section-title">Rasa aur Bhaav <span class="section-title-hindi">(रस और भाव)</span> — Emotion &amp; Mood</span></div>
+    <div class="rasa-grid">
+      <div class="rasa-card"><div class="rasa-title">Viraha Shringaar — वियोग श्रृंगार</div><div class="rasa-desc">The primary rasa: separation from the beloved. Not the tearful drama of Bhairavi, but a more dignified, quiet yearning — the figure who waits alone at midnight, composed in her grief, but aching. Bageshri is perhaps the most perfectly named raga for its mood.</div></div>
+      <div class="rasa-card"><div class="rasa-title">Karuna — करुणा</div><div class="rasa-desc">Pathos and compassion — the raga evokes a tender sadness rather than despair. The missing Re and Pa in ascent create the sound of incompleteness; the raga reaches for something it cannot fully grasp.</div></div>
+      <div class="rasa-card"><div class="rasa-title">Bhakti — भक्ति</div><div class="rasa-desc">The same yearning that works for romantic separation works for spiritual longing — many bhajans are set in Bageshri, particularly those expressing the devotee's ache for the divine. The raga's midnight time is perfect for nocturnal prayer.</div></div>
+      <div class="rasa-card"><div class="rasa-title">Prakriti — प्रकृति</div><div class="rasa-desc">The silence of midnight — the hour when all activity has stilled and the only sound is the beating of one's own heart. Bageshri is the musical embodiment of that suspended, waiting quality of the deep night.</div></div>
+    </div>
+  </div>
+
+  <!-- 14 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">14</span><span class="section-title">Samay Chakra <span class="section-title-hindi">(समय चक्र)</span> — Time Theory</span></div>
+    <div class="prahar-row">
+      <div class="prahar-cell"><span class="prahar-time">6–9 AM</span>Morning</div>
+      <div class="prahar-cell"><span class="prahar-time">9 AM–12 PM</span>Late morning</div>
+      <div class="prahar-cell"><span class="prahar-time">12–3 PM</span>Afternoon</div>
+      <div class="prahar-cell"><span class="prahar-time">3–6 PM</span>Late afternoon</div>
+      <div class="prahar-cell"><span class="prahar-time">6–9 PM</span>Evening</div>
+      <div class="prahar-cell highlight"><span class="prahar-time">9 PM–12 AM</span>★ BAGESHRI ★</div>
+      <div class="prahar-cell highlight" style="background:#ddd8f5;color:#3C3489"><span class="prahar-time">12–3 AM</span>★ Midnight ★</div>
+      <div class="prahar-cell"><span class="prahar-time">3–6 AM</span>Pre-dawn</div>
+    </div>
+    <p>Bageshri is a <strong>deep night raga</strong> — second prahar of the night (9 PM–midnight), though it is closely associated with midnight specifically. Its emotional world — the ache of waiting, the silence of the night, the suspended hope of reunion — is perfectly mapped to this time. Performing or listening to Bageshri at midnight, in near-darkness, is the ideal context for fully understanding its emotional range.</p>
+  </div>
+
+  <!-- 15 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">15</span><span class="section-title">Film Songs based on Bageshri</span></div>
+    <p style="font-size:0.85rem;margin-bottom:0.5rem">Bageshri has been used extensively in Hindi film music — its melodic nature made it a favourite of composers like C. Ramchandra, who described it as easy to work with. Many iconic songs are set in this raga.</p>
+    <table class="film-table">
+      <tr><th>Song</th><th>Film</th><th>Year</th><th>Singer / MD</th></tr>
+      <tr><td>Aaja Re Pardesi</td><td>Madhumati</td><td>1958</td><td>Lata Mangeshkar / Salil Choudhury — definitive Bageshri film song</td></tr>
+      <tr><td>Jaag Dard-e-Ishq Jaag</td><td>Anuradha</td><td>1960</td><td>Lata Mangeshkar / Pt. Ravi Shankar — pure Bageshri</td></tr>
+      <tr><td>Radha Na Bole</td><td>Azaad</td><td>1955</td><td>Lata Mangeshkar / C. Ramchandra</td></tr>
+      <tr><td>Hum Tere Bin Kahin Reh Nahin Sakte</td><td>Waqt</td><td>1965</td><td>Lata Mangeshkar / Ravi</td></tr>
+      <tr><td>Mohe Panghat Pe</td><td>Mughal-e-Azam</td><td>1960</td><td>Lata Mangeshkar / Naushad — Bageshri-influenced</td></tr>
+      <tr><td>Ja Re Beimaan Tujhe Jaan Liya</td><td>Private Secretary</td><td>1962</td><td>Manna Dey / D. Dilip</td></tr>
+    </table>
+  </div>
+
+  <!-- 16 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">16</span><span class="section-title">Notable Artists — Recommended Listening</span></div>
+    <div class="artist-card">
+      <div class="artist-initial">BG</div>
+      <div><div class="artist-name">Ustad Bade Ghulam Ali Khan</div><div class="artist-detail">Patiala Gharana, vocal — his Bageshri recordings are definitive; particularly his vilambit khayal "Kaun Gata Bha'ili" shows the raga's full emotional depth</div></div>
+    </div>
+    <div class="artist-card">
+      <div class="artist-initial">BJ</div>
+      <div><div class="artist-name">Pandit Bhimsen Joshi</div><div class="artist-detail">Kirana Gharana, vocal — his Bageshri recordings are celebrated for the treatment of DhaMa sangati and the slow alaap; essential listening for purvanga development</div></div>
+    </div>
+    <div class="artist-card">
+      <div class="artist-initial">KG</div>
+      <div><div class="artist-name">Pandit Kumar Gandharva</div><div class="artist-detail">His approach to Bageshri is highly individual and emotionally immediate — recommended for understanding how the raga can be personalised while maintaining its grammar</div></div>
+    </div>
+    <div class="artist-card">
+      <div class="artist-initial">SA</div>
+      <div><div class="artist-name">Ustad Salamat Ali Khan & Nazakat Ali Khan</div><div class="artist-detail">Their duo recordings in Bageshri are landmarks of the Patiala style — the interplay between voices captures the raga's conversational, yearning quality</div></div>
+    </div>
+    <div class="artist-card">
+      <div class="artist-initial">VK</div>
+      <div><div class="artist-name">Ustad Vilayat Khan</div><div class="artist-detail">Sitar — his Bageshri gat recordings demonstrate how the DhaMa sangati and Pa vakra rule translate beautifully to the sitar's plucked idiom</div></div>
+    </div>
+  </div>
+
+  <!-- 17 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">17</span><span class="section-title">Practice Schedule <span class="section-title-hindi">(अभ्यास क्रम)</span></span></div>
+    <div class="col-card" style="margin-bottom:1rem">
+      <h4>Daily Practice — 50 Minutes</h4>
+      <ul>
+        <li><strong>0–5 min:</strong> Tanpura setup; establish Ma as the gravitational centre — settle into the drone with Ma as the resting point</li>
+        <li><strong>5–12 min:</strong> Alankars 1–2 — core aaroh; confirm no Re or Pa going up; andolan on g and n</li>
+        <li><strong>12–18 min:</strong> Alankars 3–4 — avroh with Pa vakra; DhaMa sangati cell</li>
+        <li><strong>18–28 min:</strong> Alaap phrases 1–3; lower octave; komal Ga as primary resting note in purvanga</li>
+        <li><strong>28–38 min:</strong> Alaap phrases 4–6; DhaMa sangati; taar saptak; full resolution</li>
+        <li><strong>38–44 min:</strong> Sargam geet with Teentaal</li>
+        <li><strong>44–50 min:</strong> DhaMa meend taans — slow and deliberate; every descent through DhaMa should be felt</li>
+      </ul>
+    </div>
+    <table class="week-table">
+      <tr><th>Day</th><th>Focus</th></tr>
+      <tr><td>Monday</td><td>Alankars; drill ascending rule (no Re/Pa) and Pa vakra rule until automatic</td></tr>
+      <tr><td>Tuesday</td><td>Alaap phrases 1–3; lower octave; komal Ga as purvanga nyaas; Ma as vadi</td></tr>
+      <tr><td>Wednesday</td><td>Alaap phrases 4–6; DhaMa sangati; andolan practice on g and n</td></tr>
+      <tr><td>Thursday</td><td>Sargam geet with taal; focus on placing Pa vakra correctly in rhythmic context</td></tr>
+      <tr><td>Friday</td><td>Bandish sthai "Kahe Ri Na Bairi" — learn and memorise at slow vilambit pace</td></tr>
+      <tr><td>Saturday</td><td>Bandish antara + full composition; compare with Rageshri to sharpen distinction</td></tr>
+      <tr><td>Sunday</td><td>Listening at midnight — Bade Ghulam Ali Khan or Bhimsen Joshi; Aaja Re Pardesi (film)</td></tr>
+    </table>
+  </div>
+
+  <!-- 18 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">18</span><span class="section-title">Common Mistakes to Avoid</span></div>
+    <table class="mistake-table">
+      <tr><th>Mistake</th><th>Correction</th></tr>
+      <tr><td>Using Re in the aaroh</td><td>Re is completely absent in ascending phrases. Even a brief passing Re going up immediately destroys the raga's identity and introduces the flavour of Kafi or Bhimpalasi.</td></tr>
+      <tr><td>Using Pa freely in descent</td><td>Pa is strictly vakra — it appears only in the pattern Ma Pa Dha Ma. Never use Pa to open or close a phrase; never approach it directly from Dha above or Ma below without returning to Dha–Ma immediately.</td></tr>
+      <tr><td>Neglecting the DhaMa sangati</td><td>The Dha–Ma interval is the raga's single most identifying gesture. Every significant phrase should pass through or resolve on DhaMa. Ignoring it makes Bageshri unrecognisable.</td></tr>
+      <tr><td>Not applying andolan to g and n</td><td>Both komal Ga and komal Ni must oscillate. Komal Ga takes a Ma grace note (kan); komal Ni takes a Dha or Sa grace note. Without these ornaments, the komal notes sound inert and the raga loses its expressive character.</td></tr>
+      <tr><td>Confusing with Rageshri</td><td>Shuddha Ga = Rageshri. Komal Ga = Bageshri. This is the single fastest diagnostic. Also: Rageshri has no Pa at all; Bageshri uses Pa vakra in descent.</td></tr>
+      <tr><td>Confusing with Bhimpalasi</td><td>Bhimpalasi omits Re and Dha in ascent; Bageshri omits Re and Pa. The presence of Dha in Bageshri's aaroh (Sa g Ma Dha n Sa') is what separates it from Bhimpalasi's ascent (Sa g Ma Pa n Sa').</td></tr>
+      <tr><td>Playing at medium or fast tempo too early</td><td>Bageshri is a midnight raga of deep contemplation. Begin always at slow vilambit pace; the DhaMa sangati must be given its full emotional weight. Rushing creates a technically correct but emotionally hollow performance.</td></tr>
+    </table>
+  </div>
+
+  <!-- 19 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">19</span><span class="section-title">Glossary of Key Terms</span></div>
+    <div class="glossary-grid">
+      <div class="gloss-item"><strong>Prabal Sangati</strong>The most characteristic and powerful interval of a raga — Dha–Ma (DhaMa) is Bageshri's prabal sangati</div>
+      <div class="gloss-item"><strong>Vakra Pa</strong>Pa used obliquely in descent only, sandwiched: Ma Pa Dha Ma — never opening or closing a phrase</div>
+      <div class="gloss-item"><strong>Nyaas Swara</strong>Primary resting note: komal Ga in purvanga (lower half); Dha in uttaranga (upper half)</div>
+      <div class="gloss-item"><strong>Purvanga-pradhan</strong>A raga whose emotional weight lies in the lower half of the octave (Sa–Pa). Bageshri is purvanga-pradhan.</div>
+      <div class="gloss-item"><strong>Viraha</strong>The pain of separation from the beloved — the primary emotional theme of Bageshri</div>
+      <div class="gloss-item"><strong>Audav–Sampurna</strong>Jati: 5 notes ascending (audav), 7 notes descending (sampurna)</div>
+      <div class="gloss-item"><strong>Vadi</strong>Most important note — Ma (Madhyam) in Bageshri</div>
+      <div class="gloss-item"><strong>Samvadi</strong>Second most important note — Sa (Shadaj) in Bageshri</div>
+      <div class="gloss-item"><strong>Andolan</strong>Slow oscillation on a note — mandatory on komal Ga and komal Ni in Bageshri</div>
+      <div class="gloss-item"><strong>Kan Swara</strong>Grace note: komal Ga takes Ma kan; komal Ni takes Dha or Sa kan</div>
+      <div class="gloss-item"><strong>Varjit Swara</strong>Forbidden/omitted notes — Re and Pa varjit in aaroh</div>
+      <div class="gloss-item"><strong>Rageshri</strong>Bageshri's closest cousin — same structure but shuddha Ga and Khamaj thaat</div>
+      <div class="gloss-item"><strong>Madhya Raatri</strong>Deep midnight — the ideal time for Bageshri performance</div>
+      <div class="gloss-item"><strong>Meend</strong>Smooth glide between notes — Dha ~~~ Ma is the defining meend of Bageshri</div>
+      <div class="gloss-item"><strong>Komal</strong>Flat note — g (E♭) and n (B♭) in Bageshri</div>
+      <div class="gloss-item"><strong>Kafi Thaat</strong>Parent scale of Bageshri — S R g M P D n</div>
+    </div>
+  </div>
+
+  <!-- 20 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">20</span><span class="section-title">Summary at a Glance</span></div>
+    <div class="summary-grid">
+      <div class="summary-card"><h4>Identity</h4><p>Thaat: Kafi<br>Jati: Audav–Sampurna<br>Time: 9 PM–Midnight<br>Purvanga-pradhan</p></div>
+      <div class="summary-card"><h4>Notes</h4><p>↑ Sa <span style="color:#993C1D">g</span> <span style="color:var(--ind)">Ma</span> Dha <span style="color:#993C1D">n</span> (5)<br>↓ Sa Re <span style="color:#993C1D">g</span> <span style="color:var(--ind)">Ma</span> Pa(v) Dha <span style="color:#993C1D">n</span> (7)<br>Re+Pa absent in aaroh<br>Pa only vakra in avroh</p></div>
+      <div class="summary-card"><h4>Emphasis</h4><p>Vadi: Ma (Madhyam)<br>Samvadi: Sa (Shadaj)<br>Nyaas: g (purv) · Dha (uttara)<br>Sangati: Dha–Ma ★</p></div>
+      <div class="summary-card"><h4>Character</h4><p>Viraha — separation, yearning<br>Midnight contemplation<br>Dignified, quiet grief<br>Not dramatic — meditative</p></div>
+      <div class="summary-card"><h4>Related</h4><p>Rageshri (closest cousin)<br>Malgunji (mixed form)<br>Bhimpalasi (Kafi family)<br>Bageshri Kanada (complex)</p></div>
+      <div class="summary-card"><h4>Pedagogical key</h4><p>No Re/Pa in aaroh — ever<br>Pa only Ma Pa Dha Ma (vakra)<br>DhaMa is the soul<br>Andolan on g and n</p></div>
+    </div>
+  </div>
+
+  <div class="ornament">✦ &nbsp; ✦ &nbsp; ✦</div>
+  <p style="text-align:center;font-size:0.78rem;color:var(--ind-dim);font-style:italic">Compiled with verified sources: Wikipedia, Riyaz App, TreeOfSkills, Songs of Yore, WholisticWellnessSpace, Parrikar Archive<br>Notes for Hindustani Classical Music practice. Best heard at midnight.</p>
+
+</div>
+</body>
+</html>

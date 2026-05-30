@@ -1,0 +1,288 @@
+
+<h2 class="sr-only">Comprehensive Guitar Learning Notes — Justin Guitar Method and Beyond</h2>
+
+<style>
+:root {
+  --amber-50: #FAEEDA; --amber-100: #FAC775; --amber-400: #BA7517; --amber-600: #854F0B; --amber-800: #633806; --amber-900: #412402;
+  --teal-50: #E1F5EE; --teal-200: #5DCAA5; --teal-600: #0F6E56; --teal-800: #085041;
+  --coral-50: #FAECE7; --coral-200: #F0997B; --coral-600: #993C1D;
+  --blue-50: #E6F1FB; --blue-600: #185FA5; --blue-800: #0C447C;
+  --purple-50: #EEEDFE; --purple-600: #534AB7; --purple-800: #3C3489;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); color: var(--color-text-primary); }
+.page { padding: 1.5rem 0; }
+.hero { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.hero h1 { font-size: 26px; font-weight: 500; margin-bottom: 6px; }
+.hero p { font-size: 15px; color: var(--color-text-secondary); line-height: 1.6; }
+.badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: var(--border-radius-md); margin-right: 6px; margin-bottom: 8px; }
+.badge-amber { background: var(--amber-50); color: var(--amber-600); }
+.badge-teal { background: var(--teal-50); color: var(--teal-600); }
+.badge-blue { background: var(--blue-50); color: var(--blue-800); }
+.badge-purple { background: var(--purple-50); color: var(--purple-800); }
+.badge-coral { background: var(--coral-50); color: var(--coral-600); }
+
+.section-title { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 12px; margin-top: 2rem; }
+.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 12px; }
+.card-title { font-size: 15px; font-weight: 500; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+.card-icon { font-size: 18px; color: var(--color-text-secondary); }
+.card p { font-size: 14px; color: var(--color-text-secondary); line-height: 1.6; }
+.card ul { padding-left: 16px; font-size: 14px; color: var(--color-text-secondary); line-height: 1.8; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+.metric { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem; }
+.metric-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; }
+.metric-value { font-size: 22px; font-weight: 500; }
+
+.grade-row { display: flex; align-items: flex-start; gap: 14px; padding: 12px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.grade-row:last-child { border-bottom: none; }
+.grade-dot { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; flex-shrink: 0; margin-top: 2px; }
+.grade-body { flex: 1; }
+.grade-name { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
+.grade-desc { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; }
+
+.routine-block { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.routine-block:last-child { border-bottom: none; }
+.routine-time { font-size: 11px; font-weight: 500; color: var(--amber-600); background: var(--amber-50); padding: 3px 8px; border-radius: var(--border-radius-md); white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
+.routine-label { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+.routine-desc { font-size: 13px; color: var(--color-text-secondary); line-height: 1.5; }
+
+.tip-item { display: flex; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--color-border-tertiary); align-items: flex-start; }
+.tip-item:last-child { border-bottom: none; }
+.tip-num { font-size: 12px; font-weight: 500; background: var(--teal-50); color: var(--teal-600); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.tip-text { font-size: 14px; color: var(--color-text-secondary); line-height: 1.6; flex: 1; }
+.tip-text strong { color: var(--color-text-primary); font-weight: 500; }
+
+a.link-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--blue-600); text-decoration: none; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 5px 12px; margin-right: 8px; margin-top: 8px; }
+a.link-btn:hover { background: var(--color-background-secondary); }
+</style>
+
+<div class="page">
+
+<div class="hero">
+  <span class="badge badge-amber">Beginner → Advanced</span>
+  <span class="badge badge-teal">Justin Guitar Method</span>
+  <span class="badge badge-blue">Free Online</span>
+  <h1>Learning Guitar — Complete Notes</h1>
+  <p>A structured reference covering the JustinGuitar method, grade paths, practice routines, core techniques, and tips to accelerate your playing.</p>
+</div>
+
+<!-- <p class="section-title">About JustinGuitar</p> -->
+<!-- <div class="card">
+  <div class="card-title"><i class="ti ti-guitar-pick card-icon" aria-hidden="true"></i> Who is Justin Sandercoe?</div>
+  <p>Justin Sandercoe is one of the world's most respected guitar educators with over 20 years of teaching experience. His website <strong>justinguitar.com</strong> offers completely free, structured lessons for beginners through advanced players — covering electric, acoustic, and ukulele. The site hosts 200+ song lessons and a global student community.</p>
+</div> -->
+<!-- <div class="grid3">
+  <div class="metric"><div class="metric-label">Teaching experience</div><div class="metric-value">20+ yrs</div></div>
+  <div class="metric"><div class="metric-label">Course levels</div><div class="metric-value">3 paths</div></div>
+  <div class="metric"><div class="metric-label">Songs in catalogue</div><div class="metric-value">200+</div></div>
+</div> -->
+
+<p class="section-title">The Grade Path — Justin Guitar System</p>
+<div class="card">
+
+  <div class="grade-row">
+    <div class="grade-dot" style="background: var(--teal-50); color: var(--teal-600);">G1</div>
+    <div class="grade-body">
+      <div class="grade-name">Grade 1 — First Steps (Beginner)</div>
+      <div class="grade-desc">Open chords A, D, E. Basic strumming, chord changes, reading tab & chord boxes. First songs with 2–3 chords. Finger conditioning begins.</div>
+    </div>
+  </div>
+
+  <div class="grade-row">
+    <div class="grade-dot" style="background: var(--teal-50); color: var(--teal-600);">G2</div>
+    <div class="grade-body">
+      <div class="grade-name">Grade 2 — Building Blocks</div>
+      <div class="grade-desc">C, G, Em, Am chords added. Rhythm guitar, 12-bar blues, first pentatonic scale shapes. Power chords introduced for rock players.</div>
+    </div>
+  </div>
+
+  <div class="grade-row">
+    <div class="grade-dot" style="background: var(--teal-50); color: var(--teal-600);">G3</div>
+    <div class="grade-body">
+      <div class="grade-name">Grade 3 — Consolidation</div>
+      <div class="grade-desc">Fingerpicking patterns, basic improvisation, more songs, and solidifying chord transitions. Introduction to F chord shape and capo usage.</div>
+    </div>
+  </div>
+
+  <div class="grade-row">
+    <div class="grade-dot" style="background: var(--amber-50); color: var(--amber-600);">G4</div>
+    <div class="grade-body">
+      <div class="grade-name">Grade 4 — Intermediate Begins</div>
+      <div class="grade-desc">Barre chords (F major, B minor). Expanded scale patterns, string bending, hammer-ons, pull-offs. Rhythm fills in Hendrix/Mayfield style.</div>
+    </div>
+  </div>
+
+  <div class="grade-row">
+    <div class="grade-dot" style="background: var(--amber-50); color: var(--amber-600);">G5</div>
+    <div class="grade-body">
+      <div class="grade-name">Grade 5 — Intermediate Techniques</div>
+      <div class="grade-desc">CAGED system for fretboard navigation, vibrato, double-stop strumming, transcribing chords from songs, lead guitar foundations.</div>
+    </div>
+  </div>
+
+  <div class="grade-row">
+    <div class="grade-dot" style="background: var(--amber-50); color: var(--amber-600);">G6</div>
+    <div class="grade-body">
+      <div class="grade-name">Grade 6 — Advanced Intermediate</div>
+      <div class="grade-desc">7th chords, extended chord shapes, jazz/blues rhythm techniques, advanced fingerstyle, soloing with phrasing and dynamics.</div>
+    </div>
+  </div>
+
+  <div class="grade-row">
+    <div class="grade-dot" style="background: var(--coral-50); color: var(--coral-600);">G7</div>
+    <div class="grade-body">
+      <div class="grade-name">Grade 7+ — Advanced</div>
+      <div class="grade-desc">Modes (Dorian, Mixolydian, etc.), arpeggios, jazz chord voicings, blues lead mastery, slide guitar, advanced improvisation and ear training.</div>
+    </div>
+  </div>
+
+</div>
+
+<p class="section-title">Daily Practice Routine (30 Minutes)</p>
+<div class="card">
+  <div class="routine-block">
+    <div class="routine-time">5 min</div>
+    <div>
+      <div class="routine-label">Warm-up</div>
+      <div class="routine-desc">Finger stretches, chromatic runs up and down the neck. Slow, deliberate. Prevents strain and activates muscle memory.</div>
+    </div>
+  </div>
+  <div class="routine-block">
+    <div class="routine-time">8 min</div>
+    <div>
+      <div class="routine-label">Chord changes</div>
+      <div class="routine-desc">Practice transitioning between your current grade's chords with a metronome. Smooth transitions matter more than speed.</div>
+    </div>
+  </div>
+  <div class="routine-block">
+    <div class="routine-time">7 min</div>
+    <div>
+      <div class="routine-label">Scales / technique</div>
+      <div class="routine-desc">Run the pentatonic or major scale ascending and descending. Use a metronome, gradually increase tempo. Focus on clean picking.</div>
+    </div>
+  </div>
+  <div class="routine-block">
+    <div class="routine-time">5 min</div>
+    <div>
+      <div class="routine-label">Strumming patterns</div>
+      <div class="routine-desc">Practice a new or tricky rhythm pattern. Count aloud. Lock in with a backing track or drum loop.</div>
+    </div>
+  </div>
+  <div class="routine-block">
+    <div class="routine-time">5 min</div>
+    <div>
+      <div class="routine-label">Song practice</div>
+      <div class="routine-desc">End every session with a song you enjoy. Pick one section (verse or chorus), not the whole song. Eight smooth bars beats a stumbled-through full run.</div>
+    </div>
+  </div>
+</div>
+
+<p class="section-title">Core Techniques by Stage</p>
+<div class="grid2">
+
+  <div class="card">
+    <div class="card-title"><i class="ti ti-music card-icon" aria-hidden="true"></i> Chords — progression</div>
+    <ul>
+      <li>Open chords: A, D, E, C, G, Em, Am</li>
+      <li>Power chords: root + 5th (rock/punk)</li>
+      <li>Barre chords: E-shape, A-shape</li>
+      <li>7th chords: A7, D7, G7, B7</li>
+      <li>Extended: sus2, sus4, add9, maj7</li>
+      <li>Jazz voicings: drop-2, shell chords</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><i class="ti ti-ruler card-icon" aria-hidden="true"></i> Scales to learn</div>
+    <ul>
+      <li>Pentatonic minor — soloing workhorse</li>
+      <li>Pentatonic major — country/pop flavour</li>
+      <li>Natural minor (Aeolian)</li>
+      <li>Major scale — theory foundation</li>
+      <li>Blues scale — minor pent + ♭5</li>
+      <li>Modes: Dorian, Mixolydian (later)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><i class="ti ti-wave-sine card-icon" aria-hidden="true"></i> Lead techniques</div>
+    <ul>
+      <li>Hammer-ons and pull-offs (legato)</li>
+      <li>String bending (whole & half step)</li>
+      <li>Vibrato — finger and wrist</li>
+      <li>Slides (glissando)</li>
+      <li>Tapping (advanced)</li>
+      <li>Sweep picking (advanced)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><i class="ti ti-align-left card-icon" aria-hidden="true"></i> Rhythm & strumming</div>
+    <ul>
+      <li>Down strums — feel the beat first</li>
+      <li>Down-up patterns with 8th notes</li>
+      <li>Syncopation: miss the down, hit the up</li>
+      <li>Fingerpicking: Travis/alternating bass</li>
+      <li>Muting: palm mute, fret-hand mute</li>
+      <li>Dynamics: loud vs soft for expression</li>
+    </ul>
+  </div>
+
+</div>
+
+<p class="section-title">Essential Music Theory for Guitarists</p>
+<div class="card">
+  <ul style="columns: 2; column-gap: 2rem;">
+    <li>Notes on the fretboard — memorise E and A strings first</li>
+    <li>How to read TAB and chord diagrams</li>
+    <li>The CAGED system for chord shapes</li>
+    <li>Key signatures and the major scale formula (W-W-H-W-W-W-H)</li>
+    <li>Chord numerals: I–IV–V progressions</li>
+    <li>Relative major and minor (e.g. C major / A minor)</li>
+    <li>Circle of fifths for key relationships</li>
+    <li>Time signatures: 4/4, 3/4, 6/8</li>
+    <li>Reading a metronome and tempo (BPM)</li>
+    <li>Ear training: identifying intervals and chord quality</li>
+  </ul>
+</div>
+
+<p class="section-title">Pro tips for faster progress</p>
+<div class="card">
+  <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Consistency beats duration.</strong> 20 minutes daily outperforms 3 hours on weekends. Daily repetition is how muscle memory forms.</div></div>
+  <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Always use a metronome.</strong> Start at a tempo where you make zero mistakes, then increase by 5 BPM when clean.</div></div>
+  <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Nail chord changes before moving on.</strong> Justin's "one-minute changes" drill — count how many times you can switch between two chords cleanly in 60 seconds.</div></div>
+  <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Learn songs you love.</strong> Motivation is the fuel. Technique books won't keep you going — your favourite riff will.</div></div>
+  <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Record yourself.</strong> Listening back reveals issues invisible while playing — timing, muted strings, tone.</div></div>
+  <div class="tip-item"><div class="tip-num">6</div><div class="tip-text"><strong>Don't skip the basics.</strong> Around 90% of beginners quit within year one. The plateau at weeks 2–4 (excitement fades, skills haven't caught up) is the critical point — push through it.</div></div>
+  <div class="tip-item"><div class="tip-num">7</div><div class="tip-text"><strong>Play over backing tracks.</strong> Even simple A minor tracks transform scales from exercises into music and build your ear simultaneously.</div></div>
+</div>
+
+<p class="section-title">Gear basics for beginners</p>
+<div class="grid2">
+  <div class="card">
+    <div class="card-title"><i class="ti ti-guitar-pick card-icon" aria-hidden="true"></i> Choosing a first guitar</div>
+    <p>Acoustic: no amp needed, builds finger strength faster. Electric: easier on fingers, better for rock/blues, needs amp. Classical: nylon strings, wider neck — suited for fingerstyle and classical. A ₹8,000–₹15,000 acoustic is a solid starting point in India.</p>
+  </div>
+  <div class="card">
+    <div class="card-title"><i class="ti ti-tool card-icon" aria-hidden="true"></i> Essential accessories</div>
+    <ul>
+      <li>Clip-on tuner or tuner app (GuitarTuna)</li>
+      <li>Picks — medium gauge to start</li>
+      <li>Capo — expands playable songs quickly</li>
+      <li>Guitar strap (for electric)</li>
+      <li>Extra set of strings (same gauge)</li>
+      <li>Metronome app (free options everywhere)</li>
+    </ul>
+  </div>
+</div>
+
+<p class="section-title">Recommended resources</p>
+<div class="card">
+  <p style="font-size:14px; color: var(--color-text-secondary); margin-bottom: 8px;">All core JustinGuitar lessons are free. Books provide a structured offline companion.</p>
+  <a class="link-btn" href="https://www.justinguitar.com/beginner"><i class="ti ti-external-link" aria-hidden="true"></i> JustinGuitar Beginner Course</a>
+  <a class="link-btn" href="https://www.justinguitar.com/classes/intermediate-guitar-course-grade-four"><i class="ti ti-external-link" aria-hidden="true"></i> Intermediate Course</a>
+  <a class="link-btn" href="https://www.justinguitar.com/guitar-lessons"><i class="ti ti-external-link" aria-hidden="true"></i> All Lessons</a>
+</div>
+
+</div>

@@ -1,0 +1,807 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary)}
+.wrap{padding:1.5rem 0 3rem}
+
+/* Hero */
+.hero{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:.5px solid var(--color-border-tertiary)}
+.eyebrow{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.tag{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;letter-spacing:.03em}
+.tA{background:#FAEEDA;color:#854F0B}.tT{background:#E1F5EE;color:#0F6E56}
+.tB{background:#E6F1FB;color:#185FA5}.tP{background:#EEEDFE;color:#534AB7}
+.tC{background:#FAECE7;color:#993C1D}.tG{background:#F0FDF4;color:#166534}
+.hero h1{font-size:28px;font-weight:500;margin-bottom:8px;line-height:1.2}
+.hero p{font-size:15px;color:var(--color-text-secondary);line-height:1.6}
+
+/* Section label */
+.sl{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-secondary);margin:2.5rem 0 12px}
+
+/* Metrics */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:10px;margin-bottom:2rem}
+.metric{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.9rem 1rem}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px}
+.mv{font-size:21px;font-weight:500}
+
+/* Generic card */
+.card{border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.1rem 1.25rem;margin-bottom:12px}
+.card-title{font-size:14px;font-weight:500;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.card-body{font-size:13px;color:var(--color-text-secondary);line-height:1.7}
+
+/* Grid */
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+
+/* Sargam notation box */
+.sargam-box{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:1rem 1.2rem;font-family:var(--font-mono);margin-top:8px}
+.srow{display:flex;align-items:baseline;gap:10px;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);flex-wrap:wrap}
+.srow:last-child{border-bottom:none}
+.snote{font-size:14px;font-weight:500;min-width:28px}
+.slabel{font-size:11px;color:var(--color-text-secondary)}
+.sholes{font-size:12px;color:var(--color-text-secondary);margin-left:auto}
+.sa{color:#185FA5}.re{color:#0F6E56}.ga{color:#854F0B}
+.ma{color:#534AB7}.pa{color:#993C1D}.dha{color:#166534}.ni{color:#78350f}
+
+/* Hole diagram */
+.hole-diagram{display:flex;align-items:center;gap:4px;margin:10px 0;flex-wrap:wrap}
+.hole{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--color-border-secondary);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;cursor:default}
+.hole.blow-hole{background:#E6F1FB;border-color:#185FA5;color:#185FA5}
+.hole.open{background:var(--color-background-secondary)}
+.hole.closed{background:var(--color-text-secondary);opacity:.7}
+.hole-label{font-size:10px;color:var(--color-text-secondary);margin:0 4px}
+
+/* Stage cards */
+.stage{border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:16px;overflow:hidden}
+.stage-head{display:flex;align-items:center;gap:14px;padding:1rem 1.25rem;border-bottom:.5px solid var(--color-border-tertiary)}
+.stage-pill{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0}
+.stage-title{font-size:14px;font-weight:500}
+.stage-sub{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.stage-cols{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.scol{padding:1rem 1.25rem}
+.scol:first-child{border-right:.5px solid var(--color-border-tertiary)}
+.col-lbl{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--color-text-secondary);margin-bottom:10px}
+ul.items{list-style:none;padding:0}
+ul.items li{font-size:13px;color:var(--color-text-secondary);padding:4px 0;border-bottom:.5px solid var(--color-border-tertiary);line-height:1.5;display:flex;gap:8px;align-items:flex-start}
+ul.items li:last-child{border-bottom:none}
+ul.items li .dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.35;flex-shrink:0;margin-top:7px}
+
+/* Song practice rows */
+.song-row{padding:7px 0;border-bottom:.5px solid var(--color-border-tertiary)}
+.song-row:last-child{border-bottom:none}
+.song-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.song-notes{font-size:11px;font-family:var(--font-mono);color:#185FA5;margin:2px 0}
+.song-detail{font-size:11px;color:var(--color-text-secondary);line-height:1.5}
+
+/* Raga time wheel */
+.raga-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.raga-card{border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.2rem}
+.raga-time{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.raga-time-dot{width:8px;height:8px;border-radius:50%}
+.raga-name{font-size:14px;font-weight:500;margin-bottom:3px}
+.raga-notes{font-size:11px;font-family:var(--font-mono);color:var(--color-text-secondary);margin-bottom:4px}
+.raga-mood{font-size:11px;color:var(--color-text-secondary);line-height:1.5}
+.raga-level{display:inline-block;font-size:10px;font-weight:500;padding:2px 7px;border-radius:20px;margin-top:6px}
+
+/* Ornaments */
+.orn-card{border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem}
+.orn-name{font-size:13px;font-weight:500;margin-bottom:5px;display:flex;align-items:center;gap:8px}
+.orn-devanagari{font-size:15px;color:var(--color-text-secondary)}
+.orn-body{font-size:12px;color:var(--color-text-secondary);line-height:1.65}
+.orn-tip{font-size:11px;color:#0F6E56;margin-top:5px;font-style:italic}
+
+/* Player rows */
+.player-row{display:flex;gap:12px;padding:10px 0;border-bottom:.5px solid var(--color-border-tertiary);align-items:flex-start}
+.player-row:last-child{border-bottom:none}
+.p-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0;margin-top:2px}
+.p-name{font-size:13px;font-weight:500}
+.p-desc{font-size:12px;color:var(--color-text-secondary);line-height:1.5;margin-top:2px}
+
+/* Tips */
+.tip-item{display:flex;gap:10px;padding:9px 0;border-bottom:.5px solid var(--color-border-tertiary);align-items:flex-start}
+.tip-item:last-child{border-bottom:none}
+.tip-num{width:22px;height:22px;border-radius:50%;background:#E1F5EE;color:#0F6E56;font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.tip-body{font-size:13px;color:var(--color-text-secondary);line-height:1.6;flex:1}
+.tip-body strong{color:var(--color-text-primary);font-weight:500}
+
+/* Routine */
+.routine{border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.r-row{display:flex;align-items:stretch;border-bottom:.5px solid var(--color-border-tertiary)}
+.r-row:last-child{border-bottom:none}
+.r-time{min-width:72px;padding:10px 12px;background:#FAEEDA;color:#854F0B;font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.4;flex-shrink:0}
+.r-body{padding:10px 14px;flex:1}
+.r-label{font-size:13px;font-weight:500;margin-bottom:2px}
+.r-desc{font-size:12px;color:var(--color-text-secondary);line-height:1.5}
+.r-raga{font-size:11px;color:#0F6E56;margin-top:4px;font-style:italic}
+
+/* Gear */
+.gear-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.gear-card{border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.2rem}
+.gear-title{font-size:13px;font-weight:500;margin-bottom:6px}
+.gear-body{font-size:12px;color:var(--color-text-secondary);line-height:1.7}
+
+/* Link row */
+.link-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.lbtn{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#185FA5;text-decoration:none;border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:5px 12px}
+.lbtn:hover{background:var(--color-background-secondary)}
+
+@media(max-width:520px){
+  .stage-cols,.g2,.g3{grid-template-columns:1fr}
+  .scol:first-child{border-right:none;border-bottom:.5px solid var(--color-border-tertiary)}
+}
+</style>
+
+<div class="wrap">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="eyebrow">
+    <span class="tag tA">Complete Guide</span>
+    <span class="tag tT">Hindustani Classical</span>
+    <span class="tag tB">Beginner → Advanced</span>
+    <span class="tag tP">Ragas + Bollywood Songs</span>
+    <span class="tag tG">Sargam Notation Included</span>
+  </div>
+  <h1>बाँसुरी — The Bansuri Complete Learning Guide</h1>
+  <p>The bansuri is a side-blown bamboo flute and one of the most ancient and sacred instruments of India. Mentioned in the Vedas and played by Lord Krishna, it is the foundation of Hindustani classical music. This guide covers everything in order — from choosing your first bansuri to mastering ragas, ornaments, talas, and Bollywood melodies in sargam notation.</p>
+</div>
+
+<!-- METRICS -->
+<div class="metrics">
+  <div class="metric"><div class="ml">Age of instrument</div><div class="mv">4000+ yrs</div></div>
+  <div class="metric"><div class="ml">Playing holes</div><div class="mv">6 (basic)</div></div>
+  <div class="metric"><div class="ml">Swaras (notes)</div><div class="mv">7 + variants</div></div>
+  <div class="metric"><div class="ml">Octaves range</div><div class="mv">2.5+</div></div>
+  <div class="metric"><div class="ml">Learning stages</div><div class="mv">5</div></div>
+</div>
+
+<!-- WHAT IS BANSURI -->
+<p class="sl">What is the Bansuri?</p>
+<div class="card">
+  <div class="card-title">🎋 The Sacred Bamboo Flute</div>
+  <div class="card-body">The bansuri is a transverse (side-blown) bamboo flute with no keys or mechanisms — just a blowing hole and 6 (or 7) finger holes. It produces sound by directing a focused air stream across the edge of the blowing hole. Unlike Western flutes, the bansuri has <strong>no fixed pitch</strong> — the same holes produce different notes depending on how hard you blow (Mandra, Madhya, or Taar Saptak — lower, middle, upper octave). The standard beginner bansuri is in <strong>C or E scale</strong>. Traditionally made from bamboo grown in Assam and Manipur. Used in Hindustani (North Indian) classical music. The Carnatic equivalent (South India) is called the <strong>Venu</strong> or Pullanguzhal, with 8 holes.</div>
+</div>
+
+<!-- CHOOSING A BANSURI -->
+<p class="sl">Choosing Your First Bansuri</p>
+<div class="gear-grid">
+  <div class="gear-card">
+    <div class="gear-title">🎋 Best beginner size</div>
+    <div class="gear-body">A <strong>medium-sized bansuri in E Natural (19 inches)</strong> or <strong>C Natural</strong> is ideal for beginners. E scale is the most commonly used for practice and teaching. The tube should be straight with no cracks, smooth bamboo, and correctly spaced holes. Budget: <strong>₹300–₹1,500</strong> for a decent bamboo bansuri. Avoid plastic bansuris — they don't breathe.</div>
+  </div>
+  <div class="gear-card">
+    <div class="gear-title">📐 Size and pitch chart</div>
+    <div class="gear-body"><strong>G Bass (26 in)</strong> — Deep, resonant. For advanced players.<br><strong>F / E scale (20–22 in)</strong> — Medium, warm. Most popular for practice.<br><strong>C Natural (14 in)</strong> — Brighter, easier to blow first notes.<br><strong>D scale (17 in)</strong> — Common for film music. Hariprasad Chaurasia uses G–E range.</div>
+  </div>
+  <div class="gear-card">
+    <div class="gear-title">⚠️ What to avoid</div>
+    <div class="gear-body">Avoid very short novelty bansuris (under 10 inches) — they can't hold proper swaras. Avoid bansuris with uneven holes or visible cracks. Never buy a bansuri without blowing it first to test tone and tuning. Hole spacing should feel natural for your hand size.</div>
+  </div>
+  <div class="gear-card">
+    <div class="gear-title">🎵 Essential accessories</div>
+    <div class="gear-body"><strong>Tanpura app</strong> (iTanpura or Tanpura Droid) — provides the drone for tuning and raga practice. <strong>Tabla app</strong> (iTabla Pro, Tabla Riyaz) — for rhythm practice. <strong>Tuner app</strong> — to check swara accuracy. Soft cloth for cleaning. Store bansuri in a cloth pouch away from extreme heat.</div>
+  </div>
+</div>
+
+<!-- HOW TO HOLD -->
+<p class="sl">How to Hold the Bansuri</p>
+<div class="card">
+  <div class="card-body">Hold the bansuri <strong>horizontally to your right</strong> (side-blown). The blowing hole faces upward and slightly toward you. <strong>Left hand</strong> covers the upper 3 holes (index, middle, ring fingers). <strong>Right hand</strong> covers the lower 3 holes. Left thumb supports the flute gently underneath; right thumb provides balance and stability from below. Fingers should be <strong>soft, relaxed, and curved</strong> — covering each hole completely but without pressing hard. The blowing hole rests at the <strong>centre of your lower lip</strong> — not inside the mouth, but at the edge where dry meets moist lip. Keep your chin slightly down. Stand or sit straight — good posture directly affects breath control and tone quality. <em>Do not puff your cheeks.</em> The air comes from the diaphragm, not the chest.</div>
+  <div style="margin-top:12px">
+    <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--color-text-secondary);margin-bottom:8px">Hole layout (left → right)</div>
+    <div class="hole-diagram">
+      <span class="hole blow-hole" title="Blowing hole">💨</span>
+      <span class="hole-label">·</span>
+      <span class="hole closed" title="Left index — Sa">L1</span>
+      <span class="hole closed" title="Left middle — Re">L2</span>
+      <span class="hole closed" title="Left ring — Ga">L3</span>
+      <span class="hole-label">·</span>
+      <span class="hole closed" title="Right index — Ma">R1</span>
+      <span class="hole closed" title="Right middle — Pa">R2</span>
+      <span class="hole closed" title="Right ring — Dha">R3</span>
+      <span class="hole open" title="Open — Ni (optional 7th hole)">R4</span>
+    </div>
+    <div style="font-size:11px;color:var(--color-text-secondary);margin-top:4px">Blue = blowing hole &nbsp;|&nbsp; Dark = covered &nbsp;|&nbsp; Light = open &nbsp;|&nbsp; Left hand: L1–L3 &nbsp;|&nbsp; Right hand: R1–R4</div>
+  </div>
+</div>
+
+<!-- MAKING FIRST SOUND -->
+<p class="sl">Making Your First Sound</p>
+<div class="card">
+  <div class="card-body"><strong>Step 1 — Pen cap exercise:</strong> Before touching the bansuri, place a pen cap on your lower lip (open end touching the lip edge). Blow a gentle, focused air stream at a slight downward angle across the edge. When you hear a whistle, you've found the right angle. <br><br><strong>Step 2 — First note on bansuri:</strong> Cover ALL finger holes. Rest the blowing hole at the centre of your lower lip. Blow gently — not into the hole but <em>across</em> the edge at about a 45° downward angle. Adjust the tilt of the bansuri (roll it slightly in or out) until a clear, warm tone emerges. This note is <strong>Sa (the root note)</strong>. <br><br><strong>Step 3 — Two octaves:</strong> Blowing softly with all holes closed = <strong>Mandra Sa</strong> (lower octave). Blowing slightly harder and firmer = <strong>Madhya Sa</strong> (middle octave). Blowing firmly with lips tightened slightly = <strong>Taar Sa</strong> (upper octave). Mastering octave control is everything on bansuri — no keys help you, only your breath and lips.</div>
+</div>
+
+<!-- SARGAM NOTATION -->
+<p class="sl">Sargam — Indian Musical Notation</p>
+<div class="card">
+  <div class="card-body">Sargam is India's equivalent of Western solfège (Do Re Mi). The 7 swaras (notes) are:</div>
+  <div class="sargam-box">
+    <div class="srow"><span class="snote sa">Sa</span><span class="slabel">षड्ज &nbsp;|&nbsp; Root note — always fixed</span><span class="sholes">All holes closed</span></div>
+    <div class="srow"><span class="snote re">Re</span><span class="slabel">ऋषभ &nbsp;|&nbsp; Shuddh Re (natural), Komal Re (flat)</span><span class="sholes">Lift L1</span></div>
+    <div class="srow"><span class="snote ga">Ga</span><span class="slabel">गन्धार &nbsp;|&nbsp; Shuddh Ga, Komal Ga (flat)</span><span class="sholes">Lift L1 + L2</span></div>
+    <div class="srow"><span class="snote ma">Ma</span><span class="slabel">मध्यम &nbsp;|&nbsp; Shuddh Ma, Tivra Ma (sharp) — half-hole</span><span class="sholes">Lift L1+L2+L3</span></div>
+    <div class="srow"><span class="snote pa">Pa</span><span class="slabel">पञ्चम &nbsp;|&nbsp; Always fixed (like Sa)</span><span class="sholes">Lift L1+L2+L3+R1</span></div>
+    <div class="srow"><span class="snote dha">Dha</span><span class="slabel">धैवत &nbsp;|&nbsp; Shuddh Dha, Komal Dha</span><span class="sholes">Lift L1…R2</span></div>
+    <div class="srow"><span class="snote ni">Ni</span><span class="slabel">निषाद &nbsp;|&nbsp; Shuddh Ni, Komal Ni</span><span class="sholes">Lift L1…R3</span></div>
+    <div class="srow"><span class="snote sa" style="opacity:.7">Sa'</span><span class="slabel">तार सप्तक — Upper octave Sa (all holes open + firm breath)</span><span class="sholes">All holes open</span></div>
+  </div>
+  <div style="font-size:12px;color:var(--color-text-secondary);margin-top:10px;line-height:1.7">
+    <strong>Notation key:</strong> Lowercase letter = komal (flat) &nbsp;|&nbsp; Uppercase = shuddh (natural) &nbsp;|&nbsp; Underline = mandra (lower) &nbsp;|&nbsp; Prime (') = taar (upper) &nbsp;|&nbsp; Dash (—) = hold note &nbsp;|&nbsp; Sa and Pa never change in any raga.
+  </div>
+</div>
+
+<!-- ALANKARS -->
+<p class="sl">Alankars — Practice Patterns (Essential Daily Exercises)</p>
+<div class="card">
+  <div class="card-body" style="margin-bottom:10px">Alankars are systematic note patterns that build finger dexterity, breath control, and familiarity with the saptak. Practice each pattern slowly with a tanpura drone. Increase speed only when completely clean.</div>
+  <div class="sargam-box">
+    <div class="srow"><span class="snote" style="color:#185FA5;min-width:60px">Basic</span><span class="slabel">S R G M P D N S'  &nbsp;→&nbsp;  S' N D P M G R S</span></div>
+    <div class="srow"><span class="snote" style="color:#0F6E56;min-width:60px">Alankar 1</span><span class="slabel">SRG RGM GMP MPD PDN DNS' &nbsp;→&nbsp; descend</span></div>
+    <div class="srow"><span class="snote" style="color:#854F0B;min-width:60px">Alankar 2</span><span class="slabel">SRGM RGMP GMPS MPDN PDNS' &nbsp;→&nbsp; descend</span></div>
+    <div class="srow"><span class="snote" style="color:#534AB7;min-width:60px">Alankar 3</span><span class="slabel">SRGS RGRG MGMG PMPM DPSD &nbsp;(pairs)</span></div>
+    <div class="srow"><span class="snote" style="color:#993C1D;min-width:60px">Gamak</span><span class="slabel">S~R~G~M~P~D~N~S' &nbsp;(heavy oscillation on each note)</span></div>
+    <div class="srow"><span class="snote" style="color:#166534;min-width:60px">Bhupali</span><span class="slabel">S R G P D S' &nbsp;→&nbsp; S' D P G R S &nbsp;(only 5 notes)</span></div>
+  </div>
+</div>
+
+<!-- ===== LEARNING STAGES ===== -->
+<p class="sl">The Learning Path — Stage by Stage</p>
+
+<!-- STAGE 1 -->
+<div class="stage">
+  <div class="stage-head">
+    <div class="stage-pill" style="background:#E1F5EE;color:#085041">S1</div>
+    <div>
+      <div class="stage-title">Stage 1 — Absolute Beginner (Weeks 1–4)</div>
+      <div class="stage-sub">First sound · Sa · Posture · Diaphragm breath · Madhya Saptak swaras</div>
+    </div>
+  </div>
+  <div class="stage-cols">
+    <div class="scol">
+      <div class="col-lbl">What to learn</div>
+      <ul class="items">
+        <li><span class="dot"></span>Making the first clear sound (pen cap exercise)</li>
+        <li><span class="dot"></span>Holding the bansuri correctly — posture, hand position</li>
+        <li><span class="dot"></span>Diaphragm breathing — slow, controlled, from the belly</li>
+        <li><span class="dot"></span>Sa — hold for 5–8 seconds, clean and steady</li>
+        <li><span class="dot"></span>All 7 swaras in Madhya Saptak (middle octave)</li>
+        <li><span class="dot"></span>Ascending and descending: S R G M P D N S'</li>
+        <li><span class="dot"></span>Long notes (Swar Sadhana) — 10+ seconds per note</li>
+        <li><span class="dot"></span>Setting up tanpura drone app for Sa</li>
+      </ul>
+    </div>
+    <div class="scol">
+      <div class="col-lbl" style="color:#0F6E56">Songs & tunes to practice</div>
+      <div class="song-row">
+        <div class="song-name">Raghupati Raghav Raja Ram</div>
+        <div class="song-notes">S R G · G R S · R G M · G R S</div>
+        <div class="song-detail">Devotional bhajan. Uses only 4 notes (S R G M). Perfect first melody on bansuri.</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Om Jai Jagdish Hare</div>
+        <div class="song-notes">S R G M P D N S'</div>
+        <div class="song-detail">Classic aarti that uses all 7 swaras — ascending and descending. Great for beginners.</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Happy Birthday (Sargam)</div>
+        <div class="song-notes">S S R S M G · S S R S P M</div>
+        <div class="song-detail">Familiar tune — immediately satisfying. Builds confidence with simple pattern.</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Jana Gana Mana (National Anthem)</div>
+        <div class="song-notes">S R G G G G G R G M</div>
+        <div class="song-detail">Slow, dignified tempo. All basic notes. Teaches steady blow and clean transitions.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STAGE 2 -->
+<div class="stage">
+  <div class="stage-head">
+    <div class="stage-pill" style="background:#E1F5EE;color:#085041">S2</div>
+    <div>
+      <div class="stage-title">Stage 2 — Three Octaves & Alankars (Months 1–3)</div>
+      <div class="stage-sub">Mandra · Madhya · Taar Saptak · Alankars · Breath control · Simple ragas</div>
+    </div>
+  </div>
+  <div class="stage-cols">
+    <div class="scol">
+      <div class="col-lbl">What to learn</div>
+      <ul class="items">
+        <li><span class="dot"></span>Mandra Saptak (lower octave) — blow softer, lips relaxed</li>
+        <li><span class="dot"></span>Taar Saptak (upper octave) — firm breath, tighter aperture</li>
+        <li><span class="dot"></span>Smooth octave jumps: Sa to Sa' without squeaking</li>
+        <li><span class="dot"></span>Basic Alankars (patterns 1 & 2 — groups of 3 and 4)</li>
+        <li><span class="dot"></span>Steady breath over long melodic phrases</li>
+        <li><span class="dot"></span>Komal (flat) swaras: Komal Re, Komal Ga, Komal Dha, Komal Ni</li>
+        <li><span class="dot"></span>Tivra Ma (sharp Ma) — half-hole technique</li>
+        <li><span class="dot"></span>Raga Bhupali — first raga study (5 notes only)</li>
+      </ul>
+    </div>
+    <div class="scol">
+      <div class="col-lbl" style="color:#0F6E56">Songs & Raga to practice</div>
+      <div class="song-row">
+        <div class="song-name">Raga Bhupali (Bhoopali)</div>
+        <div class="song-notes">S R G P D S' &nbsp;↑&nbsp; S' D P G R S &nbsp;↓</div>
+        <div class="song-detail">Only 5 notes (no Ma, no Ni). Evening raga 6–9 pm. Bhakti/devotional mood. First raga for every bansuri student.</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Vande Mataram</div>
+        <div class="song-notes">S R M P M P · N S' N S' R' S' N D</div>
+        <div class="song-detail">Uses a wider range — excellent for practising Mandra to Taar octave transitions.</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Tum Hi Ho — Aashiqui 2</div>
+        <div class="song-notes">S R G · S R · G M G R S</div>
+        <div class="song-detail">Extremely popular Bollywood melody. Uses only lower-mid swaras. Great for beginners.</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Nazar Ke Saamne — Aashiqui</div>
+        <div class="song-notes">R R · S R · M G (G scale)</div>
+        <div class="song-detail">Simple 5-note melodic contour. Beautiful to play. Confidence booster.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STAGE 3 -->
+<div class="stage">
+  <div class="stage-head">
+    <div class="stage-pill" style="background:#FAEEDA;color:#633806">S3</div>
+    <div>
+      <div class="stage-title">Stage 3 — Ragas, Meend & First Ornaments (Months 3–8)</div>
+      <div class="stage-sub">Meend · Kana · Alap · Tala · Raga grammar · Aroha–Avaroha</div>
+    </div>
+  </div>
+  <div class="stage-cols">
+    <div class="scol">
+      <div class="col-lbl">What to learn</div>
+      <ul class="items">
+        <li><span class="dot"></span><strong>Meend</strong> — smooth glide between notes (slide fingers partially)</li>
+        <li><span class="dot"></span><strong>Kana swara</strong> — grace notes, quick touch before main note</li>
+        <li><span class="dot"></span>Aroha (ascending) and Avaroha (descending) of each raga</li>
+        <li><span class="dot"></span>Alap — slow, free-tempo melodic exploration of a raga</li>
+        <li><span class="dot"></span>Introduction to Tala: Teental (16 beats), Keherwa (8 beats)</li>
+        <li><span class="dot"></span>Raga Yaman — the most important raga for beginners to learn</li>
+        <li><span class="dot"></span>Raga Hamsadhwani — pentatonic, joyful, easy to grasp</li>
+        <li><span class="dot"></span>Sthayi and Antara (composition structure)</li>
+      </ul>
+    </div>
+    <div class="scol">
+      <div class="col-lbl" style="color:#854F0B">Songs & Ragas to practice</div>
+      <div class="song-row">
+        <div class="song-name">Raga Yaman</div>
+        <div class="song-notes">N S R G M# P D N S' (all shuddh, Ma is tivra)</div>
+        <div class="song-detail">Evening raga 6–9 pm. Romantic, expansive mood. Most popular raga for beginners after Bhupali. Hariprasad Chaurasia's iconic raga.</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Raga Hamsadhwani</div>
+        <div class="song-notes">S R G P N S' (only 5 notes, no Ma, no Dha)</div>
+        <div class="song-detail">Joyful, auspicious raga. Often played at concerts' start. Very easy to learn — 5 notes only.</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Kal Ho Na Ho (Bollywood)</div>
+        <div class="song-notes">G M P · M G R S · R G M P D</div>
+        <div class="song-detail">Classic Shankar-Ehsaan-Loy melody. Lies beautifully in Yaman's tonal territory — practice meend on the phrases.</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Lag Ja Gale — Lata Mangeshkar</div>
+        <div class="song-notes">P M G R · S N D P · M G R S</div>
+        <div class="song-detail">Timeless film classic. Slow, deeply expressive. Teaches phrase shaping and long-note breath control.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STAGE 4 -->
+<div class="stage">
+  <div class="stage-head">
+    <div class="stage-pill" style="background:#FAECE7;color:#712B13">S4</div>
+    <div>
+      <div class="stage-title">Stage 4 — Gamak, Taans & Raga Depth (Months 8–18)</div>
+      <div class="stage-sub">Gamak · Murki · Taan · Vistar · Bandish · Bhairavi · Kafi · Desh</div>
+    </div>
+  </div>
+  <div class="stage-cols">
+    <div class="scol">
+      <div class="col-lbl">What to learn</div>
+      <ul class="items">
+        <li><span class="dot"></span><strong>Gamak</strong> — heavy oscillation between notes; Chaurasia called it "the most important sound in Indian music"</li>
+        <li><span class="dot"></span><strong>Murki</strong> — quick alternation of 3–4 notes at high speed</li>
+        <li><span class="dot"></span><strong>Taan</strong> — rapid melodic runs (Sapaat, Gamak, Alankaar taans)</li>
+        <li><span class="dot"></span><strong>Vistar</strong> — slow expansion of raga across all octaves</li>
+        <li><span class="dot"></span>Bandish (composition) — sthayi + antara in taal</li>
+        <li><span class="dot"></span>Komal-note ragas: Kafi, Bhairavi, Asavari</li>
+        <li><span class="dot"></span>Dynamic control — pianissimo to forte on same note</li>
+        <li><span class="dot"></span>Playing with live tabla accompaniment</li>
+      </ul>
+    </div>
+    <div class="scol">
+      <div class="col-lbl" style="color:#712B13">Songs & Ragas to practice</div>
+      <div class="song-row">
+        <div class="song-name">Raga Bhairavi</div>
+        <div class="song-notes">S r g M P d n S' (all komal except Sa, Ma, Pa)</div>
+        <div class="song-detail">Most beloved raga in all of Indian music. Morning raga. Pathos and devotion. Always the last raga played at a concert. Deep emotional range.</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Raga Kafi (spring)</div>
+        <div class="song-notes">S R g M P D n S' (Komal Ga and Komal Ni)</div>
+        <div class="song-detail">Springtime raga, romantic/yearning mood. Combines shuddh and komal notes — teaches komal swara control.</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Mere Sapno Ki Rani — Aradhana</div>
+        <div class="song-notes">P D N S' · R' S' N D P · M G R S</div>
+        <div class="song-detail">R.D. Burman classic. Wonderful melody for Desh/Kafi region. Practice gamak on the Ni oscillation.</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">O Re Piya — Aaja Nachle</div>
+        <div class="song-notes">G M · S R S · D P M G M</div>
+        <div class="song-detail">Beautiful Rahat Fateh Ali Khan melody. Yaman/Bhairavi feel — expressive meend between notes.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STAGE 5 -->
+<div class="stage">
+  <div class="stage-head">
+    <div class="stage-pill" style="background:#FAECE7;color:#712B13">S5</div>
+    <div>
+      <div class="stage-title">Stage 5 — Advanced — Raga Mastery & Improvisation (Year 2+)</div>
+      <div class="stage-sub">Full alap · Jod · Jhala · Complex ragas · Marwa · Darbari · Malkauns</div>
+    </div>
+  </div>
+  <div class="stage-cols">
+    <div class="scol">
+      <div class="col-lbl">What to learn</div>
+      <ul class="items">
+        <li><span class="dot"></span>Full Alap–Jod–Jhala–Bandish structure (concert format)</li>
+        <li><span class="dot"></span>Raga Malkauns (late night, pentatonic minor — no Re, Pa)</li>
+        <li><span class="dot"></span>Raga Darbari Kanada — late night, complex komal Re phrase</li>
+        <li><span class="dot"></span>Raga Marwa — evening, no Pa, very unique</li>
+        <li><span class="dot"></span>Raga Pahadi — Himalayan folk-classical feel</li>
+        <li><span class="dot"></span>Layakari — rhythmic games with the tala cycle</li>
+        <li><span class="dot"></span>Cross-cultural fusion: Bansuri + Western harmony/jazz</li>
+        <li><span class="dot"></span>Composing your own compositions (bandish)</li>
+      </ul>
+    </div>
+    <div class="scol">
+      <div class="col-lbl" style="color:#712B13">Songs & Ragas to practice</div>
+      <div class="song-row">
+        <div class="song-name">Raga Malkauns (late night)</div>
+        <div class="song-notes">S g M d n S' (only 5 notes — no Re, no Pa)</div>
+        <div class="song-detail">One of India's most popular and haunting ragas. Gamak-heavy. Deep, introspective, late-night mood.</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Raga Pahadi (Himalayan)</div>
+        <div class="song-notes">S R G P D (+ occasional M, Ni)</div>
+        <div class="song-detail">Folk-classical feel. Used extensively in Bollywood. Chaurasia's favourite for fusion. Breezy, pastoral mood.</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Piya Tose Naina Lage Re — Guide</div>
+        <div class="song-notes">P D N S' · N D P M G R</div>
+        <div class="song-detail">S.D. Burman masterpiece. Deeply Bhairavi-influenced. Full range of ornaments — meend, gamak, murki.</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Dil Se Re — A.R. Rahman</div>
+        <div class="song-notes">Modal Phrygian feel · complex komal Re phrases</div>
+        <div class="song-detail">Rahman's bansuri writing draws from Darbari and Bhairav. Transcribing this is an advanced challenge.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RAGA TIME CHART -->
+<p class="sl">Raga & Time of Day — The Complete Prahar Map</p>
+<div class="raga-grid">
+  <div class="raga-card">
+    <div class="raga-time"><span class="raga-time-dot" style="background:#F59E0B"></span>Sunrise — 6 AM to 9 AM</div>
+    <div class="raga-name">Raga Bhairav</div>
+    <div class="raga-notes">S r G M P d N S'</div>
+    <div class="raga-mood">Tranquil, devotional. The classic morning greeting. Lord Shiva's raga. Komal Re and Dha give its unique colour.</div>
+    <div class="raga-level" style="background:#FAEEDA;color:#854F0B">Intermediate</div>
+  </div>
+  <div class="raga-card">
+    <div class="raga-time"><span class="raga-time-dot" style="background:#FCD34D"></span>Morning — 9 AM to 12 PM</div>
+    <div class="raga-name">Raga Bhairavi</div>
+    <div class="raga-notes">S r g M P d n S'</div>
+    <div class="raga-mood">Pathos, longing, farewell. The most loved raga. Always closes a concert. Deep emotional expression.</div>
+    <div class="raga-level" style="background:#FAECE7;color:#712B13">Advanced</div>
+  </div>
+  <div class="raga-card">
+    <div class="raga-time"><span class="raga-time-dot" style="background:#86EFAC"></span>Afternoon — 12 to 3 PM</div>
+    <div class="raga-name">Raga Bhimpalasi</div>
+    <div class="raga-notes">S R g M P D n S'</div>
+    <div class="raga-mood">Longing, sadness, depth. Beautiful afternoon raga with komal Ga and Ni. Very popular in classical.</div>
+    <div class="raga-level" style="background:#FAEEDA;color:#854F0B">Intermediate</div>
+  </div>
+  <div class="raga-card">
+    <div class="raga-time"><span class="raga-time-dot" style="background:#67E8F9"></span>Late Afternoon — 3 to 6 PM</div>
+    <div class="raga-name">Raga Puriya Dhanashri</div>
+    <div class="raga-notes">N R g M# P D n S'</div>
+    <div class="raga-mood">Serious, weighty. Starts on Ni (unusual). Very expressive tivra Ma. Complex and rewarding.</div>
+    <div class="raga-level" style="background:#FAECE7;color:#712B13">Advanced</div>
+  </div>
+  <div class="raga-card">
+    <div class="raga-time"><span class="raga-time-dot" style="background:#A78BFA"></span>Sunset — 6 to 9 PM</div>
+    <div class="raga-name">Raga Yaman</div>
+    <div class="raga-notes">N S R G M# P D N S'</div>
+    <div class="raga-mood">Romantic, expansive, majestic. The gateway raga — perfect for beginners. Tivra Ma gives it otherworldly colour.</div>
+    <div class="raga-level" style="background:#E1F5EE;color:#085041">Beginner</div>
+  </div>
+  <div class="raga-card">
+    <div class="raga-time"><span class="raga-time-dot" style="background:#818CF8"></span>Evening — 9 PM to 12 AM</div>
+    <div class="raga-name">Raga Desh</div>
+    <div class="raga-notes">S R G M P D n S' (Komal Ni only on descent)</div>
+    <div class="raga-mood">Joyful, festive, monsoon feel. Many Bollywood songs are in Desh. Very accessible and melodious.</div>
+    <div class="raga-level" style="background:#E1F5EE;color:#085041">Beginner</div>
+  </div>
+  <div class="raga-card">
+    <div class="raga-time"><span class="raga-time-dot" style="background:#6366F1"></span>Late Night — 12 AM+</div>
+    <div class="raga-name">Raga Malkauns</div>
+    <div class="raga-notes">S g M d n S' (5 notes only)</div>
+    <div class="raga-mood">Deep, haunting, introspective. Pentatonic minor. Gamak-heavy. One of the most beloved late-night ragas.</div>
+    <div class="raga-level" style="background:#FAEEDA;color:#854F0B">Intermediate</div>
+  </div>
+  <div class="raga-card">
+    <div class="raga-time"><span class="raga-time-dot" style="background:#34D399"></span>All seasons — Spring</div>
+    <div class="raga-name">Raga Kafi / Bahar</div>
+    <div class="raga-notes">S R g M P D n S'</div>
+    <div class="raga-mood">Springtime raga — romantic, yearning. Holi festival. Komal Ga and Ni. Both folk and classical versions exist.</div>
+    <div class="raga-level" style="background:#FAEEDA;color:#854F0B">Intermediate</div>
+  </div>
+</div>
+
+<!-- ORNAMENTS -->
+<p class="sl">Gamakas & Ornaments — The Soul of Bansuri</p>
+<div class="g2">
+  <div class="orn-card">
+    <div class="orn-name">Meend <span class="orn-devanagari">मींड</span></div>
+    <div class="orn-body">A smooth, unbroken glide between two notes — like a portamento. Done by gradually sliding fingers partially off or onto the holes. Creates the signature "singing" quality of the bansuri. Considered the most fundamental ornament in Hindustani classical music. Sa and Pa have no meend (they are fixed). All other notes can be reached via meend.</div>
+    <div class="orn-tip">Practice: slowly slide from G to R using half-coverage of L2. The transition should be imperceptible.</div>
+  </div>
+  <div class="orn-card">
+    <div class="orn-name">Gamak <span class="orn-devanagari">गमक</span></div>
+    <div class="orn-body">A heavy, vigorous oscillation between two adjacent notes. Not a gentle vibrato — a full-weight swing between pitches. Hariprasad Chaurasia calls it "the most important sound in Indian classical music." Produced by quick, forceful partial-hole movements. Used extensively in ragas like Darbari Kanada and Malkauns.</div>
+    <div class="orn-tip">Start slow — oscillate G–M–G–M cleanly before increasing speed.</div>
+  </div>
+  <div class="orn-card">
+    <div class="orn-name">Murki <span class="orn-devanagari">मुर्की</span></div>
+    <div class="orn-body">A quick alternation of 3–4 notes played very rapidly, creating a sparkling, ornate effect. Like a tiny trill pattern embedded inside a phrase. Used at phrase ends or on important notes. Common in Khayal, Thumri, and lighter classical genres.</div>
+    <div class="orn-tip">Example: G-R-S-R on a single beat. Very fast. Build from slow repetition.</div>
+  </div>
+  <div class="orn-card">
+    <div class="orn-name">Kana Swara <span class="orn-devanagari">कण स्वर</span></div>
+    <div class="orn-body">A grace note — a quick, barely-audible touch of an adjacent note just before landing on the main note. Like an appoggiatura in Western music. Adds delicacy and natural speech-like phrasing to melodies. Called the "soul of Indian classical music." Every phrase in Hindustani music uses kana swaras.</div>
+    <div class="orn-tip">Touch Pa briefly before landing on Dha. Almost inaudible — just a hint.</div>
+  </div>
+  <div class="orn-card">
+    <div class="orn-name">Andolan <span class="orn-devanagari">आन्दोलन</span></div>
+    <div class="orn-body">A slow, deliberate oscillation or wavering on a note — wider and slower than vibrato. Characteristic of komal (flat) notes in ragas like Darbari Kanada (komal Re), where the note "leans" and oscillates as it arrives. Communicates deep emotion and yearning.</div>
+    <div class="orn-tip">Hold komal Re and gently oscillate. Used heavily in evening ragas.</div>
+  </div>
+  <div class="orn-card">
+    <div class="orn-name">Taan <span class="orn-devanagari">तान</span></div>
+    <div class="orn-body">Rapid melodic runs — ascending, descending, or mixed — covering large swaths of the raga. Taans are the climax of a raga performance, showing the player's technical command. Types: Sapaat (straight), Gamak (oscillating), Alankar (patterned), Koot (oblique/tricky). Advanced taans can span three octaves in a single breath.</div>
+    <div class="orn-tip">Learn one taan pattern at a time. Master it slow in all 3 tempos before moving on.</div>
+  </div>
+</div>
+
+<!-- BOLLYWOOD SONGS FULL SECTION -->
+<p class="sl">Bollywood & Film Songs — Sargam Practice at Every Level</p>
+<div class="card">
+  <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:12px;line-height:1.6">All notes are approximate for E-scale bansuri (most common practice scale). S = Sa, R = Re, G = Ga, M = Ma, P = Pa, D = Dha, N = Ni. Lower-case = komal (flat). Numbers after note = taar (upper) saptak. Dashes = hold.</div>
+
+  <div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:#0F6E56;margin-bottom:8px">🟢 Beginner — Simple swaras, middle octave</div>
+  <div class="song-row">
+    <div class="song-name">Tum Hi Ho — Aashiqui 2 (Arijit Singh)</div>
+    <div class="song-notes">S R G · S R · Ab tum hi ho: S R G M G R S · Zindagi: n n R S n d n · p d</div>
+    <div class="song-detail">The most-played Bollywood song on bansuri. Simple swaras, slow tempo, hugely satisfying. Raga feel: Shivaranjani.</div>
+  </div>
+  <div class="song-row">
+    <div class="song-name">Raghupati Raghav Raja Ram (Bhajan)</div>
+    <div class="song-notes">S R G · G R S · R G M · G R S · P M G R S</div>
+    <div class="song-detail">Only uses lower 4 notes. Perfect first complete melody on bansuri. Can play across all three octaves once comfortable.</div>
+  </div>
+  <div class="song-row">
+    <div class="song-name">Ek Pyaar Ka Nagma Hai — Shor</div>
+    <div class="song-notes">S M M G M P · P M G R S · G M G R S</div>
+    <div class="song-detail">Lata Mangeshkar classic. Slow, melodious. Great for practicing smooth breath through long phrases.</div>
+  </div>
+  <div class="song-row">
+    <div class="song-name">Aye Mere Humsafar — DDLJ / Qayamat se Qayamat Tak</div>
+    <div class="song-notes">P P D N S'· S' N D P · M G R S</div>
+    <div class="song-detail">Uses a wide range. Teaches the transition from Madhya to Taar Saptak. Beloved by bansuri learners.</div>
+  </div>
+
+  <div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:#854F0B;margin:14px 0 8px">🟡 Intermediate — Wider range, ornaments, Bhupali/Yaman feel</div>
+  <div class="song-row">
+    <div class="song-name">Lag Ja Gale — Woh Kaun Thi (Lata Mangeshkar)</div>
+    <div class="song-notes">P M G R · S n D P · M G R S · n— D— P—</div>
+    <div class="song-detail">Haunting Madan Mohan melody. Based in Bhairavi. Teaches phrase shaping, meend, and breath over long sustained notes.</div>
+  </div>
+  <div class="song-row">
+    <div class="song-name">Kal Ho Na Ho — Shankar-Ehsaan-Loy</div>
+    <div class="song-notes">G M P · M G R S · R G M P D N · D P M G R</div>
+    <div class="song-detail">Lies in Yaman territory. Perfect for practicing tivra Ma and melodic runs across two octaves.</div>
+  </div>
+  <div class="song-row">
+    <div class="song-name">Ye Jo Mohabbat Hai — Kati Patang (Kishore Kumar)</div>
+    <div class="song-notes">S G G M P · P M G M G R · S n D P</div>
+    <div class="song-detail">R.D. Burman gem. Beautiful Kafi/Bhimpalasi feel. Uses komal Ga — teaches flat swara placement.</div>
+  </div>
+  <div class="song-row">
+    <div class="song-name">Mere Sapno Ki Rani — Aradhana</div>
+    <div class="song-notes">P D N S' · R' S' N D P · M G R S · G M P D N S'</div>
+    <div class="song-detail">Classic S.D. Burman melody. Joyful, full range. Teaches the ascending journey from Pa to Taar Sa.</div>
+  </div>
+  <div class="song-row">
+    <div class="song-name">Kesariya — Brahmastra (Arijit Singh)</div>
+    <div class="song-notes">G M G R S · n S R G M · P D P M G</div>
+    <div class="song-detail">Modern Bollywood hit in a Yaman-adjacent scale. Meend on the G–M transition sounds gorgeous on bansuri.</div>
+  </div>
+
+  <div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:#712B13;margin:14px 0 8px">🔴 Advanced — Full range, ornaments, raga-based Bollywood</div>
+  <div class="song-row">
+    <div class="song-name">O Re Piya — Aaja Nachle (Rahat Fateh Ali Khan)</div>
+    <div class="song-notes">G M · S R S · D P M G M · P D N S'</div>
+    <div class="song-detail">Deep Yaman/Bhairavi feel. Requires gamak on the Ni and meend into komal notes. Advanced emotional expression.</div>
+  </div>
+  <div class="song-row">
+    <div class="song-name">Piya Tose Naina Lage Re — Guide (Lata Mangeshkar)</div>
+    <div class="song-notes">P D N S' · N D P M G R · S n D P M G</div>
+    <div class="song-detail">S.D. Burman's finest film classical. Deeply Bhairavi. Full use of all ornaments — meend, gamak, murki, kana.</div>
+  </div>
+  <div class="song-row">
+    <div class="song-name">Dil Se Re — Dil Se (A.R. Rahman)</div>
+    <div class="song-notes">Modal Bhairav / Phrygian phrases · complex komal Re</div>
+    <div class="song-detail">Rahman's masterpiece bansuri writing. Transcribing and learning this is an advanced achievement in film music on bansuri.</div>
+  </div>
+  <div class="song-row">
+    <div class="song-name">Chhaiyya Chhaiyya — Dil Se (A.R. Rahman)</div>
+    <div class="song-notes">Kalyan thaat / Yaman base · energetic ascending taans</div>
+    <div class="song-detail">Iconic Sufi-influenced melody with bansuri threads. Advanced ornament and taan practice in high-energy context.</div>
+  </div>
+</div>
+
+<!-- GREAT PLAYERS -->
+<p class="sl">Legends of the Bansuri — Players to Study</p>
+<div class="card">
+  <div class="player-row">
+    <div class="p-avatar" style="background:#E1F5EE;color:#085041">HC</div>
+    <div>
+      <div class="p-name">Pandit Hariprasad Chaurasia (b. 1938, Prayagraj)</div>
+      <div class="p-desc">The living legend of the bansuri. Padma Vibhushan (2000). Revolutionised bansuri as a solo classical instrument. His unique style combines Dhrupad vocal technique with Tantrakari instrumental approach. Iconic ragas: Yaman, Durga, Pahadi. Also composed for Bollywood as "Shiv-Hari" with Pt. Shivkumar Sharma. Study him first.</div>
+    </div>
+  </div>
+  <div class="player-row">
+    <div class="p-avatar" style="background:#FAEEDA;color:#633806">PM</div>
+    <div>
+      <div class="p-name">Pandit Pannalal Ghosh (1911–1960)</div>
+      <div class="p-desc">The pioneer who elevated the bansuri from a folk/devotional instrument to a full classical solo instrument. Developed the 7-hole bansuri (adding the Ni hole). First to perform on the concert stage. The grandfather of modern bansuri tradition.</div>
+    </div>
+  </div>
+  <div class="player-row">
+    <div class="p-avatar" style="background:#E6F1FB;color:#0C447C">RM</div>
+    <div>
+      <div class="p-name">Pandit Ronu Majumdar</div>
+      <div class="p-desc">A senior disciple of Hariprasad Chaurasia. Known for extraordinary speed and precision in taans. Prolific in both classical concerts and Bollywood soundtracks. His gamak technique is considered among the finest.</div>
+    </div>
+  </div>
+  <div class="player-row">
+    <div class="p-avatar" style="background:#EEEDFE;color:#3C3489">RC</div>
+    <div>
+      <div class="p-name">Rakesh Chaurasia</div>
+      <div class="p-desc">Hariprasad Chaurasia's nephew and disciple. Frequently performs with Zakir Hussain. Represents the new generation of Hindustani bansuri virtuosos. His live recordings are excellent study material for advanced students.</div>
+    </div>
+  </div>
+  <div class="player-row">
+    <div class="p-avatar" style="background:#FAECE7;color:#712B13">NK</div>
+    <div>
+      <div class="p-name">Nityanand Haldipur & Pt. Vijay Raghav Rao</div>
+      <div class="p-desc">Both were disciples of Pannalal Ghosh and contributed greatly to developing bansuri pedagogy and repertoire. Vijay Raghav Rao's recordings in the 1950s–70s remain essential listening for serious students.</div>
+    </div>
+  </div>
+</div>
+
+<!-- DAILY RIYAAZ -->
+<p class="sl">Daily Riyaaz — 60-Minute Practice Routine</p>
+<div class="routine">
+  <div class="r-row">
+    <div class="r-time">10 min<br>Swar Sadhana</div>
+    <div class="r-body">
+      <div class="r-label">Long notes on each swara with tanpura</div>
+      <div class="r-desc">Hold each note for 8–12 seconds. Start with Sa. Listen to the drone and match pitch perfectly before moving on. This builds breath control, embouchure stability, and intonation. The most important practice you can do.</div>
+      <div class="r-raga">Play over tanpura set to your bansuri's Sa</div>
+    </div>
+  </div>
+  <div class="r-row">
+    <div class="r-time">10 min<br>Alankars</div>
+    <div class="r-body">
+      <div class="r-label">Pattern exercises — 2 alankars, each twice</div>
+      <div class="r-desc">Play each alankar in all 3 tempos (vilambit, madhya, drut — slow, medium, fast). Focus on even finger movement and breath consistency. Do not increase speed until clean at the current tempo.</div>
+      <div class="r-raga">S R G · R G M · G M P · M P D · P D N · ascending and descending</div>
+    </div>
+  </div>
+  <div class="r-row">
+    <div class="r-time">10 min<br>Meend & Ornaments</div>
+    <div class="r-body">
+      <div class="r-label">Kana swara and meend exercises</div>
+      <div class="r-desc">Practice meend from Pa to Ga, from Ni to Dha, from Re to Sa. Each glide should be smooth and continuous — no steps. Then practice kana swara on the landing notes of your current raga. These are called "the soul of Indian classical music."</div>
+      <div class="r-raga">Focus on whichever ornament your current raga uses most</div>
+    </div>
+  </div>
+  <div class="r-row">
+    <div class="r-time">15 min<br>Raga Alap</div>
+    <div class="r-body">
+      <div class="r-label">Free-tempo raga exploration (no tala)</div>
+      <div class="r-desc">Choose your current study raga. Play the alap — introduce swaras one by one, starting from the lower octave. No rushing. Every note should feel settled before moving to the next. Breathe deeply between phrases. This is where the music lives.</div>
+      <div class="r-raga">Beginners: Bhupali or Yaman alap · Intermediate: Bhairavi or Kafi</div>
+    </div>
+  </div>
+  <div class="r-row">
+    <div class="r-time">10 min<br>Bandish in Taal</div>
+    <div class="r-body">
+      <div class="r-label">Practice composition in rhythm (Keherwa or Teental)</div>
+      <div class="r-desc">Play your current bandish (composition) with tabla app. First sthayi, then antara, then back to sthayi. Stay with the tala cycle. Start slow (vilambit), then medium (madhya). Don't rush into fast tempo — clarity beats speed.</div>
+      <div class="r-raga">Use iTabla Pro at 40–60 BPM to start</div>
+    </div>
+  </div>
+  <div class="r-row">
+    <div class="r-time">5 min<br>Song / Film melody</div>
+    <div class="r-body">
+      <div class="r-label">End with a film or devotional melody you love</div>
+      <div class="r-desc">End every riyaaz session with music that gives you joy. Play slowly, expressively, with feeling. Add a meend or kana wherever it feels natural. This is your reward — and often where the biggest breakthroughs happen.</div>
+      <div class="r-raga">Tum Hi Ho, Lag Ja Gale, or whichever Bollywood melody speaks to you today</div>
+    </div>
+  </div>
+</div>
+
+<!-- TIPS -->
+<p class="sl">Top Tips for Bansuri Practice</p>
+<div class="card">
+  <div class="tip-item">
+    <div class="tip-num">1</div>
+    <div class="tip-body"><strong>Tanpura first, always.</strong> Never practice without the tanpura drone. It trains your ear to stay in tune and gives your playing a grounding and resonance that transforms the sound from exercises into music.</div>
+  </div>
+  <div class="tip-item">
+    <div class="tip-num">2</div>
+    <div class="tip-body"><strong>One raga at a time.</strong> Don't try to learn 5 ragas at once. Pick one raga per month (or longer). Know its aroha, avaroha, vadi, samvadi, time, mood, and characteristic phrases before moving on. Depth over breadth.</div>
+  </div>
+  <div class="tip-item">
+    <div class="tip-num">3</div>
+    <div class="tip-body"><strong>Listen actively.</strong> Spend 20–30 minutes a day just listening to bansuri recordings — Hariprasad Chaurasia, Ronu Majumdar, Pannalal Ghosh. Listen for how they use meend, gamak, and space. Your ear will teach your fingers what no lesson can.</div>
+  </div>
+  <div class="tip-item">
+    <div class="tip-num">4</div>
+    <div class="tip-body"><strong>Breath is the instrument, bamboo is just the vessel.</strong> Every problem in bansuri — squeaking, weak tone, poor intonation — comes from the breath. Before fixing fingers, fix your breathing. Diaphragm, not chest. Slow, controlled, from deep in the belly.</div>
+  </div>
+  <div class="tip-item">
+    <div class="tip-num">5</div>
+    <div class="tip-body"><strong>Record every session.</strong> Your phone microphone is fine. Playing back reveals pitch issues, rushed phrases, and missed meends that you never notice while playing. Record, listen, correct, repeat.</div>
+  </div>
+  <div class="tip-item">
+    <div class="tip-num">6</div>
+    <div class="tip-body"><strong>Guru–Shishya parampara matters.</strong> The bansuri tradition is an oral one. Online resources help, but try to find even a monthly lesson with a teacher in the Hariprasad Chaurasia lineage. There are aspects of rasa, phrasing, and raga grammar that can only be transmitted in person.</div>
+  </div>
+  <div class="tip-item">
+    <div class="tip-num">7</div>
+    <div class="tip-body"><strong>Bansuri cleaning.</strong> After every session, blow out any moisture from all holes and wipe the inside with a soft swab. Never leave moisture in bamboo — it warps and cracks. Store away from direct sunlight and AC vents.</div>
+  </div>
+</div>
+
+<!-- RESOURCES -->
+<p class="sl">Learning Resources</p>
+<div class="card">
+  <div class="card-body" style="margin-bottom:8px">Best online resources for structured bansuri learning. All have free content — paid courses go deeper.</div>
+  <div class="link-row">
+    <a class="lbtn" href="https://www.radheflutes.com/blogs/tutorials">Radhe Flutes Tutorials</a>
+    <a class="lbtn" href="https://bansuribliss.com/academy/">Bansuri Bliss Academy</a>
+    <a class="lbtn" href="https://bansurischool.com/">Bansuri School (Chaurasia lineage)</a>
+    <a class="lbtn" href="https://notesandsargam.com/">Notes & Sargam — Free Notations</a>
+    <a class="lbtn" href="https://www.notationsworld.com/category/hindi-songs">Notations World</a>
+    <a class="lbtn" href="https://www.themysticbamboo.com/">Mystic Bamboo Academy</a>
+  </div>
+</div>
+
+</div>

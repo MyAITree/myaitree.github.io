@@ -1,0 +1,343 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+.pg{padding:1rem 0 2rem;}
+.top-bar{display:flex;align-items:center;gap:10px;margin-bottom:1.5rem;flex-wrap:wrap;}
+.top-bar h1{font-size:20px;font-weight:500;color:var(--color-text-primary);flex:1;}
+select{font-size:13px;padding:5px 10px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);cursor:pointer;}
+.song-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1rem;}
+.song-card.active{border-color:var(--color-border-primary);}
+.song-head{display:flex;justify-content:space-between;align-items:flex-start;cursor:pointer;gap:8px;}
+.song-title{font-size:15px;font-weight:500;color:var(--color-text-primary);}
+.song-sub{font-size:12px;color:var(--color-text-secondary);margin-top:3px;}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;white-space:nowrap;}
+.b-purple{background:#EEEDFE;color:#3C3489;}
+.b-teal{background:#E1F5EE;color:#085041;}
+.b-coral{background:#FAECE7;color:#712B13;}
+.b-amber{background:#FAEEDA;color:#633806;}
+.b-green{background:#EAF3DE;color:#27500A;}
+.b-pink{background:#FBEAF0;color:#72243E;}
+.chevron{font-size:18px;color:var(--color-text-tertiary);transition:transform 0.2s;flex-shrink:0;margin-top:2px;}
+.chevron.open{transform:rotate(180deg);}
+.body{display:none;margin-top:14px;border-top:0.5px solid var(--color-border-tertiary);padding-top:14px;}
+.legend-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px;}
+.leg{font-size:11px;color:var(--color-text-secondary);}
+.leg span{font-weight:500;}
+.section-label{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;margin-top:12px;}
+.section-label:first-child{margin-top:0;}
+.notation-block{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 14px;font-family:var(--font-mono);font-size:13px;line-height:2.2;color:var(--color-text-primary);word-break:break-word;}
+.n{display:inline-block;padding:1px 5px;border-radius:4px;margin:1px 2px;cursor:default;transition:background 0.1s;}
+.n:hover{background:var(--color-background-info);color:var(--color-text-info);}
+.n.s{color:var(--color-text-primary);}
+.n.k{color:#A32D2D;}
+.n.t{color:#185FA5;font-style:italic;}
+.n.hi{font-size:11px;vertical-align:super;}
+.n.lo{font-size:11px;vertical-align:sub;}
+.n.dash{color:var(--color-text-tertiary);}
+.n.sep{color:var(--color-border-secondary);margin:0 6px;}
+.tip{margin-top:12px;font-size:12px;color:var(--color-text-secondary);line-height:1.6;padding:8px 12px;border-left:2px solid var(--color-border-secondary);border-radius:0;}
+.play-row{display:flex;align-items:center;gap:8px;margin-top:12px;}
+.play-btn{font-size:12px;padding:5px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;}
+.play-btn:hover{background:var(--color-background-secondary);}
+.ask-btn{font-size:12px;padding:5px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-info);cursor:pointer;}
+.key-map{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:10px;}
+.key{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:4px;padding:5px 2px;text-align:center;font-size:11px;}
+.key .sw{font-weight:500;color:var(--color-text-primary);font-size:13px;}
+.key .hn{color:var(--color-text-secondary);}
+.key.komal .sw{color:#A32D2D;}
+</style>
+
+<div class="pg">
+<div class="top-bar">
+  <h1>Song-by-song swaralipi notation</h1>
+  <select id="ragaFilter" onchange="filterBySong()">
+    <option value="all">All ragas</option>
+    <option value="Yaman">Yaman</option>
+    <option value="Bhairavi">Bhairavi</option>
+    <option value="Bhairav">Bhairav</option>
+    <option value="Desh">Desh</option>
+    <option value="Kafi">Kafi</option>
+    <option value="Bhoopali">Bhoopali</option>
+    <option value="Bageshri">Bageshri</option>
+    <option value="Pilu">Pilu</option>
+    <option value="Megh Malhar">Megh Malhar</option>
+    <option value="Yaman Kalyan">Yaman Kalyan</option>
+  </select>
+</div>
+
+<div id="cards"></div>
+
+<div style="margin-top:1rem;padding:12px 14px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:12px;color:var(--color-text-secondary);line-height:1.8;">
+  <strong style="color:var(--color-text-primary);font-weight:500;">Reading the notation</strong> —
+  Each note is shown as S R G m P D N &nbsp;|&nbsp;
+  <span style="color:#A32D2D;font-weight:500;">Red = komal (flat)</span> &nbsp;|&nbsp;
+  <span style="color:#185FA5;font-style:italic;font-weight:500;">Blue italic = tivra (sharp)</span> &nbsp;|&nbsp;
+  <sup style="font-size:10px;">dot above</sup> = upper octave (taar) &nbsp;|&nbsp;
+  <sub style="font-size:10px;">dot below</sub> = lower octave (mandra) &nbsp;|&nbsp;
+  — = hold/sustain &nbsp;|&nbsp; | = phrase break
+</div>
+</div>
+
+<script>
+const songs=[
+  {
+    title:"Kaagaz Ke Phool",film:"Kaagaz Ke Phool (1959)",raga:"Yaman",badge:"b-purple",
+    tip:"Raga Yaman uses tivra Ma (M̃). Start slowly, hold each note. The mukhda (opening phrase) ascends from lower Pa to upper Sa beautifully.",
+    sections:[
+      {label:"Mukhda",notes:[
+        {n:"P",t:"s"},{n:"-",t:"dash"},{n:"D",t:"s"},{n:"N",t:"s"},{n:"|",t:"sep"},
+        {n:"Ṡ",t:"s",hi:true},{n:"-",t:"dash"},{n:"N",t:"s"},{n:"D",t:"s"},{n:"|",t:"sep"},
+        {n:"M̃",t:"t"},{n:"G",t:"s"},{n:"R",t:"s"},{n:"S",t:"s"}
+      ]},
+      {label:"Antara",notes:[
+        {n:"Ġ",t:"s",hi:true},{n:"-",t:"dash"},{n:"M̃",t:"t",hi:true},{n:"P",t:"s",hi:true},{n:"|",t:"sep"},
+        {n:"D",t:"s"},{n:"N",t:"s"},{n:"Ṡ",t:"s",hi:true},{n:"-",t:"dash"},{n:"|",t:"sep"},
+        {n:"Ṙ",t:"s",hi:true},{n:"Ṡ",t:"s",hi:true},{n:"N",t:"s"},{n:"D",t:"s"},{n:"|",t:"sep"},
+        {n:"P",t:"s"},{n:"M̃",t:"t"},{n:"G",t:"s"},{n:"R",t:"s"},{n:"S",t:"s"}
+      ]}
+    ]
+  },
+  {
+    title:"Prem Ratan Dhan Payo",film:"Prem Ratan Dhan Payo (2015)",raga:"Yaman",badge:"b-purple",
+    tip:"This title track rides on Yaman's characteristic N-S opening. The tivra Ma lifts every phrase. Tempo is medium — each syllable matches one swara.",
+    sections:[
+      {label:"Mukhda",notes:[
+        {n:"N",t:"s",lo:true},{n:"S",t:"s"},{n:"R",t:"s"},{n:"-",t:"dash"},{n:"|",t:"sep"},
+        {n:"G",t:"s"},{n:"M̃",t:"t"},{n:"G",t:"s"},{n:"R",t:"s"},{n:"|",t:"sep"},
+        {n:"S",t:"s"},{n:"-",t:"dash"},{n:"-",t:"dash"}
+      ]},
+      {label:"Antara",notes:[
+        {n:"M̃",t:"t"},{n:"P",t:"s"},{n:"D",t:"s"},{n:"N",t:"s"},{n:"|",t:"sep"},
+        {n:"Ṡ",t:"s",hi:true},{n:"-",t:"dash"},{n:"D",t:"s"},{n:"N",t:"s"},{n:"|",t:"sep"},
+        {n:"P",t:"s"},{n:"M̃",t:"t"},{n:"G",t:"s"},{n:"R",t:"s"},{n:"S",t:"s"}
+      ]}
+    ]
+  },
+  {
+    title:"Mere Desh Ki Dharti",film:"Upkar (1967)",raga:"Bhairavi",badge:"b-teal",
+    tip:"Bhairavi uses komal Re, Ga, Dha, Ni. This patriotic anthem is in vilambit (slow) tempo. Hold the S and m long — they are the vadi anchor notes.",
+    sections:[
+      {label:"Mukhda",notes:[
+        {n:"S",t:"s"},{n:"-",t:"dash"},{n:"r",t:"k"},{n:"S",t:"s"},{n:"|",t:"sep"},
+        {n:"n",t:"k",lo:true},{n:"S",t:"s"},{n:"r",t:"k"},{n:"G",t:"s"},{n:"|",t:"sep"},
+        {n:"m",t:"s"},{n:"-",t:"dash"},{n:"P",t:"s"}
+      ]},
+      {label:"Antara",notes:[
+        {n:"d",t:"k"},{n:"P",t:"s"},{n:"m",t:"s"},{n:"G",t:"s"},{n:"|",t:"sep"},
+        {n:"r",t:"k"},{n:"S",t:"s"},{n:"-",t:"dash"},{n:"|",t:"sep"},
+        {n:"Ṡ",t:"s",hi:true},{n:"ṅ",t:"k",hi:true},{n:"d",t:"k"},{n:"P",t:"s"},{n:"|",t:"sep"},
+        {n:"m",t:"s"},{n:"G",t:"s"},{n:"r",t:"k"},{n:"S",t:"s"}
+      ]}
+    ]
+  },
+  {
+    title:"Mohe Panghat Pe",film:"Mughal-E-Azam (1960)",raga:"Bhairavi",badge:"b-teal",
+    tip:"Naushad's masterpiece in Bhairavi. The playful bandish moves in madhya laya (medium tempo). Notice how komal Ga and Ni add the gentle sadness.",
+    sections:[
+      {label:"Mukhda",notes:[
+        {n:"m",t:"s"},{n:"G",t:"s"},{n:"r",t:"k"},{n:"S",t:"s"},{n:"|",t:"sep"},
+        {n:"n",t:"k",lo:true},{n:"S",t:"s"},{n:"G",t:"s"},{n:"m",t:"s"},{n:"|",t:"sep"},
+        {n:"P",t:"s"},{n:"m",t:"s"},{n:"G",t:"s"},{n:"r",t:"k"},{n:"S",t:"s"}
+      ]},
+      {label:"Antara",notes:[
+        {n:"P",t:"s"},{n:"d",t:"k"},{n:"P",t:"s"},{n:"-",t:"dash"},{n:"|",t:"sep"},
+        {n:"m",t:"s"},{n:"P",t:"s"},{n:"d",t:"k"},{n:"n",t:"k"},{n:"|",t:"sep"},
+        {n:"Ṡ",t:"s",hi:true},{n:"-",t:"dash"},{n:"d",t:"k"},{n:"P",t:"s"},{n:"|",t:"sep"},
+        {n:"m",t:"s"},{n:"G",t:"s"},{n:"r",t:"k"},{n:"S",t:"s"}
+      ]}
+    ]
+  },
+  {
+    title:"Jo Wada Kiya",film:"Taj Mahal (1963)",raga:"Bhairav",badge:"b-coral",
+    tip:"Raga Bhairav: komal Re and komal Dha are its soul. Start in mandra saptak (lower octave). The opening N-S movement is very devotional.",
+    sections:[
+      {label:"Mukhda",notes:[
+        {n:"N",t:"s",lo:true},{n:"S",t:"s"},{n:"-",t:"dash"},{n:"r",t:"k"},{n:"|",t:"sep"},
+        {n:"G",t:"s"},{n:"m",t:"s"},{n:"G",t:"s"},{n:"r",t:"k"},{n:"|",t:"sep"},
+        {n:"S",t:"s"},{n:"-",t:"dash"},{n:"-",t:"dash"}
+      ]},
+      {label:"Antara",notes:[
+        {n:"m",t:"s"},{n:"P",t:"s"},{n:"d",t:"k"},{n:"N",t:"s"},{n:"|",t:"sep"},
+        {n:"Ṡ",t:"s",hi:true},{n:"-",t:"dash"},{n:"N",t:"s"},{n:"d",t:"k"},{n:"|",t:"sep"},
+        {n:"P",t:"s"},{n:"m",t:"s"},{n:"G",t:"s"},{n:"r",t:"k"},{n:"S",t:"s"}
+      ]}
+    ]
+  },
+  {
+    title:"Vande Mataram (film)",film:"Anand Math (1952)",raga:"Desh",badge:"b-amber",
+    tip:"Raga Desh has pentatonic ascent (skips Ga & Dha going up) but uses all notes descending. The feel is patriotic and uplifting — medium tempo.",
+    sections:[
+      {label:"Mukhda",notes:[
+        {n:"S",t:"s"},{n:"R",t:"s"},{n:"m",t:"s"},{n:"P",t:"s"},{n:"|",t:"sep"},
+        {n:"N",t:"s"},{n:"Ṡ",t:"s",hi:true},{n:"-",t:"dash"},{n:"|",t:"sep"},
+        {n:"D",t:"s"},{n:"P",t:"s"},{n:"m",t:"s"},{n:"G",t:"s"},{n:"R",t:"s"},{n:"S",t:"s"}
+      ]},
+      {label:"Antara",notes:[
+        {n:"Ṙ",t:"s",hi:true},{n:"Ṡ",t:"s",hi:true},{n:"-",t:"dash"},{n:"|",t:"sep"},
+        {n:"Ṅ",t:"s",hi:true},{n:"Ḋ",t:"s",hi:true},{n:"P",t:"s"},{n:"m",t:"s"},{n:"|",t:"sep"},
+        {n:"G",t:"s"},{n:"R",t:"s"},{n:"m",t:"s"},{n:"P",t:"s"},{n:"|",t:"sep"},
+        {n:"N",t:"s"},{n:"D",t:"s"},{n:"P",t:"s"},{n:"m",t:"s"},{n:"G",t:"s"},{n:"R",t:"s"},{n:"S",t:"s"}
+      ]}
+    ]
+  },
+  {
+    title:"Rang Barse",film:"Silsila (1981)",raga:"Kafi",badge:"b-green",
+    tip:"Raga Kafi is the Holi raga. Komal Ga and komal Ni give it its folk character. This song uses a brisk drut laya — each beat one note.",
+    sections:[
+      {label:"Mukhda",notes:[
+        {n:"S",t:"s"},{n:"R",t:"s"},{n:"g",t:"k"},{n:"m",t:"s"},{n:"|",t:"sep"},
+        {n:"P",t:"s"},{n:"D",t:"s"},{n:"n",t:"k"},{n:"Ṡ",t:"s",hi:true},{n:"|",t:"sep"},
+        {n:"n",t:"k"},{n:"D",t:"s"},{n:"P",t:"s"},{n:"-",t:"dash"},{n:"|",t:"sep"},
+        {n:"m",t:"s"},{n:"g",t:"k"},{n:"R",t:"s"},{n:"S",t:"s"}
+      ]},
+      {label:"Antara",notes:[
+        {n:"Ṡ",t:"s",hi:true},{n:"Ṅ",t:"k",hi:true},{n:"Ḋ",t:"s",hi:true},{n:"P",t:"s"},{n:"|",t:"sep"},
+        {n:"m",t:"s"},{n:"P",t:"s"},{n:"D",t:"s"},{n:"n",t:"k"},{n:"|",t:"sep"},
+        {n:"P",t:"s"},{n:"-",t:"dash"},{n:"m",t:"s"},{n:"g",t:"k"},{n:"R",t:"s"},{n:"S",t:"s"}
+      ]}
+    ]
+  },
+  {
+    title:"Kaun Disha Mein Le Ke",film:"Nadiya Ke Paar (1982)",raga:"Bageshri",badge:"b-pink",
+    tip:"Bageshri omits Rishabh in ascent. The komal Ga must be gently oscillated (kampita). The midnight mood requires slow, deliberate movement.",
+    sections:[
+      {label:"Mukhda",notes:[
+        {n:"S",t:"s"},{n:"g",t:"k"},{n:"m",t:"s"},{n:"-",t:"dash"},{n:"|",t:"sep"},
+        {n:"D",t:"s"},{n:"n",t:"k"},{n:"Ṡ",t:"s",hi:true},{n:"-",t:"dash"},{n:"|",t:"sep"},
+        {n:"n",t:"k"},{n:"D",t:"s"},{n:"m",t:"s"},{n:"g",t:"k"},{n:"R",t:"s"},{n:"S",t:"s"}
+      ]},
+      {label:"Antara",notes:[
+        {n:"m",t:"s"},{n:"D",t:"s"},{n:"n",t:"k"},{n:"Ṡ",t:"s",hi:true},{n:"|",t:"sep"},
+        {n:"Ṙ",t:"s",hi:true},{n:"Ṡ",t:"s",hi:true},{n:"ṅ",t:"k",hi:true},{n:"Ḋ",t:"s",hi:true},{n:"|",t:"sep"},
+        {n:"n",t:"k"},{n:"D",t:"s"},{n:"m",t:"s"},{n:"-",t:"dash"},{n:"|",t:"sep"},
+        {n:"g",t:"k"},{n:"R",t:"s"},{n:"S",t:"s"}
+      ]}
+    ]
+  },
+  {
+    title:"Ek Pyaar Ka Nagma",film:"Shor (1972)",raga:"Bhoopali",badge:"b-purple",
+    tip:"Bhoopali uses only 5 notes — S R G P D. No Ma, no Ni. Very clean and simple to learn. The pentatonic scale gives a bright, open feeling.",
+    sections:[
+      {label:"Mukhda",notes:[
+        {n:"G",t:"s"},{n:"R",t:"s"},{n:"S",t:"s"},{n:"-",t:"dash"},{n:"|",t:"sep"},
+        {n:"D",t:"s",lo:true},{n:"S",t:"s"},{n:"R",t:"s"},{n:"G",t:"s"},{n:"|",t:"sep"},
+        {n:"P",t:"s"},{n:"G",t:"s"},{n:"R",t:"s"},{n:"S",t:"s"}
+      ]},
+      {label:"Antara",notes:[
+        {n:"P",t:"s"},{n:"D",t:"s"},{n:"Ṡ",t:"s",hi:true},{n:"-",t:"dash"},{n:"|",t:"sep"},
+        {n:"Ġ",t:"s",hi:true},{n:"Ṡ",t:"s",hi:true},{n:"D",t:"s"},{n:"P",t:"s"},{n:"|",t:"sep"},
+        {n:"G",t:"s"},{n:"P",t:"s"},{n:"D",t:"s"},{n:"|",t:"sep"},
+        {n:"G",t:"s"},{n:"R",t:"s"},{n:"S",t:"s"}
+      ]}
+    ]
+  },
+  {
+    title:"Naina Barse Rimzhim",film:"Woh Kaun Thi (1964)",raga:"Pilu",badge:"b-teal",
+    tip:"Raga Pilu is flexible — it mixes komal and shudh notes freely. This haunting Madan Mohan composition uses komal Ga prominently. Slow, emotive tempo.",
+    sections:[
+      {label:"Mukhda",notes:[
+        {n:"n",t:"k",lo:true},{n:"S",t:"s"},{n:"R",t:"s"},{n:"g",t:"k"},{n:"|",t:"sep"},
+        {n:"m",t:"s"},{n:"g",t:"k"},{n:"R",t:"s"},{n:"S",t:"s"},{n:"|",t:"sep"},
+        {n:"n",t:"k",lo:true},{n:"S",t:"s"},{n:"-",t:"dash"}
+      ]},
+      {label:"Antara",notes:[
+        {n:"P",t:"s"},{n:"D",t:"s"},{n:"n",t:"k"},{n:"Ṡ",t:"s",hi:true},{n:"|",t:"sep"},
+        {n:"Ṙ",t:"s",hi:true},{n:"Ṡ",t:"s",hi:true},{n:"n",t:"k"},{n:"D",t:"s"},{n:"|",t:"sep"},
+        {n:"P",t:"s"},{n:"m",t:"s"},{n:"g",t:"k"},{n:"R",t:"s"},{n:"S",t:"s"}
+      ]}
+    ]
+  },
+  {
+    title:"Ghan Ghan Gar Ari Barse",film:"Malhar (1951)",raga:"Megh Malhar",badge:"b-amber",
+    tip:"Megh Malhar is pentatonic on ascent. Komal Ni is the rain signature note. Sway the phrases — this raga calls for andolan (oscillation) on Ni.",
+    sections:[
+      {label:"Mukhda",notes:[
+        {n:"S",t:"s"},{n:"R",t:"s"},{n:"m",t:"s"},{n:"P",t:"s"},{n:"|",t:"sep"},
+        {n:"n",t:"k"},{n:"P",t:"s"},{n:"-",t:"dash"},{n:"|",t:"sep"},
+        {n:"m",t:"s"},{n:"R",t:"s"},{n:"S",t:"s"}
+      ]},
+      {label:"Antara",notes:[
+        {n:"P",t:"s"},{n:"n",t:"k"},{n:"Ṡ",t:"s",hi:true},{n:"-",t:"dash"},{n:"|",t:"sep"},
+        {n:"ṅ",t:"k",hi:true},{n:"Ṡ",t:"s",hi:true},{n:"n",t:"k"},{n:"P",t:"s"},{n:"|",t:"sep"},
+        {n:"m",t:"s"},{n:"R",t:"s"},{n:"S",t:"s"},{n:"-",t:"dash"}
+      ]}
+    ]
+  },
+  {
+    title:"Ae Dil Hai Mushkil (title)",film:"Ae Dil Hai Mushkil (2016)",raga:"Yaman Kalyan",badge:"b-purple",
+    tip:"Yaman Kalyan uses both tivra M̃ and shudh m. Pritam's modern composition captures the evening longing. Medium tempo, hold on G and N.",
+    sections:[
+      {label:"Mukhda",notes:[
+        {n:"N",t:"s",lo:true},{n:"S",t:"s"},{n:"R",t:"s"},{n:"G",t:"s"},{n:"|",t:"sep"},
+        {n:"M̃",t:"t"},{n:"G",t:"s"},{n:"R",t:"s"},{n:"-",t:"dash"},{n:"|",t:"sep"},
+        {n:"S",t:"s"},{n:"N",t:"s",lo:true},{n:"S",t:"s"}
+      ]},
+      {label:"Antara",notes:[
+        {n:"G",t:"s"},{n:"M̃",t:"t"},{n:"m",t:"s"},{n:"P",t:"s"},{n:"|",t:"sep"},
+        {n:"D",t:"s"},{n:"N",t:"s"},{n:"Ṡ",t:"s",hi:true},{n:"-",t:"dash"},{n:"|",t:"sep"},
+        {n:"Ṙ",t:"s",hi:true},{n:"Ṡ",t:"s",hi:true},{n:"N",t:"s"},{n:"D",t:"s"},{n:"|",t:"sep"},
+        {n:"P",t:"s"},{n:"m",t:"s"},{n:"G",t:"s"},{n:"R",t:"s"},{n:"S",t:"s"}
+      ]}
+    ]
+  }
+];
+
+function renderNote(n){
+  let cls="n ";
+  if(n.t==="k") cls+="k ";
+  else if(n.t==="t") cls+="t ";
+  else if(n.t==="dash") cls+="dash ";
+  else if(n.t==="sep") cls+="sep ";
+  else cls+="s ";
+  if(n.hi) cls+="hi ";
+  if(n.lo) cls+="lo ";
+  return `<span class="${cls.trim()}">${n.n}</span>`;
+}
+
+function renderCards(filter){
+  const data=filter==="all"?songs:songs.filter(s=>s.raga===filter);
+  document.getElementById("cards").innerHTML=data.map((s,i)=>`
+    <div class="song-card" id="sc${i}">
+      <div class="song-head" onclick="toggleCard(${i})">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span class="song-title">${s.title}</span>
+            <span class="badge ${s.badge}">${s.raga}</span>
+          </div>
+          <div class="song-sub">${s.film}</div>
+        </div>
+        <span class="chevron" id="ch${i}">↓</span>
+      </div>
+      <div class="body" id="bd${i}">
+        ${s.sections.map(sec=>`
+          <div class="section-label">${sec.label}</div>
+          <div class="notation-block">${sec.notes.map(renderNote).join("")}</div>
+        `).join("")}
+        <div class="tip">${s.tip}</div>
+        <div class="play-row">
+          <button class="ask-btn" onclick="sendPrompt('Teach me how to sing ${s.title} in Raga ${s.raga} step by step ↗')">Sing step by step ↗</button>
+          <button class="ask-btn" onclick="sendPrompt('Show harmonium/keyboard fingering for ${s.title} ↗')">Harmonium fingering ↗</button>
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+
+function toggleCard(i){
+  const bd=document.getElementById("bd"+i);
+  const ch=document.getElementById("ch"+i);
+  const card=document.getElementById("sc"+i);
+  const open=bd.style.display==="block";
+  bd.style.display=open?"none":"block";
+  ch.textContent=open?"↓":"↑";
+  ch.classList.toggle("open",!open);
+  card.classList.toggle("active",!open);
+}
+
+function filterBySong(){
+  const v=document.getElementById("ragaFilter").value;
+  renderCards(v);
+}
+
+renderCards("all");
+</script>

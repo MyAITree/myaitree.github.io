@@ -1,0 +1,719 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary)}
+.wrap{padding:1.5rem 0 3rem}
+
+/* ── Hero ── */
+.hero{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:.5px solid var(--color-border-tertiary)}
+.eyebrow{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.tag{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;letter-spacing:.03em}
+.tA{background:#FAEEDA;color:#854F0B}.tT{background:#E1F5EE;color:#0F6E56}
+.tB{background:#E6F1FB;color:#185FA5}.tP{background:#EEEDFE;color:#534AB7}
+.tC{background:#FAECE7;color:#993C1D}
+.hero h1{font-size:28px;font-weight:500;margin-bottom:8px;line-height:1.2}
+.hero p{font-size:15px;color:var(--color-text-secondary);line-height:1.6}
+
+/* ── Section label ── */
+.sl{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-secondary);margin:2.5rem 0 12px}
+
+/* ── Metrics ── */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:2rem}
+.metric{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.9rem 1rem}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px}
+.mv{font-size:22px;font-weight:500}
+
+/* ── Generic card ── */
+.card{border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.1rem 1.25rem;margin-bottom:12px}
+.card-title{font-size:14px;font-weight:500;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.card-title i{font-size:17px;color:var(--color-text-secondary)}
+.card p,.card-body{font-size:13px;color:var(--color-text-secondary);line-height:1.7}
+
+/* ── Grid ── */
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+
+/* ── Type cards ── */
+.type-card{border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.type-head{padding:.85rem 1.1rem;display:flex;align-items:center;gap:10px;border-bottom:.5px solid var(--color-border-tertiary)}
+.type-icon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;flex-shrink:0}
+.type-name{font-size:14px;font-weight:500}
+.type-sub{font-size:11px;color:var(--color-text-secondary);margin-top:1px}
+.type-body{padding:.9rem 1.1rem;font-size:13px;color:var(--color-text-secondary);line-height:1.65}
+.type-tag{display:inline-block;font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px;margin-top:8px}
+
+/* ── TAB display ── */
+.tab-box{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.9rem 1.1rem;font-family:var(--font-mono);font-size:13px;line-height:2;margin-top:8px}
+.tab-box .blow{color:#185FA5;font-weight:500}
+.tab-box .draw{color:#0F6E56;font-weight:500}
+.tab-box .bend{color:#854F0B;font-weight:500}
+.tab-legend{display:flex;gap:14px;margin-top:8px;flex-wrap:wrap}
+.tleg{font-size:11px;display:flex;align-items:center;gap:5px}
+.tleg-dot{width:8px;height:8px;border-radius:50%}
+
+/* ── Stage cards (learning path) ── */
+.stage{border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:16px;overflow:hidden}
+.stage-head{display:flex;align-items:center;gap:14px;padding:1rem 1.25rem;border-bottom:.5px solid var(--color-border-tertiary)}
+.stage-pill{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0}
+.stage-title{font-size:14px;font-weight:500}
+.stage-sub{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.stage-cols{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.scol{padding:1rem 1.25rem}
+.scol:first-child{border-right:.5px solid var(--color-border-tertiary)}
+.col-lbl{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--color-text-secondary);margin-bottom:10px}
+ul.items{list-style:none;padding:0}
+ul.items li{font-size:13px;color:var(--color-text-secondary);padding:4px 0;border-bottom:.5px solid var(--color-border-tertiary);line-height:1.5;display:flex;gap:8px;align-items:flex-start}
+ul.items li:last-child{border-bottom:none}
+ul.items li .dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.4;flex-shrink:0;margin-top:7px}
+.song-row{padding:6px 0;border-bottom:.5px solid var(--color-border-tertiary)}
+.song-row:last-child{border-bottom:none}
+.song-name{font-size:13px;font-weight:500}
+.song-detail{font-size:11px;color:var(--color-text-secondary);margin-top:2px;line-height:1.5}
+
+/* ── Technique cards ── */
+.tech-card{border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.1rem 1.25rem}
+.tech-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#FAEEDA;color:#854F0B;font-size:11px;font-weight:500;margin-bottom:8px}
+.tech-title{font-size:13px;font-weight:500;margin-bottom:5px}
+.tech-body{font-size:12px;color:var(--color-text-secondary);line-height:1.65}
+.tech-tip{font-size:11px;color:#0F6E56;margin-top:6px;font-style:italic}
+
+/* ── Positions ── */
+.pos-card{border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.pos-head{padding:.85rem 1.1rem;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;font-weight:500;display:flex;justify-content:space-between;align-items:center}
+.pos-body{padding:.9rem 1.1rem;font-size:13px;color:var(--color-text-secondary);line-height:1.65}
+.pos-example{font-size:11px;color:#185FA5;margin-top:6px}
+
+/* ── Great players ── */
+.player-row{display:flex;gap:12px;padding:10px 0;border-bottom:.5px solid var(--color-border-tertiary);align-items:flex-start}
+.player-row:last-child{border-bottom:none}
+.p-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;flex-shrink:0;margin-top:2px}
+.p-name{font-size:13px;font-weight:500}
+.p-desc{font-size:12px;color:var(--color-text-secondary);line-height:1.5;margin-top:2px}
+
+/* ── Tip items ── */
+.tip-item{display:flex;gap:10px;padding:9px 0;border-bottom:.5px solid var(--color-border-tertiary);align-items:flex-start}
+.tip-item:last-child{border-bottom:none}
+.tip-num{width:22px;height:22px;border-radius:50%;background:#E1F5EE;color:#0F6E56;font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.tip-body{font-size:13px;color:var(--color-text-secondary);line-height:1.6;flex:1}
+.tip-body strong{color:var(--color-text-primary);font-weight:500}
+
+/* ── Gear ── */
+.gear-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.gear-card{border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.2rem}
+.gear-title{font-size:13px;font-weight:500;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.gear-title i{font-size:15px;color:var(--color-text-secondary)}
+.gear-body{font-size:12px;color:var(--color-text-secondary);line-height:1.7}
+
+/* ── Links ── */
+.link-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.lbtn{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#185FA5;text-decoration:none;border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:5px 12px}
+.lbtn:hover{background:var(--color-background-secondary)}
+
+@media(max-width:520px){
+.stage-cols,.g2,.g3{grid-template-columns:1fr}
+.scol:first-child{border-right:none;border-bottom:.5px solid var(--color-border-tertiary)}
+}
+</style>
+
+<div class="wrap">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="eyebrow">
+    <span class="tag tA">Complete Guide</span>
+    <span class="tag tT">Beginner → Advanced</span>
+    <span class="tag tB">Diatonic · Chromatic · Tremolo</span>
+    <span class="tag tP">Techniques + Songs</span>
+  </div>
+  <h1>The Harmonica — Comprehensive Learning Guide</h1>
+  <p>The harmonica is one of the most portable, expressive, and affordable instruments in the world. Developed in the 1820s, it's used across blues, folk, jazz, country, rock, and pop. This guide covers everything in order — from picking your first harp to mastering bends, positions, and blues improvisation.</p>
+</div>
+
+<!-- METRICS -->
+<div class="metrics">
+  <div class="metric"><div class="ml">Origin</div><div class="mv">1820s</div></div>
+  <div class="metric"><div class="ml">Holes (diatonic)</div><div class="mv">10</div></div>
+  <div class="metric"><div class="ml">Available notes</div><div class="mv">19+</div></div>
+  <div class="metric"><div class="ml">Learning stages</div><div class="mv">5</div></div>
+  <div class="metric"><div class="ml">Best starter key</div><div class="mv">C major</div></div>
+</div>
+
+<!-- WHAT IS IT -->
+<p class="sl">What is a Harmonica?</p>
+<div class="card">
+  <div class="card-title"><i class="ti ti-music" aria-hidden="true"></i> Overview</div>
+  <div class="card-body">The harmonica (also called a mouth organ, harp, or blues harp) is a free-reed wind instrument. You hold it to your lips and move across holes while blowing out (<strong>blow notes</strong>) or drawing in (<strong>draw notes</strong>) to produce different pitches. A standard 10-hole diatonic harmonica gives you 19 notes across three octaves — and with bending and overbending techniques, you can access the entire chromatic scale. It's possibly the easiest instrument to make sound good within your first 10 minutes, yet takes a lifetime to master at the highest level.</div>
+</div>
+
+<!-- TYPES -->
+<p class="sl">Types of Harmonicas</p>
+<div class="g2">
+
+  <div class="type-card">
+    <div class="type-head">
+      <div class="type-icon" style="background:#E1F5EE;color:#085041">D</div>
+      <div>
+        <div class="type-name">Diatonic Harmonica</div>
+        <div class="type-sub">10 holes · The "Blues Harp" · START HERE</div>
+      </div>
+    </div>
+    <div class="type-body">The most popular harmonica in the world, especially in North America. 10 holes, 19 notes, 3 octaves. Tuned to a specific key (C, G, A, D, etc.) and harmonised so random blow/draw notes all fit the key — making it nearly impossible to play a wrong note by accident. Extremely durable, inexpensive (₹800–₹4,000 for a good beginner model), and the foundation of blues, rock, folk, and country harmonica. All beginner lessons assume diatonic in key of C.
+      <span class="type-tag" style="background:#E1F5EE;color:#085041">Best for beginners</span>
+    </div>
+  </div>
+
+  <div class="type-card">
+    <div class="type-head">
+      <div class="type-icon" style="background:#E6F1FB;color:#0C447C">C</div>
+      <div>
+        <div class="type-name">Chromatic Harmonica</div>
+        <div class="type-sub">12–16 holes · Button-activated · All 12 notes</div>
+      </div>
+    </div>
+    <div class="type-body">Has a spring-loaded button on the right side. Press it and you get all notes raised by one semitone — giving you the full chromatic scale in any key. Played by Stevie Wonder and Larry Adler. Used in jazz, classical, and pop. More expensive (₹3,000–₹15,000) and requires more music theory to use effectively. Best approached after you've learned the basics on diatonic.
+      <span class="type-tag" style="background:#E6F1FB;color:#0C447C">Jazz / Classical</span>
+    </div>
+  </div>
+
+  <div class="type-card">
+    <div class="type-head">
+      <div class="type-icon" style="background:#FAEEDA;color:#633806">T</div>
+      <div>
+        <div class="type-name">Tremolo Harmonica</div>
+        <div class="type-sub">Double rows · Wavering tremolo sound</div>
+      </div>
+    </div>
+    <div class="type-body">The most popular harmonica worldwide (especially in Asia and European folk). Has two rows of holes, each pair tuned slightly apart so they produce a natural beating/tremolo effect. Requires more air to play, and bending is harder. Simple melodies are its strength. Popular in Irish folk music and Indian/Asian folk traditions.
+      <span class="type-tag" style="background:#FAEEDA;color:#633806">Folk / Asian music</span>
+    </div>
+  </div>
+
+  <div class="type-card">
+    <div class="type-head">
+      <div class="type-icon" style="background:#EEEDFE;color:#3C3489">O</div>
+      <div>
+        <div class="type-name">Octave / Bass / Chord</div>
+        <div class="type-sub">Specialist ensemble instruments</div>
+      </div>
+    </div>
+    <div class="type-body">Octave harmonicas have two reeds per hole tuned an octave apart for a harmonising effect. Bass harmonicas play extremely low registers for orchestral use. Chord harmonicas play full chord clusters. All three are specialist instruments for ensemble playing — beginners do not need to worry about these.
+      <span class="type-tag" style="background:#EEEDFE;color:#3C3489">Ensemble / Advanced</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- WHAT TO BUY -->
+<p class="sl">What to Buy — Beginner's Gear Guide</p>
+<div class="gear-grid">
+  <div class="gear-card">
+    <div class="gear-title"><i class="ti ti-star" aria-hidden="true"></i> Best beginner harmonica</div>
+    <div class="gear-body"><strong>Hohner Special 20 in C</strong> — the most recommended beginner diatonic worldwide. Excellent tone, airtight, plastic comb (won't swell with moisture). ~₹2,500–₹3,500. Alternatively the <strong>Lee Oskar Major Diatonic in C</strong> — prints 1st and 2nd position keys on the ends. Both are outstanding starter harps.</div>
+  </div>
+  <div class="gear-card">
+    <div class="gear-title"><i class="ti ti-alert-circle" aria-hidden="true"></i> Why key of C?</div>
+    <div class="gear-body">Almost all instructional content, tabs, and beginner lessons are written for the key of C. It has no sharps or flats, making music theory easiest to understand. Once you're comfortable, you'll want to collect harps in A, D, G, Bb, and F — but C is your starting point.</div>
+  </div>
+  <div class="gear-card">
+    <div class="gear-title"><i class="ti ti-ban" aria-hidden="true"></i> What to avoid</div>
+    <div class="gear-body">Avoid no-brand or very cheap harmonicas under ₹300–₹400 — they're almost impossible to bend and often leak air. Avoid Tremolo harmonicas for blues/rock instruction — they don't work with standard lessons. Don't start with a chromatic unless you're specifically learning jazz.</div>
+  </div>
+  <div class="gear-card">
+    <div class="gear-title"><i class="ti ti-tool" aria-hidden="true"></i> Accessories</div>
+    <div class="gear-body">Harmonica case or pouch · Harmonica holder/neck rack (if also playing guitar) · Microphone (Shure Green Bullet for blues amp tone — optional, advanced) · Chromatic tuner app to check your bend accuracy.</div>
+  </div>
+</div>
+
+<!-- HOW TO HOLD -->
+<p class="sl">How to Hold a Harmonica</p>
+<div class="card">
+  <div class="card-body">Hold the harmonica horizontally with the low notes (hole 1) to your LEFT and the high notes (hole 10) to your RIGHT. For the right hand: thumb underneath, fingers on top — the harmonica rests between thumb and the side of your index finger. Cup your LEFT hand loosely behind the harmonica to form an air chamber — opening and closing this hand creates the "wah-wah" effect. Keep your grip relaxed; tension kills your tone. The harmonica sits just inside your lips — deeper than most beginners expect. Your chin should tilt slightly down, lips moist and relaxed. Breathe through your diaphragm, not just your mouth — this gives you control over air pressure for bends and tone.</div>
+</div>
+
+<!-- HARMONICA TAB -->
+<p class="sl">Reading Harmonica TAB Notation</p>
+<div class="card">
+  <div class="card-body">Harmonica TAB is simpler than guitar TAB. Numbers refer to hole numbers (1–10). The direction of breath tells you whether to blow or draw. The most common convention:</div>
+  <div class="tab-box">
+    <span class="blow">+4  +5  +6</span>  = Blow (exhale) holes 4, 5, 6<br>
+    <span class="draw">-4  -5  -6</span>  = Draw (inhale) holes 4, 5, 6<br>
+    <span class="bend">-4'</span>         = Draw hole 4 with a half-step bend<br>
+    <span class="bend">-4''</span>        = Draw hole 4 with a whole-step bend<br><br>
+    <span style="opacity:.7">Example — C major scale (1st position):</span><br>
+    <span class="blow">+4</span> <span class="draw">-4</span> <span class="blow">+5</span> <span class="draw">-5</span> <span class="blow">+6</span> <span class="draw">-6</span> <span class="blow">+7</span> <span class="draw">-7</span><br><br>
+    <span style="opacity:.7">Example — Jingle Bells opening (holes 5–6):</span><br>
+    <span class="draw">-5 -5 -5</span>  <span class="draw">-5 -5 -5</span>  <span class="draw">-5 -6</span> <span class="draw">-4 -4'</span> <span class="draw">-5</span>
+  </div>
+  <div class="tab-legend">
+    <span class="tleg"><span class="tleg-dot" style="background:#185FA5"></span>Blue numbers = Blow</span>
+    <span class="tleg"><span class="tleg-dot" style="background:#0F6E56"></span>Green numbers = Draw</span>
+    <span class="tleg"><span class="tleg-dot" style="background:#854F0B"></span>Amber with ' = Bend</span>
+  </div>
+</div>
+
+<!-- POSITIONS -->
+<p class="sl">Understanding Positions (1st, 2nd, 3rd)</p>
+<div class="g3">
+  <div class="pos-card">
+    <div class="pos-head">
+      1st Position — "Straight Harp"
+      <span class="tag tT" style="font-size:10px">Folk / Pop</span>
+    </div>
+    <div class="pos-body">You play mostly blow notes. A C harmonica plays in the key of C. Naturally suits the major scale — ideal for folk, pop, and country melodies. Start blow note: hole 1 (or 4) blow. Easy for simple tunes and familiar melodies.
+      <div class="pos-example">Songs: Oh Susannah, Ode to Joy, Jingle Bells</div>
+    </div>
+  </div>
+  <div class="pos-card">
+    <div class="pos-head">
+      2nd Position — "Cross Harp"
+      <span class="tag tA" style="font-size:10px">Blues / Rock</span>
+    </div>
+    <div class="pos-body">The most important position for blues playing. You start on the draw note — a C harmonica played in 2nd position gives you the key of G. This puts the bending draw notes at the heart of the scale — giving you that classic blues wail. Most blues harmonica is played in 2nd position.
+      <div class="pos-example">C harp → G blues. Songs: most blues standards</div>
+    </div>
+  </div>
+  <div class="pos-card">
+    <div class="pos-head">
+      3rd Position — "Dorian"
+      <span class="tag tP" style="font-size:10px">Minor Blues</span>
+    </div>
+    <div class="pos-body">Starts on hole 4 draw. A C harmonica in 3rd position gives you the key of D minor. Gives a darker, more haunting sound — great for minor blues and jazz. Used by advanced players for emotional minor-key phrasing.
+      <div class="pos-example">C harp → D minor feel. Advanced technique</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LEARNING PATH ===== -->
+<p class="sl">The Learning Path — Stage by Stage</p>
+
+<!-- STAGE 1 -->
+<div class="stage">
+  <div class="stage-head">
+    <div class="stage-pill" style="background:#E1F5EE;color:#085041">S1</div>
+    <div>
+      <div class="stage-title">Stage 1 — Absolute Beginner (Weeks 1–3)</div>
+      <div class="stage-sub">Holding · Breathing · Chord chords · First notes · Basic TAB</div>
+    </div>
+  </div>
+  <div class="stage-cols">
+    <div class="scol">
+      <div class="col-lbl">What to learn</div>
+      <ul class="items">
+        <li><span class="dot"></span>Hold the harmonica correctly (low notes left)</li>
+        <li><span class="dot"></span>Diaphragm breathing — not shallow chest breathing</li>
+        <li><span class="dot"></span>Playing chords — blow and draw through multiple holes</li>
+        <li><span class="dot"></span>Reading basic TAB notation (+4, -4)</li>
+        <li><span class="dot"></span>Simple train rhythm — chugging on holes 1–2</li>
+        <li><span class="dot"></span>Moving across holes 1–4 smoothly without gaps</li>
+        <li><span class="dot"></span>Wah-wah hand effect — open and close cupped hands</li>
+      </ul>
+    </div>
+    <div class="scol">
+      <div class="col-lbl" style="color:#0F6E56">Songs to practice</div>
+      <div class="song-row">
+        <div class="song-name">Oh Susannah</div>
+        <div class="song-detail">1st position · Blow-heavy · Classic first song for absolute beginners</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Jingle Bells</div>
+        <div class="song-detail">Holes 5–6 · Simple blow/draw pattern · Perfect for first melody</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Ode to Joy (Beethoven)</div>
+        <div class="song-detail">Holes 4–7 · Blow-dominant · Legendary first melody on any instrument</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Twinkle Twinkle Little Star</div>
+        <div class="song-detail">1st position · 4-hole range · Good for training hole accuracy</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STAGE 2 -->
+<div class="stage">
+  <div class="stage-head">
+    <div class="stage-pill" style="background:#E1F5EE;color:#085041">S2</div>
+    <div>
+      <div class="stage-title">Stage 2 — Single Notes &amp; First Melodies (Weeks 3–8)</div>
+      <div class="stage-sub">Lip pursing · Tongue blocking · Clean single notes · Simple songs</div>
+    </div>
+  </div>
+  <div class="stage-cols">
+    <div class="scol">
+      <div class="col-lbl">What to learn</div>
+      <ul class="items">
+        <li><span class="dot"></span><strong>Lip pursing</strong> — purse lips to a small "O", cover only one hole. The beginner's go-to method.</li>
+        <li><span class="dot"></span><strong>Tongue blocking</strong> — open mouth over 4 holes, tongue covers 3 holes on the left, play hole 4 on the right side. Used by all pro blues players.</li>
+        <li><span class="dot"></span>Moving cleanly between holes without hitting extras</li>
+        <li><span class="dot"></span>Consistent breath pressure — no squeaks or overblowing</li>
+        <li><span class="dot"></span>Playing the 1st position C major scale cleanly</li>
+        <li><span class="dot"></span>"Ah" mouth shape for best tone on blow notes</li>
+      </ul>
+    </div>
+    <div class="scol">
+      <div class="col-lbl" style="color:#0F6E56">Songs to practice</div>
+      <div class="song-row">
+        <div class="song-name">Heart of Gold — Neil Young</div>
+        <div class="song-detail">Holes 4–6 · G harmonica · Slow pace — ideal for clean note practice</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Mr Tambourine Man — Bob Dylan</div>
+        <div class="song-detail">Holes 4–7 · Simple blow/draw · Slow, repetitive — very beginner-friendly</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">My Girl — The Temptations</div>
+        <div class="song-detail">Holes 4–6 · Clean single notes · Instantly recognisable melody</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Stand By Me — Ben E. King</div>
+        <div class="song-detail">R&B classic · Simple phrasing · Practice tone and timing</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STAGE 3 -->
+<div class="stage">
+  <div class="stage-head">
+    <div class="stage-pill" style="background:#FAEEDA;color:#633806">S3</div>
+    <div>
+      <div class="stage-title">Stage 3 — 2nd Position &amp; Blues Basics (Months 2–4)</div>
+      <div class="stage-sub">Cross harp · Blues scale · 12-bar blues · Basic bending · Rhythm</div>
+    </div>
+  </div>
+  <div class="stage-cols">
+    <div class="scol">
+      <div class="col-lbl">What to learn</div>
+      <ul class="items">
+        <li><span class="dot"></span>Understanding 2nd position (cross harp) — C harp in key of G</li>
+        <li><span class="dot"></span>The 2nd position blues scale: -2, -3', -4, +4, -4', -4, -5, -6</li>
+        <li><span class="dot"></span>The 12-bar blues chord structure (I–IV–V)</li>
+        <li><span class="dot"></span>Rhythmic chugging — punchy draw chords for blues groove</li>
+        <li><span class="dot"></span>First attempts at bending: hole 4 draw (easiest bend)</li>
+        <li><span class="dot"></span>Tongue slap technique for percussive hits</li>
+        <li><span class="dot"></span>Space and restraint — listening to Sonny Boy: play half the time!</li>
+      </ul>
+    </div>
+    <div class="scol">
+      <div class="col-lbl" style="color:#854F0B">Songs to practice</div>
+      <div class="song-row">
+        <div class="song-name">Juke — Little Walter</div>
+        <div class="song-detail">Written specifically for harmonica · 2nd position · Essential blues harp lesson</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">On the Road Again — Willie Nelson</div>
+        <div class="song-detail">Cheerful melody, simple structure · Great 2nd position intro song</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Piano Man — Billy Joel (intro)</div>
+        <div class="song-detail">Iconic harmonica intro · 2nd position feel · Crowd-pleaser at any level</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Checkin' Up on My Baby — Sonny Boy II</div>
+        <div class="song-detail">Only 6 riffs in 12 bars · Teaches restraint and space — vital skill</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STAGE 4 -->
+<div class="stage">
+  <div class="stage-head">
+    <div class="stage-pill" style="background:#FAECE7;color:#712B13">S4</div>
+    <div>
+      <div class="stage-title">Stage 4 — Bending Mastery &amp; Expression (Months 4–12)</div>
+      <div class="stage-sub">Draw bends · Blow bends · Vibrato · Wah-wah · Phrasing · Improv</div>
+    </div>
+  </div>
+  <div class="stage-cols">
+    <div class="scol">
+      <div class="col-lbl">What to learn</div>
+      <ul class="items">
+        <li><span class="dot"></span>Draw bends holes 1–6 (tongue to "Kk" zone at back of palate)</li>
+        <li><span class="dot"></span>Blow bends holes 8–10 (harder — requires precise embouchure)</li>
+        <li><span class="dot"></span>Controlled vibrato — throat, jaw, and diaphragm methods</li>
+        <li><span class="dot"></span>Wah-wah hand technique combined with bending</li>
+        <li><span class="dot"></span>Train whistle effect: bend holes 4 and 5 together</li>
+        <li><span class="dot"></span>Tongue blocking techniques for chords + single note combos</li>
+        <li><span class="dot"></span>Improvising over 12-bar blues backing tracks</li>
+      </ul>
+    </div>
+    <div class="scol">
+      <div class="col-lbl" style="color:#712B13">Songs to practice</div>
+      <div class="song-row">
+        <div class="song-name">Help Me — Sonny Boy Williamson II</div>
+        <div class="song-detail">Rich, tasteful phrasing · "Sonny Boy lick" · Blues bending masterclass</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Don't Start Me Talkin' — Sonny Boy II</div>
+        <div class="song-detail">Blues classic · Short crisp phrases · Beautiful tone and restraint</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Hoochie Coochie Man — Muddy Waters</div>
+        <div class="song-detail">Little Walter on harp · Famous riff behind singer · Tongue blocking</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Driftin' &amp; Driftin' — Paul Butterfield</div>
+        <div class="song-detail">Strong fast vibrato · Emotional phrasing · Bends that bare the soul</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STAGE 5 -->
+<div class="stage">
+  <div class="stage-head">
+    <div class="stage-pill" style="background:#FAECE7;color:#712B13">S5</div>
+    <div>
+      <div class="stage-title">Stage 5 — Advanced Techniques (Year 1+)</div>
+      <div class="stage-sub">Overblows · Overdraws · 3rd position · Amplified tone · Full chromatic scale</div>
+    </div>
+  </div>
+  <div class="stage-cols">
+    <div class="scol">
+      <div class="col-lbl">What to learn</div>
+      <ul class="items">
+        <li><span class="dot"></span><strong>Overblowing</strong> — isolating the higher reed in a chamber to access notes above normal range. Developed by Howard Levy in the 1970s.</li>
+        <li><span class="dot"></span><strong>Overdrawing</strong> — same concept on draw notes for the high end</li>
+        <li><span class="dot"></span>Overbend + bend combined = full chromatic scale on diatonic</li>
+        <li><span class="dot"></span>3rd position (Dorian/minor blues) — deep, haunting feel</li>
+        <li><span class="dot"></span>Amplified harmonica tone — Shure Green Bullet + vintage amp</li>
+        <li><span class="dot"></span>Custom harmonica work — reed gapping, tuning</li>
+        <li><span class="dot"></span>Jazz harmonica — chromatic scale and chord voicings</li>
+      </ul>
+    </div>
+    <div class="scol">
+      <div class="col-lbl" style="color:#712B13">Songs / studies</div>
+      <div class="song-row">
+        <div class="song-name">Smokestack Lightning — Howlin' Wolf</div>
+        <div class="song-detail">Epic blues · Advanced bending and amplified tone · Raw power</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Blues with a Feeling — Little Walter</div>
+        <div class="song-detail">Walter's lyrical mastery · Overdrawn notes · Expressive jazz-blues phrasing</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Driftin' Blues — Big Walter Horton</div>
+        <div class="song-detail">Big, fat tone · Mastery of space · Study in dynamics and breath control</div>
+      </div>
+      <div class="song-row">
+        <div class="song-name">Custom jazz/chromatic studies</div>
+        <div class="song-detail">Stevie Wonder, Larry Adler style · Full chromatic scale exploration</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KEY TECHNIQUES -->
+<p class="sl">10 Essential Techniques — Explained</p>
+<div class="g2">
+
+  <div class="tech-card">
+    <div class="tech-num">1</div>
+    <div class="tech-title">Lip Pursing (Pucker Method)</div>
+    <div class="tech-body">Shape your lips like a small "O" (like whistling) and cover exactly one hole. The beginner's default. Clean, easy to start with. Move across holes by sliding the harmonica while keeping the lip shape. Your standard mouth shape for non-bent notes should be relaxed — "ah" shape, not tight.</div>
+    <div class="tech-tip">Start here: master hole 4 blow → draw cleanly before anything else</div>
+  </div>
+
+  <div class="tech-card">
+    <div class="tech-num">2</div>
+    <div class="tech-title">Tongue Blocking</div>
+    <div class="tech-body">Open your mouth wide (4 holes wide), place the harp deeper in. Use your tongue to block holes on the left — play the single note on the right side of your mouth. Used by Little Walter, James Cotton, Sonny Boy Williamson. Enables chord-stabs, octaves, splits, and slaps — far more expressive than lip pursing alone.</div>
+    <div class="tech-tip">Switch at hole 4: lip purse low end, tongue block mid–high</div>
+  </div>
+
+  <div class="tech-card">
+    <div class="tech-num">3</div>
+    <div class="tech-title">Note Bending</div>
+    <div class="tech-body">The defining sound of blues harmonica. Move the back of your tongue to the "Kk" zone (closest to the pharynx/throat) while drawing. This forces the lower reed to vibrate faster, lowering the pitch. Hole 3 draw has the most dramatic bending range — from B all the way down to G#. Hole 4 draw is the easiest to start with.</div>
+    <div class="tech-tip">Takes weeks–months. Don't force it. "Kk" → yawn-lift soft palate</div>
+  </div>
+
+  <div class="tech-card">
+    <div class="tech-num">4</div>
+    <div class="tech-title">Blow Bending</div>
+    <div class="tech-body">Same concept as draw bending but on exhale — and only works on holes 8, 9, and 10 (the high end of the harmonica). Generally considered harder than draw bends. Requires precise embouchure and jaw position. Gives you access to higher chromatic notes. Important for completeness of the scale.</div>
+    <div class="tech-tip">Master draw bends fully before attempting blow bends</div>
+  </div>
+
+  <div class="tech-card">
+    <div class="tech-num">5</div>
+    <div class="tech-title">Vibrato</div>
+    <div class="tech-body">Three methods: (1) <strong>Throat vibrato</strong> — a gentle "ah-ah-ah" pulsing from the throat while sustaining a note. (2) <strong>Jaw vibrato</strong> — lower jaw moves up-down slightly. (3) <strong>Diaphragm vibrato</strong> — air pressure pulses from the belly. Throat vibrato is considered the most musical and natural. Combine with bending for the signature harmonica cry.</div>
+    <div class="tech-tip">Slow, wide vibrato sounds most expressive and vocal</div>
+  </div>
+
+  <div class="tech-card">
+    <div class="tech-num">6</div>
+    <div class="tech-title">Wah-Wah Hand Effect</div>
+    <div class="tech-body">Cup your left hand behind the harmonica to form an air chamber. Slowly open and close this hand (like a door hinge at the pinky side) while playing — this creates a wah-wah filtering effect. Combine with bending for maximum expressiveness — the classic crying harmonica sound. Opening quickly = bright tone. Closing = muffled, dark.</div>
+    <div class="tech-tip">Try it on hole 4 draw bend — instant bluesy magic</div>
+  </div>
+
+  <div class="tech-card">
+    <div class="tech-num">7</div>
+    <div class="tech-title">Tongue Slap / Tongue Stutter</div>
+    <div class="tech-body">Start in tongue-block position, then quickly pull the tongue away from the holes and slap it back. Creates a percussive "pop" sound at the start of a note — adds rhythmic punch to riffs. The "chicken call" is a famous example: a quick slap on the draw note creates a clucking sound popular in country and novelty blues playing.</div>
+    <div class="tech-tip">Used heavily by Sonny Terry in folk-blues playing</div>
+  </div>
+
+  <div class="tech-card">
+    <div class="tech-num">8</div>
+    <div class="tech-title">Train Rhythm / Chugging</div>
+    <div class="tech-body">The most accessible groove technique. Draw in and blow out rapidly on holes 1–2 (or 2–3) in a rhythmic chug pattern: "duh-ah duh-ah duh-ah duh." Mimics the sound of a steam train. Great for getting a feel for rhythm, breath control, and creating backing grooves. Essential folk harmonica vocabulary.</div>
+    <div class="tech-tip">Holes 1–2 draw/blow alternating · Slow then fast</div>
+  </div>
+
+  <div class="tech-card">
+    <div class="tech-num">9</div>
+    <div class="tech-title">Overblowing (Advanced)</div>
+    <div class="tech-body">Developed by Howard Levy in the 1970s. Instead of bending (which lowers pitch), overblowing isolates the higher reed in a hole and forces it to jump to a higher pitch. Combined with bending, this gives you the complete chromatic scale on a diatonic harmonica. Extremely difficult — requires perfect reed gapping and advanced embouchure control. Only for serious advanced players.</div>
+    <div class="tech-tip">Howard Levy, Chris Michalek, Carlos del Junco are masters</div>
+  </div>
+
+  <div class="tech-card">
+    <div class="tech-num">10</div>
+    <div class="tech-title">Phrasing and Space</div>
+    <div class="tech-body">Perhaps the most overlooked "technique." Sonny Boy Williamson II plays only 6 riffs in a 12-bar blues — he's playing only 50% of the time! The space between notes is as important as the notes themselves. As Dizzy Gillespie said: "Try leaving some holes in your playing — maybe some music will fall out." Listen, breathe, leave space.</div>
+    <div class="tech-tip">Record yourself. If every bar is full, you're overplaying.</div>
+  </div>
+
+</div>
+
+<!-- GREAT PLAYERS -->
+<p class="sl">Legendary Harmonica Players to Study</p>
+<div class="card">
+
+  <div class="player-row">
+    <div class="p-avatar" style="background:#E1F5EE;color:#085041">SB</div>
+    <div>
+      <div class="p-name">Sonny Boy Williamson II (Rice Miller)</div>
+      <div class="p-desc">The best player for beginners to study. Short, crisp, clean phrases. Powerful tone and melodic restraint. Songs: "Help Me", "Don't Start Me Talkin'". Never overplays — only the notes that serve the music.</div>
+    </div>
+  </div>
+
+  <div class="player-row">
+    <div class="p-avatar" style="background:#FAEEDA;color:#633806">LW</div>
+    <div>
+      <div class="p-name">Little Walter (Walter Jacobs)</div>
+      <div class="p-desc">Revolutionised harmonica by using amplification and microphone technique. Expanded the instrument's possibilities beyond folk into jazz-blues. Songs: "Juke", "Blues with a Feeling". Chicago blues master.</div>
+    </div>
+  </div>
+
+  <div class="player-row">
+    <div class="p-avatar" style="background:#E6F1FB;color:#0C447C">SW</div>
+    <div>
+      <div class="p-name">Stevie Wonder</div>
+      <div class="p-desc">The most famous chromatic harmonica player in the world. Used harmonica in pop and R&B at the highest level. Showed the instrument could be more than just a blues tool — it could sing, float, and soar.</div>
+    </div>
+  </div>
+
+  <div class="player-row">
+    <div class="p-avatar" style="background:#EEEDFE;color:#3C3489">BD</div>
+    <div>
+      <div class="p-name">Bob Dylan</div>
+      <div class="p-desc">Made the harmonica a symbol of folk and protest music. Pioneered the neck-rack (harmonica + guitar simultaneously). Even simple, straightforward playing can carry enormous emotional weight. Proof that feel beats technique.</div>
+    </div>
+  </div>
+
+  <div class="player-row">
+    <div class="p-avatar" style="background:#FAECE7;color:#712B13">PB</div>
+    <div>
+      <div class="p-name">Paul Butterfield</div>
+      <div class="p-desc">Brought Chicago blues harmonica to rock audiences. His fast, aggressive vibrato and deeply emotional playing style remain unique. Driftin' &amp; Driftin' is considered one of the greatest blues harp solos ever recorded.</div>
+    </div>
+  </div>
+
+  <div class="player-row">
+    <div class="p-avatar" style="background:#E1F5EE;color:#085041">HL</div>
+    <div>
+      <div class="p-name">Howard Levy</div>
+      <div class="p-desc">Inventor of the overbending technique in the 1970s. Made it possible to play the full chromatic scale on a diatonic harmonica. Jazz virtuoso who transformed what the instrument is theoretically capable of. An advanced study for serious players.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- PRACTICE ROUTINE -->
+<p class="sl">Daily Practice Routine — 20 Minutes</p>
+<div class="card">
+  <div style="display:flex;flex-direction:column;gap:0">
+    <div class="tip-item">
+      <div class="tip-num">1</div>
+      <div class="tip-body"><strong>3 min — Single note warm-up.</strong> Slowly move from hole 1 to hole 10 and back, blow and draw each hole cleanly. Check: no extra holes bleeding in. This warms your embouchure and resets muscle memory.</div>
+    </div>
+    <div class="tip-item">
+      <div class="tip-num">2</div>
+      <div class="tip-body"><strong>5 min — Scale and position work.</strong> Run the 2nd position blues scale up and down at a slow tempo (use a metronome or drum loop). Don't rush. Clean is the only goal.</div>
+    </div>
+    <div class="tip-item">
+      <div class="tip-num">3</div>
+      <div class="tip-body"><strong>5 min — Bending practice.</strong> Focus on one hole at a time. Hole 4 draw: no bend, half step bend, hold it, release. Then hole 3 (most range). Take breaks — excessive force hinders bending, not helps it.</div>
+    </div>
+    <div class="tip-item">
+      <div class="tip-num">4</div>
+      <div class="tip-body"><strong>5 min — Improv over backing track.</strong> Play over a 12-bar blues backing track in G (use C harmonica in 2nd position). Don't run scales — try to play melodic phrases with space between them. Aim for 3 or fewer notes per phrase.</div>
+    </div>
+    <div class="tip-item">
+      <div class="tip-num">5</div>
+      <div class="tip-body"><strong>2 min — One song, one phrase.</strong> End with something musical you enjoy. Learn 4 bars of a song you love. Clean, relaxed, expressive. This is the reward for the hard work.</div>
+    </div>
+  </div>
+</div>
+
+<!-- TIPS -->
+<p class="sl">Top 7 Tips for Faster Progress</p>
+<div class="g2">
+  <div class="card">
+    <div class="tip-item" style="border:none;padding:4px 0">
+      <div class="tip-num">1</div>
+      <div class="tip-body"><strong>Start in key of C.</strong> All beginner lessons, tabs, and backing tracks are built around a C diatonic. Don't buy other keys until you've spent 2–3 months on C.</div>
+    </div>
+    <div class="tip-item" style="border-top:.5px solid var(--color-border-tertiary);padding:8px 0 4px">
+      <div class="tip-num">2</div>
+      <div class="tip-body"><strong>Single notes before everything.</strong> If you can't play clean single notes, bending will be impossible. Master lip pursing first, then tongue blocking.</div>
+    </div>
+    <div class="tip-item" style="border-top:.5px solid var(--color-border-tertiary);padding:8px 0 4px">
+      <div class="tip-num">3</div>
+      <div class="tip-body"><strong>Don't force bends.</strong> Excessive tension kills your ability to bend. Take short frequent attempts rather than long frustrated sessions. Bending can take weeks to months — that's normal.</div>
+    </div>
+    <div class="tip-item" style="border-top:.5px solid var(--color-border-tertiary);padding:8px 0 4px">
+      <div class="tip-num">4</div>
+      <div class="tip-body"><strong>Listen to the masters.</strong> 20 minutes of active listening to Sonny Boy or Little Walter will teach you more about phrasing than hours of scale practice alone.</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="tip-item" style="border:none;padding:4px 0">
+      <div class="tip-num">5</div>
+      <div class="tip-body"><strong>Leave space.</strong> The biggest mistake beginners make is overplaying. Count how many empty beats Sonny Boy leaves in his solos. Silence is music too.</div>
+    </div>
+    <div class="tip-item" style="border-top:.5px solid var(--color-border-tertiary);padding:8px 0 4px">
+      <div class="tip-num">6</div>
+      <div class="tip-body"><strong>Play over backing tracks daily.</strong> A 12-bar blues backing in G (for your C harp in 2nd position) is available free on YouTube. Playing over music transforms technique into expression immediately.</div>
+    </div>
+    <div class="tip-item" style="border-top:.5px solid var(--color-border-tertiary);padding:8px 0 4px">
+      <div class="tip-num">7</div>
+      <div class="tip-body"><strong>Keep your harmonica clean.</strong> Tap out moisture after every session (don't blow through sharply — reed damage). Store in a case. Never eat immediately before playing — food particles destroy reeds.</div>
+    </div>
+    <div class="tip-item" style="border-top:.5px solid var(--color-border-tertiary);padding:8px 0 4px">
+      <div class="tip-num">+</div>
+      <div class="tip-body"><strong>Equipment won't fix technique.</strong> An expensive harmonica will not improve your tone — only your embouchure, breath control, and ear training will. Focus on those first.</div>
+    </div>
+  </div>
+</div>
+
+<!-- RESOURCES -->
+<p class="sl">Best Free Learning Resources</p>
+<div class="card">
+  <div class="card-body" style="margin-bottom:8px">All the sites below offer free beginner content. HarmonicaLessons.com and LearnTheHarmonica are the most structured for self-study.</div>
+  <div class="link-row">
+    <a class="lbtn" href="https://www.harmonica.com"><i class="ti ti-external-link"></i> Harmonica.com</a>
+    <a class="lbtn" href="https://www.learntheharmonica.com"><i class="ti ti-external-link"></i> LearnTheHarmonica</a>
+    <a class="lbtn" href="https://www.harmonicalessons.com"><i class="ti ti-external-link"></i> HarmonicaLessons.com</a>
+    <a class="lbtn" href="https://harmo.com/en/blog"><i class="ti ti-external-link"></i> Harmo Blog</a>
+    <a class="lbtn" href="https://www.tomlinharmonicalessons.com"><i class="ti ti-external-link"></i> Tomlin Lessons</a>
+  </div>
+</div>
+
+</div>
