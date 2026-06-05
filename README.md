@@ -83,7 +83,7 @@ To become the world's fastest sustainable problem-solving company.
 
 ### Phase 1
 - [1. Raga Bhupali](/music/phase1/02-raga-bhupali.html)
-- [2. Raga Yaman](/music/phase1/03-raga-yaman.html)
+- [2. Raga Yaman](/music/phase1/03-raga_yaman.html)
 - [3. Raga Bilawal](/music/phase1/04-raga-bilawal.html)
 - [4. Raga Bhairav](/music/phase1/05-raga-bhairav.html)
 
