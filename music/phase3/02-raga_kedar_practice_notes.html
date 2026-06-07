@@ -1,0 +1,677 @@
+
+<h2 class="sr-only">Raga Kedar — Complete Hindustani Classical Music Practice Notes</h2>
+<style>
+:root{
+  --c1:#6B35A0;--c1l:#EDE8F8;--c1m:#5A2D8C;--c1s:rgba(107,53,160,0.35);
+  --te:#854F0B;--tel:#FAEEDA;--tes:rgba(133,79,11,0.4);
+  --sh:#0F5733;--shl:#E1F5EE;--shs:rgba(15,87,51,0.35);
+  --ko:#993C1D;--kol:#FAECE7;--kos:rgba(153,60,29,0.35);
+  --ab-bg:#F5F0EA;--ab-c:#999;
+}
+body{font-family:var(--font-sans);font-size:15px;line-height:1.7;color:var(--color-text-primary);}
+.page{max-width:860px;margin:0 auto;padding:1.5rem 1.5rem 3rem;}
+.hero{text-align:center;padding:2.5rem 1rem 2rem;border-bottom:0.5px solid var(--color-border-secondary);margin-bottom:2.5rem;}
+.hero-sub{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--color-text-secondary);margin-bottom:.4rem;}
+.hero-name{font-family:var(--font-serif);font-size:3rem;font-weight:400;color:var(--color-text-primary);line-height:1.1;margin-bottom:.35rem;}
+.hero-name em{color:var(--c1m);font-style:italic;}
+.hero-tag{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-text-secondary);margin-bottom:1.2rem;}
+.hero-quote{font-family:var(--font-serif);font-style:italic;font-size:1rem;color:var(--color-text-secondary);max-width:580px;margin:0 auto;line-height:1.65;}
+.hero-quote cite{display:block;font-size:12px;font-style:normal;color:var(--color-text-tertiary);margin-top:.4rem;}
+
+.sec{margin-bottom:2.5rem;}
+.sec-hdr{display:flex;align-items:baseline;gap:.75rem;border-bottom:0.5px solid var(--color-border-tertiary);padding-bottom:.35rem;margin-bottom:1.25rem;}
+.sec-num{font-family:var(--font-mono);font-size:11px;color:var(--c1m);letter-spacing:.1em;}
+.sec-title{font-size:1.15rem;font-weight:500;color:var(--color-text-primary);}
+.sec-hi{font-size:.85rem;color:var(--color-text-secondary);font-style:italic;font-weight:400;}
+p{font-size:.92rem;margin-bottom:.6rem;color:var(--color-text-primary);}
+
+.callout{background:var(--c1l);border:0.5px solid var(--c1s);border-left:3px solid var(--c1m);border-radius:0;padding:.7rem 1rem;font-size:.85rem;color:var(--c1m);margin:.75rem 0;font-style:italic;}
+.callout-te{background:var(--tel);border:0.5px solid var(--tes);border-left:3px solid var(--te);border-radius:0;padding:.7rem 1rem;font-size:.85rem;color:var(--te);margin:.75rem 0;font-style:italic;}
+
+.ref-table{width:100%;border-collapse:collapse;font-size:.88rem;}
+.ref-table tr{border-bottom:0.5px solid var(--color-border-tertiary);}
+.ref-table tr:last-child{border-bottom:none;}
+.ref-table td{padding:.55rem .65rem;vertical-align:top;}
+.ref-table td:first-child{font-family:var(--font-mono);font-size:11px;color:var(--c1m);width:200px;padding-top:.65rem;}
+.badge{display:inline-block;padding:1px 9px;border-radius:20px;font-size:12px;font-family:var(--font-mono);margin:1px;}
+.b-p{background:var(--c1l);color:var(--c1m);border:0.5px solid var(--c1s);}
+.b-t{background:var(--tel);color:var(--te);border:0.5px solid var(--tes);}
+.b-s{background:var(--shl);color:var(--sh);border:0.5px solid var(--shs);}
+.b-k{background:var(--kol);color:var(--ko);border:0.5px solid var(--kos);}
+.b-g{background:var(--ab-bg);color:var(--ab-c);border:0.5px solid var(--color-border-tertiary);}
+
+.swar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:1rem 0;}
+.sw{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.55rem .3rem;text-align:center;background:var(--color-background-secondary);}
+.sw.vadi{background:var(--c1l);border-color:var(--c1s);}
+.sw.samv{background:#E0D8F5;border-color:rgba(107,53,160,.4);}
+.sw.te-cell{background:var(--tel);border-color:var(--tes);}
+.sw.sh-cell{background:var(--shl);border-color:var(--shs);}
+.sw.dual{background:linear-gradient(135deg,var(--shl) 50%,var(--tel) 50%);border-color:var(--tes);}
+.sw.ab{background:var(--ab-bg);border-color:var(--color-border-tertiary);opacity:.42;}
+.sw-nm{font-family:var(--font-mono);font-size:10px;color:var(--color-text-secondary);}
+.sw-ab{font-size:1.1rem;font-weight:500;color:var(--color-text-primary);margin:2px 0;}
+.sw.vadi .sw-ab{color:var(--c1m);}
+.sw.samv .sw-ab{color:var(--c1);}
+.sw.te-cell .sw-ab{color:var(--te);}
+.sw.sh-cell .sw-ab{color:var(--sh);}
+.sw.dual .sw-ab{color:var(--te);}
+.sw.ab .sw-ab{color:var(--ab-c);}
+.sw-tag{font-size:10px;font-family:var(--font-mono);margin-top:2px;color:inherit;}
+
+.notation{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-left:3px solid var(--c1m);border-radius:0;padding:.85rem 1.1rem;font-family:var(--font-mono);font-size:.82rem;line-height:2;margin:.65rem 0;color:var(--color-text-primary);}
+.notation .lbl{font-size:10px;color:var(--c1m);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.2rem;display:block;}
+.te{color:var(--te);font-weight:500;}
+.sh{color:var(--sh);font-weight:500;}
+.pu{color:var(--c1m);font-weight:500;}
+.ko-c{color:var(--ko);font-weight:500;}
+.dim{color:var(--color-text-tertiary);}
+.gr{color:#854F0B;font-style:italic;font-size:.78rem;}
+
+.oct-row{display:flex;gap:0;margin:.4rem 0;border-radius:var(--border-radius-md);overflow:hidden;border:0.5px solid var(--color-border-tertiary);}
+.oc{flex:1;padding:.5rem .25rem;text-align:center;font-family:var(--font-mono);font-size:12px;border-right:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);background:var(--color-background-secondary);}
+.oc:last-child{border-right:none;}
+.oc.v{background:var(--c1l);color:var(--c1m);font-weight:500;}
+.oc.s{background:#E0D8F5;color:var(--c1);font-weight:500;}
+.oc.t{background:var(--tel);color:var(--te);font-weight:500;}
+.oc.sh{background:var(--shl);color:var(--sh);font-weight:500;}
+.oc.ab{background:var(--ab-bg);color:var(--ab-c);opacity:.5;}
+.oc.du{background:linear-gradient(90deg,var(--shl) 45%,var(--tel) 55%);color:var(--te);font-weight:500;}
+
+.flow{display:flex;align-items:center;flex-wrap:wrap;gap:0;margin:1rem 0;}
+.fn{padding:.45rem .65rem;text-align:center;border:0.5px solid var(--color-border-tertiary);font-family:var(--font-mono);font-size:.8rem;background:var(--color-background-secondary);color:var(--color-text-primary);}
+.fn:first-child{border-radius:var(--border-radius-md) 0 0 var(--border-radius-md);}
+.fn:last-child{border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;}
+.fn.fv{background:var(--c1l);color:var(--c1m);border-color:var(--c1s);font-weight:500;}
+.fn.fs{background:#E0D8F5;color:var(--c1);border-color:rgba(107,53,160,.4);font-weight:500;}
+.fn.ft{background:var(--tel);color:var(--te);border-color:var(--tes);font-weight:500;}
+.fn.fsh{background:var(--shl);color:var(--sh);border-color:var(--shs);font-weight:500;}
+.fn.fab{background:var(--ab-bg);color:var(--ab-c);border-color:var(--color-border-tertiary);}
+.fn .nl{font-size:10px;color:inherit;opacity:.72;}
+.fn .nn{font-size:.95rem;}
+.fa-arr{font-size:.95rem;color:var(--c1s);padding:0 2px;}
+
+.aln-num{font-family:var(--font-mono);font-size:10px;color:var(--c1m);margin-bottom:2px;letter-spacing:.08em;}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0;}
+.card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:.9rem 1rem;background:var(--color-background-secondary);}
+.card h4{font-size:1rem;font-weight:500;margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);}
+.card ul{list-style:none;font-size:.85rem;}
+.card ul li{padding:.2rem 0;border-bottom:0.5px solid var(--color-border-tertiary);}
+.card ul li:last-child{border-bottom:none;}
+.card ul li::before{content:'◆';font-size:8px;color:var(--c1m);margin-right:6px;vertical-align:middle;}
+
+.rasa-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:1rem 0;}
+.rasa{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.8rem .9rem;background:var(--color-background-secondary);}
+.rasa-t{font-size:.9rem;font-weight:500;color:var(--c1m);margin-bottom:.25rem;}
+.rasa-d{font-size:.82rem;color:var(--color-text-secondary);line-height:1.55;}
+
+.prahar-row{display:flex;border-radius:var(--border-radius-md);overflow:hidden;border:0.5px solid var(--color-border-tertiary);margin:1rem 0;}
+.pc{flex:1;padding:.6rem .4rem;text-align:center;border-right:0.5px solid var(--color-border-tertiary);font-size:11px;font-family:var(--font-mono);color:var(--color-text-tertiary);background:var(--color-background-secondary);}
+.pc:last-child{border-right:none;}
+.pc.hl{background:var(--c1l);color:var(--c1m);font-weight:500;}
+.pc .pt{font-size:10px;display:block;margin-bottom:2px;}
+
+.bandish-block{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin:1rem 0;}
+.bh{background:var(--c1l);padding:.55rem .9rem;font-family:var(--font-mono);font-size:11px;color:var(--c1m);letter-spacing:.08em;border-bottom:0.5px solid var(--c1s);}
+.bb{padding:.65rem .9rem;background:var(--color-background-secondary);}
+.bl{font-size:10px;font-family:var(--font-mono);color:var(--c1m);text-transform:uppercase;letter-spacing:.08em;margin:.4rem 0 .15rem;}
+
+.cmp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:1rem 0;}
+.cmp{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.7rem .8rem;background:var(--color-background-secondary);}
+.cmp-name{font-size:.88rem;font-weight:500;color:var(--color-text-primary);margin-bottom:3px;}
+.cmp-notes{font-family:var(--font-mono);font-size:11px;color:var(--c1m);margin-bottom:3px;}
+.cmp-d{font-size:.78rem;color:var(--color-text-secondary);}
+
+.dual-box{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:.75rem 0;}
+.dual-half{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.7rem .9rem;background:var(--color-background-secondary);}
+.dual-half h5{font-size:.9rem;font-weight:500;margin-bottom:.35rem;padding-bottom:.3rem;border-bottom:0.5px solid var(--color-border-tertiary);}
+.dual-half.te-h{border-left:3px solid var(--te);}
+.dual-half.sh-h{border-left:3px solid var(--sh);}
+
+.tbl{width:100%;border-collapse:collapse;font-size:.85rem;}
+.tbl th{font-family:var(--font-mono);font-size:10px;color:var(--c1m);text-align:left;padding:.3rem .65rem;border-bottom:0.5px solid var(--c1s);background:var(--c1l);}
+.tbl td{padding:.5rem .65rem;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl td:first-child{font-style:italic;}
+
+.mistake-tbl{width:100%;border-collapse:collapse;font-size:.85rem;}
+.mistake-tbl th{font-family:var(--font-mono);font-size:10px;color:var(--c1m);text-align:left;padding:.3rem .65rem;border-bottom:0.5px solid var(--c1s);background:var(--c1l);}
+.mistake-tbl td{padding:.55rem .65rem;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top;}
+.mistake-tbl tr:last-child td{border-bottom:none;}
+.mistake-tbl td:first-child{color:#993C1D;font-style:italic;width:38%;}
+
+.art-card{display:flex;align-items:flex-start;gap:.7rem;padding:.65rem 0;border-bottom:0.5px solid var(--color-border-tertiary);}
+.art-card:last-child{border-bottom:none;}
+.art-init{width:36px;height:36px;border-radius:50%;background:var(--c1l);border:0.5px solid var(--c1s);display:flex;align-items:center;justify-content:center;font-size:.85rem;color:var(--c1m);font-weight:500;flex-shrink:0;}
+.art-name{font-weight:500;font-size:.88rem;color:var(--color-text-primary);}
+.art-d{font-size:.78rem;color:var(--color-text-secondary);}
+
+.gl-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin:.65rem 0;}
+.gl{padding:.45rem .65rem;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-secondary);font-size:.82rem;}
+.gl strong{font-family:var(--font-mono);font-size:11px;color:var(--c1m);display:block;margin-bottom:1px;}
+
+.sum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:1rem 0;}
+.sc{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.9rem;background:var(--color-background-secondary);}
+.sc h4{font-family:var(--font-mono);font-size:10px;color:var(--c1m);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.4rem;}
+.sc p{font-size:.82rem;line-height:1.6;color:var(--color-text-primary);margin-bottom:0;}
+
+.week-tbl{width:100%;border-collapse:collapse;font-size:.85rem;}
+.week-tbl th{font-family:var(--font-mono);font-size:10px;color:var(--c1m);text-align:left;padding:.3rem .65rem;border-bottom:0.5px solid var(--c1s);background:var(--c1l);}
+.week-tbl td{padding:.5rem .65rem;border-bottom:0.5px solid var(--color-border-tertiary);}
+.week-tbl tr:last-child td{border-bottom:none;}
+.week-tbl td:first-child{font-family:var(--font-mono);font-size:11px;color:var(--c1m);width:110px;}
+
+.taan-lbl{font-size:11px;font-family:var(--font-mono);color:var(--c1m);text-transform:uppercase;letter-spacing:.08em;margin-top:.7rem;margin-bottom:2px;}
+.orn{text-align:center;color:var(--c1m);margin:2rem 0 1rem;letter-spacing:.3em;}
+
+@media(max-width:600px){
+  .two-col,.rasa-grid,.gl-grid,.sum-grid,.cmp-grid,.dual-box{grid-template-columns:1fr;}
+  .swar-grid{grid-template-columns:repeat(4,1fr);}
+  .hero-name{font-size:2.2rem;}
+}
+</style>
+
+<div class="page">
+
+<div class="hero">
+  <div class="hero-sub">Hindustani Classical Music</div>
+  <div class="hero-name">Raga <em>Kedar</em></div>
+  <div class="hero-tag">राग केदार — Comprehensive Practice Notes</div>
+  <blockquote class="hero-quote">
+    "Kedar occupies a high pedestal in Indian classical music. Named after Lord Shiva — ruler of Kedarnath — it has the unique distinction of using both shuddha and teevra Madhyam in the same raga. The meend from Dha to Ma via Pa is the very heart of this raga."
+    <cite>— After Wikipedia; Parrikar Archive; Artium Academy; WholisticWellnessSpace</cite>
+  </blockquote>
+</div>
+
+<!-- 01 PARICHAY -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">01</span><span class="sec-title">Parichay <span class="sec-hi">(परिचय)</span></span></div>
+  <p>Raga Kedar (also Kedara) is one of the most revered and intricate ragas in Hindustani classical music, belonging to the Kalyan Thaat. It is named after Lord Shiva — whose most sacred dwelling is Kedarnath in the Himalayas — and carries the gravity, majesty, and spiritual elevation associated with the deity.</p>
+  <p>Kedar's defining and unique characteristic is its use of <strong>both shuddha Madhyam (F♮) and teevra Madhyam (F♯)</strong> within the same raga — making it one of the rare ragas that employs two forms of a single note. Its melodic movement (chalan) is highly vakra (oblique/zigzag) — a straightforward scalar rendition sounds nothing like Kedar; mastering the raga requires internalising its characteristic phrase patterns rather than its scale.</p>
+  <div class="callout">
+    <strong>Kedar and the Kalyan Panchak:</strong> Kedar is one of five ragas forming the prestigious "Kalyan Panchak" or Panchratna — five jewel ragas of the Kalyan family: Kedar, Hameer, Gaud Sarang, Kamod, and Chhayanat. All five use shuddha swaras plus teevra Ma, but each has a completely distinct character. Learning to tell these five apart is a major milestone in Hindustani classical education.
+  </div>
+</div>
+
+<!-- 02 QUICK REF -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">02</span><span class="sec-title">Quick Reference</span></div>
+  <table class="ref-table">
+    <tr><td>Thaat</td><td><span class="badge b-p">Kalyan</span></td></tr>
+    <tr><td>Jati</td><td>Audav–Sampurna (5 notes ascending, 7 descending) — but the vakra chalan means this is a simplification; Shadav-Sampurna is also cited</td></tr>
+    <tr><td>Aaroh</td><td><code>Sā  <span style="color:var(--sh)">Ma</span>  (G)<span style="color:var(--te)">m</span>  Pa  Dha  Ni  Sā'</code> — Re and Ga omitted; both Ma variants may appear; Ga as grace note only</td></tr>
+    <tr><td>Avroh</td><td><code>Sā'  Ni  Dha  Pa  <span style="color:var(--te)">m</span>  Pa  <span style="color:var(--sh)">Ma</span>  Re  Sā</code> — teevra Ma prominent; meend from Dha through Pa to Ma</td></tr>
+    <tr><td>Pakad</td><td><code>S <span style="color:var(--sh)">M</span> , <span style="color:var(--sh)">M</span> P , <span style="color:var(--te)">m</span> P <span style="color:var(--sh)">M</span> , D P <span style="color:var(--sh)">M</span> , R S</code></td></tr>
+    <tr><td>Vadi (वादी)</td><td><strong>Ma</strong> — shuddha Madhyam (F♮) is the primary vadi; phrases frequently rest on Ma</td></tr>
+    <tr><td>Samvadi (संवादी)</td><td><strong>Sa</strong> (Shadaj) — the second most important note</td></tr>
+    <tr><td>Dual Madhyam</td><td><span class="badge b-s">Shuddha Ma (M) = F♮</span> <span class="badge b-t">Teevra Ma (m) = F♯</span> — both used; shuddha Ma is the vadi and primary resting note; teevra Ma appears in characteristic phrases and meends</td></tr>
+    <tr><td>Ga treatment</td><td>Gandhar (Ga) is extremely weak — used only as a grace note (kan swara) in the transition from Ma to Pa. Never a resting note. <code>(G) before P</code></td></tr>
+    <tr><td>Ni treatment</td><td>Shuddha Ni is standard; komal Ni may occasionally appear as a passing ornament in descent — this is an idiosyncrasy of individual performers</td></tr>
+    <tr><td>Gaayan Samay</td><td>Raat ka Pratham Prahar — <strong>Evening/Night, 6–9 PM</strong> (some sources cite 9 PM–midnight). Associated with the rainy season.</td></tr>
+    <tr><td>Rasa / Mood</td><td>Unique — no single rasa; a mixture of longing, love, separation, happiness, and spiritual gravity. It is called a "chanchal" (restless/playful) raga in some classifications.</td></tr>
+    <tr><td>Carnatic Equivalent</td><td><strong>Hameer Kalyani</strong> — same scale, similar character</td></tr>
+    <tr><td>Related ragas</td><td>Hameer, Gaud Sarang, Kamod, Chhayanat (the Kalyan Panchak); also Kedar-Bahar (compound raga)</td></tr>
+  </table>
+</div>
+
+<!-- 03 SWAR VISTAR -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">03</span><span class="sec-title">Swar Vistar <span class="sec-hi">(स्वर विस्तार)</span></span></div>
+  <p>Kedar uses all seven notes but with specific restrictions. Re and Ga are omitted in the ascending scale; Ga appears only as a grace note. Most distinctively, <strong>both shuddha Ma and teevra Ma</strong> are used — shuddha Ma (M) as the vadi, and teevra Ma (m) in characteristic melodic phrases.</p>
+  <div class="swar-grid">
+    <div class="sw samv"><div class="sw-nm">Shadaj</div><div class="sw-ab">Sa</div><div class="sw-tag">SAMVADI ★</div></div>
+    <div class="sw ab"><div class="sw-nm">Rishabh</div><div class="sw-ab">Re</div><div class="sw-tag">varjit aaroh ✕</div></div>
+    <div class="sw ab" style="background:#F5F0EA;opacity:.55"><div class="sw-nm">Gandhar</div><div class="sw-ab">Ga</div><div class="sw-tag">grace note only</div></div>
+    <div class="sw dual"><div class="sw-nm">Madhyam</div><div class="sw-ab">M / m</div><div class="sw-tag">VADI M + m ★★</div></div>
+    <div class="sw"><div class="sw-nm">Pancham</div><div class="sw-ab">Pa</div><div class="sw-tag">shuddha</div></div>
+    <div class="sw" style="background:#E6F1FB;border-color:rgba(24,95,165,.4)"><div class="sw-nm">Dhaivat</div><div class="sw-ab" style="color:#0C447C">Dha</div><div class="sw-tag" style="color:#0C447C">meend partner</div></div>
+    <div class="sw"><div class="sw-nm">Nishad</div><div class="sw-ab">Ni</div><div class="sw-tag">shuddha (±komal)</div></div>
+  </div>
+  <div class="dual-box">
+    <div class="dual-half sh-h">
+      <h5 style="color:var(--sh)">Shuddha Ma (M) = F♮ — the VADI</h5>
+      <p style="font-size:.83rem">The primary note of Kedar. Phrases rest on shuddha Ma. The ascending line returns to M frequently. Shuddha Ma defines the raga's emotional centre. In the aaroh: <code>Sa M (G)m P</code> — shuddha Ma is the launching note. In the avroh: <code>m P M R S</code> — shuddha Ma appears as the resting point before descending to Re.</p>
+    </div>
+    <div class="dual-half te-h">
+      <h5 style="color:var(--te)">Teevra Ma (m) = F♯ — the expressive agent</h5>
+      <p style="font-size:.83rem">Appears in characteristic phrases and the defining meend. The meend from Dha to shuddha Ma via Pa (D → P → m → M) traverses teevra Ma on the way. Teevra Ma also appears in the phrase <code>m P m P</code> (alternating with Pa) which is idiosyncratic to Kedar. Never a resting note; always a passing or meend note.</p>
+    </div>
+  </div>
+  <div class="callout-te">
+    <strong>The notation convention:</strong> M (capital) = shuddha Madhyam (F♮). m (lowercase) = teevra Madhyam (F♯). This is opposite to the general Hindustani notation where lowercase = komal. In Kedar specifically: M = shuddha Ma (vadi); m = teevra Ma. This convention is used throughout these notes.
+  </div>
+</div>
+
+<!-- 04 AAROH AVROH PAKAD -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">04</span><span class="sec-title">Aaroh–Avroh aur Pakad</span></div>
+  <div class="notation"><span class="lbl">Aaroh (आरोह) — Ascending · 5–6 notes · Re absent · Ga as grace note only</span>
+Sā  <span class="sh">M</span>  (<span class="dim">G</span>)<span class="te">m</span>  Pa  Dha  Ni  Sā'
+<span class="dim">(M = shuddha Ma; (G) = Gandhar as subtle grace note before teevra m; Re absent; sometimes: S M M P D N S')</span></div>
+  <div class="notation"><span class="lbl">Avroh (अवरोह) — Descending · all 7 notes · defining meend</span>
+Sā'  Ni  Dha  Pa  <span class="te">m</span>  Pa  <span class="sh">M</span>  Re  Sā
+<span class="dim">(the phrase D → Pa → m → Pa → M = the heart of Kedar; meend from Dha through Pa to shuddha Ma)</span></div>
+  <div class="callout-te">
+    <strong>The defining meend — the heart of Kedar:</strong> The phrase <code>D → P → m → M</code> (Dha descending through Pa, touching teevra Ma, then landing on shuddha Ma) is described as "the heart of the raga — repeated again and again." The slide traverses two forms of Madhyam in a single meend. This is Kedar's most immediately identifying gesture. Without it, the raga loses its identity.
+  </div>
+  <div class="notation"><span class="lbl">Pakad (पकड़)</span>
+S  <span class="sh">M</span>  ,  <span class="sh">M</span>  P  ,  <span class="te">m</span>  P  <span class="sh">M</span>  ,  D  P  <span class="sh">M</span>  ,  R  S
+<span class="dim">(S M = the opening; m P M = the core alternation; D P M = the defining descent; R S = cadence)</span></div>
+  <div class="notation"><span class="lbl">Key characteristic phrases (chalan patterns)</span>
+S <span class="sh">M</span>  ,  S R S <span class="sh">M</span>  ,  <span class="sh">M</span>–<span class="sh">M</span>  P  ,  <span class="sh">M</span> (<span class="dim">G</span>)<span class="te">m</span> P <span class="sh">M</span>  ,  <span class="te">m</span> P <span class="te">m</span> P  ,  D P <span class="te">m</span> P <span class="sh">M</span>  ,  P <span class="sh">M</span> R S
+<span class="dim">(m P m P = the alternation; D P m P M = the defining descent; S M repeated openings)</span></div>
+  <div class="callout">
+    <strong>Ga is a kan swara — never a resting note:</strong> Gandhar (Ga) is extremely weak in Kedar — described as "rarely used" and only as "a grace note in the transition from Ma to Pa." The notation is (G)m before Pa — a subtle, felt-rather-than-heard embellishment. Singing Ga as a resting note immediately destroys Kedar's character.
+  </div>
+</div>
+
+<!-- 05 OCTAVE MAP -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">05</span><span class="sec-title">Saptak Vistar <span class="sec-hi">(सप्तक विस्तार)</span></span></div>
+  <p style="font-size:.82rem;color:var(--color-text-secondary);margin-bottom:.4rem">Aaroh — Re absent; Ga grace note only; both Ma variants possible</p>
+  <div class="oct-row">
+    <div class="oc s">Sa ★</div><div class="oc ab">Re ✕</div><div class="oc ab" style="opacity:.35">Ga(kan)</div><div class="oc du">M/m ★★</div><div class="oc">Pa</div><div class="oc" style="background:#E6F1FB;color:#0C447C;font-weight:500">Dha</div><div class="oc">Ni</div>
+  </div>
+  <p style="font-size:.82rem;color:var(--color-text-secondary);margin-bottom:.4rem">Avroh — all 7 notes; meend D → P → m → M is the central phrase</p>
+  <div class="oct-row">
+    <div class="oc s">Sa ★</div><div class="oc">Re ↓</div><div class="oc ab" style="opacity:.35">Ga(kan)</div><div class="oc v">M (vadi)</div><div class="oc">Pa</div><div class="oc" style="background:#E6F1FB;color:#0C447C;font-weight:500">Dha</div><div class="oc">Ni</div>
+  </div>
+  <p style="font-size:.8rem;color:var(--color-text-secondary);margin-top:.35rem">Vadi shuddha Ma in purple. Samvadi Sa in lighter purple. Dual Ma cell (gradient) = both shuddha and teevra. Dha in blue = meend partner. Faded = absent in aaroh or grace-note only. Kedar is <em>purvanga-pradhan</em> — centre of gravity in the lower half.</p>
+</div>
+
+<!-- 06 CHALAN -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">06</span><span class="sec-title">Chalan <span class="sec-hi">(चलन)</span> — Melodic Character</span></div>
+  <div class="callout">Kedar's chalan is highly vakra (zigzag/oblique). A straightforward scale rendition sounds nothing like Kedar. The raga must be learned through its characteristic phrase patterns, not its aaroh-avroh.</div>
+  <p style="font-size:.88rem;font-weight:500;margin-bottom:.4rem">Core ascending movement:</p>
+  <div class="flow">
+    <div class="fn fs"><div class="nl">SAMVADI</div><div class="nn">Sa ★</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn fv"><div class="nl">VADI (repeated)</div><div class="nn">M–M</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn fab"><div class="nl">grace note</div><div class="nn">(G)</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn ft"><div class="nl">teevra</div><div class="nn">m</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn"><div class="nl">shuddha</div><div class="nn">Pa</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn" style="background:#E6F1FB;color:#0C447C;border-color:rgba(24,95,165,.35)"><div class="nl">meend partner</div><div class="nn">Dha</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn"><div class="nl">shuddha</div><div class="nn">Ni</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn"><div class="nl">taar</div><div class="nn">Sa'</div></div>
+  </div>
+  <p style="font-size:.88rem;font-weight:500;margin:.65rem 0 .4rem">Defining descending meend (the heart of Kedar):</p>
+  <div class="flow">
+    <div class="fn" style="background:#E6F1FB;color:#0C447C;border-color:rgba(24,95,165,.35)"><div class="nl">start meend</div><div class="nn">Dha</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn"><div class="nl">through</div><div class="nn">Pa</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn ft"><div class="nl">teevra (transit)</div><div class="nn">m</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn"><div class="nl">through</div><div class="nn">Pa</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn fv"><div class="nl">VADI (land here)</div><div class="nn">M ★</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn"><div class="nl">descend</div><div class="nn">Re</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn fs"><div class="nl">SAMVADI</div><div class="nn">Sa ★</div></div>
+  </div>
+  <div class="two-col" style="margin-top:1rem">
+    <div class="card">
+      <h4>Key melodic rules</h4>
+      <ul>
+        <li>M (shuddha Ma) is the vadi — phrases frequently rest on M; it is repeated for emphasis (M–M)</li>
+        <li>Ga is a grace note only — never a resting note; appears as (G) before teevra m</li>
+        <li>Re is omitted in aaroh; appears briefly in descent (m P M R S)</li>
+        <li>The meend D → P → m → M is the defining phrase — practise it until it is effortless</li>
+        <li>The alternation m P m P (teevra Ma and Pa) is idiosyncratic to Kedar</li>
+        <li>The phrase S M M P (shuddha Ma dwelt upon, then jumping to Pa) creates Kedar's vast, soaring quality</li>
+        <li>Teevra Ma (m) is always a passing or meend note — never a resting note</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Vakra chalan — key patterns</h4>
+      <ul>
+        <li><code>S M , M–M P</code> — the opening; double Ma before leaping to Pa</li>
+        <li><code>M (G)m P m P</code> — grace Ga + teevra Ma alternation with Pa</li>
+        <li><code>D P m P M</code> — the defining descent via teevra Ma to shuddha Ma</li>
+        <li><code>P D P P S'</code> — the launch into taar saptak via doubled Pa</li>
+        <li><code>S' (N)R' S'</code> — upper octave turn with Ni grace note</li>
+        <li><code>S' N D P</code> — descent from taar into the defining D → M meend</li>
+        <li><code>P m M R S</code> — final resolution to samvadi Sa</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 07 ALANKARS -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">07</span><span class="sec-title">Alankars <span class="sec-hi">(अलंकार)</span></span></div>
+  <p>Practise slowly with tanpura drone. Focus: M (shuddha Ma) as resting note; Ga as grace note only; teevra m as passing/meend note; D → P → m → M meend as the primary gesture.</p>
+  <div class="aln-num">ALANKAR 1 — Core aaroh–avroh</div>
+  <div class="notation">S  <span class="sh">M</span>  (<span class="dim">G</span>)<span class="te">m</span>  Pa  Dha  Ni  S' | S'  Ni  Dha  Pa  <span class="te">m</span>  Pa  <span class="sh">M</span>  Re  S
+<span class="dim">(Re absent ascending; Ga grace note before m; D P m P M = the defining descent)</span></div>
+  <div class="aln-num">ALANKAR 2 — Repeated Ma (shuddha) and Pa leap</div>
+  <div class="notation">S  <span class="sh">M</span>  –  <span class="sh">M</span>  Pa  ,  <span class="sh">M</span>  <span class="sh">M</span>  Pa  Dha  ,  Pa  Dha  Ni  S'
+<span class="dim">(M–M before Pa = the "soaring leap" quality; double shuddha Ma is characteristic)</span></div>
+  <div class="aln-num">ALANKAR 3 — Teevra Ma alternation m P m P</div>
+  <div class="notation"><span class="sh">M</span>  (<span class="dim">G</span>)<span class="te">m</span>  Pa  <span class="te">m</span>  Pa  ,  <span class="te">m</span>  Pa  <span class="te">m</span>  Pa  Dha  ,  Dha  Pa  <span class="te">m</span>  Pa  <span class="sh">M</span>  R  S
+<span class="dim">(m P m P = the idiosyncratic Kedar alternation; always ending on shuddha M)</span></div>
+  <div class="aln-num">ALANKAR 4 — The defining meend D → P → m → M</div>
+  <div class="notation">Dha  ~~~  Pa  ~~~  <span class="te">m</span>  ~~~  Pa  ~~~  <span class="sh">M</span>  –  R  S
+<span class="dim">(~~~ = slow meend; this phrase D P m P M must be practised until completely smooth)</span></div>
+  <div class="aln-num">ALANKAR 5 — Taar saptak approach P D P P S'</div>
+  <div class="notation"><span class="sh">M</span>  Pa  Dha  Pa  Pa  S'  ,  S'  Ni  Dha  Pa  <span class="te">m</span>  Pa  <span class="sh">M</span>  R  S
+<span class="dim">(P D P P S' = the doubled Pa before taar jump; characteristic launch into upper octave)</span></div>
+  <div class="aln-num">ALANKAR 6 — Full pakad cell (practise daily)</div>
+  <div class="notation">S  <span class="sh">M</span>  ,  <span class="sh">M</span>  Pa  ,  (<span class="dim">G</span>)<span class="te">m</span>  Pa  <span class="sh">M</span>  ,  Dha  Pa  <span class="te">m</span>  Pa  <span class="sh">M</span>  ,  R  S
+<span class="dim">(the complete Kedar pakad — learn this before anything else)</span></div>
+</div>
+
+<!-- 08 ALAAP -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">08</span><span class="sec-title">Alaap Kramanik <span class="sec-hi">(आलाप क्रमाणिक)</span></span></div>
+  <div class="aln-num">PHRASE 1 — Sthapana (establishing Sa and shuddha Ma)</div>
+  <div class="notation">S  <span class="sh">M</span>  –  ,  S  R  S  <span class="sh">M</span>  –  ,  <span class="sh">M</span>  –  <span class="sh">M</span>  –  ,  R  S  –</div>
+  <div class="aln-num">PHRASE 2 — Introducing teevra m and the Ma–Pa leap</div>
+  <div class="notation">S  <span class="sh">M</span>  <span class="sh">M</span>  Pa  –  ,  <span class="sh">M</span>  (<span class="dim">G</span>)<span class="te">m</span>  Pa  <span class="sh">M</span>  –  ,  <span class="te">m</span>  Pa  <span class="te">m</span>  Pa  –  ,  Pa  <span class="sh">M</span>  R  S  –</div>
+  <div class="aln-num">PHRASE 3 — Introducing Dha and the meend</div>
+  <div class="notation"><span class="sh">M</span>  Pa  Dha  –  ,  Dha  ~~~  Pa  ~~~  <span class="te">m</span>  ~~~  Pa  ~~~  <span class="sh">M</span>  –  ,  R  S  –</div>
+  <div class="aln-num">PHRASE 4 — Introducing Ni and taar Sa</div>
+  <div class="notation">Pa  Dha  Ni  –  ,  Ni  S'  –  ,  S'  Ni  Dha  Pa  <span class="te">m</span>  Pa  <span class="sh">M</span>  R  S  –</div>
+  <div class="aln-num">PHRASE 5 — Taar saptak with doubled Pa launch</div>
+  <div class="notation"><span class="sh">M</span>  Pa  Dha  Pa  Pa  S'  –  ,  S'  (<span class="dim">N</span>)R'  S'  –  ,  S'  Ni  Dha  Pa  <span class="te">m</span>  Pa  <span class="sh">M</span>  R  S  –</div>
+  <div class="aln-num">PHRASE 6 — Full resolution with complete meend</div>
+  <div class="notation">S  <span class="sh">M</span>  <span class="sh">M</span>  Pa  (<span class="dim">G</span>)<span class="te">m</span>  Pa  Dha  Ni  S'  –  ,  S'  Ni  Dha  ~~~  Pa  ~~~  <span class="te">m</span>  Pa  <span class="sh">M</span>  –  ,  R  S  –
+<span class="dim">(full arc: aaroh with Ma-Ma leap; the defining meend in descent; resolution on Sa)</span></div>
+</div>
+
+<!-- 09 SARGAM -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">09</span><span class="sec-title">Sargam Geet</span></div>
+  <div class="bandish-block">
+    <div class="bh">SARGAM GEET — TEENTAAL (16 beats)</div>
+    <div class="bb">
+      <div class="bl">Sthai</div>
+      <div class="notation" style="margin:.25rem 0">
+        S  <span class="sh">M</span>  <span class="sh">M</span>  Pa  |  <span class="te">m</span>  Pa  <span class="sh">M</span>  R  |  S  –  <span class="sh">M</span>  <span class="sh">M</span>  |  Pa  <span class="te">m</span>  Pa  <span class="sh">M</span><br>
+        D  Pa  <span class="te">m</span>  Pa  |  <span class="sh">M</span>  –  R  S  |  S  <span class="sh">M</span>  Pa  Dha  |  Ni  S'  –  –
+      </div>
+      <div class="bl">Antara</div>
+      <div class="notation" style="margin:.25rem 0">
+        Pa  Dha  Pa  Pa  |  S'  –  Ni  Dha  |  Pa  <span class="te">m</span>  Pa  <span class="sh">M</span>  |  R  S  –  –<br>
+        S'  (<span class="dim">N</span>)R'  S'  –  |  Ni  Dha  Pa  <span class="te">m</span>  |  Pa  <span class="sh">M</span>  R  S  |  –  –  –  –
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 10 BANDISH -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">10</span><span class="sec-title">Bandish <span class="sec-hi">(बंदिश)</span></span></div>
+  <div class="bandish-block">
+    <div class="bh">BANDISH 1 · "Jane De Mohe Tori Piharwa Na Manoon" — TEENTAAL (vilambit) — Mewati Gharana</div>
+    <div class="bb">
+      <p style="font-size:.82rem;color:var(--color-text-secondary);margin-bottom:.4rem">One of the most beautiful vilambit compositions in Kedar — a plea not to be sent away from the beloved's home (piharwa). The text expresses the emotional world of the raga — a mixture of longing, love, and refusal to leave. Famous in the Mewati tradition; mentioned by Rajan Parrikar in his Kedar archive as "the other bandish I quite like."</p>
+      <div class="bl">Sthai</div>
+      <div class="notation" style="margin:.25rem 0">
+        Ja–ne  de  |  mo–he  to–ri  |  pi–har–wa  na  |  ma–noon  –  –<br>
+        S  <span class="sh">M</span>  |  <span class="sh">M</span>  Pa  <span class="te">m</span>  Pa  |  <span class="sh">M</span>  R  S  –  |  –  –  –  –
+      </div>
+      <div class="bl">Antara</div>
+      <div class="notation" style="margin:.25rem 0">
+        Pa  Dha  Pa  Pa  S'  –  ,  S'  Ni  Dha  Pa  <span class="te">m</span>  Pa  <span class="sh">M</span>  R  S  –
+      </div>
+    </div>
+  </div>
+  <div class="bandish-block">
+    <div class="bh">BANDISH 2 · "Painjaani Baaje Jhanana Jhanana" — TEENTAAL (madhya laya) — Ramashreya Jha "Ramrang"</div>
+    <div class="bb">
+      <p style="font-size:.82rem;color:var(--color-text-secondary);margin-bottom:.4rem">A delightful composition by Ramashreya Jha "Ramrang" — describes baby Krishna gambolling in the courtyard as Yashoda watches lovingly. The text's playfulness captures Kedar's "chanchal" (restless/playful) nature beautifully.</p>
+      <div class="bl">Sthai</div>
+      <div class="notation" style="margin:.25rem 0">
+        Pain–jaa–ni  |  baa–je  jha–na–na  |  jha–na–na  –  |  –  –  –  –<br>
+        S  <span class="sh">M</span>  (<span class="dim">G</span>)<span class="te">m</span>  |  Pa  <span class="te">m</span>  Pa  <span class="sh">M</span>  |  R  S  –  –  |  –  –  –  –
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 11 TAANS -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">11</span><span class="sec-title">Taan Prakar <span class="sec-hi">(तान प्रकार)</span></span></div>
+  <div class="callout">All taans must: (1) keep Re and Ga weak/absent in ascending runs, (2) use the defining D P m P M meend, (3) always land on shuddha M as the resting point, (4) preserve the m P m P alternation as characteristic.</div>
+  <div class="taan-lbl">Seedhi taan (preserving Kedar's key phrases)</div>
+  <div class="notation">S  <span class="sh">M</span>  <span class="sh">M</span>  Pa  <span class="te">m</span>  Pa  Dha  Ni  S' | S'  Ni  Dha  Pa  <span class="te">m</span>  Pa  <span class="sh">M</span>  R  S</div>
+  <div class="taan-lbl">Vakra taan (idiomatic Kedar movement)</div>
+  <div class="notation">S  <span class="sh">M</span>  <span class="sh">M</span>  Pa  <span class="te">m</span>  Pa  <span class="te">m</span>  Pa  Dha  Pa  Pa  S'<br>S'  Ni  Dha  Pa  <span class="te">m</span>  Pa  <span class="sh">M</span>  <span class="te">m</span>  Pa  <span class="sh">M</span>  R  S</div>
+  <div class="taan-lbl">Meend-based taan (the defining Kedar meend as taan)</div>
+  <div class="notation">Dha  ~~~  Pa  ~~~  <span class="te">m</span>  ~~~  Pa  ~~~  <span class="sh">M</span>  ,  <span class="sh">M</span>  <span class="sh">M</span>  Pa  Dha  Ni  S'  ,  S'  Ni  Dha  ~~~  Pa  ~~~  <span class="te">m</span>  Pa  <span class="sh">M</span>  R  S</div>
+  <div class="taan-lbl">Gamak taan</div>
+  <div class="notation">S–<span class="sh">M</span>–Pa–Dha–Ni–S'  <span class="dim">(with bounce; Re and Ga absent going up)</span></div>
+  <div class="taan-lbl">Sapat taan (fast)</div>
+  <div class="notation">S  <span class="sh">M</span>  <span class="te">m</span>  Pa  Dha  Ni  S'  S'  Ni  Dha  Pa  <span class="te">m</span>  Pa  <span class="sh">M</span>  R  S  <span class="dim">(continuous; D P m P M must be felt even at speed)</span></div>
+</div>
+
+<!-- 12 KALYAN PANCHAK -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">12</span><span class="sec-title">The Kalyan Panchak — Telling Kedar Apart</span></div>
+  <p>Kedar belongs to the Kalyan Panchak — five jewel ragas of the Kalyan family, all using shuddha swaras + teevra Ma. Distinguishing them is a major milestone in Hindustani classical education.</p>
+  <div class="cmp-grid">
+    <div class="cmp">
+      <div class="cmp-name">Kedar</div>
+      <div class="cmp-notes">S M (G)m P D N S'</div>
+      <div class="cmp-d">Vadi: Ma. Re + Ga weak/absent in aaroh. Ga as grace note. Meend D → P → m → M is the heart. Both Ma variants. Evening.</div>
+    </div>
+    <div class="cmp">
+      <div class="cmp-name">Hameer</div>
+      <div class="cmp-notes">S G M D N S' (Re absent)</div>
+      <div class="cmp-d">Vadi: Dha. Ga prominent in aaroh (unlike Kedar). Pakad: m+P G M D. Characteristic Re–Pa meend. Night.</div>
+    </div>
+    <div class="cmp">
+      <div class="cmp-name">Gaud Sarang</div>
+      <div class="cmp-notes">S R G M P D N S'</div>
+      <div class="cmp-d">Vadi: Re. All 7 notes in aaroh (unlike Kedar). Re is prominent. Day raga (noon). Lighter character.</div>
+    </div>
+    <div class="cmp">
+      <div class="cmp-name">Kamod</div>
+      <div class="cmp-notes">S G M D N S' (Pa-centric)</div>
+      <div class="cmp-d">Vadi: Pa (or Ga). Characteristic Re–Pa meend (like Hameer but different treatment). Night raga.</div>
+    </div>
+    <div class="cmp">
+      <div class="cmp-name">Chhayanat</div>
+      <div class="cmp-notes">S R G m P D N S'</div>
+      <div class="cmp-d">Vadi: Pa. Uses primarily teevra Ma (unlike Kedar's shuddha Ma vadi). Night. Elaborate vakra patterns.</div>
+    </div>
+    <div class="cmp">
+      <div class="cmp-name">Kedar vs Hameer — fastest test</div>
+      <div class="cmp-notes">Ga in aaroh = key</div>
+      <div class="cmp-d">If Ga is prominent in ascent → Hameer. If Ga is absent/grace note → Kedar. Also: Kedar's shuddha Ma is the vadi; Hameer's vadi is Dha.</div>
+    </div>
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <h4>Kedar vs Yaman</h4>
+      <ul>
+        <li>Both Kalyan thaat; both use teevra Ma</li>
+        <li>Yaman: only teevra Ma; Kedar: both shuddha and teevra Ma</li>
+        <li>Yaman aaroh begins from lower Ni; Kedar begins from Sa</li>
+        <li>Yaman: vadi Ga; Kedar: vadi shuddha Ma</li>
+        <li>Yaman: evening/night; Kedar: evening/night</li>
+        <li>Yaman has a regular scale feel; Kedar is dramatically vakra</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Shuddha Kedar — the variant</h4>
+      <ul>
+        <li>Shuddha Kedar de-emphasises meends and teevra Ma</li>
+        <li>It brightens the shuddha Ni in the ascent</li>
+        <li>More austere and direct than standard Kedar</li>
+        <li>Pandit Bhimsen Joshi has a celebrated recording of Shuddha Kedar</li>
+        <li>Think of it as Kedar without the characteristic meend complexity</li>
+        <li>Closer to the Carnatic Hameer Kalyani in feel</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 13 RASA -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">13</span><span class="sec-title">Rasa aur Bhaav <span class="sec-hi">(रस और भाव)</span></span></div>
+  <div class="rasa-grid">
+    <div class="rasa"><div class="rasa-t">Mixed / Chanchal — unique among ragas</div><div class="rasa-d">Kedar has no single defining rasa. WholisticWellnessSpace notes: "One cannot define a definite feeling — like loneliness, love, separation, happiness — there is no one feeling. It has a mixture of all these feelings." This emotional multiplicity is unique.</div></div>
+    <div class="rasa"><div class="rasa-t">Shiva Bhakti — devotional gravity</div><div class="rasa-d">Named after Lord Shiva and Kedarnath — the highest of the 12 Jyotirlingas. The raga carries the gravity, majesty, and spiritual elevation associated with this deity. Devotional compositions in Kedar have a particular gravitas.</div></div>
+    <div class="rasa"><div class="rasa-t">Shringaar — romantic longing</div><div class="rasa-d">The famous bandish "Jane de mohe tori piharwa na manoon" captures the romantic dimension — a refusal to leave the beloved's home. This yearning shringaar coexists with the raga's spiritual weight.</div></div>
+    <div class="rasa"><div class="rasa-t">Varsha / Monsoon</div><div class="rasa-d">Kedar is sung mostly in the rainy season — no specific seasonal restriction, but its association with monsoon imagery and post-sunset performance gives it a characteristic atmospheric mood.</div></div>
+  </div>
+</div>
+
+<!-- 14 PRAHAR -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">14</span><span class="sec-title">Samay Chakra <span class="sec-hi">(समय चक्र)</span></span></div>
+  <div class="prahar-row">
+    <div class="pc"><span class="pt">6–9 AM</span>Morning</div>
+    <div class="pc"><span class="pt">9 AM–12 PM</span>Late morning</div>
+    <div class="pc"><span class="pt">12–3 PM</span>Afternoon</div>
+    <div class="pc"><span class="pt">3–6 PM</span>Late afternoon</div>
+    <div class="pc hl"><span class="pt">6–9 PM</span>★ KEDAR ★</div>
+    <div class="pc hl" style="background:#E0D8F5;color:var(--c1)"><span class="pt">9 PM–12 AM</span>also cited</div>
+    <div class="pc"><span class="pt">12–3 AM</span>Late night</div>
+    <div class="pc"><span class="pt">3–6 AM</span>Pre-dawn</div>
+  </div>
+  <p>Kedar is a night raga — first prahar of the night (6–9 PM) is most commonly cited; some sources extend to 9 PM–midnight. Associated with the rainy season. The raga's majestic, multi-faceted emotional world suits the evening hour — neither the pure contemplation of midnight nor the charged energy of morning.</p>
+</div>
+
+<!-- 15 CARNATIC -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">15</span><span class="sec-title">Carnatic Connection — Hameer Kalyani</span></div>
+  <table class="tbl">
+    <tr><th>Feature</th><th>Kedar (Hindustani)</th><th>Hameer Kalyani (Carnatic)</th></tr>
+    <tr><td>Notes</td><td>S Re Ga M/m Pa Dha Ni (both Ma; Ga weak)</td><td>Sa Ri2 Ga3 Ma1+Ma2 Pa Dha2 Ni3 (similar)</td></tr>
+    <tr><td>Parent</td><td>Kalyan Thaat</td><td>Janya of Kalyani (65th Melakarta)</td></tr>
+    <tr><td>Dual Ma</td><td>Both shuddha and teevra Ma used</td><td>Both Ma1 and Ma2 used — similar concept</td></tr>
+    <tr><td>Mood</td><td>Mixed — majestic, spiritual, romantic</td><td>Devotional, majestic — similar register</td></tr>
+    <tr><td>Notable</td><td>Parrikar notes Narayanaswamy's treatment has better likeness to Hindustani Kedar</td><td>Mutthuswami Dikshitar and Subbariah Sastry have celebrated compositions</td></tr>
+  </table>
+</div>
+
+<!-- 16 FILM SONGS -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">16</span><span class="sec-title">Film Songs based on Kedar</span></div>
+  <table class="tbl">
+    <tr><th>Song</th><th>Film</th><th>Year</th><th>Singer / Notes</th></tr>
+    <tr><td>Tere Sur Aur Mere Geet</td><td>Goonj Uthi Shehnai</td><td>1959</td><td>Lata Mangeshkar / Vasant Desai — widely cited as a Kedar-based composition</td></tr>
+    <tr><td>Mhare Hiwde Mein</td><td>Prem Parbat</td><td>1973</td><td>Lata Mangeshkar / Jaidev — Kedar ang</td></tr>
+    <tr><td>Kedar Tarana</td><td>Non-film / concert</td><td>—</td><td>Various artists — Kedar-inspired Tarana in the Carnatic Thillana style (referenced by WholisticWellnessSpace)</td></tr>
+  </table>
+  <p style="font-size:.82rem;color:var(--color-text-secondary);margin-top:.5rem">Pure Kedar in film music is relatively rare due to the raga's complex vakra chalan and dual Ma usage. Its phrases appear more commonly in semi-classical and devotional contexts.</p>
+</div>
+
+<!-- 17 ARTISTS -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">17</span><span class="sec-title">Notable Artists — Recommended Listening</span></div>
+  <div class="art-card">
+    <div class="art-init">BJ</div>
+    <div><div class="art-name">Pandit Bhimsen Joshi</div><div class="art-d">Kirana Gharana, vocal — both standard Kedar and Shuddha Kedar recordings; Parrikar Archive includes his Shuddha Kedar as reference; essential for understanding the two variants</div></div>
+  </div>
+  <div class="art-card">
+    <div class="art-init">PJ</div>
+    <div><div class="art-name">Pandit Jasraj</div><div class="art-d">Mewati Gharana, vocal — his Kedar recordings are noted for the emotional range and the characteristic meend treatment; devotional compositions particularly compelling</div></div>
+  </div>
+  <div class="art-card">
+    <div class="art-init">RJ</div>
+    <div><div class="art-name">Pandit Ramashreya Jha "Ramrang"</div><div class="art-d">Vocalist and composer — his composition "Painjaani Baaje" (baby Krishna bandish) and others are considered among the finest modern Kedar compositions; recommended by Parrikar Archive</div></div>
+  </div>
+  <div class="art-card">
+    <div class="art-init">AA</div>
+    <div><div class="art-name">Ustad Amjad Ali Khan</div><div class="art-d">Sarod — Kedar is among his favoured ragas; his recordings demonstrate how the vakra chalan and defining meend translate onto the sarod's plucked idiom</div></div>
+  </div>
+  <div class="art-card">
+    <div class="art-init">HC</div>
+    <div><div class="art-name">Hariprasad Chaurasia</div><div class="art-d">Bansuri — his Kedar recordings capture the raga's flowing, melodious turns; the flute's sustained breath is particularly suited to the long meends that define the raga</div></div>
+  </div>
+</div>
+
+<!-- 18 PRACTICE SCHEDULE -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">18</span><span class="sec-title">Practice Schedule</span></div>
+  <div class="card" style="margin-bottom:1rem">
+    <h4>Daily practice — 50 minutes</h4>
+    <ul>
+      <li>0–5 min: Tanpura setup; establish shuddha Ma as the gravitational centre</li>
+      <li>5–12 min: Alankar 1 — core aaroh–avroh; confirm Re/Ga weak ascending; Ga as grace note only</li>
+      <li>12–18 min: Alankars 2–4 — M–M Pa leap; m P m P alternation; D P m P M meend</li>
+      <li>18–28 min: Alaap phrases 1–3; shuddha Ma as resting note; introducing teevra m in phrases</li>
+      <li>28–38 min: Alaap phrases 4–6; taar saptak; full meend; complete resolution</li>
+      <li>38–44 min: Sargam geet with Teentaal</li>
+      <li>44–50 min: Meend practice — D ~~~ P ~~~ m ~~~ P ~~~ M; slow until smooth</li>
+    </ul>
+  </div>
+  <table class="week-tbl">
+    <tr><th>Day</th><th>Focus</th></tr>
+    <tr><td>Monday</td><td>Alankars; shuddha Ma as vadi; Ga as grace note only; confirm teevra m is passing, never resting</td></tr>
+    <tr><td>Tuesday</td><td>Alaap phrases 1–3; M–M Pa leap; m P m P alternation; teevra m in context</td></tr>
+    <tr><td>Wednesday</td><td>Alaap phrases 4–6; the defining meend D P m P M; taar saptak P D P P S'</td></tr>
+    <tr><td>Thursday</td><td>Sargam geet with taal; the dual Ma in rhythmic context</td></tr>
+    <tr><td>Friday</td><td>Bandish "Jane De Mohe" sthai — learn and memorise at vilambit pace</td></tr>
+    <tr><td>Saturday</td><td>Full bandish + compare Kedar with Hameer and Yaman to sharpen distinctions</td></tr>
+    <tr><td>Sunday</td><td>Listening — Bhimsen Joshi (Shuddha Kedar comparison); Pandit Jasraj; Ramashreya Jha</td></tr>
+  </table>
+</div>
+
+<!-- 19 MISTAKES -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">19</span><span class="sec-title">Common Mistakes to Avoid</span></div>
+  <table class="mistake-tbl">
+    <tr><th>Mistake</th><th>Correction</th></tr>
+    <tr><td>Using teevra Ma (m) as a resting note</td><td>Teevra Ma is always a passing or meend note in Kedar — never a point of rest. The vadi and resting note is shuddha Ma (M). Landing on teevra m and pausing there is the most common error in Kedar.</td></tr>
+    <tr><td>Singing Ga as a resting note</td><td>Gandhar is extremely weak in Kedar — it appears only as a subtle grace note (kan) before teevra m in the phrase (G)m P. Making Ga a full note or resting on it immediately turns the raga toward Hameer or Yaman.</td></tr>
+    <tr><td>Using Re prominently in the aaroh</td><td>Re is absent or extremely weak in Kedar's ascending line. It appears briefly in descent (m P M R S). Prominently ascending through Re sounds like Yaman or Kalyan, not Kedar.</td></tr>
+    <tr><td>Neglecting the D P m P M meend</td><td>This is the single most identifying phrase of Kedar — described as "the heart of the raga, repeated again and again." Not using it makes a Kedar performance unrecognisable. Practise this meend until it is completely fluent.</td></tr>
+    <tr><td>Skipping the M–M P (double Ma) opening</td><td>The phrase S M M P — shuddha Ma dwelt upon and repeated before leaping to Pa — creates Kedar's characteristic soaring quality. Without this doubled Ma, the raga loses its majestic character.</td></tr>
+    <tr><td>Confusing with Hameer</td><td>Hameer has Ga prominent in the ascending line; Kedar does not. Also: Hameer's vadi is Dha; Kedar's vadi is shuddha Ma. The characteristic Hameer pakad phrase is m+P G M D — very different from Kedar.</td></tr>
+    <tr><td>Playing Kedar as a scale exercise</td><td>Kedar's chalan is highly vakra — a straightforward scale rendition sounds nothing like the raga. The raga must be learned through its characteristic phrases (M–M P, m P m P, D P m P M), not its aaroh–avroh.</td></tr>
+  </table>
+</div>
+
+<!-- 20 GLOSSARY -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">20</span><span class="sec-title">Glossary</span></div>
+  <div class="gl-grid">
+    <div class="gl"><strong>Dual Madhyam</strong>Using two forms of Ma in the same raga — shuddha M (F♮, vadi) and teevra m (F♯, passing/meend) coexist in Kedar</div>
+    <div class="gl"><strong>Shuddha Ma (M)</strong>Natural Madhyam, F♮ — the vadi of Kedar; primary resting note; repeated M–M for emphasis</div>
+    <div class="gl"><strong>Teevra Ma (m)</strong>Sharpened Madhyam, F♯ — passing and meend note; the expressive agent of Kedar; appears in D P m P M</div>
+    <div class="gl"><strong>Vakra Chalan</strong>Oblique/zigzag melodic movement — Kedar's defining characteristic; cannot be rendered as a simple scale</div>
+    <div class="gl"><strong>Kan Swara</strong>Grace note — Ga (Gandhar) is a kan swara in Kedar; appears as (G) before teevra m; never a resting note</div>
+    <div class="gl"><strong>Vadi</strong>Most important note — shuddha Ma (M) in Kedar</div>
+    <div class="gl"><strong>Samvadi</strong>Second most important — Sa (Shadaj) in Kedar</div>
+    <div class="gl"><strong>Kalyan Panchak</strong>The five jewel ragas of Kalyan thaat: Kedar, Hameer, Gaud Sarang, Kamod, Chhayanat</div>
+    <div class="gl"><strong>Meend</strong>Smooth glide — D → P → m → M is the defining Kedar meend; traverses two forms of Madhyam</div>
+    <div class="gl"><strong>Chanchal raga</strong>A "restless/playful" raga — Kedar's classification for its mixed emotional character and melodious turns</div>
+    <div class="gl"><strong>Hameer Kalyani</strong>Carnatic equivalent of Kedar — janya raga using both Ma variants</div>
+    <div class="gl"><strong>Shuddha Kedar</strong>Variant of Kedar — de-emphasises meends and teevra Ma; brightens shuddha Ni in ascent</div>
+    <div class="gl"><strong>m P m P</strong>The idiosyncratic alternation of teevra Ma and Pa — uniquely identifying phrase in Kedar</div>
+    <div class="gl"><strong>Prahar</strong>3-hour time period — Kedar: first prahar of night (6–9 PM)</div>
+    <div class="gl"><strong>Audav–Sampurna</strong>5 notes ascending, 7 descending — Kedar's jati (simplified; vakra means the ascent is irregular)</div>
+    <div class="gl"><strong>Kalyan Thaat</strong>Parent scale — S R G m P D N (teevra Ma) — Kedar belongs to this family</div>
+  </div>
+</div>
+
+<!-- 21 SUMMARY -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">21</span><span class="sec-title">Summary at a Glance</span></div>
+  <div class="sum-grid">
+    <div class="sc"><h4>Identity</h4><p>Thaat: Kalyan<br>Jati: Audav–Sampurna (vakra)<br>Time: Evening 6–9 PM<br>Kalyan Panchak jewel</p></div>
+    <div class="sc"><h4>Notes</h4><p>Sa Re Ga <span style="color:var(--sh)">M</span>/<span style="color:var(--te)">m</span> Pa Dha Ni<br>Both shuddha M and teevra m<br>Re + Ga weak in aaroh<br>Ga as grace note only</p></div>
+    <div class="sc"><h4>Emphasis</h4><p>Vadi: shuddha Ma (M)<br>Samvadi: Sa<br>Defining: D → P → m → M meend<br>Repeated: m P m P</p></div>
+    <div class="sc"><h4>Character</h4><p>Chanchal — mixed emotions<br>Shiva bhakti + shringaar<br>Highly vakra chalan<br>Majestic, non-linear</p></div>
+    <div class="sc"><h4>Related</h4><p>Hameer (closest Panchak cousin)<br>Hameer Kalyani (Carnatic)<br>Gaud Sarang, Kamod, Chhayanat<br>Shuddha Kedar (variant)</p></div>
+    <div class="sc"><h4>Key rules</h4><p>Teevra m — passing only, never rest<br>Shuddha M — vadi; always rest here<br>D P m P M = the soul of Kedar<br>Ga = grace note, nothing more</p></div>
+  </div>
+</div>
+
+<div class="orn">✦ &nbsp; ✦ &nbsp; ✦</div>
+<p style="text-align:center;font-size:12px;color:var(--color-text-tertiary);font-style:italic">Compiled with verified sources: Wikipedia, Parrikar Archive, Artium Academy, SingersPassion, WholisticWellnessSpace, MusicMaster<br>Notes for Hindustani Classical Music practice. Supplement with guru's guidance and regular listening.</p>
+
+</div>

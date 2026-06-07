@@ -1,0 +1,595 @@
+
+<h2 class="sr-only">Raga Bhimpalasi — Complete Hindustani Classical Music Practice Notes</h2>
+<style>
+:root{--c1:#3E5A18;--c1l:#EAF2D7;--c1m:#5C7A2A;--c1b:rgba(92,122,42,0.2);--c1s:rgba(92,122,42,0.4);--ko:#8B2252;--kol:#F8E8F0;--kob:rgba(139,34,82,0.35);--absent-bg:#F5F0EA;--blue:#0C447C;--bluel:#E6F1FB;--amber:#633806;--amberl:#FAEEDA;}
+body{font-family:var(--font-sans);font-size:15px;line-height:1.7;color:var(--color-text-primary);}
+.page{max-width:860px;margin:0 auto;padding:1.5rem 1.5rem 3rem;}
+.hero{text-align:center;padding:2.5rem 1rem 2rem;border-bottom:0.5px solid var(--color-border-secondary);margin-bottom:2.5rem;}
+.hero-sub{font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--color-text-secondary);margin-bottom:.4rem;}
+.hero-name{font-family:var(--font-serif);font-size:3rem;font-weight:400;color:var(--color-text-primary);line-height:1.1;margin-bottom:.35rem;}
+.hero-name em{color:var(--c1m);font-style:italic;}
+.hero-tag{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-text-secondary);margin-bottom:1.2rem;}
+.hero-quote{font-family:var(--font-serif);font-style:italic;font-size:1rem;color:var(--color-text-secondary);max-width:580px;margin:0 auto;line-height:1.65;}
+.hero-quote cite{display:block;font-size:12px;font-style:normal;color:var(--color-text-tertiary);margin-top:.4rem;}
+
+.sec{margin-bottom:2.5rem;}
+.sec-hdr{display:flex;align-items:baseline;gap:.75rem;border-bottom:0.5px solid var(--color-border-tertiary);padding-bottom:.35rem;margin-bottom:1.25rem;}
+.sec-num{font-family:var(--font-mono);font-size:11px;color:var(--c1m);letter-spacing:.1em;}
+.sec-title{font-size:1.15rem;font-weight:500;color:var(--color-text-primary);}
+.sec-hi{font-size:.85rem;color:var(--color-text-secondary);font-style:italic;font-weight:400;}
+
+p{font-size:.92rem;margin-bottom:.6rem;color:var(--color-text-primary);}
+
+.callout{background:var(--c1l);border:0.5px solid var(--c1s);border-left:3px solid var(--c1m);border-radius:0;padding:.7rem 1rem;font-size:.85rem;color:var(--c1);margin:.75rem 0;font-style:italic;}
+
+.ref-table{width:100%;border-collapse:collapse;font-size:.88rem;}
+.ref-table tr{border-bottom:0.5px solid var(--color-border-tertiary);}
+.ref-table tr:last-child{border-bottom:none;}
+.ref-table td{padding:.55rem .65rem;vertical-align:top;}
+.ref-table td:first-child{font-family:var(--font-mono);font-size:11px;color:var(--c1m);width:200px;padding-top:.65rem;}
+.badge{display:inline-block;padding:1px 9px;border-radius:20px;font-size:12px;font-family:var(--font-mono);margin:1px;}
+.b-g{background:var(--c1l);color:var(--c1);border:0.5px solid var(--c1s);}
+.b-k{background:var(--kol);color:var(--ko);border:0.5px solid var(--kob);}
+.b-x{background:var(--absent-bg);color:var(--color-text-tertiary);border:0.5px solid var(--color-border-tertiary);text-decoration:line-through;}
+.b-b{background:var(--bluel);color:var(--blue);border:0.5px solid rgba(24,95,165,.35);}
+
+.swar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:1rem 0;}
+.sw{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.55rem .3rem;text-align:center;background:var(--color-background-secondary);}
+.sw.vadi{background:var(--c1l);border-color:var(--c1s);}
+.sw.samv{background:#D8EEBC;border-color:rgba(92,122,42,.45);}
+.sw.kml{background:var(--kol);border-color:var(--kob);}
+.sw.abs{background:var(--absent-bg);border-color:var(--color-border-tertiary);opacity:.42;}
+.sw-nm{font-family:var(--font-mono);font-size:10px;color:var(--color-text-secondary);}
+.sw-ab{font-size:1.1rem;font-weight:500;color:var(--color-text-primary);margin:2px 0;}
+.sw.vadi .sw-ab{color:var(--c1m);}
+.sw.samv .sw-ab{color:var(--c1);}
+.sw.kml .sw-ab{color:var(--ko);}
+.sw.abs .sw-ab{color:var(--color-text-tertiary);}
+.sw-tag{font-size:10px;font-family:var(--font-mono);margin-top:2px;color:inherit;}
+
+.notation{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-left:3px solid var(--c1m);border-radius:0;padding:.85rem 1.1rem;font-family:var(--font-mono);font-size:.82rem;line-height:2;margin:.65rem 0;color:var(--color-text-primary);}
+.notation .lbl{font-size:10px;color:var(--c1m);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.2rem;display:block;}
+.hi{color:var(--c1m);font-weight:500;}
+.ko{color:var(--ko);font-weight:500;}
+.ma{color:var(--c1m);font-weight:700;}
+.dim{color:var(--color-text-tertiary);}
+
+.oct-row{display:flex;gap:0;margin:.4rem 0;border-radius:var(--border-radius-md);overflow:hidden;border:0.5px solid var(--color-border-tertiary);}
+.oc{flex:1;padding:.5rem .25rem;text-align:center;font-family:var(--font-mono);font-size:12px;border-right:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);background:var(--color-background-secondary);}
+.oc:last-child{border-right:none;}
+.oc.v{background:var(--c1l);color:var(--c1m);font-weight:500;}
+.oc.s{background:#D8EEBC;color:var(--c1);font-weight:500;}
+.oc.k{background:var(--kol);color:var(--ko);font-weight:500;}
+.oc.a{background:var(--absent-bg);color:var(--color-text-tertiary);opacity:.5;}
+.oc.ap{background:var(--bluel);color:var(--blue);font-weight:500;}
+
+.flow{display:flex;align-items:center;flex-wrap:wrap;gap:0;margin:1rem 0;}
+.fn{padding:.45rem .65rem;text-align:center;border:0.5px solid var(--color-border-tertiary);font-family:var(--font-mono);font-size:.8rem;background:var(--color-background-secondary);color:var(--color-text-primary);}
+.fn:first-child{border-radius:var(--border-radius-md) 0 0 var(--border-radius-md);}
+.fn:last-child{border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;}
+.fn.fv{background:var(--c1l);color:var(--c1m);border-color:var(--c1s);font-weight:500;}
+.fn.fs{background:#D8EEBC;color:var(--c1);border-color:rgba(92,122,42,.45);font-weight:500;}
+.fn.fk{background:var(--kol);color:var(--ko);border-color:var(--kob);font-weight:500;}
+.fn.fa{background:var(--absent-bg);color:var(--color-text-tertiary);border-color:var(--color-border-tertiary);}
+.fn.fp{background:var(--bluel);color:var(--blue);border-color:rgba(24,95,165,.35);font-weight:500;}
+.fn .nl{font-size:10px;color:inherit;opacity:.72;}
+.fn .nn{font-size:.95rem;}
+.fa-arr{font-size:.95rem;color:var(--c1s);padding:0 2px;}
+
+.aln-num{font-family:var(--font-mono);font-size:10px;color:var(--c1m);margin-bottom:2px;letter-spacing:.08em;}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0;}
+.card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:.9rem 1rem;background:var(--color-background-secondary);}
+.card h4{font-size:1rem;font-weight:500;margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);}
+.card ul{list-style:none;font-size:.85rem;}
+.card ul li{padding:.2rem 0;border-bottom:0.5px solid var(--color-border-tertiary);}
+.card ul li:last-child{border-bottom:none;}
+.card ul li::before{content:'◆';font-size:8px;color:var(--c1m);margin-right:6px;vertical-align:middle;}
+
+.rasa-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:1rem 0;}
+.rasa{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.8rem .9rem;background:var(--color-background-secondary);}
+.rasa-t{font-size:.9rem;font-weight:500;color:var(--c1);margin-bottom:.25rem;}
+.rasa-d{font-size:.82rem;color:var(--color-text-secondary);line-height:1.55;}
+
+.prahar-row{display:flex;border-radius:var(--border-radius-md);overflow:hidden;border:0.5px solid var(--color-border-tertiary);margin:1rem 0;}
+.pc{flex:1;padding:.6rem .4rem;text-align:center;border-right:0.5px solid var(--color-border-tertiary);font-size:11px;font-family:var(--font-mono);color:var(--color-text-tertiary);background:var(--color-background-secondary);}
+.pc:last-child{border-right:none;}
+.pc.hl{background:var(--c1l);color:var(--c1);font-weight:500;}
+.pc .pt{font-size:10px;display:block;margin-bottom:2px;}
+
+.bandish-block{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin:1rem 0;}
+.bh{background:var(--c1l);padding:.55rem .9rem;font-family:var(--font-mono);font-size:11px;color:var(--c1);letter-spacing:.08em;border-bottom:0.5px solid var(--c1s);}
+.bb{padding:.65rem .9rem;background:var(--color-background-secondary);}
+.bl{font-size:10px;font-family:var(--font-mono);color:var(--c1m);text-transform:uppercase;letter-spacing:.08em;margin:.4rem 0 .15rem;}
+
+.cmp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:1rem 0;}
+.cmp{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.7rem .8rem;background:var(--color-background-secondary);}
+.cmp-name{font-size:.88rem;font-weight:500;color:var(--color-text-primary);margin-bottom:3px;}
+.cmp-notes{font-family:var(--font-mono);font-size:11px;color:var(--c1m);margin-bottom:3px;}
+.cmp-d{font-size:.78rem;color:var(--color-text-secondary);}
+
+.tbl{width:100%;border-collapse:collapse;font-size:.85rem;}
+.tbl th{font-family:var(--font-mono);font-size:10px;color:var(--c1m);text-align:left;padding:.3rem .65rem;border-bottom:0.5px solid var(--c1s);background:var(--c1l);}
+.tbl td{padding:.5rem .65rem;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl td:first-child{font-style:italic;}
+
+.mistake-tbl{width:100%;border-collapse:collapse;font-size:.85rem;}
+.mistake-tbl th{font-family:var(--font-mono);font-size:10px;color:var(--c1m);text-align:left;padding:.3rem .65rem;border-bottom:0.5px solid var(--c1s);background:var(--c1l);}
+.mistake-tbl td{padding:.55rem .65rem;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top;}
+.mistake-tbl tr:last-child td{border-bottom:none;}
+.mistake-tbl td:first-child{color:#993C1D;font-style:italic;width:38%;}
+
+.art-card{display:flex;align-items:flex-start;gap:.7rem;padding:.65rem 0;border-bottom:0.5px solid var(--color-border-tertiary);}
+.art-card:last-child{border-bottom:none;}
+.art-init{width:36px;height:36px;border-radius:50%;background:var(--c1l);border:0.5px solid var(--c1s);display:flex;align-items:center;justify-content:center;font-size:.85rem;color:var(--c1);font-weight:500;flex-shrink:0;}
+.art-name{font-weight:500;font-size:.88rem;color:var(--color-text-primary);}
+.art-d{font-size:.78rem;color:var(--color-text-secondary);}
+
+.gl-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin:.65rem 0;}
+.gl{padding:.45rem .65rem;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-secondary);font-size:.82rem;}
+.gl strong{font-family:var(--font-mono);font-size:11px;color:var(--c1m);display:block;margin-bottom:1px;}
+
+.sum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:1rem 0;}
+.sc{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.9rem;background:var(--color-background-secondary);}
+.sc h4{font-family:var(--font-mono);font-size:10px;color:var(--c1m);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.4rem;}
+.sc p{font-size:.82rem;line-height:1.6;color:var(--color-text-primary);margin-bottom:0;}
+
+.week-tbl{width:100%;border-collapse:collapse;font-size:.85rem;}
+.week-tbl th{font-family:var(--font-mono);font-size:10px;color:var(--c1m);text-align:left;padding:.3rem .65rem;border-bottom:0.5px solid var(--c1s);background:var(--c1l);}
+.week-tbl td{padding:.5rem .65rem;border-bottom:0.5px solid var(--color-border-tertiary);}
+.week-tbl tr:last-child td{border-bottom:none;}
+.week-tbl td:first-child{font-family:var(--font-mono);font-size:11px;color:var(--c1m);width:110px;}
+
+.orn{text-align:center;color:var(--c1m);margin:2rem 0 1rem;letter-spacing:.3em;}
+.taan-lbl{font-size:11px;font-family:var(--font-mono);color:var(--c1m);text-transform:uppercase;letter-spacing:.08em;margin-top:.7rem;margin-bottom:2px;}
+
+@media(max-width:600px){
+  .two-col,.rasa-grid,.gl-grid,.sum-grid,.cmp-grid{grid-template-columns:1fr;}
+  .swar-grid{grid-template-columns:repeat(4,1fr);}
+  .hero-name{font-size:2.2rem;}
+}
+</style>
+
+<div class="page">
+
+<div class="hero">
+  <div class="hero-sub">Hindustani Classical Music</div>
+  <div class="hero-name">Raga <em>Bhimpalasi</em></div>
+  <div class="hero-tag">राग भीमपलासी — Comprehensive Practice Notes</div>
+  <blockquote class="hero-quote">
+    "It is precisely the preponderance of Madhyam — its nyaas bahutva — that bestows on Bhimpalasi its unique depth. When the accent shifts away from Pa toward Ma, the raga blooms into its full afternoon longing."
+    <cite>— After MusicMaster; Sangeetapriya; Grokipedia</cite>
+  </blockquote>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">01</span><span class="sec-title">Parichay <span class="sec-hi">(परिचय)</span></span></div>
+  <p>Raga Bhimpalasi (also Bheempalasi, Bheempalas, Bheempalashree) is one of the most emotionally rich ragas in Hindustani classical music. It belongs to Kafi Thaat and is Audav-Sampurna — five notes ascending, seven descending.</p>
+  <p>Its defining structure is the omission of Re and Dha in the ascent, both appearing only in descent. Its two komal notes — komal Ga and komal Ni — carry andolan and mandatory kan swaras (grace notes). Ma (Madhyam) is the vadi: the emotional centre everything gravitates toward. An afternoon raga (12–3 PM) evoking the heavy, tender longing of midday.</p>
+  <div class="callout">
+    <strong>Re and Dha — the symmetrical approach rule:</strong> Re is approached only from komal Ga above (g → Re). Dha is approached only from komal Ni above (n → Dha). Neither note may be reached directly. This symmetrical oblique approach is one of Bhimpalasi's defining characteristics — violating it changes the raga's identity immediately.
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">02</span><span class="sec-title">Quick Reference</span></div>
+  <table class="ref-table">
+    <tr><td>Thaat</td><td><span class="badge b-g">Kafi</span></td></tr>
+    <tr><td>Jati</td><td>Audav–Sampurna (5 notes ascending, 7 descending)</td></tr>
+    <tr><td>Aaroh</td><td><code class="hi">.n  Sa  <span class="ko">(Ma)g</span>  <span class="ma">Ma</span>  Pa  <span class="ko">(Sa)n</span>  Sa'</code> — Re and Dha absent in ascent</td></tr>
+    <tr><td>Avroh</td><td><code>Sa'  <span class="ko">n</span>  Dha  Pa  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  Sa</code> — all 7 notes; Re via g; Dha via n</td></tr>
+    <tr><td>Vadi (वादी)</td><td><strong>Ma</strong> (shuddha Madhyam) — the dominant nyaas swara; the raga's gravitational centre</td></tr>
+    <tr><td>Samvadi (संवादी)</td><td><strong>Sa</strong> (Shadaj) — second most important note</td></tr>
+    <tr><td>Varjit in aaroh</td><td><span class="badge b-x">Re</span> <span class="badge b-x">Dha</span> — absent ascending; both present in descent</td></tr>
+    <tr><td>Komal swaras</td><td><span class="badge b-k">komal Ga (g)</span> <span class="badge b-k">komal Ni (n)</span> — both with andolan and kan swaras</td></tr>
+    <tr><td>Kan swaras</td><td>Komal Ga takes Ma kan: (Ma)g &nbsp;|&nbsp; Komal Ni takes Sa kan: (Sa)n — both mandatory</td></tr>
+    <tr><td>Approach rule</td><td>Re ← g only (g → Re) &nbsp;|&nbsp; Dha ← n only (n → Dha) — never reached directly</td></tr>
+    <tr><td>Gaayan Samay</td><td>Third prahar — <strong>Afternoon 12–3 PM</strong></td></tr>
+    <tr><td>Rasa / Mood</td><td>Shringaar (yearning); Karuna (compassion, pathos); Bhakti (devotion); Shant (serenity)</td></tr>
+    <tr><td>Carnatic equivalent</td><td><strong>Abheri</strong> — janya raga from Kharaharapriya (22nd Melakarta)</td></tr>
+    <tr><td>Related ragas</td><td>Kafi, Bageshri, Dhanashri, Dhani, Patdeep, Pilu (Kafi thaat cousins)</td></tr>
+  </table>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">03</span><span class="sec-title">Swar Vistar <span class="sec-hi">(स्वर विस्तार)</span></span></div>
+  <p>Five notes ascending, seven descending. Two komal notes with andolan and kan swaras. Re and Dha absent in aaroh; when they appear in avroh they arrive obliquely from their upper komal neighbours.</p>
+  <div class="swar-grid">
+    <div class="sw samv"><div class="sw-nm">Shadaj</div><div class="sw-ab">Sa</div><div class="sw-tag">SAMVADI ★</div></div>
+    <div class="sw abs"><div class="sw-nm">Rishabh</div><div class="sw-ab">Re</div><div class="sw-tag">varjit aaroh ✕</div></div>
+    <div class="sw kml"><div class="sw-nm">Gandhar</div><div class="sw-ab">g</div><div class="sw-tag">komal · Ma kan ★</div></div>
+    <div class="sw vadi"><div class="sw-nm">Madhyam</div><div class="sw-ab">Ma</div><div class="sw-tag">VADI ★</div></div>
+    <div class="sw" style="background:var(--amberl);border-color:rgba(133,79,11,.35)"><div class="sw-nm">Pancham</div><div class="sw-ab" style="color:var(--amber)">Pa</div><div class="sw-tag" style="color:var(--amber)">shuddha</div></div>
+    <div class="sw abs"><div class="sw-nm">Dhaivat</div><div class="sw-ab">Dha</div><div class="sw-tag">varjit aaroh ✕</div></div>
+    <div class="sw kml"><div class="sw-nm">Nishad</div><div class="sw-ab">n</div><div class="sw-tag">komal · Sa kan ★</div></div>
+  </div>
+  <div class="callout">
+    <strong>Kan swara details:</strong> Komal Ga is sung with a quick grace-note of Ma before landing on g — written (Ma)g. Komal Ni is sung with a quick grace-note of Sa before landing on n — written (Sa)n. These are structural requirements, not optional ornaments.
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">04</span><span class="sec-title">Aaroh–Avroh aur Pakad</span></div>
+  <div class="notation"><span class="lbl">Aaroh — ascending · 5 notes · Re and Dha absent</span>
+<span class="dim">.n</span>  Sa  <span class="ko">(Ma)g</span>  <span class="ma">Ma</span>  Pa  <span class="ko">(Sa)n</span>  Sa'
+<span class="dim">((Ma)g = komal Ga with Ma kan; (Sa)n = komal Ni with Sa kan; Re and Dha are completely absent)</span></div>
+  <div class="notation"><span class="lbl">Avroh — descending · all 7 notes · approach rules apply</span>
+Sa'  <span class="ko">n</span>  Dha  Pa  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  Sa
+<span class="dim">(Dha via n: n → Dha; Re via g: g → Re — these approach rules are mandatory every time)</span></div>
+  <div class="callout">
+    <strong>The approach rule — the most important structural feature:</strong> In descent, Dha must be preceded by komal Ni (n → Dha). Re must be preceded by komal Ga (g → Re). Jumping directly to Re from Ma, or to Dha from Pa or n, violates Bhimpalasi's grammar. This symmetrical oblique approach is unique to this raga among Kafi-family ragas.
+  </div>
+  <div class="notation"><span class="lbl">Pakad (पकड़)</span>
+<span class="dim">.n</span>  S  <span class="ma">Ma</span>  <span class="ko">g</span>  Pa  <span class="ma">Ma</span>  ,  <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S</div>
+  <div class="notation"><span class="lbl">Chalan — full movement</span>
+<span class="dim">.n</span>  S  <span class="ko">(Ma)g</span>  <span class="ma">Ma</span>  Pa  <span class="ma">Ma</span>  <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S  ,  <span class="ko">(Sa)n</span>  Dha  Pa  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S</div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">05</span><span class="sec-title">Saptak Vistar <span class="sec-hi">(सप्तक विस्तार)</span></span></div>
+  <p style="font-size:.82rem;color:var(--color-text-secondary);margin-bottom:.4rem">Aaroh — 5 notes (Re and Dha absent)</p>
+  <div class="oct-row">
+    <div class="oc s">Sa ★</div><div class="oc a">Re ✕</div><div class="oc k">(Ma)g ★</div><div class="oc v">Ma ★</div><div class="oc">Pa</div><div class="oc a">Dha ✕</div><div class="oc k">(Sa)n ★</div>
+  </div>
+  <p style="font-size:.82rem;color:var(--color-text-secondary);margin-bottom:.4rem">Avroh — all 7 notes (Re and Dha via upper komal neighbours)</p>
+  <div class="oct-row">
+    <div class="oc s">Sa ★</div><div class="oc ap">Re ← g</div><div class="oc k">g ★</div><div class="oc v">Ma ★</div><div class="oc">Pa</div><div class="oc ap">Dha ← n</div><div class="oc k">n ★</div>
+  </div>
+  <p style="font-size:.8rem;color:var(--color-text-secondary);margin-top:.35rem">Vadi Ma in green. Samvadi Sa in lighter green. Komal notes in rose. Faded = absent in aaroh. Blue cells show the approach direction (← means "must come from"). Bhimpalasi is purvanga-pradhan — lower octave is the emotional centre.</p>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">06</span><span class="sec-title">Chalan <span class="sec-hi">(चलन)</span></span></div>
+  <p style="font-size:.88rem;font-weight:500;margin-bottom:.4rem">Ascending (5 notes — Re and Dha absent):</p>
+  <div class="flow">
+    <div class="fn fk"><div class="nl">lower komal</div><div class="nn">.n</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn fs"><div class="nl">SAMVADI</div><div class="nn">Sa ★</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn fk"><div class="nl">komal + Ma kan</div><div class="nn">(Ma)g</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn fv"><div class="nl">VADI</div><div class="nn">Ma ★</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn"><div class="nl">shuddha</div><div class="nn">Pa</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn fk"><div class="nl">komal + Sa kan</div><div class="nn">(Sa)n</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn"><div class="nl">taar</div><div class="nn">Sa'</div></div>
+  </div>
+  <p style="font-size:.88rem;font-weight:500;margin:.65rem 0 .4rem">Descending (all 7 — Re and Dha via upper komal):</p>
+  <div class="flow">
+    <div class="fn"><div class="nl">taar</div><div class="nn">Sa'</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn fk"><div class="nl">komal</div><div class="nn">n</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn fp"><div class="nl">via n above</div><div class="nn">Dha</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn"><div class="nl">shuddha</div><div class="nn">Pa</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn fv"><div class="nl">VADI rest</div><div class="nn">Ma ★</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn fk"><div class="nl">komal</div><div class="nn">g</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn fp"><div class="nl">via g above</div><div class="nn">Re</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn fs"><div class="nl">SAMVADI</div><div class="nn">Sa ★</div></div>
+  </div>
+  <div class="two-col" style="margin-top:1rem">
+    <div class="card">
+      <h4>Key melodic rules</h4>
+      <ul>
+        <li>Re and Dha absent in aaroh — never use them going up</li>
+        <li>Re approached only via g (g → Re) in descent</li>
+        <li>Dha approached only via n (n → Dha) in descent</li>
+        <li>Ma is the vadi and primary nyaas — all phrases return to Ma</li>
+        <li>Komal g takes Ma kan; komal n takes Sa kan</li>
+        <li>Aaroh begins from lower .n — the sweep .n Sa g Ma Pa n Sa' is idiosyncratic</li>
+        <li>Purvanga-pradhan — lower half is the emotional centre</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Character and feel</h4>
+      <ul>
+        <li>The afternoon timing captures the heavy, languid, tender mood of midday</li>
+        <li>Monsoon imagery — gentle rains, afternoon longing — is deeply associated</li>
+        <li>Ma's preponderance (nyaas bahutva) gives the raga its meditative depth</li>
+        <li>When Pa is over-emphasised, the raga drifts toward Dhanashri — Ma must dominate</li>
+        <li>Vilambit khayal in Bhimpalasi is among the most expressive forms in Hindustani music</li>
+        <li>Moves between deep pathos and warm devotion with equal ease</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">07</span><span class="sec-title">Alankars <span class="sec-hi">(अलंकार)</span></span></div>
+  <p>Practise with tanpura drone. Focus: no Re or Dha ascending; approach rules in descent; Ma kan on g; Sa kan on n; Ma as primary resting note throughout.</p>
+  <div class="aln-num">ALANKAR 1 — Core aaroh–avroh</div>
+  <div class="notation"><span class="dim">.n</span>  S  <span class="ko">(M)g</span>  <span class="ma">Ma</span>  Pa  <span class="ko">(S)n</span>  S' | S'  <span class="ko">n</span>  Dha  Pa  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S
+<span class="dim">(no Re or Dha ascending; n→Dha and g→Re in descent; (M) = Ma kan; (S) = Sa kan)</span></div>
+  <div class="aln-num">ALANKAR 2 — Aaroh step (5 notes only)</div>
+  <div class="notation">S  <span class="ko">(M)g</span>  |  <span class="ko">g</span>  <span class="ma">Ma</span>  |  <span class="ma">Ma</span>  Pa  |  Pa  <span class="ko">(S)n</span>  |  <span class="ko">n</span>  S'  <span class="dim">(Re and Dha never appear going up)</span></div>
+  <div class="aln-num">ALANKAR 3 — Avroh step (approach rules)</div>
+  <div class="notation">S'  <span class="ko">n</span>  |  <span class="ko">n</span>→Dha  |  Dha  Pa  |  Pa  <span class="ma">Ma</span>  |  <span class="ma">Ma</span>  <span class="ko">g</span>  |  <span class="ko">g</span>→Re  |  Re  S</div>
+  <div class="aln-num">ALANKAR 4 — Trikhand aaroh</div>
+  <div class="notation"><span class="dim">.n</span>  S  <span class="ko">g</span>  |  S  <span class="ko">g</span>  <span class="ma">Ma</span>  |  <span class="ko">g</span>  <span class="ma">Ma</span>  Pa  |  <span class="ma">Ma</span>  Pa  <span class="ko">n</span>  |  Pa  <span class="ko">n</span>  S'</div>
+  <div class="aln-num">ALANKAR 5 — Trikhand avroh</div>
+  <div class="notation">S'  <span class="ko">n</span>  Dha  |  <span class="ko">n</span>  Dha  Pa  |  Dha  Pa  <span class="ma">Ma</span>  |  Pa  <span class="ma">Ma</span>  <span class="ko">g</span>  |  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  |  <span class="ko">g</span>  Re  S</div>
+  <div class="aln-num">ALANKAR 6 — Pakad cell (practise daily)</div>
+  <div class="notation"><span class="dim">.n</span>  S  <span class="ma">Ma</span>  <span class="ko">g</span>  Pa  <span class="ma">Ma</span>  ,  <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S  ,  <span class="dim">.n</span>  S  <span class="ko">g</span>  <span class="ma">Ma</span>  Pa  <span class="ko">n</span>  Dha  Pa  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S
+<span class="dim">(the complete Bhimpalasi pakad — commits the raga's full character to muscle memory)</span></div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">08</span><span class="sec-title">Alaap Kramanik <span class="sec-hi">(आलाप क्रमाणिक)</span></span></div>
+  <div class="aln-num">PHRASE 1 — Sthapana</div>
+  <div class="notation"><span class="dim">.n</span>  S  –  ,  S  <span class="ko">g</span>  S  –  ,  <span class="dim">.n</span>  S  <span class="ko">g</span>  <span class="ma">Ma</span>  –  ,  <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  S  –</div>
+  <div class="aln-num">PHRASE 2 — Establishing Ma (vadi)</div>
+  <div class="notation">S  <span class="ko">g</span>  <span class="ma">Ma</span>  –  ,  <span class="ma">Ma</span>  <span class="ko">g</span>  <span class="ma">Ma</span>  –  ,  <span class="dim">.n</span>  S  <span class="ma">Ma</span>  <span class="ko">g</span>  <span class="ma">Ma</span>  –  ,  <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S  –</div>
+  <div class="aln-num">PHRASE 3 — Introducing Pa</div>
+  <div class="notation">S  <span class="ko">g</span>  <span class="ma">Ma</span>  Pa  –  ,  Pa  <span class="ma">Ma</span>  –  ,  <span class="ma">Ma</span>  <span class="ko">g</span>  Pa  <span class="ma">Ma</span>  –  ,  <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S  –</div>
+  <div class="aln-num">PHRASE 4 — Introducing komal Ni and Dha (approach rule in action)</div>
+  <div class="notation">Pa  <span class="ko">n</span>  –  ,  <span class="ko">n</span>→Dha  Pa  <span class="ma">Ma</span>  –  ,  Pa  <span class="ko">n</span>  Dha  Pa  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S  –</div>
+  <div class="aln-num">PHRASE 5 — Taar saptak</div>
+  <div class="notation">Pa  <span class="ko">n</span>  S'  –  ,  S'  <span class="ko">g'</span>  <span class="ma">Ma'</span>  –  ,  <span class="ko">g'</span>  <span class="ma">Ma'</span>  <span class="ko">g'</span>  S'  –  ,  <span class="ko">n</span>  Dha  Pa  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S  –</div>
+  <div class="aln-num">PHRASE 6 — Full resolution</div>
+  <div class="notation"><span class="dim">.n</span>  S  <span class="ko">g</span>  <span class="ma">Ma</span>  Pa  <span class="ko">n</span>  S'  –  ,  S'  <span class="ko">n</span>  Dha  Pa  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S  –
+<span class="dim">(full arc: aaroh skipping Re/Dha; avroh with n→Dha and g→Re; Ma as the final resting note)</span></div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">09</span><span class="sec-title">Sargam Geet</span></div>
+  <div class="bandish-block">
+    <div class="bh">SARGAM GEET — TEENTAAL (16 beats)</div>
+    <div class="bb">
+      <div class="bl">Sthai</div>
+      <div class="notation" style="margin:.25rem 0">
+        <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  Pa  |  <span class="ma">Ma</span>  <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  |  Re  <span class="ko">g</span>  <span class="ma">Ma</span>  Pa  |  <span class="ko">n</span>  S'  –  –<br>
+        <span class="dim">.n</span>  S  <span class="ko">g</span>  <span class="ma">Ma</span>  |  Pa  <span class="ko">n</span>  Dha  Pa  |  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S  |  –  –  –  –
+      </div>
+      <div class="bl">Antara</div>
+      <div class="notation" style="margin:.25rem 0">
+        <span class="ko">n</span>  S'  <span class="ko">g'</span>  <span class="ma">Ma'</span>  |  <span class="ko">g'</span>  <span class="ma">Ma'</span>  <span class="ko">g'</span>  S'  |  <span class="ko">n</span>  Dha  Pa  <span class="ma">Ma</span>  |  <span class="ko">g</span>  Re  S  –
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">10</span><span class="sec-title">Bandish <span class="sec-hi">(बंदिश)</span></span></div>
+  <div class="bandish-block">
+    <div class="bh">BANDISH 1 · "Ja Ja Re Apne Mandirwa" — TEENTAAL (madhya laya) — Sadarang</div>
+    <div class="bb">
+      <p style="font-size:.82rem;color:var(--color-text-secondary);margin-bottom:.4rem">The most famous composition in Bhimpalasi — composed by Sadarang (Niyamat Khan, 18th century). Depicts a tense, love-filled exchange. A staple of every school teaching this raga. Pandit Jasraj and Sanjeev Abhyankar are particularly known for this bandish.</p>
+      <div class="bl">Sthai</div>
+      <div class="notation" style="margin:.25rem 0">
+        Ja  ja  re  |  ap–ne  man–dir–wa  |  –  –  –  –  |  –  –  –  –<br>
+        <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  |  Pa  <span class="ma">Ma</span>  <span class="ko">g</span>  <span class="ma">Ma</span>  |  <span class="ko">g</span>  Re  S  –  |  –  –  –  –
+      </div>
+      <div class="bl">Antara</div>
+      <div class="notation" style="margin:.25rem 0">
+        Sun  ho  Sa–da–rang  |  tum–ko  cha–hat  hai<br>
+        <span class="ko">n</span>  S'  <span class="ko">g'</span>  <span class="ma">Ma'</span>  |  <span class="ko">g'</span>  <span class="ma">Ma'</span>  <span class="ko">g'</span>  S'  |  <span class="ko">n</span>  Dha  Pa  <span class="ma">Ma</span>  |  <span class="ko">g</span>  Re  S  –
+      </div>
+    </div>
+  </div>
+  <div class="bandish-block">
+    <div class="bh">BANDISH 2 · "Mori Araj Suno" — TEENTAAL (vilambit)</div>
+    <div class="bb">
+      <p style="font-size:.82rem;color:var(--color-text-secondary);margin-bottom:.4rem">A vilambit khayal — one of the most emotionally expressive compositions in Bhimpalasi, evoking yearning and supplication. Vilambit Bhimpalasi is considered one of the finest slow khayal forms in the tradition.</p>
+      <div class="bl">Sthai</div>
+      <div class="notation" style="margin:.25rem 0">
+        Mo–ri  a–raj  |  su–no  –  –  |  –  –  –  –  |  –  –  –  –<br>
+        <span class="dim">.n</span>  S  <span class="ko">g</span>  <span class="ma">Ma</span>  |  Pa  <span class="ko">n</span>  Dha  Pa  |  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S  |  –  –  –  –
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">11</span><span class="sec-title">Taan Prakar <span class="sec-hi">(तान प्रकार)</span></span></div>
+  <div class="callout">All taans must: (1) never use Re or Dha in ascending runs, (2) approach Re via g and Dha via n in descending runs, (3) let Ma dominate as the resting point between sections.</div>
+  <div class="taan-lbl">Seedhi taan (straight — full arc)</div>
+  <div class="notation"><span class="dim">.n</span>  S  <span class="ko">g</span>  <span class="ma">Ma</span>  Pa  <span class="ko">n</span>  S' | S'  <span class="ko">n</span>  Dha  Pa  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S</div>
+  <div class="taan-lbl">Vakra taan</div>
+  <div class="notation">S  <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  <span class="ma">Ma</span>  Pa  <span class="ma">Ma</span>  Pa  <span class="ko">n</span>  Pa  <span class="ko">n</span>  S'<br>S'  <span class="ko">n</span>  Dha  <span class="ko">n</span>  Dha  Pa  Dha  Pa  <span class="ma">Ma</span>  <span class="ko">g</span>  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S</div>
+  <div class="taan-lbl">Sapat taan (fast continuous)</div>
+  <div class="notation"><span class="dim">.n</span>  S  <span class="ko">g</span>  <span class="ma">Ma</span>  Pa  <span class="ko">n</span>  S'  S'  <span class="ko">n</span>  Dha  Pa  <span class="ma">Ma</span>  <span class="ko">g</span>  Re  S  <span class="dim">(note approach rules hold mid-run)</span></div>
+  <div class="taan-lbl">Meend taan (characteristic in vilambit)</div>
+  <div class="notation"><span class="ko">g</span> ~~~  <span class="ma">Ma</span>  –  ,  <span class="ma">Ma</span> ~~~  <span class="ko">g</span>  –  ,  <span class="ko">g</span> ~~~  Re  –  ,  Re ~~~  S  <span class="dim">(~~~ = meend; slow glides are defining)</span></div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">12</span><span class="sec-title">Bhimpalasi and the Kafi Family</span></div>
+  <p>Kafi Thaat is the most crowded thaat — many ragas share similar note sets. Knowing Bhimpalasi's specific distinctions is essential for maintaining its identity in performance.</p>
+  <div class="cmp-grid">
+    <div class="cmp">
+      <div class="cmp-name">Bhimpalasi</div>
+      <div class="cmp-notes">↑ S g Ma Pa n S' · ↓ S' n Dha Pa Ma g Re S</div>
+      <div class="cmp-d">Varjit aaroh: Re + Dha. Vadi: Ma. Afternoon. Approach rules: g→Re; n→Dha.</div>
+    </div>
+    <div class="cmp">
+      <div class="cmp-name">Kafi</div>
+      <div class="cmp-notes">↑ S R g Ma Pa Dha n S' · ↓ same</div>
+      <div class="cmp-d">All 7 notes in aaroh. Vadi: Pa. Night. No approach restrictions. Lighter character.</div>
+    </div>
+    <div class="cmp">
+      <div class="cmp-name">Bageshri</div>
+      <div class="cmp-notes">↑ S g Ma Dha n S' · ↓ S' n Dha Ma Pa Dha Ma g Re S</div>
+      <div class="cmp-d">Varjit aaroh: Re + Pa (not Dha). Vadi: Ma. Night. Pa vakra in avroh.</div>
+    </div>
+  </div>
+  <div class="callout">
+    <strong>Bhimpalasi vs Bageshri — the key distinction:</strong> Both have vadi Ma and komal Ga + Ni. Bhimpalasi omits Re and Dha in ascent (Pa present). Bageshri omits Re and Pa in ascent (Dha present). Quickest test: if Dha appears in the ascending phrase → Bageshri. If Pa but no Dha in ascent → Bhimpalasi.
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <h4>Bhimpalasi vs Dhanashri</h4>
+      <ul>
+        <li>Both: Kafi thaat, same aaroh structure (Re + Dha varjit)</li>
+        <li>Bhimpalasi: vadi is Ma — Ma dominates</li>
+        <li>Dhanashri: vadi is Pa — Pa dominates</li>
+        <li>Shifting accent from Pa to Ma = Bhimpalasi appears</li>
+        <li>Overemphasising Pa in Bhimpalasi creates Dhanashri — the most common error</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Bhimpalasi vs Dhani</h4>
+      <ul>
+        <li>Dhani is shadav (6 notes) — omits Ma entirely</li>
+        <li>Bhimpalasi uses Ma as the vadi — complete opposite treatment</li>
+        <li>Dhani aaroh: S g Pa Dha n S' (no Ma)</li>
+        <li>Quickest test: if Ma is prominent → Bhimpalasi; if Ma is absent → Dhani</li>
+        <li>Both are Kafi thaat with komal Ga and Ni</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">13</span><span class="sec-title">Rasa aur Bhaav <span class="sec-hi">(रस और भाव)</span></span></div>
+  <div class="rasa-grid">
+    <div class="rasa"><div class="rasa-t">Shringaar — yearning</div><div class="rasa-d">A tender, aching yearning — the slow longing of afternoon, the weight of waiting, love expressed with restraint and depth. Not dramatic but deeply felt.</div></div>
+    <div class="rasa"><div class="rasa-t">Karuna — compassion</div><div class="rasa-d">Bhimpalasi evokes compassion and pathos with unusual directness — the komal notes and Ma preponderance create a sustained heaviness that moves the listener involuntarily.</div></div>
+    <div class="rasa"><div class="rasa-t">Bhakti — devotion</div><div class="rasa-d">Widely used in devotional compositions — its afternoon time aligns with midday prayers, and its depth and serenity are natural vehicles for spiritual surrender.</div></div>
+    <div class="rasa"><div class="rasa-t">Varsha — monsoon</div><div class="rasa-d">Post-1950s compositions draw on monsoon imagery — gentle rains, afternoon longing. The raga's timing coincides with afternoon showers, deepening this seasonal association.</div></div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">14</span><span class="sec-title">Samay Chakra <span class="sec-hi">(समय चक्र)</span></span></div>
+  <div class="prahar-row">
+    <div class="pc"><span class="pt">6–9 AM</span>Morning</div>
+    <div class="pc"><span class="pt">9 AM–12 PM</span>Late morning</div>
+    <div class="pc hl"><span class="pt">12–3 PM</span>★ BHIMPALASI ★</div>
+    <div class="pc hl" style="background:#D8EEBC;color:var(--c1)"><span class="pt">3–6 PM</span>also cited</div>
+    <div class="pc"><span class="pt">6–9 PM</span>Evening</div>
+    <div class="pc"><span class="pt">9 PM–12 AM</span>Night</div>
+    <div class="pc"><span class="pt">12–3 AM</span>Late night</div>
+    <div class="pc"><span class="pt">3–6 AM</span>Pre-dawn</div>
+  </div>
+  <p>Bhimpalasi is an afternoon raga — third prahar (12–3 PM), some sources extending to 3–6 PM. The heavy, languid, tender quality of midday — the world slowing under the afternoon sun, the mind turning inward — is its natural environment.</p>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">15</span><span class="sec-title">Carnatic Connection — Abheri</span></div>
+  <table class="tbl">
+    <tr><th>Feature</th><th>Bhimpalasi (Hindustani)</th><th>Abheri (Carnatic)</th></tr>
+    <tr><td>Notes</td><td>S g Ma Pa n S' ↑ / S' n Dha Pa Ma g Re S ↓</td><td>Ni Sa Ga Ma Pa Ni Sa ↑ / similar descent</td></tr>
+    <tr><td>Parent</td><td>Kafi Thaat</td><td>Janya of Kharaharapriya (22nd Melakarta)</td></tr>
+    <tr><td>Emotion</td><td>Meditative, yearning, compassionate</td><td>Deep longing, bhakti — very similar emotional register</td></tr>
+    <tr><td>Film use</td><td>Moderate in Hindi cinema</td><td>Widely used in South Indian film music (A.R. Rahman, Ilaiyaraaja)</td></tr>
+  </table>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">16</span><span class="sec-title">Film Songs based on Bhimpalasi / Abheri</span></div>
+  <table class="tbl">
+    <tr><th>Song</th><th>Film</th><th>Year</th><th>Singer / MD</th></tr>
+    <tr><td>Aa Bhi Ja Raat Dhalne Lagi</td><td>Various</td><td>—</td><td>Lata Mangeshkar — "good touch of Bhimpalasi"</td></tr>
+    <tr><td>Aaj Purani Rahoon Se</td><td>Aadmi</td><td>1968</td><td>Mohammad Rafi / Naushad — Bhimpalasi/Dhani flavour</td></tr>
+    <tr><td>Mere Toh L Lag Gaye</td><td>Jolly LLB</td><td>2013</td><td>Udit Narayan, Asha Bhosle / Bappi Lahiri</td></tr>
+    <tr><td>Kannodu Kanbathellam</td><td>Jeans (Tamil)</td><td>1998</td><td>Hariharan / A.R. Rahman — Abheri</td></tr>
+    <tr><td>Ragangal Pathinaaru</td><td>Thillu Mullu (Tamil)</td><td>1981</td><td>S.P. Balasubrahmanyam / M.S. Viswanathan — Abheri</td></tr>
+  </table>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">17</span><span class="sec-title">Notable Artists — Recommended Listening</span></div>
+  <div class="art-card">
+    <div class="art-init">PJ</div>
+    <div><div class="art-name">Pandit Jasraj</div><div class="art-d">Mewati Gharana, vocal — his "Ja Ja Re Apne Mandirwa" is one of the most celebrated Bhimpalasi recordings; listen for the vilambit treatment and Ma preponderance</div></div>
+  </div>
+  <div class="art-card">
+    <div class="art-init">PS</div>
+    <div><div class="art-name">Parveen Sultana</div><div class="art-d">Vocal — her Bhimpalasi recordings are landmark renditions; her approach to the Ma nyaas and komal note treatment is a model for students</div></div>
+  </div>
+  <div class="art-card">
+    <div class="art-init">VK</div>
+    <div><div class="art-name">Ustad Vilayat Khan</div><div class="art-d">Sitar — his Bhimpalasi gat recordings convey the raga's afternoon languor and the characteristic komal note articulation beautifully</div></div>
+  </div>
+  <div class="art-card">
+    <div class="art-init">SA</div>
+    <div><div class="art-name">Sanjeev Abhyankar</div><div class="art-d">Vocal — his rendition of "Ja Ja Re" is widely recommended; also known for presenting Bhimpalasi in light-classical contexts</div></div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">18</span><span class="sec-title">Practice Schedule</span></div>
+  <div class="card" style="margin-bottom:1rem">
+    <h4>Daily practice — 50 minutes</h4>
+    <ul>
+      <li>0–5 min: Tanpura setup; let Ma settle as the gravitational centre of the drone</li>
+      <li>5–12 min: Alankar 1 — core aaroh–avroh; no Re/Dha ascending; approach rules in descent; kan swaras</li>
+      <li>12–18 min: Alankars 2–5 — step patterns, trikhand; confirm rules are natural</li>
+      <li>18–28 min: Alaap phrases 1–3; .n Sa g Ma opening; Ma as primary resting note</li>
+      <li>28–38 min: Alaap phrases 4–6; n→Dha approach; taar saptak; full resolution</li>
+      <li>38–44 min: Sargam geet with Teentaal</li>
+      <li>44–50 min: Meend taans — g ~~~ Ma ~~~ g ~~~ Re ~~~ S; slow and deliberate</li>
+    </ul>
+  </div>
+  <table class="week-tbl">
+    <tr><th>Day</th><th>Focus</th></tr>
+    <tr><td>Monday</td><td>Alankars; drill ascending rule (no Re/Dha) and approach rules (g→Re; n→Dha) until automatic</td></tr>
+    <tr><td>Tuesday</td><td>Alaap phrases 1–3; .n Sa opening; kan swaras on g (Ma kan) and n (Sa kan)</td></tr>
+    <tr><td>Wednesday</td><td>Alaap phrases 4–6; n→Dha approach in context; Ma as constant nyaas swara</td></tr>
+    <tr><td>Thursday</td><td>Sargam geet with taal; approach rules within rhythmic constraints</td></tr>
+    <tr><td>Friday</td><td>Bandish "Ja Ja Re" sthai — learn and memorise; feel the afternoon character</td></tr>
+    <tr><td>Saturday</td><td>Bandish antara + full composition; compare Bhimpalasi with Bageshri and Kafi</td></tr>
+    <tr><td>Sunday</td><td>Listening — Parveen Sultana or Pandit Jasraj; ideally in the afternoon hour</td></tr>
+  </table>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">19</span><span class="sec-title">Common Mistakes to Avoid</span></div>
+  <table class="mistake-tbl">
+    <tr><th>Mistake</th><th>Correction</th></tr>
+    <tr><td>Using Re or Dha in the aaroh</td><td>Completely absent ascending. Their appearance instantly turns the raga toward Kafi. The strict aaroh is: .n Sa g Ma Pa n Sa'.</td></tr>
+    <tr><td>Not approaching Re via g</td><td>In descent, Re must always be preceded by komal Ga (g → Re). Jumping from Ma or Pa directly to Re violates Bhimpalasi's most important structural rule.</td></tr>
+    <tr><td>Not approaching Dha via n</td><td>In descent, Dha must always be preceded by komal Ni (n → Dha). Jumping directly to Dha destroys the raga's character.</td></tr>
+    <tr><td>Skipping kan swaras on g and n</td><td>Komal Ga takes a Ma kan; komal Ni takes a Sa kan. These are structural, not optional. Without them, the komal notes sound inert.</td></tr>
+    <tr><td>Overemphasising Pa → becoming Dhanashri</td><td>Ma must remain dominant. If phrases keep resting on Pa, redirect attention to Ma. Excessive Pa emphasis creates Dhanashri, not Bhimpalasi.</td></tr>
+    <tr><td>Confusing with Bageshri</td><td>Bhimpalasi: Re + Dha absent in aaroh (Pa present). Bageshri: Re + Pa absent in aaroh (Dha present). If Dha is in the ascending line → Bageshri. If Pa but no Dha → Bhimpalasi.</td></tr>
+    <tr><td>Rushing through the raga</td><td>Bhimpalasi's emotional character lives at slow vilambit pace. Begin all practice at the slowest comfortable tempo. Rushing undermines the raga's essential depth.</td></tr>
+  </table>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">20</span><span class="sec-title">Glossary</span></div>
+  <div class="gl-grid">
+    <div class="gl"><strong>Audav–Sampurna</strong>5 notes ascending, 7 descending — Bhimpalasi's defining jati</div>
+    <div class="gl"><strong>Varjit in aaroh</strong>Notes omitted in ascent — Re and Dha in Bhimpalasi</div>
+    <div class="gl"><strong>Kan swara</strong>Grace note — (Ma)g = Ma kan on komal Ga; (Sa)n = Sa kan on komal Ni; both mandatory</div>
+    <div class="gl"><strong>Approach rule</strong>Re only via g (g→Re); Dha only via n (n→Dha) — symmetrical oblique approach</div>
+    <div class="gl"><strong>Nyaas bahutva</strong>Preponderance of a note as resting point — Ma's nyaas bahutva defines Bhimpalasi</div>
+    <div class="gl"><strong>Vadi</strong>Most important note — Ma (Madhyam) in Bhimpalasi</div>
+    <div class="gl"><strong>Samvadi</strong>Second most important — Sa (Shadaj) in Bhimpalasi</div>
+    <div class="gl"><strong>Purvanga-pradhan</strong>Centre of gravity in lower half (Sa–Pa) — Bhimpalasi is purvanga-pradhan</div>
+    <div class="gl"><strong>Andolan</strong>Slow oscillation — on komal Ga and komal Ni in Bhimpalasi</div>
+    <div class="gl"><strong>Abheri</strong>Carnatic equivalent of Bhimpalasi — janya of Kharaharapriya (22nd Melakarta)</div>
+    <div class="gl"><strong>Dhanashri</strong>Closest cousin — same structure but vadi is Pa instead of Ma</div>
+    <div class="gl"><strong>Samprakritik</strong>Ragas sharing similar notes but different chalan/vadi/time — Bhimpalasi's Kafi-family cousins are samprakritik ragas</div>
+    <div class="gl"><strong>Meend</strong>Smooth glide — g ~~~ Ma and g ~~~ Re are defining meends in Bhimpalasi</div>
+    <div class="gl"><strong>Komal</strong>Flat note — g (E♭) and n (B♭) in Bhimpalasi</div>
+    <div class="gl"><strong>Vilambit</strong>Slow tempo — the richest performance mode for Bhimpalasi</div>
+    <div class="gl"><strong>Kafi Thaat</strong>Parent scale — S R g Ma Pa Dha n (komal Ga and Ni)</div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">21</span><span class="sec-title">Summary at a Glance</span></div>
+  <div class="sum-grid">
+    <div class="sc"><h4>Identity</h4><p>Thaat: Kafi<br>Jati: Audav–Sampurna<br>Time: Afternoon 12–3 PM<br>Purvanga-pradhan</p></div>
+    <div class="sc"><h4>Notes</h4><p>↑ Sa g Ma Pa n (5 notes)<br>↓ Sa Re g Ma Pa Dha n (7)<br>Re + Dha varjit in aaroh<br>Approach rules in avroh</p></div>
+    <div class="sc"><h4>Emphasis</h4><p>Vadi: Ma (primary nyaas)<br>Samvadi: Sa<br>Opens from lower .n Sa<br>g→Re · n→Dha always</p></div>
+    <div class="sc"><h4>Character</h4><p>Shringaar — yearning<br>Karuna — compassion<br>Afternoon meditative depth<br>Monsoon associations</p></div>
+    <div class="sc"><h4>Related</h4><p>Abheri (Carnatic = closest)<br>Dhanashri (Pa vadi)<br>Bageshri, Kafi (cousins)<br>Dhani, Patdeep</p></div>
+    <div class="sc"><h4>Key rules</h4><p>No Re/Dha in aaroh<br>g→Re; n→Dha in avroh<br>Ma kan on g; Sa kan on n<br>Ma must dominate, not Pa</p></div>
+  </div>
+</div>
+
+<div class="orn">✦ &nbsp; ✦ &nbsp; ✦</div>
+<p style="text-align:center;font-size:12px;color:var(--color-text-tertiary);font-style:italic">Compiled with verified sources: Wikipedia, MusicMaster, Riyaz App, Sangeetapriya, Grokipedia, Songs of Yore, Bollypiano<br>Notes for Hindustani Classical Music practice. Best heard in the afternoon.</p>
+
+</div>

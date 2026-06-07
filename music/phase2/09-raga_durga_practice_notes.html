@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --saf: #B5600A;
+    --saf-light: #FFF0DC;
+    --saf-dim: #8B4400;
+    --ink: #1E1408;
+    --parchment: #FFFBF4;
+    --parchment2: #FFF4E3;
+    --rust: #7a3a1a;
+    --teal: #0F7B6C;
+    --blue: #185FA5;
+    --border: rgba(181,96,10,0.18);
+    --border-strong: rgba(181,96,10,0.42);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--parchment); color: var(--ink); font-family: 'Libre Baskerville', Georgia, serif; font-size: 15px; line-height: 1.75; }
+  .page { max-width: 900px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+
+  .hero { text-align: center; padding: 2.8rem 1rem 2.3rem; border-bottom: 1px solid var(--border-strong); margin-bottom: 3rem; position: relative; }
+  .hero::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 200px; height: 2px; background: linear-gradient(90deg, transparent, var(--saf), transparent); }
+  .hero-devanagari { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--saf-dim); letter-spacing: 0.15em; margin-bottom: 0.4rem; font-style: italic; }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: 3.6rem; font-weight: 300; color: var(--ink); line-height: 1.1; margin-bottom: 0.5rem; }
+  .hero-title em { color: var(--saf); font-style: italic; }
+  .hero-sub { font-size: 0.85rem; color: var(--saf-dim); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1.5rem; }
+  .hero-quote { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.05rem; color: #2a1a08; max-width: 620px; margin: 0 auto; line-height: 1.65; }
+  .hero-quote cite { display: block; font-size: 0.8rem; font-style: normal; color: var(--saf-dim); margin-top: 0.5rem; letter-spacing: 0.08em; }
+
+  .section { margin-bottom: 3rem; }
+  .section-header { display: flex; align-items: baseline; gap: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+  .section-number { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--saf-dim); letter-spacing: 0.1em; }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: 1.45rem; font-weight: 600; color: var(--ink); }
+  .section-title-hindi { font-size: 0.9rem; color: var(--saf-dim); font-style: italic; font-weight: 400; }
+
+  .ref-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .ref-table tr { border-bottom: 1px solid var(--border); }
+  .ref-table tr:last-child { border-bottom: none; }
+  .ref-table td { padding: 0.6rem 0.75rem; }
+  .ref-table td:first-child { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--saf-dim); width: 220px; vertical-align: top; padding-top: 0.7rem; }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 0.75rem; font-family: 'DM Mono', monospace; margin: 1px 2px; }
+  .b-saf { background: var(--saf-light); color: var(--saf-dim); border: 1px solid var(--border-strong); }
+  .b-teal { background: #DAF2EE; color: #0A5A4E; border: 1px solid rgba(15,123,108,0.4); }
+  .b-blue { background: #E6F1FB; color: #0C447C; border: 1px solid rgba(24,95,165,0.35); }
+  .b-gray { background: var(--parchment2); color: #555; border: 1px solid rgba(0,0,0,0.12); }
+  .b-absent { background: #f5f0ea; color: #999; border: 1px solid #ddd; text-decoration: line-through; }
+
+  .swar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin: 1rem 0; }
+  .swar-cell { border: 1px solid var(--border); border-radius: 6px; padding: 0.65rem 0.4rem; text-align: center; background: var(--parchment2); }
+  .swar-cell.vadi { background: var(--saf-light); border-color: var(--border-strong); }
+  .swar-cell.samvadi { background: #ffe8c0; border-color: rgba(181,96,10,0.45); }
+  .swar-cell.dha-cell { background: #e6f4f0; border-color: rgba(15,123,108,0.4); }
+  .swar-cell.absent { background: #f5f0ea; border-color: rgba(0,0,0,0.08); opacity: 0.42; }
+  .swar-name { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--saf-dim); }
+  .swar-abbr { font-size: 1.1rem; font-weight: 700; color: var(--ink); margin: 2px 0; }
+  .swar-cell.vadi .swar-abbr { color: var(--saf); }
+  .swar-cell.samvadi .swar-abbr { color: var(--saf-dim); }
+  .swar-cell.dha-cell .swar-abbr { color: var(--teal); }
+  .swar-cell.absent .swar-abbr { color: #bbb; }
+  .swar-west { font-size: 0.7rem; color: #5a4030; }
+  .swar-tag { font-size: 0.6rem; font-family: 'DM Mono', monospace; margin-top: 2px; color: inherit; }
+
+  .notation { background: var(--parchment2); border: 1px solid var(--border); border-left: 3px solid var(--saf); border-radius: 4px; padding: 1rem 1.25rem; font-family: 'DM Mono', monospace; font-size: 0.85rem; line-height: 2; margin: 0.75rem 0; color: var(--ink); }
+  .notation .label { font-size: 0.7rem; color: var(--saf-dim); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.3rem; display: block; }
+  .hi { color: var(--saf); font-weight: 500; }
+  .ma { color: var(--saf); font-weight: 700; }
+  .dha { color: var(--teal); font-weight: 500; }
+  .re { color: var(--blue); font-weight: 500; }
+  .dim { color: #888; }
+
+  .octave-row { display: flex; gap: 0; margin: 0.5rem 0; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); }
+  .oct-cell { flex: 1; padding: 0.55rem 0.3rem; text-align: center; font-family: 'DM Mono', monospace; font-size: 0.78rem; border-right: 1px solid var(--border); color: var(--ink); background: var(--parchment2); }
+  .oct-cell:last-child { border-right: none; }
+  .oct-cell.vadi { background: var(--saf-light); color: var(--saf); font-weight: 500; }
+  .oct-cell.samvadi { background: #ffe8c0; color: var(--saf-dim); font-weight: 500; }
+  .oct-cell.dha-c { background: #e6f4f0; color: var(--teal); font-weight: 500; }
+  .oct-cell.absent { background: #f5f0ea; color: #bbb; opacity: 0.5; }
+  .oct-cell.re-c { background: #e6f1fb; color: var(--blue); font-weight: 500; }
+
+  .chalan-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 0; margin: 1rem 0; }
+  .chalan-node { padding: 0.5rem 0.75rem; text-align: center; border: 1px solid var(--border); font-family: 'DM Mono', monospace; font-size: 0.82rem; background: var(--parchment2); color: var(--ink); }
+  .chalan-node:first-child { border-radius: 6px 0 0 6px; }
+  .chalan-node:last-child { border-radius: 0 6px 6px 0; }
+  .chalan-node.n-vadi { background: var(--saf-light); color: var(--saf); border-color: var(--border-strong); font-weight: 500; }
+  .chalan-node.n-samvadi { background: #ffe8c0; color: var(--saf-dim); border-color: rgba(181,96,10,0.45); font-weight: 500; }
+  .chalan-node.n-dha { background: #e6f4f0; color: var(--teal); border-color: rgba(15,123,108,0.4); font-weight: 500; }
+  .chalan-node.n-re { background: #e6f1fb; color: var(--blue); border-color: rgba(24,95,165,0.35); font-weight: 500; }
+  .chalan-node .node-name { font-size: 1rem; }
+  .chalan-node .node-label { font-size: 0.6rem; color: inherit; opacity: 0.75; }
+  .chalan-arrow { font-size: 1rem; color: var(--border-strong); padding: 0 2px; }
+
+  .alankar-block { margin: 0.6rem 0; }
+  .alankar-num { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--saf-dim); margin-bottom: 3px; letter-spacing: 0.1em; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 1rem 0; }
+  .col-card { border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.1rem; background: var(--parchment2); }
+  .col-card h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--ink); margin-bottom: 0.6rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
+  .col-card ul { list-style: none; font-size: 0.88rem; }
+  .col-card ul li { padding: 0.25rem 0; border-bottom: 1px solid rgba(181,96,10,0.08); }
+  .col-card ul li:last-child { border-bottom: none; }
+  .col-card ul li::before { content: '◆'; font-size: 0.5rem; color: var(--saf); margin-right: 6px; vertical-align: middle; }
+
+  .rasa-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 1rem 0; }
+  .rasa-card { border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1rem; background: var(--parchment2); }
+  .rasa-card .rasa-title { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; color: var(--saf-dim); margin-bottom: 0.35rem; }
+  .rasa-card .rasa-desc { font-size: 0.83rem; color: #1E1408; line-height: 1.55; }
+
+  .prahar-row { display: flex; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); margin: 1rem 0; }
+  .prahar-cell { flex: 1; padding: 0.65rem 0.5rem; text-align: center; border-right: 1px solid var(--border); font-size: 0.78rem; font-family: 'DM Mono', monospace; color: #888; background: var(--parchment2); }
+  .prahar-cell:last-child { border-right: none; }
+  .prahar-cell.highlight { background: var(--saf-light); color: var(--saf-dim); font-weight: 500; }
+  .prahar-cell .prahar-time { font-size: 0.65rem; display: block; margin-bottom: 2px; }
+
+  .bandish-block { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 1rem 0; }
+  .bandish-header { background: var(--saf-light); padding: 0.6rem 1rem; font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--saf-dim); letter-spacing: 0.1em; border-bottom: 1px solid var(--border-strong); }
+  .bandish-body { padding: 0.75rem 1rem; background: var(--parchment2); }
+  .bandish-label { font-size: 0.7rem; font-family: 'DM Mono', monospace; color: var(--saf-dim); text-transform: uppercase; letter-spacing: 0.1em; margin: 0.5rem 0 0.2rem; }
+
+  .callout { background: var(--saf-light); border: 1px solid var(--border-strong); border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.87rem; color: var(--saf-dim); margin: 0.75rem 0; font-style: italic; }
+
+  .compare-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 1rem 0; }
+  .cmp-card { border: 1px solid var(--border); border-radius: 7px; padding: 0.75rem 0.9rem; background: var(--parchment2); }
+  .cmp-name { font-size: 0.9rem; font-weight: 500; color: var(--ink); margin-bottom: 4px; font-family: 'Cormorant Garamond', serif; }
+  .cmp-notes { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--saf-dim); margin-bottom: 4px; }
+  .cmp-diff { font-size: 0.8rem; color: #2a1a08; }
+
+  .mistake-table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+  .mistake-table th { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--saf-dim); letter-spacing: 0.1em; text-align: left; padding: 0.4rem 0.75rem; border-bottom: 1px solid var(--border-strong); background: var(--saf-light); }
+  .mistake-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .mistake-table tr:last-child td { border-bottom: none; }
+  .mistake-table td:first-child { color: var(--rust); font-style: italic; }
+
+  .artist-card { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
+  .artist-card:last-child { border-bottom: none; }
+  .artist-initial { width: 38px; height: 38px; border-radius: 50%; background: var(--saf-light); border: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 0.9rem; color: var(--saf-dim); font-weight: 600; flex-shrink: 0; }
+  .artist-name { font-weight: 500; font-size: 0.92rem; color: var(--ink); }
+  .artist-detail { font-size: 0.8rem; color: #4a3020; }
+
+  .film-table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+  .film-table th { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--saf-dim); letter-spacing: 0.1em; text-align: left; padding: 0.35rem 0.75rem; border-bottom: 1px solid var(--border-strong); background: var(--saf-light); }
+  .film-table td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .film-table tr:last-child td { border-bottom: none; }
+  .film-table td:first-child { font-style: italic; }
+
+  .glossary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 0.75rem 0; }
+  .gloss-item { padding: 0.5rem 0.75rem; border: 1px solid var(--border); border-radius: 5px; background: var(--parchment2); font-size: 0.83rem; }
+  .gloss-item strong { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--saf-dim); display: block; margin-bottom: 2px; }
+
+  .week-table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+  .week-table th { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--saf-dim); letter-spacing: 0.1em; text-align: left; padding: 0.35rem 0.75rem; border-bottom: 1px solid var(--border-strong); background: var(--saf-light); }
+  .week-table td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border); }
+  .week-table tr:last-child td { border-bottom: none; }
+  .week-table td:first-child { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--saf-dim); width: 120px; }
+
+  .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 1rem 0; }
+  .summary-card { border: 1px solid var(--border); border-radius: 8px; padding: 1rem; background: var(--parchment2); }
+  .summary-card h4 { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--saf-dim); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .summary-card p { font-size: 0.85rem; color: var(--ink); line-height: 1.6; }
+
+  .taan-label { font-size: 0.78rem; font-family: 'DM Mono', monospace; color: var(--saf-dim); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.75rem; margin-bottom: 2px; }
+  .ornament { text-align: center; color: var(--saf-dim); margin: 2rem 0 1rem; letter-spacing: 0.3em; }
+  p { margin-bottom: 0.75rem; font-size: 0.92rem; }
+  p:last-child { margin-bottom: 0; }
+
+  @media (max-width: 600px) {
+    .two-col, .rasa-grid, .glossary-grid, .summary-grid, .compare-grid { grid-template-columns: 1fr; }
+    .swar-grid { grid-template-columns: repeat(4, 1fr); }
+    .hero-title { font-size: 2.4rem; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-devanagari">राग दुर्गा — Hindustani Classical Music</div>
+    <div class="hero-title">Raga <em>Durga</em></div>
+    <div class="hero-sub">Comprehensive Practice Notes</div>
+    <blockquote class="hero-quote">
+      "Beguiling in its pentatonic simplicity, Durga is inextricably tied to visions of the Hindu Mother Goddess — depicted in lore as destroyer of demons and protector of the faithful. The raga carries both her fierce power and her devotional sweetness: Veer and Bhakti in a single melodic breath."
+      <cite>— After Ragajunglism; Grokipedia; Songs of Yore</cite>
+    </blockquote>
+  </div>
+
+  <!-- 1 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">01</span><span class="section-title">Parichay <span class="section-title-hindi">(परिचय)</span> — Introduction</span></div>
+    <p>Raga Durga is a pentatonic (audav-audav) raga belonging to the <strong>Bilawal Thaat</strong>. Its name derives from the Sanskrit word meaning "invincible, impassable, inaccessible" — precisely the epithets of the Hindu Mother Goddess Maa Durga, the destroyer of the demon Mahishasura. The raga carries both aspects of the goddess: fierce devotional power (Veer Rasa) and tender, protective love (Bhakti Rasa).</p>
+    <p>Durga uses only five notes — Sa, Re, Ma, Pa, Dha — all shuddha (natural). Gandhar and Nishad are completely omitted. This pentatonic structure makes it a natural companion to Bhupali (which omits Ma and Ni), and the two ragas are frequently studied together to understand how different pentatonic selections from the same thaat family create entirely different emotional worlds.</p>
+    <div class="callout">
+      <strong>The most important fact about Durga's avroh:</strong> The descending scale is not a simple reversal of the ascent. Durga uses <em>vakra (oblique) movement in the avroh</em> — specifically, Dha appears twice in characteristic descent patterns: <code>S' Dha Pa Ma</code>, and then again <code>Dha Ma Re Dha Sa</code>. Pancham (Pa) is <strong>not a resting note</strong> in the avroh — it is a passing note. The avroh's primary resting points are Sa, Ma, and Dha. Getting this right is the key to Durga.
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">02</span><span class="section-title">Quick Reference Card</span></div>
+    <table class="ref-table">
+      <tr><td>Thaat</td><td><span class="badge b-saf">Bilawal</span></td></tr>
+      <tr><td>Jati</td><td>Audav–Audav (pentatonic — 5 notes in both ascent and descent)</td></tr>
+      <tr><td>Aaroh</td><td><code>Sā  Re  <span style="color:var(--saf)">Ma</span>  Pa  <span style="color:var(--teal)">Dha</span>  Sā'</code></td></tr>
+      <tr><td>Avroh</td><td><code>Sā'  <span style="color:var(--teal)">Dha</span>  Pa  Ma  Re  <span style="color:var(--teal)">Dha</span>  Sā</code> — with vakra Dha; Pa is a passing note in descent</td></tr>
+      <tr><td>Vadi (वादी)</td><td><strong>Ma</strong> (shuddha Madhyam) — the most important, most dwelt-upon note</td></tr>
+      <tr><td>Samvadi (संवादी)</td><td><strong>Sa</strong> (Shadaj) — the second most important note</td></tr>
+      <tr><td>Varjit Swaras</td><td><span class="badge b-absent">Ga (Gandhar)</span> <span class="badge b-absent">Ni (Nishad)</span> — completely omitted in both ascent and descent</td></tr>
+      <tr><td>Pa treatment</td><td><span class="badge b-gray">Alpa / transient in avroh</span> — Pa is never a resting note in descent; it is passed through quickly</td></tr>
+      <tr><td>Nyaas Swaras</td><td>Sa, <strong>Ma</strong>, and <strong>Dha</strong> — these are the three primary resting notes</td></tr>
+      <tr><td>Signature phrase</td><td><code>Sa Re <span style="color:var(--teal)">Dha</span> Sa</code> — the most identifying single phrase of Durga (Re to lower Dha to Sa)</td></tr>
+      <tr><td>Gaayan Samay</td><td>Raat ka Dwitiya Prahar — <strong>Night, 9 PM–12 AM</strong></td></tr>
+      <tr><td>Rasa / Mood</td><td>Veer (वीर) — heroic strength; Bhakti (भक्ति) — devotion to the goddess; Shringaar — romantic undertones</td></tr>
+      <tr><td>Carnatic Equivalent</td><td><strong>Shuddha Saveri</strong> (same note positions S R M P D, but different sancharas / movements)</td></tr>
+      <tr><td>Related ragas</td><td>Bhupali (Kalyan thaat, different pentatonic), Jaldhar Kedar (Kedar ang on Durga notes), Shuddha Malhar (same notes, different treatment)</td></tr>
+    </table>
+  </div>
+
+  <!-- 3 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">03</span><span class="section-title">Swar Vistar <span class="section-title-hindi">(स्वर विस्तार)</span> — Note Structure</span></div>
+    <p>All five notes used are <em>shuddha</em> — no komal or teevra modifications. Ga and Ni are completely omitted. Importantly, Teevra Ma (F♯) is also strictly forbidden — only shuddha Ma (F♮) is used.</p>
+    <div class="swar-grid">
+      <div class="swar-cell samvadi"><div class="swar-name">Shadaj</div><div class="swar-abbr">Sa</div><div class="swar-west">C</div><div class="swar-tag">SAMVADI ★</div></div>
+      <div class="swar-cell re-c" style="background:#e6f1fb;border-color:rgba(24,95,165,0.4)"><div class="swar-name">Rishabh</div><div class="swar-abbr" style="color:var(--blue)">Re</div><div class="swar-west">D ♮</div><div class="swar-tag" style="color:var(--blue)">shuddha</div></div>
+      <div class="swar-cell absent"><div class="swar-name">Gandhar</div><div class="swar-abbr">Ga</div><div class="swar-west">E</div><div class="swar-tag">VARJIT ✕</div></div>
+      <div class="swar-cell vadi"><div class="swar-name">Madhyam</div><div class="swar-abbr">Ma</div><div class="swar-west">F ♮</div><div class="swar-tag">VADI ★</div></div>
+      <div class="swar-cell" style="background:#fff8ee;border-color:rgba(181,96,10,0.25)"><div class="swar-name">Pancham</div><div class="swar-abbr" style="color:#8B4400">Pa</div><div class="swar-west">G ♮</div><div class="swar-tag" style="color:#8B4400">alpa in avroh</div></div>
+      <div class="swar-cell dha-cell"><div class="swar-name">Dhaivat</div><div class="swar-abbr">Dha</div><div class="swar-west">A ♮</div><div class="swar-tag">nyaas + vakra ★</div></div>
+      <div class="swar-cell absent"><div class="swar-name">Nishad</div><div class="swar-abbr">Ni</div><div class="swar-west">B</div><div class="swar-tag">VARJIT ✕</div></div>
+    </div>
+    <p style="font-size:0.82rem;color:var(--saf-dim);margin-top:0.25rem">With C as Sa: <em>C D F G A</em> — a pentatonic scale. Vadi Ma in saffron. Samvadi Sa in lighter saffron. Dha in teal (characteristic vakra role). Re in blue. Faded cells (Ga, Ni) are varjit — completely forbidden. Pa in amber = alpa (transient) in avroh.</p>
+    <div class="callout">
+      <strong>Teevra Ma is strictly forbidden:</strong> Durga belongs to Bilawal Thaat (all-shuddha). The use of Teevra Madhyam (F♯) — which appears in the Kalyan family — is completely forbidden. This is one of the key distinctions from ragas of the Yaman/Kalyan family. Ma in Durga is always shuddha (F♮).
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">04</span><span class="section-title">Aaroh–Avroh aur Pakad</span></div>
+    <div class="notation"><span class="label">Aaroh (आरोह) — Ascending</span>
+Sā  <span class="re">Re</span>  <span class="ma">Ma</span>  Pa  <span class="dha">Dha</span>  Sā'
+<span class="dim">(Ga and Ni absent; clean pentatonic ascent; Ma is the emotional centre)</span></div>
+    <div class="notation"><span class="label">Avroh (अवरोह) — Descending (with vakra Dha)</span>
+Sā'  <span class="dha">Dha</span>  Pa  <span class="ma">Ma</span>  ,  Pa  <span class="dha">Dha</span>  <span class="ma">Ma</span>  ,  <span class="re">Re</span>  <span class="dha">Dha</span>  Sā
+<span class="dim">(Pa is alpa — never rest on it in descent; Dha appears twice — this vakra quality is idiosyncratic)</span></div>
+    <div class="callout">
+      <strong>The vakra avroh explained:</strong> The full avroh pattern includes:<br>
+      • <code>S' Dha Pa Ma</code> — Dha moving down through Pa to Ma<br>
+      • <code>Pa Dha Ma</code> — Pa moves <em>up</em> to Dha before coming back down to Ma (the vakra gesture)<br>
+      • <code>Re Dha Sa</code> — Re drops to lower Dha before resolving on Sa (the most identifying phrase of Durga)<br>
+      Pa is used as a passing note only — phrases never rest on Pa going down.
+    </div>
+    <div class="notation"><span class="label">Pakad (पकड़) — Characteristic Catch-phrase</span>
+<span class="re">Re</span>  <span class="ma">Ma</span>  Pa  <span class="dha">Dha</span>  ,  <span class="ma">Ma</span>  Pa  <span class="dha">Dha</span>  ,  <span class="ma">Ma</span>  <span class="re">Re</span>  ,  Sa  <span class="re">Re</span>  <span class="dha">Dha</span>  Sa</div>
+    <div class="notation"><span class="label">The most identifying phrase of Durga — Sa Re Dha Sa</span>
+Sa  <span class="re">Re</span>  <span class="dha">.Dha</span>  Sa  ,  Sa  <span class="re">Re</span>  <span class="dha">.Dha</span>  Sa
+<span class="dim">(.Dha = lower octave Dha; this phrase — Re dropping to lower Dha, then Sa — is uniquely Durga's signature)</span></div>
+  </div>
+
+  <!-- 5 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">05</span><span class="section-title">Saptak Vistar <span class="section-title-hindi">(सप्तक विस्तार)</span> — Octave Map</span></div>
+    <p style="font-size:0.82rem;color:#5a4030;margin-bottom:0.5rem">Aaroh — 5 notes (Ga and Ni absent)</p>
+    <div class="octave-row">
+      <div class="oct-cell samvadi">Sa ★</div><div class="oct-cell re-c">Re</div><div class="oct-cell absent">Ga ✕</div><div class="oct-cell vadi">Ma ★</div><div class="oct-cell">Pa</div><div class="oct-cell dha-c">Dha ★</div><div class="oct-cell absent">Ni ✕</div>
+    </div>
+    <p style="font-size:0.82rem;color:#5a4030;margin-bottom:0.5rem">Avroh — 5 notes (Ga and Ni absent; Pa alpa/transient; Dha vakra)</p>
+    <div class="octave-row">
+      <div class="oct-cell samvadi">Sa ★</div><div class="oct-cell re-c">Re ↓</div><div class="oct-cell absent">Ga ✕</div><div class="oct-cell vadi">Ma ★</div><div class="oct-cell" style="background:#fff8ee;color:#8B4400">Pa (alpa)</div><div class="oct-cell dha-c">Dha ★ vakra</div><div class="oct-cell absent">Ni ✕</div>
+    </div>
+    <p style="font-size:0.8rem;color:var(--saf-dim);margin-top:0.4rem">Vadi Ma (saffron), Samvadi Sa (light saffron), Dha in teal (vakra in avroh, nyaas). Pa in amber = transient only. Durga is <em>purvanga-pradhan</em> — its centre of gravity lies in the lower half (Sa–Pa), and Ma is the emotional heart.</p>
+  </div>
+
+  <!-- 6 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">06</span><span class="section-title">Chalan <span class="section-title-hindi">(चलन)</span> — Melodic Movement</span></div>
+    <p style="font-size:0.88rem;font-weight:500;margin-bottom:0.5rem">Ascending:</p>
+    <div class="chalan-flow">
+      <div class="chalan-node n-samvadi"><div class="node-label">SAMVADI</div><div class="node-name">Sa ★</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-re"><div class="node-label">shuddha</div><div class="node-name">Re</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-vadi"><div class="node-label">VADI</div><div class="node-name">Ma ★</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node"><div class="node-label">alpa↑</div><div class="node-name">Pa</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-dha"><div class="node-label">nyaas</div><div class="node-name">Dha ★</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node"><div class="node-label">taar</div><div class="node-name">Sā'</div></div>
+    </div>
+    <p style="font-size:0.88rem;font-weight:500;margin:0.75rem 0 0.5rem">Descending (vakra pattern):</p>
+    <div class="chalan-flow">
+      <div class="chalan-node"><div class="node-label">taar</div><div class="node-name">Sā'</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-dha"><div class="node-label">1st Dha</div><div class="node-name">Dha</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node"><div class="node-label">alpa↓</div><div class="node-name">Pa</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-vadi"><div class="node-label">VADI</div><div class="node-name">Ma ★</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-dha"><div class="node-label">2nd Dha (vakra↑)</div><div class="node-name">Dha</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-vadi"><div class="node-label">back to Ma</div><div class="node-name">Ma ★</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-re"><div class="node-label">Re drops to ↓</div><div class="node-name">Re</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-dha"><div class="node-label">lower Dha</div><div class="node-name">.Dha</div></div>
+      <div class="chalan-arrow">→</div>
+      <div class="chalan-node n-samvadi"><div class="node-label">SAMVADI</div><div class="node-name">Sa ★</div></div>
+    </div>
+    <div class="two-col" style="margin-top:1rem">
+      <div class="col-card">
+        <h4>Key melodic rules</h4>
+        <ul>
+          <li><strong>Ma is the vadi</strong> — the gravitational centre; phrases radiate from and resolve to Ma</li>
+          <li><strong>Pa is alpa in avroh</strong> — never rest on Pa going down; it is a quick passing note between Dha and Ma</li>
+          <li><strong>Dha appears twice in characteristic descent</strong> — Pa Dha Ma (vakra upward touch) is idiosyncratic to Durga</li>
+          <li><strong>Sa Re Dha Sa</strong> — the most identifying phrase; Re drops to lower Dha then Sa; practise daily</li>
+          <li><strong>Three nyaas swaras</strong> — Sa, Ma, and Dha; phrases naturally pause on these three notes</li>
+          <li><strong>All notes shuddha</strong> — no komal, no teevra; Durga's simplicity is its most challenging aspect</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>Character and feel</h4>
+        <ul>
+          <li>Durga has the same notes as Shuddha Malhar — but Re's role distinguishes them; Durga emphasises Re prominently while Malhar de-emphasises it</li>
+          <li>The Re–Pa sangati (interval) has a folk-like directness; the raga is "accessible" without being simple</li>
+          <li>Both Veer (heroic) and Bhakti (devotional) rasas are present — the raga can project strength or surrender depending on treatment</li>
+          <li>The characteristic Sa Re Dha Sa phrase gives Durga a distinctive "circular" quality — it returns on itself</li>
+          <li>Durga is purvanga-pradhan — most melodic activity centred below Pa</li>
+          <li>Ustad Amjad Ali Khan particularly favours this raga; Bhimsen Joshi used it frequently in school</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">07</span><span class="section-title">Alankars <span class="section-title-hindi">(अलंकार)</span> — Scale Exercises</span></div>
+    <p>Practise with tanpura drone. Focus on: (1) no Ga or Ni ever, (2) Pa as alpa/transient in descent, (3) Sa Re Dha Sa as the signature phrase, (4) the vakra Pa Dha Ma pattern.</p>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 1 — Core Aaroh–Avroh</div>
+      <div class="notation">S  <span class="re">R</span>  <span class="ma">M</span>  P  <span class="dha">D</span>  S' | S'  <span class="dha">D</span>  P  <span class="ma">M</span>  P  <span class="dha">D</span>  <span class="ma">M</span>  <span class="re">R</span>  <span class="dha">.D</span>  S
+<span class="dim">(Pa is alpa in descent; Dha appears twice in vakra pattern; Re drops to lower Dha at the end)</span></div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 2 — Aaroh step (5 notes)</div>
+      <div class="notation">S  <span class="re">R</span>  |  <span class="re">R</span>  <span class="ma">M</span>  |  <span class="ma">M</span>  P  |  P  <span class="dha">D</span>  |  <span class="dha">D</span>  S'  <span class="dim">(clean pentatonic — no Ga, no Ni)</span></div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 3 — Avroh with vakra (Pa Dha Ma pattern)</div>
+      <div class="notation">S'  <span class="dha">D</span>  P  <span class="ma">M</span>  ,  P  <span class="dha">D</span>  <span class="ma">M</span>  ,  <span class="re">R</span>  <span class="dha">.D</span>  S
+<span class="dim">(S' Dha Pa Ma = first descent; Pa Dha Ma = the vakra upward touch; Re Dha Sa = the signature ending)</span></div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 4 — Trikhand aaroh (5 notes)</div>
+      <div class="notation">S  <span class="re">R</span>  <span class="ma">M</span>  |  <span class="re">R</span>  <span class="ma">M</span>  P  |  <span class="ma">M</span>  P  <span class="dha">D</span>  |  P  <span class="dha">D</span>  S'</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 5 — Chaukhand aaroh–avroh</div>
+      <div class="notation">S  <span class="re">R</span>  <span class="ma">M</span>  P  |  <span class="re">R</span>  <span class="ma">M</span>  P  <span class="dha">D</span>  |  <span class="ma">M</span>  P  <span class="dha">D</span>  S'<br>S'  <span class="dha">D</span>  P  <span class="ma">M</span>  |  <span class="dha">D</span>  P  <span class="ma">M</span>  <span class="re">R</span>  |  P  <span class="ma">M</span>  <span class="re">R</span>  <span class="dha">.D</span>  |  <span class="ma">M</span>  <span class="re">R</span>  <span class="dha">.D</span>  S</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 6 — Signature Sa Re Dha Sa phrase (practise daily)</div>
+      <div class="notation">S  <span class="re">R</span>  <span class="dha">.D</span>  S  ,  S  <span class="re">R</span>  <span class="dha">.D</span>  S  ,  S  <span class="re">R</span>  <span class="ma">M</span>  <span class="re">R</span>  <span class="dha">.D</span>  S  ,  <span class="re">R</span>  <span class="ma">M</span>  P  <span class="dha">D</span>  <span class="ma">M</span>  <span class="re">R</span>  <span class="dha">.D</span>  S
+<span class="dim">(the Sa Re .Dha Sa phrase is Durga's most identifying gesture — commit to muscle memory)</span></div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">ALANKAR 7 — Chalan cell: R M P D / P D M / D M R D S</div>
+      <div class="notation"><span class="re">R</span>  <span class="ma">M</span>  P  <span class="dha">D</span>  ,  P  <span class="dha">D</span>  <span class="ma">M</span>  ,  <span class="dha">D</span>  <span class="ma">M</span>  <span class="re">R</span>  ,  <span class="dha">D</span>  <span class="dha">D</span>  S'  ,  S'  <span class="dha">D</span>  <span class="dha">D</span>  <span class="ma">M</span>  ,  <span class="ma">M</span>  P  <span class="dha">D</span>  ,  <span class="ma">M</span>  <span class="re">R</span>  <span class="dha">.D</span>  S
+<span class="dim">(note the double Dha: D D S' and S' D D M are characteristic chalan phrases in Durga)</span></div>
+    </div>
+  </div>
+
+  <!-- 8 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">08</span><span class="section-title">Alaap Kramanik <span class="section-title-hindi">(आलाप क्रमाणिक)</span> — Step-by-step Alaap</span></div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 1 — Sthapana</div>
+      <div class="notation">S  <span class="re">R</span>  S  –  ,  S  <span class="re">R</span>  <span class="dha">.D</span>  S  –  ,  <span class="re">R</span>  S  <span class="re">R</span>  –  ,  S  <span class="re">R</span>  <span class="dha">.D</span>  S  –</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 2 — Establishing Ma (vadi)</div>
+      <div class="notation">S  <span class="re">R</span>  <span class="ma">M</span>  –  ,  <span class="ma">M</span>  <span class="re">R</span>  S  –  ,  <span class="re">R</span>  <span class="ma">M</span>  <span class="re">R</span>  –  ,  <span class="re">R</span>  <span class="ma">M</span>  <span class="re">R</span>  <span class="dha">.D</span>  S  –</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 3 — Introducing Pa and Dha</div>
+      <div class="notation"><span class="re">R</span>  <span class="ma">M</span>  P  <span class="dha">D</span>  –  ,  <span class="dha">D</span>  <span class="ma">M</span>  –  ,  P  <span class="dha">D</span>  <span class="ma">M</span>  –  ,  <span class="ma">M</span>  <span class="re">R</span>  <span class="dha">.D</span>  S  –</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 4 — The vakra and double-Dha phrases</div>
+      <div class="notation"><span class="re">R</span>  <span class="ma">M</span>  P  <span class="dha">D</span>  <span class="dha">D</span>  <span class="ma">M</span>  –  ,  P  <span class="dha">D</span>  <span class="ma">M</span>  <span class="re">R</span>  –  ,  <span class="dha">D</span>  S'  –  ,  <span class="ma">M</span>  <span class="re">R</span>  <span class="dha">.D</span>  S  –
+<span class="dim">(D D M = characteristic double Dha phrase; note the double Dha before Ma)</span></div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 5 — Taar saptak</div>
+      <div class="notation"><span class="dha">D</span>  S'  –  ,  S'  <span class="re">R'</span>  S'  –  ,  <span class="dha">D</span>  <span class="dha">D</span>  S'  –  ,  S'  <span class="dha">D</span>  P  <span class="ma">M</span>  P  <span class="dha">D</span>  <span class="ma">M</span>  <span class="re">R</span>  <span class="dha">.D</span>  S  –</div>
+    </div>
+    <div class="alankar-block">
+      <div class="alankar-num">PHRASE 6 — Full resolution</div>
+      <div class="notation">S  <span class="re">R</span>  <span class="ma">M</span>  P  <span class="dha">D</span>  <span class="dha">D</span>  S'  –  ,  S'  <span class="dha">D</span>  P  <span class="ma">M</span>  ,  P  <span class="dha">D</span>  <span class="ma">M</span>  ,  <span class="re">R</span>  <span class="dha">.D</span>  S  –
+<span class="dim">(full arc: ascent with double Dha; vakra descent P D M; signature ending R .D S)</span></div>
+    </div>
+  </div>
+
+  <!-- 9 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">09</span><span class="section-title">Sargam Geet <span class="section-title-hindi">(सरगम गीत)</span></span></div>
+    <div class="bandish-block">
+      <div class="bandish-header">SARGAM GEET — TEENTAAL (16 BEATS)</div>
+      <div class="bandish-body">
+        <div class="bandish-label">Sthai (स्थायी)</div>
+        <div class="notation" style="margin:0.3rem 0">
+          <span class="re">R</span>  <span class="ma">M</span>  P  <span class="dha">D</span>  |  <span class="ma">M</span>  P  <span class="dha">D</span>  <span class="dha">D</span>  |  <span class="ma">M</span>  –  <span class="re">R</span>  <span class="dha">.D</span>  |  S  –  –  –<br>
+          S  <span class="re">R</span>  <span class="dha">.D</span>  S  |  <span class="re">R</span>  <span class="ma">M</span>  P  <span class="dha">D</span>  |  P  <span class="dha">D</span>  <span class="ma">M</span>  <span class="re">R</span>  |  <span class="dha">.D</span>  S  –  –
+        </div>
+        <div class="bandish-label">Antara (अंतरा)</div>
+        <div class="notation" style="margin:0.3rem 0">
+          <span class="dha">D</span>  <span class="dha">D</span>  S'  –  |  S'  <span class="re">R'</span>  S'  <span class="dha">D</span>  |  P  <span class="ma">M</span>  P  <span class="dha">D</span>  |  <span class="dha">D</span>  <span class="ma">M</span>  –  –<br>
+          P  <span class="dha">D</span>  <span class="ma">M</span>  <span class="re">R</span>  |  <span class="ma">M</span>  <span class="re">R</span>  <span class="dha">.D</span>  S  |  <span class="re">R</span>  <span class="ma">M</span>  P  <span class="dha">D</span>  |  <span class="re">R</span>  <span class="dha">.D</span>  S  –
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">10</span><span class="section-title">Bandish <span class="section-title-hindi">(बंदिश)</span> — Compositions</span></div>
+    <div class="bandish-block">
+      <div class="bandish-header">BANDISH 1: "Sakhi Mori Rum Jhum" — TEENTAAL (medium)</div>
+      <div class="bandish-body">
+        <p style="font-size:0.82rem;color:#2a1a08;margin-bottom:0.5rem">The single most widely performed bandish in Raga Durga — sung by Ustad Fateh Ali Khan, Pandit Omkarnath Thakur, and virtually every classical vocalist. The bandish describes the sound of anklets and the arrival of rain. Its composition is ascribed to multiple gharanas, reflecting how universally it has been adopted.</p>
+        <div class="bandish-label">Sthai</div>
+        <div class="notation" style="margin:0.3rem 0">
+          Sak–hi  mo–ri  |  rum  jhum  –  –  |  –  –  –  –  |  –  –  –  –<br>
+          <span class="re">R</span>  <span class="ma">M</span>  P  <span class="dha">D</span>  |  P  <span class="dha">D</span>  <span class="dha">D</span>  <span class="ma">M</span>  |  <span class="re">R</span>  <span class="dha">.D</span>  S  –  |  –  –  –  –
+        </div>
+        <div class="bandish-label">Antara</div>
+        <div class="notation" style="margin:0.3rem 0">
+          <span class="dha">D</span>  S'  <span class="re">R'</span>  S'  |  <span class="dha">D</span>  P  <span class="ma">M</span>  P  |  <span class="dha">D</span>  <span class="ma">M</span>  <span class="re">R</span>  <span class="dha">.D</span>  |  S  –  –  –
+        </div>
+      </div>
+    </div>
+    <div class="bandish-block" style="margin-top:1rem">
+      <div class="bandish-header">BANDISH 2: "Ata Hi Ghanghor Badal Chaye" — RUPAK TAAL (7 beats) — Ashwini Bhide-Deshpande</div>
+      <div class="bandish-body">
+        <p style="font-size:0.82rem;color:#2a1a08;margin-bottom:0.5rem">A vilambit Rupak taal composition in Durga — featured in Ragajunglism as a definitive Jaipur-Atrauli rendition. The text describes dark monsoon clouds gathering.</p>
+        <div class="bandish-label">Sthai (Rupak — 3+2+2)</div>
+        <div class="notation" style="margin:0.3rem 0">
+          A–ta  hi  ghan–  |  ghor  ba–  |  dal  cha–ye<br>
+          <span class="dha">D</span>  <span class="ma">M</span>  P  |  <span class="dha">D</span>  <span class="dha">D</span>  |  S'  <span class="dha">D</span>  <span class="ma">M</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">11</span><span class="section-title">Taan Prakar <span class="section-title-hindi">(तान प्रकार)</span> — Types of Taans</span></div>
+    <div class="callout">All taans in Durga must maintain: no Ga or Ni; Pa alpa in descent (no resting); vakra Dha pattern in descending runs; Sa Re Dha Sa as a possible cadential phrase.</div>
+    <div class="taan-label">Seedhi Taan (straight)</div>
+    <div class="notation">S  <span class="re">R</span>  <span class="ma">M</span>  P  <span class="dha">D</span>  S' | S'  <span class="dha">D</span>  P  <span class="ma">M</span>  <span class="re">R</span>  S  <span class="dim">(note: no Ga or Ni anywhere)</span></div>
+    <div class="taan-label">Vakra Taan (with characteristic Pa Dha Ma)</div>
+    <div class="notation">S  <span class="re">R</span>  <span class="ma">M</span>  <span class="re">R</span>  <span class="ma">M</span>  P  <span class="ma">M</span>  P  <span class="dha">D</span>  P  <span class="dha">D</span>  S'<br>S'  <span class="dha">D</span>  P  <span class="ma">M</span>  P  <span class="dha">D</span>  <span class="ma">M</span>  <span class="re">R</span>  <span class="ma">M</span>  <span class="re">R</span>  <span class="dha">.D</span>  S</div>
+    <div class="taan-label">Gamak Taan</div>
+    <div class="notation">S–<span class="re">R</span>–<span class="ma">M</span>–P–<span class="dha">D</span>–S'  <span class="dim">(with bounce; ascending only — no Ga or Ni)</span></div>
+    <div class="taan-label">Sapat Taan (fast)</div>
+    <div class="notation">S  <span class="re">R</span>  <span class="ma">M</span>  P  <span class="dha">D</span>  S'  S'  <span class="dha">D</span>  P  <span class="ma">M</span>  P  <span class="dha">D</span>  <span class="ma">M</span>  <span class="re">R</span>  <span class="dha">.D</span>  S  <span class="dim">(continuous; note the vakra in descent)</span></div>
+    <div class="taan-label">Signature cadential phrase taan</div>
+    <div class="notation"><span class="re">R</span>  <span class="ma">M</span>  P  <span class="dha">D</span>  ,  <span class="dha">D</span>  <span class="dha">D</span>  S'  ,  S'  <span class="dha">D</span>  P  <span class="ma">M</span>  ,  P  <span class="dha">D</span>  <span class="ma">M</span>  ,  <span class="re">R</span>  <span class="dha">.D</span>  S  <span class="dim">(double Dha; vakra; signature ending)</span></div>
+  </div>
+
+  <!-- 12 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">12</span><span class="section-title">Durga, Bhupali, and the Pentatonic Cousins</span></div>
+    <p>Durga, Bhupali, and Malhar/Megh all share pentatonic structures from the all-shuddha note set. Comparing them reveals how radically different emotional worlds can be built from closely related material.</p>
+    <div class="compare-grid">
+      <div class="cmp-card">
+        <div class="cmp-name">Raga Durga 🌙</div>
+        <div class="cmp-notes">Sa Re Ma Pa Dha</div>
+        <div class="cmp-diff">Thaat: Bilawal. Vadi: Ma. Night (9 PM–12). Veer + Bhakti. Signature: Sa Re .Dha Sa. Pa is alpa in avroh. Vakra Dha in descent.</div>
+      </div>
+      <div class="cmp-card">
+        <div class="cmp-name">Raga Bhupali 🌅</div>
+        <div class="cmp-notes">Sa Re Ga Pa Dha</div>
+        <div class="cmp-diff">Thaat: Kalyan. Vadi: Ga. Evening (6–9 PM). Shant + Bhakti. Uses Ga; omits Ma and Ni. Begins from lower .Dha. Serene, domestic.</div>
+      </div>
+      <div class="cmp-card">
+        <div class="cmp-name">Raga Malhar 🌧️</div>
+        <div class="cmp-notes">Sa Re Ma Pa Dha</div>
+        <div class="cmp-diff">Same notes as Durga! Distinguished by treatment: Malhar de-emphasises Re (Re–Pa sangati replaces Re-Ma). Monsoon raga. Different chalan entirely.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>Durga vs Malhar — the most important distinction:</strong> Both ragas use the identical five notes (Sa Re Ma Pa Dha). They are distinguished primarily by the treatment of Re. Durga prominently features Re throughout and uses the Sa Re .Dha Sa phrase as its signature. Malhar de-emphasises Re and uses a Re–Pa sangati differently. The aural experience is completely different despite identical note sets.
+    </div>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>Durga vs Bhupali</h4>
+        <ul>
+          <li>Durga: Sa Re Ma Pa Dha (omits Ga and Ni)</li>
+          <li>Bhupali: Sa Re Ga Pa Dha (omits Ma and Ni)</li>
+          <li>Durga: Bilawal Thaat; Bhupali: Kalyan Thaat</li>
+          <li>Durga: vadi Ma, night raga; Bhupali: vadi Ga, evening raga</li>
+          <li>Durga: Veer + Bhakti; Bhupali: Shant + gentle devotion</li>
+          <li>Quickest test: if Ma is present → Durga; if Ga is present → Bhupali</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>Durga vs Shuddha Saveri (Carnatic)</h4>
+        <ul>
+          <li>Both use the same five notes: Sa Re Ma Pa Dha</li>
+          <li>Different sancharas (movements) entirely</li>
+          <li>Shuddha Saveri's rishabh may use a slightly different shruti (microtone)</li>
+          <li>Shuddha Saveri is performed at any time in Carnatic; Durga is a night raga</li>
+          <li>The emotional character differs significantly between traditions</li>
+          <li>Durga has the vakra Dha pattern; Shuddha Saveri does not have a direct equivalent</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 13 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">13</span><span class="section-title">Rasa aur Bhaav <span class="section-title-hindi">(रस और भाव)</span> — Emotion &amp; Mood</span></div>
+    <div class="rasa-grid">
+      <div class="rasa-card"><div class="rasa-title">Veer Rasa — वीर</div><div class="rasa-desc">Heroic strength, valor, and invincibility — the primary masculine quality of Durga, named after the warrior goddess. The raga has an upward directness in its ascent and a poised authority in its descent that conveys this quality naturally.</div></div>
+      <div class="rasa-card"><div class="rasa-title">Bhakti — भक्ति</div><div class="rasa-desc">Deep devotion to the goddess Durga — the protective, nurturing dimension of the deity. Many kirtans and stotras (hymns to Durga) are set in this raga, expressing both awe and surrender before the divine mother.</div></div>
+      <div class="rasa-card"><div class="rasa-title">Shringaar — श्रृंगार</div><div class="rasa-desc">Wikipedia cites Shringaar as the rasa of Durga — romantic love, particularly in the lighter bandish and thumri contexts. The raga's pentatonic clarity and the sweetness of the Ma–Dha interval lend themselves to romantic expression.</div></div>
+      <div class="rasa-card"><div class="rasa-title">Soothing Night — शांत रात्रि</div><div class="rasa-desc">The raga evokes a soothing, devotional nocturnal mood. Unlike the anxious darkness of Marwa or the yearning of Bageshri, Durga's night is assured and powerful — the silence of a warrior at rest.</div></div>
+    </div>
+  </div>
+
+  <!-- 14 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">14</span><span class="section-title">Samay Chakra <span class="section-title-hindi">(समय चक्र)</span> — Time Theory</span></div>
+    <div class="prahar-row">
+      <div class="prahar-cell"><span class="prahar-time">6–9 AM</span>Morning</div>
+      <div class="prahar-cell"><span class="prahar-time">9 AM–12 PM</span>Late morning</div>
+      <div class="prahar-cell"><span class="prahar-time">12–3 PM</span>Afternoon</div>
+      <div class="prahar-cell"><span class="prahar-time">3–6 PM</span>Late afternoon</div>
+      <div class="prahar-cell"><span class="prahar-time">6–9 PM</span>Evening</div>
+      <div class="prahar-cell highlight"><span class="prahar-time">9 PM–12 AM</span>★ DURGA ★</div>
+      <div class="prahar-cell"><span class="prahar-time">12–3 AM</span>Late night</div>
+      <div class="prahar-cell"><span class="prahar-time">3–6 AM</span>Pre-dawn</div>
+    </div>
+    <p>Durga is a <strong>night raga</strong> — second prahar of the night (9 PM–midnight). Note: one source (ragamelody.com) places it at 6–9 PM; the majority of authoritative sources (Wikipedia, Ragajunglism, Grokipedia) cite 9 PM–midnight. The 9 PM–midnight timing is the more widely accepted canonical assignment.</p>
+  </div>
+
+  <!-- 15 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">15</span><span class="section-title">Carnatic Connection — Shuddha Saveri</span></div>
+    <p>Shuddha Saveri shares the same five notes as Raga Durga (Sa Re Ma Pa Dha / C D F G A) but belongs to a completely different musical tradition with different chalan, ornaments, and emotional character. The equivalence is approximate — Ragajunglism notes the sancharas are "significantly different."</p>
+    <table class="film-table" style="margin-top:0.75rem">
+      <tr><th>Feature</th><th>Durga (Hindustani)</th><th>Shuddha Saveri (Carnatic)</th></tr>
+      <tr><td>Notes</td><td>Sa Re Ma Pa Dha (shuddha)</td><td>Sa Ri2 Ma1 Pa Dha2</td></tr>
+      <tr><td>Jati</td><td>Audav–Audav</td><td>Audava–Audava</td></tr>
+      <tr><td>Time</td><td>Night (9 PM–12 AM)</td><td>Suitable at any time</td></tr>
+      <tr><td>Signature</td><td>Sa Re .Dha Sa; vakra Dha in avroh</td><td>Different sancharas entirely</td></tr>
+      <tr><td>Mood</td><td>Veer + Bhakti</td><td>Devotional, serene</td></tr>
+      <tr><td>Rishabh shruti</td><td>4-shruti Re (D♮)</td><td>May use 3-shruti Ri (slightly lower) — disputed</td></tr>
+    </table>
+  </div>
+
+  <!-- 16 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">16</span><span class="section-title">Film Songs based on Durga</span></div>
+    <table class="film-table">
+      <tr><th>Song</th><th>Film / Context</th><th>Year</th><th>Singer / Notes</th></tr>
+      <tr><td>Hoga Tumse Pyara Kaun</td><td>Zamane Ko Dikhana Hai</td><td>1982</td><td>Lata Mangeshkar / Bappi Lahiri — widely cited as a Durga-based film song</td></tr>
+      <tr><td>Sakhi Mori Rum Jhum</td><td>Non-film classical bandish</td><td>—</td><td>Multiple artists — the most widely performed Durga composition; also recorded as a semi-classical piece</td></tr>
+      <tr><td>Radha Radha (Tamil)</td><td>Meendum Kokila</td><td>1981</td><td>S.P. Balasubrahmanyam, S. Janaki / Ilaiyaraaja — Carnatic Shuddha Saveri equivalent</td></tr>
+    </table>
+    <p style="font-size:0.82rem;color:var(--saf-dim);margin-top:0.5rem">Pure Durga film songs in Hindi are relatively rare — the raga's pentatonic structure is sometimes confused with Bhupali. Durga is more commonly heard in classical and semi-classical concert contexts than in film music.</p>
+  </div>
+
+  <!-- 17 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">17</span><span class="section-title">Notable Artists — Recommended Listening</span></div>
+    <div class="artist-card">
+      <div class="artist-initial">AA</div>
+      <div><div class="artist-name">Ustad Amjad Ali Khan</div><div class="artist-detail">Sarod — Durga is one of his favourite ragas; Doordarshan produced a full DVD of his Raga Durga presentation; his rhythmic drive with a variety of plucking techniques is recommended</div></div>
+    </div>
+    <div class="artist-card">
+      <div class="artist-initial">AB</div>
+      <div><div class="artist-name">Ashwini Bhide-Deshpande</div><div class="artist-detail">Jaipur-Atrauli Gharana, vocal — her vilambit Rupak taal recording (bandish: Ata Hi Ghanghor Badal Chaye, 14 mins) is described by Ragajunglism as "a Jaipur-Atrauli highlight"</div></div>
+    </div>
+    <div class="artist-card">
+      <div class="artist-initial">BJ</div>
+      <div><div class="artist-name">Pandit Bhimsen Joshi</div><div class="artist-detail">Kirana Gharana, vocal — Durga was a favourite in his school demonstrations; his 52-minute recording is considered essential for understanding the raga's full development</div></div>
+    </div>
+    <div class="artist-card">
+      <div class="artist-initial">RS</div>
+      <div><div class="artist-name">Ravi Shankar &amp; Ali Akbar Khan</div><div class="artist-detail">Jugalbandi (1984, San Francisco) — "a joyous jugalbandi in Jhaptal"; recommended for understanding Durga's vitality in an instrumental context</div></div>
+    </div>
+    <div class="artist-card">
+      <div class="artist-initial">BK</div>
+      <div><div class="artist-name">Ustad Bismillah Khan</div><div class="artist-detail">Shehnai — "takes the raga back to its folksy roots" (Ragajunglism); the shehnai's nasal tone brings out Durga's folk connection beautifully</div></div>
+    </div>
+  </div>
+
+  <!-- 18 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">18</span><span class="section-title">Practice Schedule <span class="section-title-hindi">(अभ्यास क्रम)</span></span></div>
+    <div class="col-card" style="margin-bottom:1rem">
+      <h4>Daily Practice — 45 Minutes</h4>
+      <ul>
+        <li><strong>0–5 min:</strong> Tanpura setup; establish Ma as the gravitational centre of the drone</li>
+        <li><strong>5–10 min:</strong> Alankar 1 — core aaroh–avroh; focus on Pa alpa and vakra Dha in descent</li>
+        <li><strong>10–15 min:</strong> Alankars 2–4 — step patterns; Sa Re Dha Sa signature phrase</li>
+        <li><strong>15–25 min:</strong> Alaap phrases 1–3; Sa Re Dha Sa opening; Ma as resting note</li>
+        <li><strong>25–35 min:</strong> Alaap phrases 4–6; double Dha phrases; taar exploration; full resolution</li>
+        <li><strong>35–40 min:</strong> Sargam geet with Teentaal</li>
+        <li><strong>40–45 min:</strong> Taans — seedhi, then vakra with Pa Dha Ma pattern</li>
+      </ul>
+    </div>
+    <table class="week-table">
+      <tr><th>Day</th><th>Focus</th></tr>
+      <tr><td>Monday</td><td>Alankars; Pa alpa rule in descent; no Ga or Ni anywhere — confirm accuracy</td></tr>
+      <tr><td>Tuesday</td><td>Alaap phrases 1–3; Sa Re .Dha Sa signature phrase; Ma as primary resting note</td></tr>
+      <tr><td>Wednesday</td><td>Alaap phrases 4–6; double Dha (D D S'; S' D D M) and vakra Pa Dha Ma pattern</td></tr>
+      <tr><td>Thursday</td><td>Sargam geet with taal; correct placement of vakra phrases in rhythmic context</td></tr>
+      <tr><td>Friday</td><td>Bandish "Sakhi Mori Rum Jhum" sthai — learn and memorise</td></tr>
+      <tr><td>Saturday</td><td>Bandish antara + full composition; compare with Bhupali (Ga vs Ma)</td></tr>
+      <tr><td>Sunday</td><td>Listening — Amjad Ali Khan sarod; Bhimsen Joshi vocal; compare Durga with Bhupali and Malhar</td></tr>
+    </table>
+  </div>
+
+  <!-- 19 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">19</span><span class="section-title">Common Mistakes to Avoid</span></div>
+    <table class="mistake-table">
+      <tr><th>Mistake</th><th>Correction</th></tr>
+      <tr><td>Using Ga or Ni</td><td>Both Gandhar and Nishad are strictly varjit (forbidden) in Durga. Any appearance of Ga or Ni immediately destroys the raga's identity. There is no exception to this rule.</td></tr>
+      <tr><td>Using Teevra Ma (F♯)</td><td>Durga is a Bilawal thaat raga — all-shuddha. The teevra Madhyam (F♯) must never appear. This would shift the raga into the Kalyan family entirely.</td></tr>
+      <tr><td>Resting on Pa in the avroh</td><td>Pa is alpa (transient) in the descending scale — it is passed through, never lingered on. Resting on Pa in descent gives the raga a completely wrong shape. The nyaas swaras are Sa, Ma, and Dha — not Pa.</td></tr>
+      <tr><td>Skipping the vakra Dha pattern</td><td>The Pa Dha Ma vakra movement in descent is idiosyncratic to Durga. Not using it makes a descending phrase sound generic. Similarly, the double Dha phrase (D D M) is characteristic and should appear regularly.</td></tr>
+      <tr><td>Not using the Sa Re Dha Sa phrase</td><td>This is Durga's most identifying single phrase. Its absence makes the raga sound like a scale exercise rather than Raga Durga. Practise it until it appears naturally in alaap and taan.</td></tr>
+      <tr><td>Confusing with Bhupali</td><td>Bhupali uses Ga; Durga uses Ma. If Ga appears, it is Bhupali. If Ma appears without Ga, it is Durga. The two ragas are also in different thaats (Kalyan vs Bilawal) and different time slots (evening vs night).</td></tr>
+      <tr><td>Confusing with Malhar</td><td>Same notes as Durga (Sa Re Ma Pa Dha) but completely different treatment. Malhar de-emphasises Re; Durga features Re prominently. Listen carefully to the Sa Re .Dha Sa phrase — this is Durga's signature; it does not appear in Malhar.</td></tr>
+    </table>
+  </div>
+
+  <!-- 20 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">20</span><span class="section-title">Glossary of Key Terms</span></div>
+    <div class="glossary-grid">
+      <div class="gloss-item"><strong>Audav–Audav</strong>Jati: 5 notes in both aaroh and avroh — Durga's pentatonic structure</div>
+      <div class="gloss-item"><strong>Alpa Swara</strong>A note used sparingly, as a passing note — Pa is alpa in Durga's avroh</div>
+      <div class="gloss-item"><strong>Vakra</strong>Oblique/zigzag movement — Pa Dha Ma in Durga's descent is vakra (Pa moves up to Dha before descending to Ma)</div>
+      <div class="gloss-item"><strong>Nyaas Swara</strong>Primary resting notes — Sa, Ma, and Dha are Durga's three nyaas swaras</div>
+      <div class="gloss-item"><strong>Varjit Swara</strong>Forbidden/omitted notes — Ga and Ni in Durga</div>
+      <div class="gloss-item"><strong>Vadi</strong>Most important note — Ma (Madhyam) in Durga</div>
+      <div class="gloss-item"><strong>Samvadi</strong>Second most important note — Sa (Shadaj) in Durga</div>
+      <div class="gloss-item"><strong>Purvanga-pradhan</strong>A raga with centre of gravity in the lower half (Sa–Pa) — Durga is purvanga-pradhan</div>
+      <div class="gloss-item"><strong>Shuddha Saveri</strong>Carnatic equivalent of Durga — same notes but different sancharas and treatment</div>
+      <div class="gloss-item"><strong>Teevra Ma</strong>Sharpened Madhyam (F♯) — strictly forbidden in Durga (Bilawal thaat)</div>
+      <div class="gloss-item"><strong>Veer Rasa</strong>Heroic strength — one of Durga's primary rasas, derived from the warrior goddess</div>
+      <div class="gloss-item"><strong>Prahar</strong>3-hour time period — Durga: 2nd prahar of night (9 PM–12 AM)</div>
+    </div>
+  </div>
+
+  <!-- 21 -->
+  <div class="section">
+    <div class="section-header"><span class="section-number">21</span><span class="section-title">Summary at a Glance</span></div>
+    <div class="summary-grid">
+      <div class="summary-card"><h4>Identity</h4><p>Thaat: Bilawal<br>Jati: Audav–Audav<br>Time: Night · 9 PM–12 AM<br>Named for Maa Durga</p></div>
+      <div class="summary-card"><h4>Notes</h4><p>Sa <span style="color:var(--blue)">Re</span> <span style="color:var(--saf)">Ma</span> Pa <span style="color:var(--teal)">Dha</span><br>All 5 notes shuddha<br>Ga + Ni absent; Pa alpa in avroh<br>Scale: C D F G A</p></div>
+      <div class="summary-card"><h4>Emphasis</h4><p>Vadi: Ma (Madhyam)<br>Samvadi: Sa<br>Nyaas: Sa, Ma, Dha<br>Signature: Sa Re .Dha Sa</p></div>
+      <div class="summary-card"><h4>Character</h4><p>Veer — heroic strength<br>Bhakti — devotion<br>Vakra Dha in avroh<br>Double-Dha phrases</p></div>
+      <div class="summary-card"><h4>Related</h4><p>Bhupali (same thaat family)<br>Malhar (same notes!)<br>Shuddha Saveri (Carnatic)<br>Jaldhar Kedar (compound)</p></div>
+      <div class="summary-card"><h4>Key rules</h4><p>No Ga, No Ni — ever<br>No Teevra Ma — ever<br>Pa alpa in avroh only<br>Pa Dha Ma = vakra descent</p></div>
+    </div>
+  </div>
+
+  <div class="ornament">✦ &nbsp; ✦ &nbsp; ✦</div>
+  <p style="text-align:center;font-size:0.78rem;color:var(--saf-dim);font-style:italic">Compiled with verified sources: Wikipedia, Ragajunglism, Grokipedia, Songs of Yore, Riyaz App, Sangeetapriya, RagaMelody<br>Notes for Hindustani Classical Music practice. Supplement with guru's guidance and regular listening.</p>
+
+</div>
+</body>
+</html>

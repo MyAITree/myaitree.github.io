@@ -1,0 +1,637 @@
+
+<style>
+:root{
+  --g:#B8860B;--gl:#F5E6A0;--gd:#8B6914;--gs:rgba(184,134,11,.3);--gsb:rgba(184,134,11,.5);
+  --pu:#5A2D8C;--pul:#EDE8F8;--pus:rgba(90,45,140,.35);
+  --tl:#0F7B6C;--tll:#DAF2EE;--tls:rgba(15,123,108,.35);
+}
+body{font-family:var(--font-sans);font-size:15px;line-height:1.7;color:var(--color-text-primary);}
+.page{max-width:860px;margin:0 auto;padding:1.5rem 1.5rem 3rem;}
+
+.hero{text-align:center;padding:2.5rem 1rem 2rem;border-bottom:0.5px solid var(--gsb);margin-bottom:2.5rem;position:relative;}
+.hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:200px;height:2px;background:linear-gradient(90deg,transparent,var(--g),transparent);}
+.hero-sub{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gd);margin-bottom:.4rem;}
+.hero-name{font-family:var(--font-serif);font-size:3rem;font-weight:400;color:var(--color-text-primary);line-height:1.1;margin-bottom:.35rem;}
+.hero-name em{color:var(--g);font-style:italic;}
+.hero-tag{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gd);margin-bottom:1.2rem;}
+.hero-quote{font-family:var(--font-serif);font-style:italic;font-size:1rem;color:var(--color-text-secondary);max-width:600px;margin:0 auto;line-height:1.65;}
+.hero-quote cite{display:block;font-size:12px;font-style:normal;color:var(--color-text-tertiary);margin-top:.4rem;}
+
+.sec{margin-bottom:2.5rem;}
+.sec-hdr{display:flex;align-items:baseline;gap:.75rem;border-bottom:0.5px solid var(--color-border-tertiary);padding-bottom:.35rem;margin-bottom:1.25rem;}
+.sec-num{font-family:var(--font-mono);font-size:11px;color:var(--gd);letter-spacing:.1em;}
+.sec-title{font-size:1.15rem;font-weight:500;color:var(--color-text-primary);}
+.sec-hi{font-size:.85rem;color:var(--color-text-secondary);font-style:italic;font-weight:400;}
+p{font-size:.92rem;margin-bottom:.6rem;color:var(--color-text-primary);}
+
+.callout{background:var(--gl);border:0.5px solid var(--gsb);border-left:3px solid var(--g);padding:.7rem 1rem;font-size:.85rem;color:var(--gd);margin:.75rem 0;font-style:italic;}
+
+.ref-table{width:100%;border-collapse:collapse;font-size:.88rem;}
+.ref-table tr{border-bottom:0.5px solid var(--color-border-tertiary);}
+.ref-table tr:last-child{border-bottom:none;}
+.ref-table td{padding:.55rem .65rem;vertical-align:top;}
+.ref-table td:first-child{font-family:var(--font-mono);font-size:11px;color:var(--gd);width:200px;padding-top:.65rem;}
+.badge{display:inline-block;padding:1px 9px;border-radius:20px;font-size:12px;font-family:var(--font-mono);margin:1px;}
+.b-g{background:var(--gl);color:var(--gd);border:0.5px solid var(--gsb);}
+.b-t{background:var(--tll);color:var(--tl);border:0.5px solid var(--tls);}
+.b-p{background:var(--pul);color:var(--pu);border:0.5px solid var(--pus);}
+.b-x{background:var(--color-background-secondary);color:var(--color-text-tertiary);border:0.5px solid var(--color-border-tertiary);}
+
+.swar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:1rem 0;}
+.sw{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.6rem .3rem;text-align:center;background:var(--color-background-secondary);}
+.sw.vadi{background:var(--gl);border-color:var(--gsb);}
+.sw.samv{background:#F0EAA0;border-color:rgba(184,134,11,.45);}
+.sw.te{background:var(--tll);border-color:var(--tls);}
+.sw-nm{font-family:var(--font-mono);font-size:10px;color:var(--color-text-secondary);}
+.sw-ab{font-size:1.1rem;font-weight:500;color:var(--color-text-primary);margin:2px 0;}
+.sw.vadi .sw-ab{color:var(--g);}
+.sw.samv .sw-ab{color:var(--gd);}
+.sw.te .sw-ab{color:var(--tl);}
+.sw-tag{font-size:10px;font-family:var(--font-mono);margin-top:2px;color:inherit;}
+
+.notation{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-left:3px solid var(--g);padding:.85rem 1.1rem;font-family:var(--font-mono);font-size:.82rem;line-height:2;margin:.65rem 0;color:var(--color-text-primary);}
+.notation .lbl{font-size:10px;color:var(--gd);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.2rem;display:block;}
+.hi{color:var(--g);font-weight:500;}
+.pu{color:var(--pu);font-weight:500;}
+.tl{color:var(--tl);font-weight:500;}
+.ma{color:var(--g);font-weight:700;font-size:.9rem;}
+.dim{color:var(--color-text-tertiary);}
+
+.oct-row{display:flex;gap:0;margin:.4rem 0;border-radius:var(--border-radius-md);overflow:hidden;border:0.5px solid var(--color-border-tertiary);}
+.oc{flex:1;padding:.5rem .25rem;text-align:center;font-family:var(--font-mono);font-size:12px;border-right:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);background:var(--color-background-secondary);}
+.oc:last-child{border-right:none;}
+.oc.v{background:var(--gl);color:var(--g);font-weight:500;}
+.oc.s{background:#F0EAA0;color:var(--gd);font-weight:500;}
+.oc.t{background:var(--tll);color:var(--tl);font-weight:500;}
+
+.flow{display:flex;align-items:center;flex-wrap:wrap;gap:0;margin:1rem 0;}
+.fn{padding:.45rem .65rem;text-align:center;border:0.5px solid var(--color-border-tertiary);font-family:var(--font-mono);font-size:.8rem;background:var(--color-background-secondary);color:var(--color-text-primary);}
+.fn:first-child{border-radius:var(--border-radius-md) 0 0 var(--border-radius-md);}
+.fn:last-child{border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;}
+.fn.fv{background:var(--gl);color:var(--g);border-color:var(--gsb);font-weight:500;}
+.fn.fs{background:#F0EAA0;color:var(--gd);border-color:rgba(184,134,11,.45);font-weight:500;}
+.fn.ft{background:var(--tll);color:var(--tl);border-color:var(--tls);font-weight:500;}
+.fn.fp{background:var(--pul);color:var(--pu);border-color:var(--pus);font-weight:500;}
+.fn .nl{font-size:10px;color:inherit;opacity:.72;}
+.fn .nn{font-size:.95rem;}
+.fa-arr{font-size:.95rem;color:var(--gsb);padding:0 2px;}
+
+.aln-num{font-family:var(--font-mono);font-size:10px;color:var(--gd);margin-bottom:2px;letter-spacing:.08em;}
+.taan-lbl{font-size:11px;font-family:var(--font-mono);color:var(--gd);text-transform:uppercase;letter-spacing:.08em;margin-top:.7rem;margin-bottom:2px;}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0;}
+.card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:.9rem 1rem;background:var(--color-background-secondary);}
+.card h4{font-size:1rem;font-weight:500;margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:0.5px solid var(--color-border-tertiary);}
+.card ul{list-style:none;font-size:.85rem;}
+.card ul li{padding:.2rem 0;border-bottom:0.5px solid var(--color-border-tertiary);}
+.card ul li:last-child{border-bottom:none;}
+.card ul li::before{content:'◆';font-size:8px;color:var(--g);margin-right:6px;vertical-align:middle;}
+
+.rasa-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:1rem 0;}
+.rasa{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.8rem .9rem;background:var(--color-background-secondary);}
+.rasa-t{font-size:.9rem;font-weight:500;color:var(--gd);margin-bottom:.25rem;}
+.rasa-d{font-size:.82rem;color:var(--color-text-secondary);line-height:1.55;}
+
+.prahar-row{display:flex;border-radius:var(--border-radius-md);overflow:hidden;border:0.5px solid var(--color-border-tertiary);margin:1rem 0;}
+.pc{flex:1;padding:.6rem .4rem;text-align:center;border-right:0.5px solid var(--color-border-tertiary);font-size:11px;font-family:var(--font-mono);color:var(--color-text-tertiary);background:var(--color-background-secondary);}
+.pc:last-child{border-right:none;}
+.pc.hl{background:var(--gl);color:var(--gd);font-weight:500;}
+.pc .pt{font-size:10px;display:block;margin-bottom:2px;}
+
+.bandish-block{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin:1rem 0;}
+.bh{background:var(--gl);padding:.55rem .9rem;font-family:var(--font-mono);font-size:11px;color:var(--gd);letter-spacing:.08em;border-bottom:0.5px solid var(--gsb);}
+.bb{padding:.65rem .9rem;background:var(--color-background-secondary);}
+.bl{font-size:10px;font-family:var(--font-mono);color:var(--gd);text-transform:uppercase;letter-spacing:.08em;margin:.4rem 0 .15rem;}
+
+.cmp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:1rem 0;}
+.cmp{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.7rem .8rem;background:var(--color-background-secondary);}
+.cmp-name{font-size:.88rem;font-weight:500;color:var(--color-text-primary);margin-bottom:3px;}
+.cmp-notes{font-family:var(--font-mono);font-size:11px;color:var(--gd);margin-bottom:3px;}
+.cmp-d{font-size:.78rem;color:var(--color-text-secondary);}
+
+.tbl{width:100%;border-collapse:collapse;font-size:.85rem;}
+.tbl th{font-family:var(--font-mono);font-size:10px;color:var(--gd);text-align:left;padding:.3rem .65rem;border-bottom:0.5px solid var(--gsb);background:var(--gl);}
+.tbl td{padding:.5rem .65rem;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl td:first-child{font-style:italic;}
+
+.mistake-tbl{width:100%;border-collapse:collapse;font-size:.85rem;}
+.mistake-tbl th{font-family:var(--font-mono);font-size:10px;color:var(--gd);text-align:left;padding:.3rem .65rem;border-bottom:0.5px solid var(--gsb);background:var(--gl);}
+.mistake-tbl td{padding:.55rem .65rem;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top;}
+.mistake-tbl tr:last-child td{border-bottom:none;}
+.mistake-tbl td:first-child{color:#993C1D;font-style:italic;width:38%;}
+
+.art-card{display:flex;align-items:flex-start;gap:.7rem;padding:.65rem 0;border-bottom:0.5px solid var(--color-border-tertiary);}
+.art-card:last-child{border-bottom:none;}
+.art-init{width:36px;height:36px;border-radius:50%;background:var(--gl);border:0.5px solid var(--gsb);display:flex;align-items:center;justify-content:center;font-size:.85rem;color:var(--gd);font-weight:500;flex-shrink:0;}
+.art-name{font-weight:500;font-size:.88rem;color:var(--color-text-primary);}
+.art-d{font-size:.78rem;color:var(--color-text-secondary);}
+
+.gl-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin:.65rem 0;}
+.gl{padding:.45rem .65rem;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-secondary);font-size:.82rem;}
+.gl strong{font-family:var(--font-mono);font-size:11px;color:var(--gd);display:block;margin-bottom:1px;}
+
+.sum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:1rem 0;}
+.sc{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.9rem;background:var(--color-background-secondary);}
+.sc h4{font-family:var(--font-mono);font-size:10px;color:var(--gd);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.4rem;}
+.sc p{font-size:.82rem;line-height:1.6;color:var(--color-text-primary);margin-bottom:0;}
+
+.week-tbl{width:100%;border-collapse:collapse;font-size:.85rem;}
+.week-tbl th{font-family:var(--font-mono);font-size:10px;color:var(--gd);text-align:left;padding:.3rem .65rem;border-bottom:0.5px solid var(--gsb);background:var(--gl);}
+.week-tbl td{padding:.5rem .65rem;border-bottom:0.5px solid var(--color-border-tertiary);}
+.week-tbl tr:last-child td{border-bottom:none;}
+.week-tbl td:first-child{font-family:var(--font-mono);font-size:11px;color:var(--gd);width:110px;}
+
+.orn{text-align:center;color:var(--gd);margin:2rem 0 1rem;letter-spacing:.3em;}
+@media(max-width:600px){
+  .two-col,.rasa-grid,.gl-grid,.sum-grid,.cmp-grid{grid-template-columns:1fr;}
+  .swar-grid{grid-template-columns:repeat(4,1fr);}
+  .hero-name{font-size:2.2rem;}
+}
+</style>
+
+<div class="page">
+
+<div class="hero">
+  <div class="hero-sub">Hindustani Classical Music</div>
+  <div class="hero-name">Raga <em>Yaman</em></div>
+  <div class="hero-tag">राग यमन — Comprehensive Practice Notes</div>
+  <blockquote class="hero-quote">
+    "When we use tivra Ma, it is like a prayer of shantha; and whenever we use shuddha Ma, there is a little bit of shringara — relief, tenderness, arrival."
+    <cite>— Ustad Vilayat Khan, on the twin-Ma interaction in Yaman Kalyan</cite>
+  </blockquote>
+</div>
+
+<!-- 01 -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">01</span><span class="sec-title">Parichay <span class="sec-hi">(परिचय)</span></span></div>
+  <p>Raga Yaman (also called Kalyan, Iman, Aiman, Eman; Kalyani in Carnatic music) is one of the most fundamental, most performed, and most beloved ragas in Hindustani classical music. It belongs to the Kalyan Thaat and is a Sampurna raga — all seven notes in both ascent and descent. It is typically among the first ragas taught to beginners, yet every great master of the tradition has performed it throughout their career.</p>
+  <p>Its defining characteristic is the <strong>teevra Madhyam (Ma♯ / F♯)</strong> — the raised fourth. All other notes are shuddha. This single sharpened note gives Yaman its luminous, expansive quality: open, floating, reaching upward. The raga also features the use of <strong>shuddha Ma (F♮) as a relief note</strong> in Yaman Kalyan — a cadential arrival point after the teevra, creating the shringaar quality Vilayat Khan described.</p>
+  <div class="callout">
+    <strong>Yaman, Kalyan, and Yaman Kalyan:</strong> Pure Yaman (Puriya Kalyan) uses only teevra Ma — shuddha Ma is strictly forbidden. Yaman Kalyan (the most commonly performed form) inserts shuddha Ma in specific phrases — typically as a descent cadence <code>Ga Ma♮ Ga Re Sa</code> — while using teevra Ma everywhere else. Most concert renditions, classical recordings, and bandishes labelled "Yaman" are in Yaman Kalyan form. These notes are verified from Parrikar Archive, Ragajunglism, and musicmaster.in.
+  </div>
+</div>
+
+<!-- 02 -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">02</span><span class="sec-title">Quick Reference</span></div>
+  <table class="ref-table">
+    <tr><td>Thaat</td><td><span class="badge b-g">Kalyan</span></td></tr>
+    <tr><td>Jati</td><td>Sampurna–Sampurna (all 7 notes ascending and descending) — standard form. Shadav (6-note) aaroh also cited: .N R G m D N S' omitting Pa.</td></tr>
+    <tr><td>Aaroh</td><td><code><span class="dim">.N</span>  Re  Ga  <span style="color:var(--tl)">m♯</span>  Pa  Dha  Ni  Sā'</code> — begins from lower Ni; teevra Ma throughout</td></tr>
+    <tr><td>Avroh</td><td><code>Sā'  Ni  Dha  Pa  <span style="color:var(--tl)">m♯</span>  Ga  Re  Sā</code> — teevra Ma; shuddha Ma appears in Yaman Kalyan cadences</td></tr>
+    <tr><td>Pakad (पकड़)</td><td><code>.N Re Ga Re , Sa , Pa m♯ Ga , Re , Sa</code></td></tr>
+    <tr><td>Vadi (वादी)</td><td><strong>Ga</strong> (shuddha Gandhar) — the most important, most dwelt-upon note; the emotional anchor</td></tr>
+    <tr><td>Samvadi (संवादी)</td><td><strong>Ni</strong> (shuddha Nishad) — the second most important note; the aaroh begins with Ni</td></tr>
+    <tr><td>Teevra Ma</td><td><span class="badge b-t">Ma♯ = F♯</span> — the defining note; used throughout except in shuddha Ma relief cadences (Yaman Kalyan)</td></tr>
+    <tr><td>Shuddha Ma</td><td>Appears in Yaman Kalyan only as a relief/arrival note: <code>Ga Ma♮ Ga Re Sa</code> — "a little bit of shringara" (Vilayat Khan)</td></tr>
+    <tr><td>Gaayan Samay</td><td>Raat ka Pratham Prahar — <strong>Evening, 6–9 PM</strong>. First notes at sunset; considered suitable for all night but canonically evening.</td></tr>
+    <tr><td>Rasa / Mood</td><td>Shringaar (श्रृंगार) — romantic longing; Shant (शांत) — serenity; Bhakti — devotion; expansive grandeur</td></tr>
+    <tr><td>Carnatic Equivalent</td><td><strong>Kalyani</strong> — 65th Melakarta (Mechakalyani); same scale Sa Ri2 Ga3 Ma2 Pa Dha2 Ni3</td></tr>
+    <tr><td>Western Equivalent</td><td>Lydian Mode — C D E F♯ G A B — the major scale with a raised fourth</td></tr>
+    <tr><td>Related ragas</td><td>Yaman Kalyan (adds shuddha Ma), Bhupali (pentatonic cousin), Kedar, Hameer, Hindol (all Kalyan family)</td></tr>
+  </table>
+</div>
+
+<!-- 03 -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">03</span><span class="sec-title">Swar Vistar <span class="sec-hi">(स्वर विस्तार)</span></span></div>
+  <p>All seven notes used; six are shuddha, one is teevra. Shuddha Ma may appear in Yaman Kalyan as a cadential relief note — never as a resting note in pure Yaman.</p>
+  <div class="swar-grid">
+    <div class="sw"><div class="sw-nm">Shadaj</div><div class="sw-ab">Sa</div><div class="sw-tag">C · fixed</div></div>
+    <div class="sw"><div class="sw-nm">Rishabh</div><div class="sw-ab">Re</div><div class="sw-tag">D♮ · shuddha</div></div>
+    <div class="sw vadi"><div class="sw-nm">Gandhar</div><div class="sw-ab">Ga</div><div class="sw-tag">E♮ · VADI ★</div></div>
+    <div class="sw te"><div class="sw-nm">Madhyam</div><div class="sw-ab">m♯</div><div class="sw-tag">F♯ · TEEVRA ★</div></div>
+    <div class="sw"><div class="sw-nm">Pancham</div><div class="sw-ab">Pa</div><div class="sw-tag">G♮ · fixed</div></div>
+    <div class="sw"><div class="sw-nm">Dhaivat</div><div class="sw-ab">Dha</div><div class="sw-tag">A♮ · shuddha</div></div>
+    <div class="sw samv"><div class="sw-nm">Nishad</div><div class="sw-ab">Ni</div><div class="sw-tag">B♮ · SAMVADI ★</div></div>
+  </div>
+  <p style="font-size:.82rem;color:var(--gd);margin-top:.25rem">With C as Sa: <em>C D E F♯ G A B</em> — the Lydian mode. Vadi Ga in gold; Samvadi Ni in yellow; teevra Ma in teal. The komal Ma (F♮) must never appear in pure Yaman — it belongs to other thaats.</p>
+</div>
+
+<!-- 04 -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">04</span><span class="sec-title">Aaroh–Avroh aur Pakad</span></div>
+  <div class="notation"><span class="lbl">Aaroh (आरोह) — Ascending</span>
+<span class="dim">.Ni</span>  Re  <span class="hi">Ga</span>  <span class="tl">m♯</span>  Pa  Dha  Ni  Sā'
+<span class="dim">(Aaroh begins from lower Ni — .Ni → Re → Ga is the characteristic opening sweep. Pa is sometimes omitted: .N R G m D N S')</span></div>
+  <div class="notation"><span class="lbl">Avroh (अवरोह) — Descending (pure Yaman)</span>
+Sā'  Ni  Dha  Pa  <span class="tl">m♯</span>  <span class="hi">Ga</span>  Re  Sā</div>
+  <div class="notation"><span class="lbl">Avroh cadence — Yaman Kalyan (shuddha Ma relief)</span>
+<span class="hi">Ga</span>  <span class="pu">Ma♮</span>  <span class="hi">Ga</span>  Re  Sā
+<span class="dim">(Ma♮ = shuddha Ma, F♮; appears only in this cadential descent phrase — "a little shringara"; in all other positions teevra m♯)</span></div>
+  <div class="callout">
+    <strong>The aaroh signature:</strong> Yaman's ascent must begin from the lower Ni (.Ni → Re → Ga). Beginning directly from Sa sounds like a scale exercise, not Yaman. The .Ni Re Ga opening sweep — with a smooth meend — is the raga's melodic signature and should be felt in every alaap phrase.
+  </div>
+  <div class="notation"><span class="lbl">Pakad (पकड़)</span>
+<span class="dim">.Ni</span>  Re  <span class="hi">Ga</span>  Re  ,  Sa  ,  Pa  <span class="tl">m♯</span>  <span class="hi">Ga</span>  ,  Re  ,  Sa
+<span class="dim">(the opening .N R G R establishes the raga; Pa m Ga Re Sa is the descent cadence; Ga is visited repeatedly)</span></div>
+  <div class="notation"><span class="lbl">Key characteristic phrases (to practise daily)</span>
+<span class="dim">.N</span>  R  <span class="hi">G</span>  R  S  ,  R  <span class="hi">G</span>  <span class="tl">m♯</span>  <span class="hi">G</span>  R  S  ,  <span class="hi">G</span>  <span class="tl">m♯</span>  Dha  Ni  S'  ,  S'  Ni  Dha  <span class="tl">m♯</span>  <span class="hi">G</span>  R  S
+<span class="dim">(these four phrase cells define Yaman; memorise them before alankars)</span></div>
+</div>
+
+<!-- 05 -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">05</span><span class="sec-title">Saptak Vistar <span class="sec-hi">(सप्तक विस्तार)</span></span></div>
+  <p style="font-size:.82rem;color:var(--color-text-secondary);margin-bottom:.4rem">Mandra Saptak (lower octave)</p>
+  <div class="oct-row">
+    <div class="oc">.Sa</div><div class="oc">.Re</div><div class="oc v">.Ga ★</div><div class="oc t">.m♯</div><div class="oc">.Pa</div><div class="oc">.Dha</div><div class="oc s">.Ni ★</div>
+  </div>
+  <p style="font-size:.82rem;color:var(--color-text-secondary);margin-bottom:.4rem">Madhya Saptak (middle octave)</p>
+  <div class="oct-row">
+    <div class="oc">Sa</div><div class="oc">Re</div><div class="oc v">Ga ★</div><div class="oc t">m♯</div><div class="oc">Pa</div><div class="oc">Dha</div><div class="oc s">Ni ★</div>
+  </div>
+  <p style="font-size:.82rem;color:var(--color-text-secondary);margin-bottom:.4rem">Taar Saptak (upper octave)</p>
+  <div class="oct-row">
+    <div class="oc">Sa'</div><div class="oc">Re'</div><div class="oc v">Ga' ★</div><div class="oc t">m♯'</div><div class="oc">Pa'</div><div class="oc">Dha'</div><div class="oc s">Ni'</div>
+  </div>
+  <p style="font-size:.8rem;color:var(--gd);margin-top:.35rem">Vadi Ga in gold across all octaves. Samvadi Ni in yellow. Teevra Ma in teal. Yaman roams freely across all three octaves — it is neither purvanga nor uttaranga dominant; it is expansive and unbounded.</p>
+</div>
+
+<!-- 06 -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">06</span><span class="sec-title">Chalan <span class="sec-hi">(चलन)</span></span></div>
+  <p style="font-size:.88rem;font-weight:500;margin-bottom:.4rem">Ascending direction (begins from lower Ni):</p>
+  <div class="flow">
+    <div class="fn fp"><div class="nl">start here</div><div class="nn">.Ni</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn"><div class="nl">shuddha</div><div class="nn">Re</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn fv"><div class="nl">VADI ★</div><div class="nn">Ga</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn ft"><div class="nl">teevra</div><div class="nn">m♯</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn"><div class="nl">shuddha</div><div class="nn">Pa</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn"><div class="nl">shuddha</div><div class="nn">Dha</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn fs"><div class="nl">SAMVADI ★</div><div class="nn">Ni</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn"><div class="nl">taar</div><div class="nn">Sā'</div></div>
+  </div>
+  <p style="font-size:.88rem;font-weight:500;margin:.65rem 0 .4rem">Descending (Ga is the anchor — phrases return to it repeatedly):</p>
+  <div class="flow">
+    <div class="fn"><div class="nl">taar</div><div class="nn">Sā'</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn fs"><div class="nl">SAMVADI</div><div class="nn">Ni</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn"><div class="nl">shuddha</div><div class="nn">Dha</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn ft"><div class="nl">teevra</div><div class="nn">m♯</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn fv"><div class="nl">VADI — rest here</div><div class="nn">Ga ★</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn"><div class="nl">brief</div><div class="nn">Re</div></div>
+    <span class="fa-arr">→</span>
+    <div class="fn"><div class="nl">arrive</div><div class="nn">Sa</div></div>
+  </div>
+  <div class="two-col" style="margin-top:1rem">
+    <div class="card">
+      <h4>Key melodic rules</h4>
+      <ul>
+        <li><strong>Open from .Ni</strong> — aaroh must sweep from lower Ni; never from Sa directly</li>
+        <li><strong>Ga is the vadi and primary nyaas</strong> — every significant phrase resolves to or rests on Ga</li>
+        <li><strong>Ni and Ga create the melodic axis</strong> — the interplay between these two notes defines the raga's identity</li>
+        <li><strong>Teevra m♯ throughout</strong> — pure Yaman never uses shuddha Ma as a resting note</li>
+        <li><strong>Ga m Ga = the defining phrase</strong> — Ga both sides of teevra Ma; use it constantly</li>
+        <li><strong>Pa is lightly treated</strong> — phrases often skip Pa: G m D N S'</li>
+        <li><strong>Smooth meends essential</strong> — Ni → Re and Ga → m♯ are the two critical glides</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Character and feel</h4>
+      <ul>
+        <li>The Lydian mode's "floating" quality is the key — the raised fourth creates perpetual upward yearning</li>
+        <li>Yaman is described as <em>vastly luminous and of infinite possibility</em> — the teevra Ma is its crown</li>
+        <li>Ga as vadi means the raga feels grounded despite the floating Ma♯ — it creates a beautiful tension</li>
+        <li>The .Ni → Re → Ga sweep is one of the most recognisable openings in all of Hindustani music</li>
+        <li>Phrases should feel expansive and searching — not compact; Yaman breathes deeply</li>
+        <li>It is the emperor of the Kalyan family — majestic and comprehensive</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 07 -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">07</span><span class="sec-title">Alankars <span class="sec-hi">(अलंकार)</span></span></div>
+  <p>Practise with tanpura drone. Focus: teevra m♯ throughout; .Ni opening; Ga as primary resting note; smooth meend on Ni → Re and Ga → m♯.</p>
+  <div class="aln-num">ALANKAR 1 — Core aaroh–avroh</div>
+  <div class="notation"><span class="dim">.N</span>  R  <span class="hi">G</span>  <span class="tl">m</span>  P  Dha  Ni  S' | S'  Ni  Dha  P  <span class="tl">m</span>  <span class="hi">G</span>  R  S
+<span class="dim">(m = teevra Ma throughout; .N = lower Ni as the aaroh starting note)</span></div>
+  <div class="aln-num">ALANKAR 2 — Step pattern</div>
+  <div class="notation">S  R  |  R  <span class="hi">G</span>  |  <span class="hi">G</span>  <span class="tl">m</span>  |  <span class="tl">m</span>  P  |  P  Dha  |  Dha  Ni  |  Ni  S'<br>S'  Ni  |  Ni  Dha  |  Dha  P  |  P  <span class="tl">m</span>  |  <span class="tl">m</span>  <span class="hi">G</span>  |  <span class="hi">G</span>  R  |  R  S</div>
+  <div class="aln-num">ALANKAR 3 — Skip pattern</div>
+  <div class="notation">S  <span class="hi">G</span>  |  R  <span class="tl">m</span>  |  <span class="hi">G</span>  P  |  <span class="tl">m</span>  Dha  |  P  Ni  |  Dha  S'<br>S'  Dha  |  Ni  P  |  Dha  <span class="tl">m</span>  |  P  <span class="hi">G</span>  |  <span class="tl">m</span>  R  |  <span class="hi">G</span>  S</div>
+  <div class="aln-num">ALANKAR 4 — Trikhand (groups of 3)</div>
+  <div class="notation"><span class="dim">.N</span>  R  <span class="hi">G</span>  |  R  <span class="hi">G</span>  <span class="tl">m</span>  |  <span class="hi">G</span>  <span class="tl">m</span>  P  |  <span class="tl">m</span>  P  Dha  |  P  Dha  Ni  |  Dha  Ni  S'<br>S'  Ni  Dha  |  Ni  Dha  P  |  Dha  P  <span class="tl">m</span>  |  P  <span class="tl">m</span>  <span class="hi">G</span>  |  <span class="tl">m</span>  <span class="hi">G</span>  R  |  <span class="hi">G</span>  R  S</div>
+  <div class="aln-num">ALANKAR 5 — G m G signature cell (practise daily)</div>
+  <div class="notation"><span class="hi">G</span>  <span class="tl">m</span>  <span class="hi">G</span>  R  S  ,  R  <span class="hi">G</span>  <span class="tl">m</span>  <span class="hi">G</span>  R  S  ,  P  <span class="tl">m</span>  <span class="hi">G</span>  R  S  ,  <span class="dim">.N</span>  R  <span class="hi">G</span>  <span class="tl">m</span>  <span class="hi">G</span>  R  S
+<span class="dim">(G m G = the single most identifying phrase cell in Yaman; commit to muscle memory)</span></div>
+  <div class="aln-num">ALANKAR 6 — Chaukhand (groups of 4)</div>
+  <div class="notation"><span class="dim">.N</span>  R  <span class="hi">G</span>  <span class="tl">m</span>  |  R  <span class="hi">G</span>  <span class="tl">m</span>  P  |  <span class="hi">G</span>  <span class="tl">m</span>  P  Dha  |  <span class="tl">m</span>  P  Dha  Ni  |  P  Dha  Ni  S'<br>S'  Ni  Dha  P  |  Ni  Dha  P  <span class="tl">m</span>  |  Dha  P  <span class="tl">m</span>  <span class="hi">G</span>  |  P  <span class="tl">m</span>  <span class="hi">G</span>  R  |  <span class="tl">m</span>  <span class="hi">G</span>  R  S</div>
+</div>
+
+<!-- 08 -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">08</span><span class="sec-title">Alaap Kramanik <span class="sec-hi">(आलाप क्रमाणिक)</span></span></div>
+  <div class="aln-num">PHRASE 1 — Sthapana (from lower Ni)</div>
+  <div class="notation"><span class="dim">.N</span>  R  <span class="hi">G</span>  –  ,  <span class="hi">G</span>  R  S  –  ,  <span class="dim">.N</span>  R  <span class="hi">G</span>  R  S  –</div>
+  <div class="aln-num">PHRASE 2 — Introducing teevra Ma</div>
+  <div class="notation">R  <span class="hi">G</span>  <span class="tl">m</span>  –  ,  <span class="hi">G</span>  <span class="tl">m</span>  <span class="hi">G</span>  R  –  ,  <span class="dim">.N</span>  R  <span class="hi">G</span>  <span class="tl">m</span>  <span class="hi">G</span>  R  S  –</div>
+  <div class="aln-num">PHRASE 3 — Introducing Pa and Dha</div>
+  <div class="notation"><span class="hi">G</span>  <span class="tl">m</span>  P  –  ,  <span class="tl">m</span>  P  Dha  –  ,  Dha  P  <span class="tl">m</span>  <span class="hi">G</span>  –  ,  <span class="hi">G</span>  <span class="tl">m</span>  <span class="hi">G</span>  R  S  –</div>
+  <div class="aln-num">PHRASE 4 — Introducing Ni and taar Sa</div>
+  <div class="notation">P  Dha  Ni  –  ,  Ni  S'  –  ,  S'  Ni  Dha  <span class="tl">m</span>  <span class="hi">G</span>  R  S  –</div>
+  <div class="aln-num">PHRASE 5 — Taar saptak with Re' and Ga'</div>
+  <div class="notation">Dha  Ni  S'  –  ,  S'  R'  S'  –  ,  S'  R'  <span class="hi">G'</span>  –  ,  <span class="hi">G'</span>  R'  S'  –  ,  S'  Ni  Dha  <span class="tl">m</span>  <span class="hi">G</span>  R  S  –</div>
+  <div class="aln-num">PHRASE 6 — Full resolution (with Yaman Kalyan shuddha Ma cadence)</div>
+  <div class="notation"><span class="dim">.N</span>  R  <span class="hi">G</span>  <span class="tl">m</span>  Dha  Ni  S'  –  ,  <span class="hi">G'</span>  R'  S'  Ni  Dha  <span class="tl">m</span>  <span class="hi">G</span>  <span class="pu">Ma♮</span>  <span class="hi">G</span>  R  S  –
+<span class="dim">(Ma♮ = shuddha Ma in the Yaman Kalyan cadence G Ma♮ G R S — the shringaar arrival moment)</span></div>
+</div>
+
+<!-- 09 -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">09</span><span class="sec-title">Sargam Geet</span></div>
+  <div class="bandish-block">
+    <div class="bh">SARGAM GEET — TEENTAAL (16 beats)</div>
+    <div class="bb">
+      <div class="bl">Sthai</div>
+      <div class="notation" style="margin:.25rem 0">
+        <span class="hi">G</span>  –  <span class="hi">G</span>  R  |  <span class="hi">G</span>  <span class="tl">m</span>  Dha  Ni  |  <span class="hi">G</span>  R  <span class="hi">G</span>  R  |  S  R  S  –<br>
+        <span class="dim">.N</span>  R  –  S  |  –  R  <span class="hi">G</span>  –  |  S'  –  Ni  Dha  |  <span class="tl">m</span>  <span class="hi">G</span>  R  S
+      </div>
+      <div class="bl">Antara</div>
+      <div class="notation" style="margin:.25rem 0">
+        <span class="tl">m</span>  Dha  Ni  S'  |  S'  R'  <span class="hi">G'</span>  R'  |  S'  –  Ni  Dha  |  <span class="tl">m</span>  Dha  Ni  –<br>
+        Ni  S'  R'  <span class="hi">G'</span>  |  R'  S'  Ni  Dha  |  <span class="tl">m</span>  <span class="hi">G</span>  R  <span class="hi">G</span>  |  R  S  –  –
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 10 -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">10</span><span class="sec-title">Bandish <span class="sec-hi">(बंदिश)</span></span></div>
+  <div class="bandish-block">
+    <div class="bh">BANDISH 1 · "Eri Aali Piya Bin" — TEENTAAL (vilambit) — Agra Gharana</div>
+    <div class="bb">
+      <p style="font-size:.82rem;color:var(--color-text-secondary);margin-bottom:.4rem">The most widely taught and performed bandish in Yaman — standard for beginners. A woman expresses restlessness and yearning without her beloved. Pandit Bhimsen Joshi's paired recordings of "piyabina ratiya" (Jhaptaal) and "eri aali piyabina" are considered definitive by the Parrikar Archive.</p>
+      <div class="bl">Sthai</div>
+      <div class="notation" style="margin:.25rem 0">
+        E–ri  a–a–li  |  pi–ya  bin  –  |  –  –  –  –  |  –  –  –  –<br>
+        <span class="hi">G</span>  –  <span class="hi">G</span>  R  |  <span class="hi">G</span>  <span class="tl">m</span>  P  –  |  <span class="hi">G</span>  R  S  –  |  –  –  –  –
+      </div>
+      <div class="bl">Antara</div>
+      <div class="notation" style="margin:.25rem 0">
+        <span class="tl">m</span>  Dha  Ni  S'  |  S'  R'  <span class="hi">G'</span>  R'  |  S'  Ni  Dha  <span class="tl">m</span>  |  <span class="hi">G</span>  R  S  –
+      </div>
+    </div>
+  </div>
+  <div class="bandish-block">
+    <div class="bh">BANDISH 2 · "Piya Ki Najariya" — TEENTAAL (drut) — Raag Hindustani</div>
+    <div class="bb">
+      <p style="font-size:.82rem;color:var(--color-text-secondary);margin-bottom:.4rem">A drut (fast tempo) khayal — the singer celebrates her lover's magical, love-filled gaze. One of the two standard Yaman bandishes taught at the beginner stage (after "Eri Aali").</p>
+      <div class="bl">Sthai</div>
+      <div class="notation" style="margin:.25rem 0">
+        Pi–ya  ki  |  na–ja–ri–ya  |  jaa–du  bha–ri  |  –  –  –  –<br>
+        <span class="hi">G</span>  <span class="tl">m</span>  |  <span class="hi">G</span>  R  <span class="hi">G</span>  <span class="tl">m</span>  |  P  Dha  <span class="hi">G</span>  R  |  S  –  –  –
+      </div>
+    </div>
+  </div>
+  <div class="bandish-block">
+    <div class="bh">BANDISH 3 · "Shyam Bajaye Aaj Muraliya" — TEENTAAL — widely cited by Bhimsen Joshi</div>
+    <div class="bb">
+      <p style="font-size:.82rem;color:var(--color-text-secondary);margin-bottom:.4rem">A Krishna bandish widely performed by Pandit Bhimsen Joshi — "Shyam plays the flute today." Cited in the ragasphere.com analysis as exemplifying how Bhimsen-ji takes the mukhda "in almost a dozen different ways."</p>
+      <div class="bl">Sthai</div>
+      <div class="notation" style="margin:.25rem 0">
+        Shyam  ba–jaye  |  aaj  mu–ra–li–ya  |  –  –  –  –  |  –  –  –  –<br>
+        <span class="dim">.N</span>  R  <span class="hi">G</span>  <span class="tl">m</span>  |  Dha  Ni  S'  <span class="hi">G'</span>  |  R'  S'  Ni  Dha  |  <span class="tl">m</span>  <span class="hi">G</span>  R  S
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 11 -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">11</span><span class="sec-title">Taan Prakar <span class="sec-hi">(तान प्रकार)</span></span></div>
+  <div class="callout">All taans must maintain teevra m♯ throughout (except the Yaman Kalyan shuddha Ma cadence). Komal Ma (F♮) is forbidden as a resting note. Aaroh taans must begin from lower .Ni or from within the scale, not from Sa directly.</div>
+  <div class="taan-lbl">Seedhi taan (straight)</div>
+  <div class="notation"><span class="dim">.N</span>  R  <span class="hi">G</span>  <span class="tl">m</span>  P  Dha  Ni  S' | S'  Ni  Dha  P  <span class="tl">m</span>  <span class="hi">G</span>  R  S</div>
+  <div class="taan-lbl">Vakra taan (G m G characteristic)</div>
+  <div class="notation">S  R  <span class="hi">G</span>  R  <span class="hi">G</span>  <span class="tl">m</span>  <span class="hi">G</span>  <span class="tl">m</span>  P  <span class="tl">m</span>  P  Dha  P  Dha  Ni  S'<br>S'  Ni  Dha  Ni  Dha  P  Dha  P  <span class="tl">m</span>  P  <span class="tl">m</span>  <span class="hi">G</span>  <span class="tl">m</span>  <span class="hi">G</span>  R  S</div>
+  <div class="taan-lbl">Gamak taan</div>
+  <div class="notation">S–R–<span class="hi">G</span>–<span class="tl">m</span>–P–Dha–Ni–S'  <span class="dim">(with bounce; teevra m throughout)</span></div>
+  <div class="taan-lbl">Sapat taan (fast)</div>
+  <div class="notation"><span class="dim">.N</span>  R  <span class="hi">G</span>  <span class="tl">m</span>  P  Dha  Ni  S'  S'  Ni  Dha  P  <span class="tl">m</span>  <span class="hi">G</span>  R  S  <span class="dim">(continuous)</span></div>
+  <div class="taan-lbl">G m G Signature taan (practise first)</div>
+  <div class="notation"><span class="dim">.N</span>  R  <span class="hi">G</span>  <span class="tl">m</span>  <span class="hi">G</span>  R  S  ,  R  <span class="hi">G</span>  <span class="tl">m</span>  <span class="hi">G</span>  <span class="tl">m</span>  P  ,  P  <span class="tl">m</span>  <span class="hi">G</span>  <span class="tl">m</span>  <span class="hi">G</span>  R  S  <span class="dim">(Ga both sides of m♯)</span></div>
+  <div class="taan-lbl">Yaman Kalyan cadential taan (with shuddha Ma)</div>
+  <div class="notation"><span class="hi">G</span>  <span class="tl">m</span>  Dha  Ni  S'  Ni  Dha  <span class="tl">m</span>  <span class="hi">G</span>  <span class="pu">Ma♮</span>  <span class="hi">G</span>  R  S  <span class="dim">(the shringaar arrival via shuddha Ma — end every alaap section with this)</span></div>
+</div>
+
+<!-- 12 -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">12</span><span class="sec-title">Yaman and the Kalyan Family</span></div>
+  <div class="cmp-grid">
+    <div class="cmp">
+      <div class="cmp-name">Yaman (pure)</div>
+      <div class="cmp-notes">.N R G m P D N S'</div>
+      <div class="cmp-d">Only teevra Ma. Vadi: Ga. Samvadi: Ni. Shuddha Ma forbidden. Evening. The "emperor of Kalyan."</div>
+    </div>
+    <div class="cmp">
+      <div class="cmp-name">Yaman Kalyan</div>
+      <div class="cmp-notes">Same + shuddha Ma cadences</div>
+      <div class="cmp-d">Adds shuddha Ma as relief/arrival (G Ma♮ G R S). Most performed concert form. Parrikar notes this is what most artists mean by "Yaman."</div>
+    </div>
+    <div class="cmp">
+      <div class="cmp-name">Bhupali</div>
+      <div class="cmp-notes">S R G P D S' (no Ma, no Ni)</div>
+      <div class="cmp-d">Pentatonic cousin. Kalyan thaat. Vadi: Ga (same). Evening. Serene and simpler. Omits Ma entirely — contrast with Yaman's teevra Ma as defining feature.</div>
+    </div>
+    <div class="cmp">
+      <div class="cmp-name">Kedar</div>
+      <div class="cmp-notes">S M m P D N S'</div>
+      <div class="cmp-d">Both Ma variants. Vadi: shuddha Ma (opposite to Yaman where Ga is vadi). Highly vakra. Evening. The defining meend D P m P M distinguishes it.</div>
+    </div>
+    <div class="cmp">
+      <div class="cmp-name">Kalyani (Carnatic)</div>
+      <div class="cmp-notes">S R2 G3 M2 P D2 N3 S'</div>
+      <div class="cmp-d">The exact Carnatic equivalent of Yaman — 65th Melakarta. Same scale; different ornament system, gamaka, and emotional treatment.</div>
+    </div>
+    <div class="cmp">
+      <div class="cmp-name">Yaman vs Kalyan (older thaat)</div>
+      <div class="cmp-notes">Kalyan starts S R G</div>
+      <div class="cmp-d">Kalyan uses S R G in aaroh; Yaman opens from .N R G. Most film songs called "Yaman" use S R G and are technically Kalyan. The .N opening distinguishes pure Yaman.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 13 -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">13</span><span class="sec-title">Rasa aur Bhaav <span class="sec-hi">(रस और भाव)</span></span></div>
+  <div class="rasa-grid">
+    <div class="rasa"><div class="rasa-t">Shringaar — romantic grandeur</div><div class="rasa-d">The primary rasa — not the aching separation of Bageshri or the folk festivity of Kafi, but a grand, luminous romantic longing. Vast and reaching, like the evening sky itself expanding into night.</div></div>
+    <div class="rasa"><div class="rasa-t">Shant — serene elevation</div><div class="rasa-d">The teevra Ma creates a floating, suspended quality — serene but always reaching. The raga's calm is not passive but expansive: the peace of open sky, not closed room.</div></div>
+    <div class="rasa"><div class="rasa-t">Bhakti — devotional surrender</div><div class="rasa-d">"When we use teevra Ma, it is like a prayer of shantha" (Vilayat Khan). The sharpened fourth creates an upward pull — spiritually, this is the quality of prayer: reaching beyond the natural toward the divine.</div></div>
+    <div class="rasa"><div class="rasa-t">Prakriti — the golden hour</div><div class="rasa-d">Yaman is dusk made music — the exact moment the sky turns from gold to indigo. Expansive, complete, and suffused with the bittersweet feeling of a perfect day ending.</div></div>
+  </div>
+</div>
+
+<!-- 14 -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">14</span><span class="sec-title">Samay Chakra <span class="sec-hi">(समय चक्र)</span></span></div>
+  <div class="prahar-row">
+    <div class="pc"><span class="pt">6–9 AM</span>Morning</div>
+    <div class="pc"><span class="pt">9 AM–12 PM</span>Late morning</div>
+    <div class="pc"><span class="pt">12–3 PM</span>Afternoon</div>
+    <div class="pc"><span class="pt">3–6 PM</span>Late afternoon</div>
+    <div class="pc hl"><span class="pt">6–9 PM</span>★ YAMAN ★</div>
+    <div class="pc"><span class="pt">9 PM–12 AM</span>Night</div>
+    <div class="pc"><span class="pt">12–3 AM</span>Late night</div>
+    <div class="pc"><span class="pt">3–6 AM</span>Pre-dawn</div>
+  </div>
+  <p>Yaman is canonically the evening raga — first prahar of the night (6–9 PM). In practice it is considered suitable for all night performance: "Yaman ragas are considered suitable to play at any time of the day, but they are traditionally performed in the evening." The raga's mood — expansive, luminous, neither anxious nor sleepy — is perfectly mapped to the transition from day to night.</p>
+</div>
+
+<!-- 15 -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">15</span><span class="sec-title">Carnatic Connection — Kalyani</span></div>
+  <table class="tbl">
+    <tr><th>Feature</th><th>Yaman (Hindustani)</th><th>Kalyani (Carnatic)</th></tr>
+    <tr><td>Notes</td><td>Sa Re Ga Ma♯ Pa Dha Ni</td><td>Sa Ri2 Ga3 Ma2 Pa Dha2 Ni3</td></tr>
+    <tr><td>Scale</td><td>C D E F♯ G A B (Lydian mode)</td><td>Same scale; 65th Melakarta (Mechakalyani)</td></tr>
+    <tr><td>Vadi</td><td>Ga (Gandhar)</td><td>Prominent notes vary by context; Ma2 central</td></tr>
+    <tr><td>Time</td><td>Evening 6–9 PM (canonical)</td><td>All times — very widely performed</td></tr>
+    <tr><td>Treatment</td><td>Teevra Ma throughout; shuddha Ma as relief (Yaman Kalyan); .Ni opening</td><td>Different gamaka and ornament system; different sancharas</td></tr>
+    <tr><td>Famous works</td><td>Eri Aali Piya Bin; Shyam Bajaye Muraliya</td><td>Kritis by Tyagaraja, Dikshitar; Yamunakalyani variant</td></tr>
+  </table>
+</div>
+
+<!-- 16 -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">16</span><span class="sec-title">Film Songs based on Yaman</span></div>
+  <table class="tbl">
+    <tr><th>Song</th><th>Film</th><th>Year</th><th>Singer / MD</th></tr>
+    <tr><td>Eri Aali Piya Bin</td><td>Raag Rang</td><td>1952</td><td>Lata Mangeshkar / Roshan — the standard classical bandish in film form</td></tr>
+    <tr><td>Ja Re Badra Bairi Ja</td><td>Bahana</td><td>1960</td><td>Lata Mangeshkar / Madan Mohan — "evokes a mood of pure joy" (Songs of Yore)</td></tr>
+    <tr><td>Aaj Jaane Ki Zidd Na Karo</td><td>Non-film ghazal</td><td>—</td><td>Farida Khanum — Yaman-based ghazal; iconic</td></tr>
+    <tr><td>Ranjish Hi Sahi</td><td>Non-film ghazal</td><td>—</td><td>Mehdi Hassan — Yaman-flavoured</td></tr>
+    <tr><td>Aa Gayi Sham</td><td>Non-film ghazal</td><td>—</td><td>Ghulam Ali — Yaman-based</td></tr>
+    <tr><td>Chaudhvin Ka Chand</td><td>Chaudhvin Ka Chand</td><td>1960</td><td>Mohammad Rafi / Ravi — Yaman structure cited by HCL Concerts</td></tr>
+  </table>
+  <p style="font-size:.82rem;color:var(--gd);margin-top:.5rem">Note (verified by ragasphere.com): Most Hindi film songs called "Yaman" use the Kalyan opening Sa Re Ga (not .Ni Re Ga) and are technically in the older Kalyan raga. Pure Yaman's .Ni Re Ga opening is less common in film music.</p>
+</div>
+
+<!-- 17 -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">17</span><span class="sec-title">Notable Artists — Recommended Listening</span></div>
+  <div class="art-card">
+    <div class="art-init">BJ</div>
+    <div><div class="art-name">Pandit Bhimsen Joshi</div><div class="art-d">Kirana Gharana, vocal — "powerful taans and bhava"; the paired Jhaptaal "piyabina ratiya" + Teentaal "eri aali piyabina" is described by Parrikar as a highlight; NDMPMGR GmG phrase signature</div></div>
+  </div>
+  <div class="art-card">
+    <div class="art-init">AK</div>
+    <div><div class="art-name">Ustad Amir Khan</div><div class="art-d">Indore Gharana, vocal — NDPMGR GmG signature; deeply meditative, slow approach; his Yaman is considered one of the most philosophically profound on record</div></div>
+  </div>
+  <div class="art-card">
+    <div class="art-init">RK</div>
+    <div><div class="art-name">Ustad Rashid Khan</div><div class="art-d">Rampur-Sahaswan Gharana, vocal — NRG RGmGRS characteristic phrase; "depth and emotion in vilambit khayal"; recommended as a reference for the .Ni opening</div></div>
+  </div>
+  <div class="art-card">
+    <div class="art-init">VK</div>
+    <div><div class="art-name">Ustad Vilayat Khan</div><div class="art-d">Sitar — his sitar-shehnai jugalbandi with Bismillah Khan contains his famous statement on the twin-Ma interaction; RGmG G(mG)RS characteristic; essential listening</div></div>
+  </div>
+  <div class="art-card">
+    <div class="art-init">RS</div>
+    <div><div class="art-name">Pandit Ravi Shankar</div><div class="art-d">Sitar — MDP RGmGRNS characteristic phrase; multiple recordings spanning decades; his evening Yaman concerts are among the most documented in the tradition</div></div>
+  </div>
+  <div class="art-card">
+    <div class="art-init">KC</div>
+    <div><div class="art-name">Kaushiki Chakraborty</div><div class="art-d">Vocal — mGR SNRNS characteristic phrase; highly expressive fast taans; recommended for understanding how modern vocalists approach Yaman's phrase architecture</div></div>
+  </div>
+</div>
+
+<!-- 18 -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">18</span><span class="sec-title">Practice Schedule</span></div>
+  <div class="card" style="margin-bottom:1rem">
+    <h4>Daily practice — 50 minutes</h4>
+    <ul>
+      <li>0–5 min: Tanpura setup; practise lower Ni → Re → Ga opening sweep slowly</li>
+      <li>5–12 min: Alankar 1 — core aaroh–avroh; teevra m♯ throughout; .Ni as starting note</li>
+      <li>12–18 min: Alankars 2–4 — step, skip, trikhand; maintain teevra Ma; Ga as resting note</li>
+      <li>18–28 min: Alaap phrases 1–3; .N R G opening; Ga as primary nyaas; G m G cell</li>
+      <li>28–38 min: Alaap phrases 4–6; taar saptak; Yaman Kalyan shuddha Ma cadence</li>
+      <li>38–44 min: Sargam geet with Teentaal</li>
+      <li>44–50 min: G m G signature taans; then Yaman Kalyan cadential taan</li>
+    </ul>
+  </div>
+  <table class="week-tbl">
+    <tr><th>Day</th><th>Focus</th></tr>
+    <tr><td>Monday</td><td>Alankars; drill .Ni opening; teevra m♯ accuracy; G m G cell until automatic</td></tr>
+    <tr><td>Tuesday</td><td>Alaap phrases 1–3; .N R G sweep; Ga as emotional anchor throughout</td></tr>
+    <tr><td>Wednesday</td><td>Alaap phrases 4–6; taar saptak; the Yaman Kalyan G Ma♮ G R S cadence</td></tr>
+    <tr><td>Thursday</td><td>Sargam geet with taal; teevra Ma in rhythmic context; Sam awareness</td></tr>
+    <tr><td>Friday</td><td>Bandish "Eri Aali" sthai at vilambit pace — learn and feel the phrase architecture</td></tr>
+    <tr><td>Saturday</td><td>Full bandish antara + drut khayal "Piya Ki Najariya"; compare the two tempos</td></tr>
+    <tr><td>Sunday</td><td>Listening at sunset — Bhimsen Joshi or Vilayat Khan; compare Yaman with Bhupali and Kedar</td></tr>
+  </table>
+</div>
+
+<!-- 19 -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">19</span><span class="sec-title">Common Mistakes to Avoid</span></div>
+  <table class="mistake-tbl">
+    <tr><th>Mistake</th><th>Correction</th></tr>
+    <tr><td>Using komal Ma (F♮) as a resting note</td><td>In pure Yaman, shuddha/komal Ma is strictly forbidden as a resting or prominent note. It belongs to the Kafi and Bilawal families. In Yaman Kalyan, shuddha Ma appears only in the G Ma♮ G R S cadence — never as an independent resting point.</td></tr>
+    <tr><td>Beginning the aaroh from Sa</td><td>Yaman's ascending line must open from lower Ni (.Ni → Re → Ga). Beginning from Sa sounds like a scale, not Yaman. The .N R G sweep is the raga's melodic signature. Make it the first thing you practise every session.</td></tr>
+    <tr><td>Not dwelling on Ga (the vadi)</td><td>Ga is the vadi — the emotional anchor. Phrases must resolve to, circle around, and linger on Ga. Treating Ga as a passing note denudes the raga of its identity. Apply meend and subtle andolan when resting on Ga.</td></tr>
+    <tr><td>Neglecting the G m G phrase cell</td><td>The G m G pattern — Ga both sides of teevra Ma — is the single most identifying melodic cell of Yaman. Not using it makes the raga sound like a generic Lydian scale. Practise it before anything else.</td></tr>
+    <tr><td>Confusing with Yaman Kalyan</td><td>Pure Yaman has only teevra Ma. Yaman Kalyan adds shuddha Ma as a cadential arrival note (G Ma♮ G R S). Both are valid. Know which you are performing, and be consistent within a performance.</td></tr>
+    <tr><td>Confusing Yaman with Kalyan (film songs)</td><td>Most Hindi film songs called "Yaman" use the older Kalyan form: ascending from Sa Re Ga (not .Ni Re Ga). The .Ni Re Ga opening distinguishes pure Yaman. Not all "Yaman" songs are in the classical Yaman raga.</td></tr>
+    <tr><td>Rushing past teevra Ma</td><td>The teevra Ma (F♯) is the crown of Yaman — it must be sung with clarity and emotional sensitivity, not slid through quickly. It creates the floating, suspended quality of the raga. Rushing it collapses the raga's expansive feeling.</td></tr>
+  </table>
+</div>
+
+<!-- 20 -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">20</span><span class="sec-title">Glossary</span></div>
+  <div class="gl-grid">
+    <div class="gl"><strong>Teevra Ma (m♯)</strong>Sharpened Madhyam, F♯ — the defining note of Yaman; creates the floating Lydian quality</div>
+    <div class="gl"><strong>Shuddha Ma (Ma♮)</strong>Natural Madhyam, F♮ — appears only in Yaman Kalyan cadences as a relief/arrival note</div>
+    <div class="gl"><strong>G m G phrase cell</strong>Ga → teevra Ma → Ga — the single most identifying melodic cell of Yaman; practise daily</div>
+    <div class="gl"><strong>.Ni opening</strong>The aaroh must begin from lower Ni; .Ni Re Ga is Yaman's signature ascending sweep</div>
+    <div class="gl"><strong>Vadi</strong>Most important note — Ga (Gandhar) in Yaman</div>
+    <div class="gl"><strong>Samvadi</strong>Second most important — Ni (Nishad) in Yaman; also the aaroh starting note</div>
+    <div class="gl"><strong>Yaman vs Yaman Kalyan</strong>Pure Yaman: only teevra Ma. Yaman Kalyan: adds shuddha Ma as a cadential arrival note</div>
+    <div class="gl"><strong>Kalyan Thaat</strong>Parent scale — S R G m P D N (teevra Ma); Yaman is the ashraya raga of Kalyan thaat</div>
+    <div class="gl"><strong>Kalyani</strong>Carnatic equivalent — 65th Melakarta (Mechakalyani); same scale, different ornament system</div>
+    <div class="gl"><strong>Lydian Mode</strong>Western equivalent — C D E F♯ G A B; the major scale with a raised fourth</div>
+    <div class="gl"><strong>Meend</strong>Smooth glide — Ni → Re and Ga → m♯ are the two critical Yaman meends</div>
+    <div class="gl"><strong>Sampurna</strong>All 7 notes used — Yaman's jati is Sampurna–Sampurna in standard form</div>
+    <div class="gl"><strong>Prahar</strong>3-hour time period — Yaman: first prahar of night (6–9 PM)</div>
+    <div class="gl"><strong>Nyaas Swara</strong>Primary resting note — Ga in Yaman; every phrase should resolve here</div>
+    <div class="gl"><strong>Kalyan Panchak</strong>Five jewel ragas of Kalyan family: Yaman, Kedar, Hameer, Gaud Sarang, Kamod, Chhayanat</div>
+    <div class="gl"><strong>Andolan</strong>Gentle oscillation on a sustained note — apply to Ga during long alaap rests</div>
+  </div>
+</div>
+
+<!-- 21 -->
+<div class="sec">
+  <div class="sec-hdr"><span class="sec-num">21</span><span class="sec-title">Summary at a Glance</span></div>
+  <div class="sum-grid">
+    <div class="sc"><h4>Identity</h4><p>Thaat: Kalyan<br>Jati: Sampurna–Sampurna<br>Time: Evening 6–9 PM<br>Emperor of the Kalyan family</p></div>
+    <div class="sc"><h4>Notes</h4><p>Sa Re <span style="color:var(--g)">Ga</span> <span style="color:var(--tl)">m♯</span> Pa Dha <span style="color:var(--gd)">Ni</span><br>Only teevra Ma (F♯)<br>Komal Ma strictly forbidden<br>Scale: C D E F♯ G A B</p></div>
+    <div class="sc"><h4>Emphasis</h4><p>Vadi: Ga (Gandhar)<br>Samvadi: Ni (Nishad)<br>Opens from lower .Ni<br>Cell: G m G — practise daily</p></div>
+    <div class="sc"><h4>Character</h4><p>Shringaar — grand romantic longing<br>Floating Lydian quality<br>Expansive, unbounded<br>Luminous evening grandeur</p></div>
+    <div class="sc"><h4>Related</h4><p>Yaman Kalyan (adds shuddha Ma)<br>Kalyani — Carnatic 65th Melakarta<br>Bhupali (pentatonic cousin)<br>Kedar, Hameer (Kalyan family)</p></div>
+    <div class="sc"><h4>Key rules</h4><p>Always open from .Ni<br>Ga is the vadi — rest here<br>G m G is the defining cell<br>Teevra Ma only — no komal Ma</p></div>
+  </div>
+</div>
+
+<div class="orn">✦ &nbsp; ✦ &nbsp; ✦</div>
+<p style="text-align:center;font-size:12px;color:var(--color-text-tertiary);font-style:italic">Compiled with verified sources: Wikipedia, Parrikar Archive, Ragajunglism (365+ Ragas), Artium Academy, Songs of Yore, MusicMaster, HCL Concerts, Ragasphere, Raag Hindustani<br>Notes for Hindustani Classical Music practice. Best heard at sunset.</p>
+
+</div>
