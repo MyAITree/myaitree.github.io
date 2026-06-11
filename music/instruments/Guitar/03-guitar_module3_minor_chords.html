@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 3 — Minor Chords & Up Strums | Guitar Practice Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --accent: #5c2d91;
+  --accent-light: #f2ecfa;
+  --accent-mid: #8b5cf6;
+  --accent-border: rgba(92,45,145,0.25);
+  --green: #1a6b3a;
+  --green-light: #e6f4ec;
+  --red: #c0392b;
+  --red-light: #fdf0ef;
+  --amber: #b45309;
+  --amber-light: #fffbeb;
+  --teal: #0f6e56;
+  --teal-light: #e1f5ee;
+  --ink: #1c1917;
+  --ink2: #44403c;
+  --ink3: #78716c;
+  --border: rgba(0,0,0,0.09);
+  --border2: rgba(0,0,0,0.05);
+  --surface: #fafaf9;
+  --surface2: #f5f0fa;
+  --wood: #f5efe4;
+  --bg: #fff;
+  --fret: #c8a96e;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Space Grotesk',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.7;}
+.page{max-width:920px;margin:0 auto;padding:0 1.5rem 5rem;}
+
+.hero{padding:4rem 0 3rem;border-bottom:2px solid var(--accent);margin-bottom:3rem;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:end;}
+.hero-eyebrow{font-family:'Space Mono',monospace;font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent-mid);margin-bottom:0.6rem;}
+.hero-title{font-family:'Instrument Serif',Georgia,serif;font-size:4rem;font-weight:400;line-height:1.0;color:var(--ink);margin-bottom:0.5rem;}
+.hero-title em{color:var(--accent);font-style:italic;}
+.hero-sub{font-size:1rem;color:var(--ink3);max-width:480px;line-height:1.65;}
+.hero-badge{background:var(--surface2);border:1px solid var(--accent-border);border-radius:12px;padding:1.2rem 1.4rem;text-align:center;min-width:130px;}
+.hero-badge-num{font-family:'Instrument Serif',serif;font-size:3rem;color:var(--accent);line-height:1;}
+.hero-badge-label{font-family:'Space Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--ink3);margin-top:4px;}
+
+.mod-strip{display:flex;gap:0;margin-bottom:3rem;border-radius:8px;overflow:hidden;border:1px solid var(--border);}
+.mod-cell{flex:1;padding:0.6rem 0.5rem;text-align:center;border-right:1px solid var(--border);font-family:'Space Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em;background:var(--surface);color:var(--ink3);}
+.mod-cell:last-child{border-right:none;}
+.mod-cell.done{background:var(--green-light);color:var(--green);}
+.mod-cell.current{background:var(--accent);color:#fff;font-weight:700;}
+.mod-cell .mn{font-size:0.55rem;display:block;opacity:0.7;}
+
+.toc-strip{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--border2);}
+.toc-pill{font-family:'Space Mono',monospace;font-size:0.68rem;padding:4px 10px;border:1px solid var(--border);border-radius:20px;color:var(--ink3);text-decoration:none;cursor:pointer;}
+.toc-pill:hover{background:var(--surface2);color:var(--ink);}
+.toc-pill.done{background:var(--green-light);color:var(--green);border-color:rgba(26,107,58,0.25);}
+.toc-pill.current{background:var(--accent);color:#fff;border-color:var(--accent);}
+
+.sec{margin-bottom:4rem;scroll-margin-top:2rem;}
+.sec-header{display:flex;align-items:baseline;gap:1rem;margin-bottom:1.75rem;padding-bottom:0.6rem;border-bottom:2px solid var(--accent);}
+.sec-num{font-family:'Space Mono',monospace;font-size:0.72rem;color:var(--accent-mid);letter-spacing:0.1em;flex-shrink:0;}
+.sec-title{font-family:'Instrument Serif',serif;font-size:1.8rem;font-weight:400;color:var(--ink);line-height:1.1;}
+.sec-title em{color:var(--accent);font-style:italic;}
+.sec-tag{font-family:'Space Mono',monospace;font-size:0.65rem;background:var(--accent-light);color:var(--accent);border:1px solid var(--accent-border);padding:2px 8px;border-radius:20px;margin-left:auto;flex-shrink:0;}
+.sec-tag.green{background:var(--green-light);color:var(--green);border-color:rgba(26,107,58,0.25);}
+.sec-tag.amber{background:var(--amber-light);color:var(--amber);border-color:rgba(180,83,9,0.25);}
+.sec-tag.teal{background:var(--teal-light);color:var(--teal);border-color:rgba(15,110,86,0.25);}
+p{font-size:0.93rem;margin-bottom:0.75rem;color:var(--ink2);}
+
+/* CHORD DIAGRAMS */
+.chord-row{display:flex;gap:2rem;flex-wrap:wrap;margin:1.5rem 0;align-items:flex-start;}
+.chord-block{flex:0 0 auto;}
+.chord-name{font-family:'Instrument Serif',serif;font-size:1.6rem;color:var(--ink);margin-bottom:0.5rem;}
+.chord-name span{font-family:'Space Mono',monospace;font-size:0.68rem;color:var(--ink3);letter-spacing:0.08em;display:block;margin-top:-2px;}
+.chord-name .minor-badge{display:inline-block;padding:1px 7px;font-family:'Space Mono',monospace;font-size:0.68rem;background:var(--accent-light);color:var(--accent);border:1px solid var(--accent-border);border-radius:10px;margin-left:6px;vertical-align:middle;}
+.chord-diagram{background:var(--wood);border:1px solid rgba(0,0,0,0.12);border-radius:8px;padding:0.75rem;display:inline-block;}
+
+/* MAJOR VS MINOR COMPARE */
+.compare-row{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin:1.5rem 0;align-items:start;}
+.compare-label{font-family:'Space Mono',monospace;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.6rem;}
+.compare-label.major{color:var(--green);}
+.compare-label.minor{color:var(--accent);}
+
+/* TABLES */
+.finger-table{width:100%;border-collapse:collapse;font-size:0.85rem;margin:1rem 0;}
+.finger-table th{font-family:'Space Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink3);text-align:left;padding:0.35rem 0.65rem;border-bottom:1px solid var(--border);background:var(--surface2);}
+.finger-table td{padding:0.5rem 0.65rem;border-bottom:1px solid var(--border2);color:var(--ink2);}
+.finger-table tr:last-child td{border-bottom:none;}
+.finger-table td:first-child{font-family:'Space Mono',monospace;font-size:0.78rem;color:var(--accent);}
+.f-badge{display:inline-block;width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;font-size:0.72rem;font-weight:600;text-align:center;line-height:22px;font-family:'Space Mono',monospace;}
+.f-badge.f1{background:var(--red);}
+.f-badge.f2{background:var(--accent);}
+.f-badge.f3{background:var(--amber);}
+.f-badge.f4{background:var(--teal);}
+.f-open{display:inline-block;width:22px;height:22px;border-radius:50%;border:2px solid var(--ink3);font-size:0.65rem;text-align:center;line-height:19px;color:var(--ink3);font-family:'Space Mono',monospace;}
+.f-mute{display:inline-block;color:var(--red);font-size:1rem;font-weight:700;width:22px;text-align:center;line-height:22px;}
+.f-removed{display:inline-block;width:22px;height:22px;border-radius:50%;border:2px dashed var(--accent-mid);font-size:0.72rem;text-align:center;line-height:19px;color:var(--accent-mid);font-family:'Space Mono',monospace;}
+
+/* CALLOUTS */
+.callout{background:var(--accent-light);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:0.75rem 1rem;font-size:0.87rem;color:var(--ink2);margin:1rem 0;font-style:italic;}
+.callout strong{color:var(--accent);font-style:normal;}
+.callout-green{background:var(--green-light);border-left:3px solid var(--green);border-radius:0 6px 6px 0;padding:0.75rem 1rem;font-size:0.87rem;color:var(--ink2);margin:1rem 0;}
+.callout-green strong{color:var(--green);}
+.callout-warn{background:var(--amber-light);border-left:3px solid var(--amber);border-radius:0 6px 6px 0;padding:0.75rem 1rem;font-size:0.87rem;color:var(--ink2);margin:1rem 0;}
+.callout-warn strong{color:var(--amber);}
+.callout-teal{background:var(--teal-light);border-left:3px solid var(--teal);border-radius:0 6px 6px 0;padding:0.75rem 1rem;font-size:0.87rem;color:var(--ink2);margin:1rem 0;}
+.callout-teal strong{color:var(--teal);}
+.callout-red{background:var(--red-light);border-left:3px solid var(--red);border-radius:0 6px 6px 0;padding:0.75rem 1rem;font-size:0.87rem;color:var(--ink2);margin:1rem 0;}
+.callout-red strong{color:var(--red);}
+
+/* NOTATION */
+.notation{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);padding:0.9rem 1.1rem;font-family:'Space Mono',monospace;font-size:0.82rem;line-height:2;margin:0.75rem 0;border-radius:0 6px 6px 0;}
+.notation .lbl{font-size:0.65rem;color:var(--ink3);text-transform:uppercase;letter-spacing:0.12em;display:block;margin-bottom:0.25rem;}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin:1.25rem 0;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem;}
+.card h4{font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:600;color:var(--ink);margin-bottom:0.6rem;padding-bottom:0.4rem;border-bottom:1px solid var(--border2);}
+.card ul{list-style:none;font-size:0.85rem;color:var(--ink2);}
+.card ul li{padding:0.2rem 0;border-bottom:1px solid var(--border2);display:flex;gap:8px;}
+.card ul li:last-child{border-bottom:none;}
+.card ul li::before{content:'◆';font-size:0.5rem;color:var(--accent-mid);flex-shrink:0;margin-top:7px;}
+
+/* MINOR vs MAJOR SOUND GRID */
+.feel-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:1rem 0;}
+.feel-card{border-radius:10px;padding:1rem 1.1rem;}
+.feel-card.major-feel{background:var(--green-light);border:1px solid rgba(26,107,58,0.2);}
+.feel-card.minor-feel{background:var(--accent-light);border:1px solid var(--accent-border);}
+.feel-card h4{font-size:0.9rem;font-weight:600;margin-bottom:0.5rem;padding-bottom:0.35rem;border-bottom:1px solid rgba(0,0,0,0.06);}
+.feel-card.major-feel h4{color:var(--green);}
+.feel-card.minor-feel h4{color:var(--accent);}
+.feel-card p{font-size:0.83rem;margin:0;line-height:1.6;}
+.feel-card.major-feel p{color:#1a3d28;}
+.feel-card.minor-feel p{color:#3d1a6e;}
+
+/* BEAT / STRUM GRIDS */
+.pattern-title{font-family:'Space Mono',monospace;font-size:0.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:0.1em;margin:1.5rem 0 0.5rem;}
+.strum-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin-bottom:0.5rem;}
+.sc{border:1px solid var(--border);border-radius:6px;padding:0.6rem 0.2rem;text-align:center;background:var(--surface);}
+.sc .sbeat{font-family:'Space Mono',monospace;font-size:0.62rem;color:var(--ink3);display:block;}
+.sc .sdir{font-size:1.1rem;display:block;font-weight:700;}
+.sc .sname{font-size:0.62rem;display:block;font-family:'Space Mono',monospace;}
+.sc.sd{background:var(--accent);color:#fff;border-color:var(--accent);}
+.sc.sd .sbeat{color:rgba(255,255,255,0.7);}
+.sc.su{background:var(--teal-light);color:var(--teal);border-color:rgba(15,110,86,0.25);}
+.sc.sr{background:var(--surface2);color:var(--ink3);}
+.sc.sm{background:#fff3cd;color:#856404;border-color:rgba(133,100,4,0.3);}
+.sc.sx{background:var(--accent-light);color:var(--accent);border-color:var(--accent-border);font-weight:700;}
+
+/* COUNTING GRID */
+.count-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin:0.75rem 0;}
+.cc{border:1px solid var(--border);border-radius:6px;padding:0.5rem 0.2rem;text-align:center;background:var(--surface);}
+.cc .cnum{font-family:'Instrument Serif',serif;font-size:1.1rem;color:var(--ink);display:block;}
+.cc .cword{font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--ink3);display:block;}
+.cc.beat-num{background:var(--accent);color:#fff;}
+.cc.beat-num .cnum{color:#fff;}
+.cc.beat-num .cword{color:rgba(255,255,255,0.7);}
+.cc.beat-and{background:var(--teal-light);}
+.cc.beat-and .cnum{color:var(--teal);}
+.cc.beat-and .cword{color:var(--teal);}
+
+/* CAPO TABLE */
+.capo-table{width:100%;border-collapse:collapse;font-size:0.87rem;margin:1rem 0;}
+.capo-table th{font-family:'Space Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--teal);text-align:left;padding:0.4rem 0.65rem;border-bottom:1px solid rgba(15,110,86,0.3);background:var(--teal-light);}
+.capo-table td{padding:0.55rem 0.65rem;border-bottom:1px solid var(--border2);vertical-align:top;color:var(--ink2);}
+.capo-table tr:last-child td{border-bottom:none;}
+.capo-table td:first-child{font-family:'Space Mono',monospace;font-size:0.78rem;color:var(--teal);}
+
+/* SONG TABLE */
+.song-table{width:100%;border-collapse:collapse;font-size:0.87rem;margin:1rem 0;}
+.song-table th{font-family:'Space Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);text-align:left;padding:0.4rem 0.65rem;border-bottom:1px solid var(--accent-border);background:var(--accent-light);}
+.song-table td{padding:0.55rem 0.65rem;border-bottom:1px solid var(--border2);vertical-align:top;color:var(--ink2);}
+.song-table tr:last-child td{border-bottom:none;}
+.song-table td:first-child{font-style:italic;color:var(--ink);font-weight:500;}
+.diff-badge{display:inline-block;padding:1px 8px;border-radius:20px;font-size:0.72rem;font-family:'Space Mono',monospace;}
+.diff-easy{background:var(--green-light);color:var(--green);border:1px solid rgba(26,107,58,0.3);}
+.diff-med{background:var(--amber-light);color:var(--amber);border:1px solid rgba(180,83,9,0.3);}
+
+/* TAB BLOCK */
+.tab-block{background:#1c1917;border-radius:8px;padding:1.25rem 1.5rem;margin:1rem 0;font-family:'Space Mono',monospace;font-size:0.82rem;line-height:2.2;color:#e2d9c5;overflow-x:auto;}
+.tab-block .tab-lbl{font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:#78716c;display:block;margin-bottom:0.4rem;}
+.tab-string{white-space:pre;color:var(--fret);}
+.tab-note{color:#8b5cf6;font-weight:700;}
+.tab-open{color:#e2d9c5;}
+
+/* TIMER */
+.timer-row{display:flex;gap:0;border-radius:8px;overflow:hidden;border:1px solid var(--border);margin:1rem 0;}
+.timer-cell{flex:1;padding:0.75rem 0.5rem;text-align:center;border-right:1px solid var(--border);font-size:0.8rem;background:var(--surface);}
+.timer-cell:last-child{border-right:none;}
+.timer-cell.active{background:var(--accent-light);}
+.timer-cell .ttime{font-family:'Instrument Serif',serif;font-size:1.5rem;color:var(--ink);display:block;line-height:1.2;}
+.timer-cell.active .ttime{color:var(--accent);}
+.timer-cell .tlbl{font-family:'Space Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink3);display:block;margin-top:3px;}
+
+/* WEEK TABLE */
+.week-table{width:100%;border-collapse:collapse;font-size:0.87rem;}
+.week-table th{font-family:'Space Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);text-align:left;padding:0.4rem 0.65rem;border-bottom:1px solid var(--accent-border);background:var(--accent-light);}
+.week-table td{padding:0.55rem 0.65rem;border-bottom:1px solid var(--border2);color:var(--ink2);}
+.week-table tr:last-child td{border-bottom:none;}
+.week-table td:first-child{font-family:'Space Mono',monospace;font-size:0.78rem;color:var(--ink);width:110px;}
+
+/* CHECKLIST */
+.checklist{list-style:none;font-size:0.9rem;margin:0.75rem 0;}
+.checklist li{padding:0.45rem 0;border-bottom:1px solid var(--border2);display:flex;gap:10px;align-items:flex-start;color:var(--ink2);}
+.checklist li:last-child{border-bottom:none;}
+.check-box{width:18px;height:18px;border:1.5px solid var(--border);border-radius:4px;flex-shrink:0;margin-top:3px;background:var(--bg);}
+
+/* MISTAKE TABLE */
+.mistake-table{width:100%;border-collapse:collapse;font-size:0.87rem;}
+.mistake-table th{font-family:'Space Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--red);text-align:left;padding:0.4rem 0.65rem;border-bottom:1px solid rgba(192,57,43,0.3);background:var(--red-light);}
+.mistake-table td{padding:0.55rem 0.65rem;border-bottom:1px solid var(--border2);vertical-align:top;color:var(--ink2);}
+.mistake-table tr:last-child td{border-bottom:none;}
+.mistake-table td:first-child{color:var(--red);font-style:italic;width:38%;}
+
+/* HOLDING DIAGRAM */
+.hold-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin:1.25rem 0;}
+.hold-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem;}
+.hold-card h4{font-size:0.88rem;font-weight:600;color:var(--ink);margin-bottom:0.5rem;padding-bottom:0.35rem;border-bottom:1px solid var(--border2);}
+.hold-card.correct h4{color:var(--green);}
+.hold-card.incorrect h4{color:var(--red);}
+.hold-card ul{list-style:none;font-size:0.83rem;color:var(--ink2);}
+.hold-card ul li{padding:0.2rem 0;border-bottom:1px solid var(--border2);display:flex;gap:8px;}
+.hold-card ul li:last-child{border-bottom:none;}
+.hold-card.correct ul li::before{content:'✓';color:var(--green);flex-shrink:0;}
+.hold-card.incorrect ul li::before{content:'✗';color:var(--red);flex-shrink:0;}
+
+.orn{text-align:center;color:var(--accent-mid);letter-spacing:0.4em;margin:3rem 0 1.5rem;font-size:1.2rem;}
+
+@media(max-width:640px){
+  .hero{grid-template-columns:1fr;}
+  .hero-badge{display:none;}
+  .hero-title{font-size:2.8rem;}
+  .two-col,.compare-row,.feel-grid,.hold-grid{grid-template-columns:1fr;}
+  .strum-grid,.count-grid{grid-template-columns:repeat(4,1fr);}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow">Beginner Guitar · Module 3</div>
+    <div class="hero-title">Minor Chords<br>&amp; <em>Up Strums</em></div>
+    <p class="hero-sub">What minor chords are and why they feel different, Em and Am in full detail, proper guitar posture, counting &amp; and subdivisions, up-strum mechanics, complete strum patterns with ups, the capo unlocked, Seven Nation Army, and a full Bollywood + Western repertoire.</p>
+  </div>
+  <div class="hero-badge">
+    <div class="hero-badge-num">11</div>
+    <div class="hero-badge-label">Lessons</div>
+  </div>
+</div>
+
+<!-- MODULE PROGRESS -->
+<div class="mod-strip">
+  <div class="mod-cell done"><span class="mn">Module</span>01 · A & D</div>
+  <div class="mod-cell done"><span class="mn">Module</span>02 · E Chord</div>
+  <div class="mod-cell current"><span class="mn">Module</span>03 · Minor ←</div>
+  <div class="mod-cell"><span class="mn">Module</span>04 · F Chord</div>
+  <div class="mod-cell"><span class="mn">Module</span>05 · Barre</div>
+</div>
+
+<!-- TOC -->
+<div class="toc-strip">
+  <a class="toc-pill current" href="#l1">▶ Minor Chords?</a>
+  <a class="toc-pill" href="#l2">E Minor</a>
+  <a class="toc-pill" href="#l3">A Minor</a>
+  <a class="toc-pill done" href="#l4">✓ Holding Guitar</a>
+  <a class="toc-pill done" href="#l5">✓ Counting Ands</a>
+  <a class="toc-pill done" href="#l6">✓ Up Strums</a>
+  <a class="toc-pill done" href="#l7">✓ Patterns With Ups</a>
+  <a class="toc-pill done" href="#l8">✓ Capos</a>
+  <a class="toc-pill done" href="#l9">✓ Seven Nation Army</a>
+  <a class="toc-pill done" href="#l10">✓ Songs Module 3</a>
+  <a class="toc-pill" href="#l11">Practice Routine</a>
+</div>
+
+<!-- LESSON 1: WHAT ARE MINOR CHORDS -->
+<div class="sec" id="l1">
+  <div class="sec-header">
+    <span class="sec-num">L-01</span>
+    <span class="sec-title">What Are <em>Minor Chords</em>?</span>
+    <span class="sec-tag">Theory</span>
+  </div>
+  <p>Every chord you've played so far — D, A, E — is a major chord. Major chords sound bright, confident, happy. Minor chords have a lowered third degree, which creates a darker, more emotional, melancholic quality. The difference between a major and minor chord is literally one note — moved by just one fret.</p>
+
+  <div class="feel-grid">
+    <div class="feel-card major-feel">
+      <h4>Major chords — the sound</h4>
+      <p>Bright, confident, uplifting, resolved. The classic "happy" chord sound. D major, A major, E major. Used in celebrations, anthems, upbeat Bollywood numbers. Think: <em>Balam Pichkari</em>, <em>Shake It Off</em>.</p>
+    </div>
+    <div class="feel-card minor-feel">
+      <h4>Minor chords — the sound</h4>
+      <p>Dark, yearning, emotional, unresolved. The "sad" or "serious" chord sound. Em, Am. Used in love songs, film tension, soulful qawwalis. Think: <em>Tum Hi Ho</em> (Em), <em>Shape of You</em> (Em), <em>Stairway to Heaven</em> (Am).</p>
+    </div>
+  </div>
+
+  <div class="notation">
+    <span class="lbl">The One-Note Difference — Major vs Minor</span>
+    E  major  :  E  —  G#  —  B   (the major third is G# / fret 1 on G string)
+    E  minor  :  E  —  G   —  B   (the minor third is G♮  / open G string — remove finger 1)
+
+    A  major  :  A  —  C#  —  E   (middle finger and ring finger on fret 2)
+    A  minor  :  A  —  C   —  E   (finger 2 moves from D-str to B-str, finger 3 stays on D-str)
+
+    The rule: flatten (lower by one fret) the middle note of any major chord → minor chord
+  </div>
+
+  <div class="callout">
+    <strong>Why this matters immediately:</strong> Em and Am are the most common minor chords in guitar music. Adding them to D, A, E gives you access to a huge new range of Bollywood emotional songs, Western ballads, and the most popular chord progression in modern music: Am · F · C · G (or its relatives). You'll recognise this progression in hundreds of songs the moment you hear it.
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h4>Most common chord progressions with minors</h4>
+      <ul>
+        <li>Am → F → C → G — the most used progression in pop (Bollywood and Western)</li>
+        <li>Em → C → G → D — "the four-chord song" (Axis of Awesome)</li>
+        <li>Am → Em → D — classic Bollywood minor feel</li>
+        <li>E → Am — the sudden minor shift creates instant drama</li>
+        <li>D → Em → A — common in Indian folk and classical-inspired film songs</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Minor chord theory — keep it simple for now</h4>
+      <ul>
+        <li>Major = root + major 3rd + perfect 5th (bright)</li>
+        <li>Minor = root + minor 3rd + perfect 5th (darker)</li>
+        <li>The minor 3rd is 1 semitone (1 fret) lower than the major 3rd</li>
+        <li>You don't need to memorise intervals — just feel the difference</li>
+        <li>Play E major, then E minor, back and forth — hear how the mood shifts</li>
+        <li>That emotional shift is what minor chords bring to every song</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- LESSON 2: E MINOR -->
+<div class="sec" id="l2">
+  <div class="sec-header">
+    <span class="sec-num">L-02</span>
+    <span class="sec-title">The E Minor <em>Chord</em></span>
+    <span class="sec-tag">New Chord</span>
+  </div>
+  <p>E minor is one of the easiest chords on guitar — it requires only two fingers, uses all 6 strings, and sounds immediately rich and full. It is derived directly from E major by simply removing the index finger.</p>
+
+  <div class="compare-row">
+    <div>
+      <div class="compare-label major">E Major (review)</div>
+      <div class="chord-diagram">
+        <svg width="155" height="195" viewBox="0 0 155 195">
+          <rect x="15" y="35" width="125" height="7" fill="#1a1a1a" rx="1"/>
+          <line x1="15" y1="42" x2="15" y2="185" stroke="#aaa" stroke-width="1.4"/>
+          <line x1="40" y1="42" x2="40" y2="185" stroke="#999" stroke-width="1.6"/>
+          <line x1="65" y1="42" x2="65" y2="185" stroke="#888" stroke-width="1.8"/>
+          <line x1="90" y1="42" x2="90" y2="185" stroke="#777" stroke-width="2"/>
+          <line x1="115" y1="42" x2="115" y2="185" stroke="#666" stroke-width="2.2"/>
+          <line x1="140" y1="42" x2="140" y2="185" stroke="#555" stroke-width="2.4"/>
+          <line x1="15" y1="78" x2="140" y2="78" stroke="#c8a96e" stroke-width="1"/>
+          <line x1="15" y1="115" x2="140" y2="115" stroke="#c8a96e" stroke-width="1"/>
+          <line x1="15" y1="152" x2="140" y2="152" stroke="#c8a96e" stroke-width="1"/>
+          <text x="15" y="193" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#78716c">E</text>
+          <text x="40" y="193" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#78716c">A</text>
+          <text x="65" y="193" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#78716c">D</text>
+          <text x="90" y="193" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#78716c">G</text>
+          <text x="115" y="193" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#78716c">B</text>
+          <text x="140" y="193" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#78716c">e</text>
+          <text x="4" y="100" font-family="Space Mono,monospace" font-size="9" fill="#78716c">1</text>
+          <text x="4" y="136" font-family="Space Mono,monospace" font-size="9" fill="#78716c">2</text>
+          <circle cx="15" cy="26" r="6" fill="none" stroke="#44403c" stroke-width="1.5"/>
+          <circle cx="115" cy="26" r="6" fill="none" stroke="#44403c" stroke-width="1.5"/>
+          <circle cx="140" cy="26" r="6" fill="none" stroke="#44403c" stroke-width="1.5"/>
+          <!-- Index on G fret1 -->
+          <circle cx="90" cy="58" r="13" fill="#1a6b3a" opacity="0.5"/>
+          <text x="90" y="62" text-anchor="middle" font-family="Space Mono,monospace" font-size="11" fill="#1a6b3a" font-weight="700">1</text>
+          <!-- Mid on A fret2 -->
+          <circle cx="40" cy="96" r="13" fill="#1a6b3a"/>
+          <text x="40" y="100" text-anchor="middle" font-family="Space Mono,monospace" font-size="11" fill="white" font-weight="700">2</text>
+          <!-- Ring on D fret2 -->
+          <circle cx="65" cy="96" r="13" fill="#b45309"/>
+          <text x="65" y="100" text-anchor="middle" font-family="Space Mono,monospace" font-size="11" fill="white" font-weight="700">3</text>
+        </svg>
+      </div>
+    </div>
+    <div>
+      <div class="compare-label minor">E Minor — remove finger 1</div>
+      <div class="chord-diagram">
+        <svg width="155" height="195" viewBox="0 0 155 195">
+          <rect x="15" y="35" width="125" height="7" fill="#1a1a1a" rx="1"/>
+          <line x1="15" y1="42" x2="15" y2="185" stroke="#aaa" stroke-width="1.4"/>
+          <line x1="40" y1="42" x2="40" y2="185" stroke="#999" stroke-width="1.6"/>
+          <line x1="65" y1="42" x2="65" y2="185" stroke="#888" stroke-width="1.8"/>
+          <line x1="90" y1="42" x2="90" y2="185" stroke="#777" stroke-width="2"/>
+          <line x1="115" y1="42" x2="115" y2="185" stroke="#666" stroke-width="2.2"/>
+          <line x1="140" y1="42" x2="140" y2="185" stroke="#555" stroke-width="2.4"/>
+          <line x1="15" y1="78" x2="140" y2="78" stroke="#c8a96e" stroke-width="1"/>
+          <line x1="15" y1="115" x2="140" y2="115" stroke="#c8a96e" stroke-width="1"/>
+          <line x1="15" y1="152" x2="140" y2="152" stroke="#c8a96e" stroke-width="1"/>
+          <text x="15" y="193" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#78716c">E</text>
+          <text x="40" y="193" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#78716c">A</text>
+          <text x="65" y="193" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#78716c">D</text>
+          <text x="90" y="193" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#78716c">G</text>
+          <text x="115" y="193" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#78716c">B</text>
+          <text x="140" y="193" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#78716c">e</text>
+          <text x="4" y="100" font-family="Space Mono,monospace" font-size="9" fill="#78716c">1</text>
+          <text x="4" y="136" font-family="Space Mono,monospace" font-size="9" fill="#78716c">2</text>
+          <circle cx="15" cy="26" r="6" fill="none" stroke="#44403c" stroke-width="1.5"/>
+          <circle cx="90" cy="26" r="6" fill="none" stroke="#44403c" stroke-width="1.5"/>
+          <circle cx="115" cy="26" r="6" fill="none" stroke="#44403c" stroke-width="1.5"/>
+          <circle cx="140" cy="26" r="6" fill="none" stroke="#44403c" stroke-width="1.5"/>
+          <!-- Dashed circle where finger 1 WAS — now removed -->
+          <circle cx="90" cy="58" r="13" fill="none" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <text x="90" y="62" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#8b5cf6">LIFT</text>
+          <!-- Mid on A fret2 (now relabeled 1 for Em) -->
+          <circle cx="40" cy="96" r="13" fill="#5c2d91"/>
+          <text x="40" y="100" text-anchor="middle" font-family="Space Mono,monospace" font-size="11" fill="white" font-weight="700">2</text>
+          <!-- Ring on D fret2 -->
+          <circle cx="65" cy="96" r="13" fill="#b45309"/>
+          <text x="65" y="100" text-anchor="middle" font-family="Space Mono,monospace" font-size="11" fill="white" font-weight="700">3</text>
+          <!-- MINOR label -->
+          <rect x="25" y="78" width="155" height="37" fill="none"/>
+          <text x="78" y="185" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#5c2d91">← open G makes it minor</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <table class="finger-table">
+    <tr><th>String</th><th>Fret</th><th>Finger</th><th>Note</th><th>Difference from E major</th></tr>
+    <tr><td>6 (Low E)</td><td>Open</td><td><span class="f-open">O</span></td><td>E</td><td>Same</td></tr>
+    <tr><td>5 (A)</td><td>2</td><td><span class="f-badge f2">2</span></td><td>B</td><td>Same</td></tr>
+    <tr><td>4 (D)</td><td>2</td><td><span class="f-badge f3">3</span></td><td>E</td><td>Same</td></tr>
+    <tr><td>3 (G)</td><td>Open</td><td><span class="f-removed">↑</span></td><td>G♮</td><td>Finger 1 removed → G♮ instead of G#</td></tr>
+    <tr><td>2 (B)</td><td>Open</td><td><span class="f-open">O</span></td><td>B</td><td>Same</td></tr>
+    <tr><td>1 (High e)</td><td>Open</td><td><span class="f-open">O</span></td><td>E</td><td>Same</td></tr>
+  </table>
+
+  <div class="callout">
+    <strong>The magic shortcut:</strong> E major → E minor = simply lift your index finger off the G string. The rest of the chord stays exactly the same. This also means E → Em is one of the fastest chord changes in all of guitar — zero repositioning needed for the other two fingers.
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h4>Em — what to practice first</h4>
+      <ul>
+        <li>Alternate E and Em: form E, lift index, strum Em, replace index, strum E</li>
+        <li>Feel the emotional shift — from bright E major to melancholic Em</li>
+        <li>Practice E → Em OMC: the change score should immediately exceed 60+/min</li>
+        <li>Practice Em → Am (the next chord) — this is the harder new change</li>
+        <li>Strum all 6 strings on Em — the open G string is the key note that creates the minor feel</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Songs that use Em prominently</h4>
+      <ul>
+        <li>Tum Hi Ho (Aashiqui 2) — Em is the emotional heart of this song</li>
+        <li>Shape of You (Ed Sheeran) — Em A D A loop throughout</li>
+        <li>Stairway to Heaven (Led Zeppelin) — Em in the famous intro</li>
+        <li>Hotel California (Eagles) — Bm F# A E G D Em F# loop</li>
+        <li>Channa Mereya (Ae Dil Hai Mushkil) — Em based progression</li>
+        <li>Wonderwall (Oasis) — Em7 throughout (just Em with capo)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- LESSON 3: A MINOR -->
+<div class="sec" id="l3">
+  <div class="sec-header">
+    <span class="sec-num">L-03</span>
+    <span class="sec-title">The A Minor <em>Chord</em></span>
+    <span class="sec-tag">New Chord</span>
+  </div>
+  <p>A minor is the second essential minor chord. Unlike Em, it requires a new finger shape — but it has a beautiful relationship with E major: the Am shape is the same pattern of fingers as E major, just shifted to different strings. Once you see this, both chords become easier.</p>
+
+  <div class="compare-row">
+    <div>
+      <div class="compare-label major">A Major (review)</div>
+      <div class="chord-diagram">
+        <svg width="140" height="195" viewBox="0 0 140 195">
+          <rect x="10" y="35" width="120" height="7" fill="#1a1a1a" rx="1"/>
+          <line x1="20" y1="42" x2="20" y2="185" stroke="#aaa" stroke-width="1.4"/>
+          <line x1="44" y1="42" x2="44" y2="185" stroke="#999" stroke-width="1.6"/>
+          <line x1="68" y1="42" x2="68" y2="185" stroke="#888" stroke-width="1.8"/>
+          <line x1="92" y1="42" x2="92" y2="185" stroke="#777" stroke-width="2"/>
+          <line x1="116" y1="42" x2="116" y2="185" stroke="#666" stroke-width="2.2"/>
+          <line x1="20" y1="78" x2="116" y2="78" stroke="#c8a96e" stroke-width="1"/>
+          <line x1="20" y1="115" x2="116" y2="115" stroke="#c8a96e" stroke-width="1"/>
+          <text x="20" y="193" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#78716c">A</text>
+          <text x="44" y="193" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#78716c">D</text>
+          <text x="68" y="193" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#78716c">G</text>
+          <text x="92" y="193" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#78716c">B</text>
+          <text x="116" y="193" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#78716c">e</text>
+          <text x="4" y="100" font-family="Space Mono,monospace" font-size="9" fill="#78716c">1</text>
+          <text x="4" y="136" font-family="Space Mono,monospace" font-size="9" fill="#78716c">2</text>
+          <text x="20" y="27" text-anchor="middle" font-size="12" fill="#c0392b" font-weight="700">×</text>
+          <circle cx="44" cy="27" r="6" fill="none" stroke="#44403c" stroke-width="1.5"/>
+          <circle cx="116" cy="27" r="6" fill="none" stroke="#44403c" stroke-width="1.5"/>
+          <!-- A major: index D fret2, mid G fret2, ring B fret2 -->
+          <circle cx="44" cy="96" r="13" fill="#1a6b3a" opacity="0.5"/>
+          <text x="44" y="100" text-anchor="middle" font-family="Space Mono,monospace" font-size="11" fill="#1a6b3a" font-weight="700">1</text>
+          <circle cx="68" cy="96" r="13" fill="#1a6b3a"/>
+          <text x="68" y="100" text-anchor="middle" font-family="Space Mono,monospace" font-size="11" fill="white" font-weight="700">2</text>
+          <circle cx="92" cy="96" r="13" fill="#b45309"/>
+          <text x="92" y="100" text-anchor="middle" font-family="Space Mono,monospace" font-size="11" fill="white" font-weight="700">3</text>
+        </svg>
+      </div>
+    </div>
+    <div>
+      <div class="compare-label minor">A Minor — finger 1 moves, shape shifts</div>
+      <div class="chord-diagram">
+        <svg width="140" height="195" viewBox="0 0 140 195">
+          <rect x="10" y="35" width="120" height="7" fill="#1a1a1a" rx="1"/>
+          <line x1="20" y1="42" x2="20" y2="185" stroke="#aaa" stroke-width="1.4"/>
+          <line x1="44" y1="42" x2="44" y2="185" stroke="#999" stroke-width="1.6"/>
+          <line x1="68" y1="42" x2="68" y2="185" stroke="#888" stroke-width="1.8"/>
+          <line x1="92" y1="42" x2="92" y2="185" stroke="#777" stroke-width="2"/>
+          <line x1="116" y1="42" x2="116" y2="185" stroke="#666" stroke-width="2.2"/>
+          <line x1="20" y1="78" x2="116" y2="78" stroke="#c8a96e" stroke-width="1"/>
+          <line x1="20" y1="115" x2="116" y2="115" stroke="#c8a96e" stroke-width="1"/>
+          <text x="20" y="193" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#78716c">A</text>
+          <text x="44" y="193" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#78716c">D</text>
+          <text x="68" y="193" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#78716c">G</text>
+          <text x="92" y="193" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#78716c">B</text>
+          <text x="116" y="193" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#78716c">e</text>
+          <text x="4" y="100" font-family="Space Mono,monospace" font-size="9" fill="#78716c">1</text>
+          <text x="4" y="136" font-family="Space Mono,monospace" font-size="9" fill="#78716c">2</text>
+          <text x="20" y="27" text-anchor="middle" font-size="12" fill="#c0392b" font-weight="700">×</text>
+          <circle cx="44" cy="27" r="6" fill="none" stroke="#44403c" stroke-width="1.5"/>
+          <circle cx="116" cy="27" r="6" fill="none" stroke="#44403c" stroke-width="1.5"/>
+          <!-- Am: index B fret1, mid D fret2, ring G fret2 -->
+          <circle cx="92" cy="58" r="13" fill="#c0392b"/>
+          <text x="92" y="62" text-anchor="middle" font-family="Space Mono,monospace" font-size="11" fill="white" font-weight="700">1</text>
+          <circle cx="44" cy="96" r="13" fill="#5c2d91"/>
+          <text x="44" y="100" text-anchor="middle" font-family="Space Mono,monospace" font-size="11" fill="white" font-weight="700">2</text>
+          <circle cx="68" cy="96" r="13" fill="#b45309"/>
+          <text x="68" y="100" text-anchor="middle" font-family="Space Mono,monospace" font-size="11" fill="white" font-weight="700">3</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <table class="finger-table">
+    <tr><th>String</th><th>Fret</th><th>Finger</th><th>Note</th><th>Action</th></tr>
+    <tr><td>6 (Low E)</td><td>—</td><td><span class="f-mute">×</span></td><td>—</td><td>Mute — do not play</td></tr>
+    <tr><td>5 (A)</td><td>Open</td><td><span class="f-open">O</span></td><td>A</td><td>Root — strum open</td></tr>
+    <tr><td>4 (D)</td><td>2</td><td><span class="f-badge f2">2</span></td><td>E</td><td>Middle finger</td></tr>
+    <tr><td>3 (G)</td><td>2</td><td><span class="f-badge f3">3</span></td><td>A</td><td>Ring finger</td></tr>
+    <tr><td>2 (B)</td><td>1</td><td><span class="f-badge f1">1</span></td><td>C♮</td><td>Index finger — this is what makes it minor</td></tr>
+    <tr><td>1 (High e)</td><td>Open</td><td><span class="f-open">O</span></td><td>E</td><td>Open — must ring clearly</td></tr>
+  </table>
+
+  <div class="callout">
+    <strong>Am is the E major shape shifted:</strong> Look at the Am fingering — index on B-str fret 1, middle on D-str fret 2, ring on G-str fret 2. Now compare to E major — index on G-str fret 1, middle on A-str fret 2, ring on D-str fret 2. The same three-finger shape, moved one string toward the higher strings. This is the "CAGED system" in action — you'll understand it fully in Module 5.
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h4>Am — key technique points</h4>
+      <ul>
+        <li>Index finger (1) on B string fret 1 — very close to the metal fret</li>
+        <li>Middle (2) and ring (3) on D and G strings fret 2 — same as the A major shape</li>
+        <li>High e string must ring open — if muted, index is too flat on B string</li>
+        <li>Mute the low E string — start the strum from the A string (string 5)</li>
+        <li>Am is one of the most emotionally resonant chords in guitar music</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>The four new OMC pairs — Module 3</h4>
+      <ul>
+        <li>Em ↔ Am — the main minor pair; practice daily</li>
+        <li>Am ↔ E — major to relative minor shift; very common in songs</li>
+        <li>Em ↔ D — used in hundreds of Bollywood songs</li>
+        <li>Am ↔ D — another very common Bollywood pair</li>
+        <li>Am ↔ G — key progression for Module 4 prep</li>
+        <li>Em ↔ G — needed for many Western folk songs</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- LESSON 4: HOLDING THE GUITAR -->
+<div class="sec" id="l4">
+  <div class="sec-header">
+    <span class="sec-num">L-04</span>
+    <span class="sec-title">Holding The <em>Guitar</em></span>
+    <span class="sec-tag">Posture</span>
+  </div>
+  <p>Good posture is not about looking professional — it is about preventing pain and building technique that works at speed. Poor posture creates tension that caps your playing ability and can cause real repetitive strain injury over months of practice. This lesson checks and corrects the fundamentals.</p>
+
+  <div class="hold-grid">
+    <div class="hold-card correct">
+      <h4>✓ Sitting position — correct</h4>
+      <ul>
+        <li>Guitar body rests on the right thigh (right-handed players)</li>
+        <li>Guitar tilted slightly toward you — not lying flat</li>
+        <li>The neck points slightly upward (30–45°) — not horizontal</li>
+        <li>Back straight — not hunched over the guitar</li>
+        <li>Strumming elbow rests lightly on the guitar body</li>
+        <li>Fretting wrist curves outward — not bent inward under the neck</li>
+        <li>Thumb of fretting hand sits behind the neck — 2nd/3rd fret area, opposite the middle finger</li>
+      </ul>
+    </div>
+    <div class="hold-card incorrect">
+      <h4>✗ Common posture errors</h4>
+      <ul>
+        <li>Tilting the guitar up to see the fretboard — the neck drops and tension increases</li>
+        <li>Squeezing the neck with the thumb hooked over the top — kills finger arch</li>
+        <li>Hunching to watch the left hand — causes neck and back strain over time</li>
+        <li>Guitar sliding on the leg — use a strap even when sitting to stabilise</li>
+        <li>Wrist bent sharply inward under the neck — creates carpal tunnel risk</li>
+        <li>Right arm pressing the guitar body away — guitar must feel secure without gripping</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout-warn">
+    <strong>The strap rule:</strong> Use a strap when sitting and standing. When sitting, the strap prevents the guitar from shifting position as you change chords. When standing, proper strap height is crucial — the guitar should sit at the same height as when sitting, not dropped to the hip. Dropping the guitar to look cool creates wrist angle problems that hurt your technique.
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h4>Fretting hand position check</h4>
+      <ul>
+        <li>Thumb: behind the neck, roughly opposite the 2nd finger, not hooked over</li>
+        <li>Palm: a gap between the palm and the neck — the guitar doesn't sit in your palm</li>
+        <li>Fingers: arched, pressing with tips, not flat pads</li>
+        <li>Knuckles: roughly parallel to the fretboard</li>
+        <li>Wrist: curves outward — imagine holding a tennis ball under your palm</li>
+        <li>Tension check: can you wiggle each finger independently? If not, relax</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Strumming hand position check</h4>
+      <ul>
+        <li>Forearm rests on the body of the guitar — a light, natural anchor point</li>
+        <li>Wrist hangs loose and relaxed over the sound hole</li>
+        <li>The strum motion is from the wrist, not the elbow or shoulder</li>
+        <li>Pick (or thumb) held lightly — you should be able to feel it could slip</li>
+        <li>After each strum, the wrist returns to its neutral position — no locking</li>
+        <li>The strumming hand should feel like it's doing very little — lightness is correct</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- LESSON 5: COUNTING ANDS -->
+<div class="sec" id="l5">
+  <div class="sec-header">
+    <span class="sec-num">L-05</span>
+    <span class="sec-title">Counting <em>Ands</em></span>
+    <span class="sec-tag">Rhythm</span>
+  </div>
+  <p>To play up-strums, you must understand what happens <em>between</em> the beats. The "and" is the subdivision — the second eighth note in each beat. Counting "1 and 2 and 3 and 4 and" out loud is the single most powerful rhythmic tool a beginner can use.</p>
+
+  <p style="font-family:'Space Mono',monospace;font-size:0.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem">The counting system — beats and ands</p>
+  <div class="count-grid">
+    <div class="cc beat-num"><span class="cnum">1</span><span class="cword">beat</span></div>
+    <div class="cc beat-and"><span class="cnum">&amp;</span><span class="cword">and</span></div>
+    <div class="cc beat-num"><span class="cnum">2</span><span class="cword">beat</span></div>
+    <div class="cc beat-and"><span class="cnum">&amp;</span><span class="cword">and</span></div>
+    <div class="cc beat-num"><span class="cnum">3</span><span class="cword">beat</span></div>
+    <div class="cc beat-and"><span class="cnum">&amp;</span><span class="cword">and</span></div>
+    <div class="cc beat-num"><span class="cnum">4</span><span class="cword">beat</span></div>
+    <div class="cc beat-and"><span class="cnum">&amp;</span><span class="cword">and</span></div>
+  </div>
+  <p style="font-size:0.8rem;color:var(--ink3)">Purple = beat (foot down). Teal = "and" (foot up). Eight equal divisions of one bar of 4/4.</p>
+
+  <div class="notation">
+    <span class="lbl">Strum-Counting Alignment — Downs on beats, Ups on ands</span>
+    Count   :  1    &amp;    2    &amp;    3    &amp;    4    &amp;
+    Foot    :  ↓    ↑    ↓    ↑    ↓    ↑    ↓    ↑    (never stops)
+    Strum   :  ↓    ↑    ↓    ↑    ↓    ↑    ↓    ↑    (all 8 eighth notes)
+    or      :  ↓    ·    ↓    ↑    ↑    ↓    ↑    ·    (selective strums — DDUUDU)
+
+    Rule: DOWN strums happen on beats (when foot is going DOWN)
+          UP strums happen on ands (when foot is coming UP)
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h4>How to train counting ands</h4>
+      <ul>
+        <li>Step 1: Clap on every "1" while counting aloud — feel one beat per bar</li>
+        <li>Step 2: Clap on "1 and 2 and 3 and 4 and" — feel all 8 subdivisions</li>
+        <li>Step 3: Clap only on "ands" while counting aloud — isolate the upbeat</li>
+        <li>Step 4: Pick up guitar, hold chord, strum down on beats, up on ands</li>
+        <li>Step 5: Selectively drop some strums (ghost) — the pendulum keeps swinging</li>
+        <li>Count aloud every time you practice a new pattern — until it's internal</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Ands in Bollywood context</h4>
+      <ul>
+        <li>Most Bollywood guitar patterns are 8th-note based — the "and" is everywhere</li>
+        <li>The characteristic D-DU-UDU Bollywood feel = deliberate placement of ands</li>
+        <li>Hindi film songs often accent the "and" of beat 2 — creating the forward push</li>
+        <li>Classical Indian music has its own tal system — ands correspond to matra subdivisions</li>
+        <li>Counting "1 aur 2 aur 3 aur 4 aur" in Hindi works just as well as "and"</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- LESSON 6: UP STRUMS -->
+<div class="sec" id="l6">
+  <div class="sec-header">
+    <span class="sec-num">L-06</span>
+    <span class="sec-title">All About <em>Up Strums</em></span>
+    <span class="sec-tag">Technique</span>
+  </div>
+  <p>Up strums are the single technique that most transforms a beginner guitarist into someone who sounds musical. Without up strums, you can only play stiff quarter-note rhythms. With up strums, you have the rhythmic vocabulary of nearly every style of music.</p>
+
+  <div class="callout-teal">
+    <strong>The key insight:</strong> An up strum only catches the top 2–3 strings (high e, B, sometimes G). This is correct and intentional — not a mistake. If your up strum catches all 6 strings, it sounds harsh and unbalanced. Think of the up strum as a light, quick flick catching only the brightest strings.
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h4>Up strum mechanics — step by step</h4>
+      <ul>
+        <li>Your wrist is already rotating for the downstroke — the upstroke is the return</li>
+        <li>After the downstroke, let the wrist continue its rotation upward</li>
+        <li>The pick flips slightly — now the opposite face of the pick leads</li>
+        <li>Catch only the high strings (e and B, maybe G) on the way up</li>
+        <li>The upstroke should be faster and lighter than the downstroke — natural feel</li>
+        <li>Practice: down-up, down-up, slow with one chord, count "1 and 2 and"</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Ghost strums vs real up strums</h4>
+      <ul>
+        <li>Ghost strum = hand moves upward but DOES NOT touch the strings</li>
+        <li>Real up strum = hand moves upward AND catches the high strings</li>
+        <li>Both are valid — the difference is whether you want sound at that "and"</li>
+        <li>Pattern reading: ↑ = real up strum · · = ghost strum (hand moves, no sound)</li>
+        <li>The pendulum always swings both ways — only the contact point creates sound</li>
+        <li>Beginners often ghost too many ups — don't be afraid to let them ring</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="notation">
+    <span class="lbl">Up strum isolation exercise — before full patterns</span>
+    Hold Em chord. Set metronome 50 BPM.
+    Bar 1 :  ↓  ↑  ↓  ↑  ↓  ↑  ↓  ↑   (all 8 eighth notes — train the wrist motion)
+    Bar 2 :  ↓  ·  ↓  ·  ↓  ·  ↓  ·   (downstrokes only — compare the feel)
+    Bar 3 :  ·  ↑  ·  ↑  ·  ↑  ·  ↑   (upstrokes only — isolate the motion)
+    Bar 4 :  ↓  ↑  ↓  ↑  ↓  ↑  ↓  ↑   (all 8 again — now feel the smoothness)
+
+    Key: the wrist never stops between bars 1 and 4. Only the contact changes.
+  </div>
+</div>
+
+<!-- LESSON 7: STRUMMING PATTERNS WITH UPS -->
+<div class="sec" id="l7">
+  <div class="sec-header">
+    <span class="sec-num">L-07</span>
+    <span class="sec-title">Strumming Patterns <em>With Ups</em></span>
+    <span class="sec-tag">Rhythm</span>
+  </div>
+  <p>Now we build complete patterns that combine downstrokes and upstrokes. These are the actual patterns used in real songs — Bollywood, pop, rock, folk. Each one is presented with a beat grid, counts, and song examples.</p>
+
+  <div class="callout">
+    <strong>Reading the grid:</strong> Blue = down strum · Teal = up strum · Grey = ghost (move but no sound) · Gold = muted strum (chuck — percussive hit with left hand releasing pressure).
+  </div>
+
+  <div class="pattern-title">Pattern 1 — Down-Up alternating (all 8th notes) · Warm-up pattern</div>
+  <div class="strum-grid">
+    <div class="sc sd"><span class="sbeat">1</span><span class="sdir">↓</span><span class="sname">DOWN</span></div>
+    <div class="sc su"><span class="sbeat">1+</span><span class="sdir">↑</span><span class="sname">UP</span></div>
+    <div class="sc sd"><span class="sbeat">2</span><span class="sdir">↓</span><span class="sname">DOWN</span></div>
+    <div class="sc su"><span class="sbeat">2+</span><span class="sdir">↑</span><span class="sname">UP</span></div>
+    <div class="sc sd"><span class="sbeat">3</span><span class="sdir">↓</span><span class="sname">DOWN</span></div>
+    <div class="sc su"><span class="sbeat">3+</span><span class="sdir">↑</span><span class="sname">UP</span></div>
+    <div class="sc sd"><span class="sbeat">4</span><span class="sdir">↓</span><span class="sname">DOWN</span></div>
+    <div class="sc su"><span class="sbeat">4+</span><span class="sdir">↑</span><span class="sname">UP</span></div>
+  </div>
+  <p style="font-size:0.8rem;color:var(--ink3)">Target: 60 BPM. Songs: Any slow Bollywood ballad, Iktara. Great for training the wrist rotation.</p>
+
+  <div class="pattern-title">Pattern 2 — DDUUDU · The universal pop/Bollywood pattern</div>
+  <div class="strum-grid">
+    <div class="sc sd"><span class="sbeat">1</span><span class="sdir">↓</span><span class="sname">DOWN</span></div>
+    <div class="sc sr"><span class="sbeat">1+</span><span class="sdir">·</span><span class="sname">ghost</span></div>
+    <div class="sc sd"><span class="sbeat">2</span><span class="sdir">↓</span><span class="sname">DOWN</span></div>
+    <div class="sc su"><span class="sbeat">2+</span><span class="sdir">↑</span><span class="sname">UP</span></div>
+    <div class="sc su"><span class="sbeat">3</span><span class="sdir">↑</span><span class="sname">UP</span></div>
+    <div class="sc sd"><span class="sbeat">3+</span><span class="sdir">↓</span><span class="sname">DOWN</span></div>
+    <div class="sc su"><span class="sbeat">4</span><span class="sdir">↑</span><span class="sname">UP</span></div>
+    <div class="sc sr"><span class="sbeat">4+</span><span class="sdir">·</span><span class="sname">ghost</span></div>
+  </div>
+  <p style="font-size:0.8rem;color:var(--ink3)">Target: 70 BPM. Songs: Wonderwall, Let Her Go, Tum Hi Ho, Perfect. The most used pattern in modern music.</p>
+
+  <div class="pattern-title">Pattern 3 — Bollywood feel (D · DU · UDU) · The filmi strum</div>
+  <div class="strum-grid">
+    <div class="sc sd"><span class="sbeat">1</span><span class="sdir">↓</span><span class="sname">DOWN</span></div>
+    <div class="sc sr"><span class="sbeat">1+</span><span class="sdir">·</span><span class="sname">ghost</span></div>
+    <div class="sc sd"><span class="sbeat">2</span><span class="sdir">↓</span><span class="sname">DOWN</span></div>
+    <div class="sc su"><span class="sbeat">2+</span><span class="sdir">↑</span><span class="sname">UP</span></div>
+    <div class="sc su"><span class="sbeat">3</span><span class="sdir">↑</span><span class="sname">UP</span></div>
+    <div class="sc sd"><span class="sbeat">3+</span><span class="sdir">↓</span><span class="sname">DOWN</span></div>
+    <div class="sc su"><span class="sbeat">4</span><span class="sdir">↑</span><span class="sname">UP</span></div>
+    <div class="sc su"><span class="sbeat">4+</span><span class="sdir">↑</span><span class="sname">UP</span></div>
+  </div>
+  <p style="font-size:0.8rem;color:var(--ink3)">Target: 75 BPM. Songs: Iktara (full), Tere Sang Yaara, Jeena Jeena. The classic Hindi film acoustic guitar feel.</p>
+
+  <div class="pattern-title">Pattern 4 — Muted chuck pattern (D · DU xDU) · Rhythmic and percussive</div>
+  <div class="strum-grid">
+    <div class="sc sd"><span class="sbeat">1</span><span class="sdir">↓</span><span class="sname">DOWN</span></div>
+    <div class="sc sr"><span class="sbeat">1+</span><span class="sdir">·</span><span class="sname">ghost</span></div>
+    <div class="sc sd"><span class="sbeat">2</span><span class="sdir">↓</span><span class="sname">DOWN</span></div>
+    <div class="sc su"><span class="sbeat">2+</span><span class="sdir">↑</span><span class="sname">UP</span></div>
+    <div class="sc sm"><span class="sbeat">3</span><span class="sdir">×</span><span class="sname">CHUCK</span></div>
+    <div class="sc sd"><span class="sbeat">3+</span><span class="sdir">↓</span><span class="sname">DOWN</span></div>
+    <div class="sc su"><span class="sbeat">4</span><span class="sdir">↑</span><span class="sname">UP</span></div>
+    <div class="sc sr"><span class="sbeat">4+</span><span class="sdir">·</span><span class="sname">ghost</span></div>
+  </div>
+  <p style="font-size:0.8rem;color:var(--ink3)">Target: 80 BPM. Chuck = release fretting hand pressure on beat 3 while strumming — creates a percussive "chk" sound. Songs: Shape of You, Brown Eyed Girl.</p>
+
+  <div class="callout-warn" style="margin-top:1.25rem">
+    <strong>Pattern sequence rule:</strong> Learn Pattern 1 until smooth, then add Pattern 2. Do not attempt Pattern 4 until Patterns 2 and 3 are solid at 75+ BPM. The muted chuck (×) requires confident chord holding — a shaky chord produces a muddy chuck, not a clean percussive hit.
+  </div>
+</div>
+
+<!-- LESSON 8: CAPOS -->
+<div class="sec" id="l8">
+  <div class="sec-header">
+    <span class="sec-num">L-08</span>
+    <span class="sec-title">All About <em>Capos</em></span>
+    <span class="sec-tag teal">Tool</span>
+  </div>
+  <p>A capo is a clamp that attaches to the neck of your guitar, pressing all strings down at a specific fret. It effectively raises the pitch of all strings by one semitone per fret — allowing you to use the same chord shapes you know but in a different key. It's one of the most useful tools in acoustic guitar.</p>
+
+  <div class="callout-teal">
+    <strong>Why capos matter for you right now:</strong> Many Bollywood and Western songs are recorded in keys that require barre chords or unusual chord shapes. A capo lets you play the same D, A, E, Em, Am shapes you already know and sound exactly like the recording. Most beginner-friendly song arrangements use a capo for this reason.
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h4>How to use a capo — basics</h4>
+      <ul>
+        <li>Clamp the capo on the desired fret — directly behind the fret wire, not on top of it</li>
+        <li>Check that all strings ring cleanly under the capo — if any buzz, reposition</li>
+        <li>Capo fret 1 = all chords sound 1 semitone higher than normal</li>
+        <li>Capo fret 2 = all chords sound 1 full step (2 semitones) higher</li>
+        <li>Think of it as moving the nut of the guitar up the neck</li>
+        <li>Your chord shapes and finger positions stay exactly the same</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Capo key chart — D, A, E shapes</h4>
+      <ul>
+        <li>No capo: D = D · A = A · E = E</li>
+        <li>Capo 1: D = D# · A = A# · E = F</li>
+        <li>Capo 2: D = E · A = B · E = F# (very common)</li>
+        <li>Capo 3: D = F · A = C · E = G (makes D shape sound like F — no barre needed!)</li>
+        <li>Capo 4: D = F# · A = C# · E = G#</li>
+        <li>Capo 5: D = G · A = D · E = A (the entire set shifts up perfectly)</li>
+      </ul>
+    </div>
+  </div>
+
+  <table class="capo-table">
+    <tr><th>Song</th><th>Artist</th><th>Capo</th><th>Chords to play</th><th>Why capo helps</th></tr>
+    <tr><td>Perfect</td><td>Ed Sheeran</td><td>Capo 1</td><td>D · A · Em · G</td><td>Original key Ab — capo makes it playable with open chords</td></tr>
+    <tr><td>Wonderwall</td><td>Oasis</td><td>Capo 2</td><td>Em7 · G · Dsus4 · A7sus4</td><td>Noel Gallagher's original setup — capo 2 is standard</td></tr>
+    <tr><td>Tum Hi Ho</td><td>Aashiqui 2</td><td>No capo or Capo 1</td><td>D · A · Em · G</td><td>Capo 1 matches the recorded key exactly</td></tr>
+    <tr><td>Iktara</td><td>Wake Up Sid</td><td>Capo 3</td><td>D · A</td><td>D with capo 3 = F, matching the original orchestration</td></tr>
+    <tr><td>Let Her Go</td><td>Passenger</td><td>No capo</td><td>D · A · Em · G</td><td>Original key is D major — open chords work perfectly</td></tr>
+    <tr><td>Hotel California</td><td>Eagles</td><td>Capo 7</td><td>Am · E · G · D · F · C · Dm · E</td><td>Original key of Bm — capo 7 enables open chord fingering</td></tr>
+    <tr><td>Channa Mereya</td><td>ADHM</td><td>Capo 2</td><td>Em · C · G · D</td><td>Capo 2 matches the original recorded key</td></tr>
+    <tr><td>Jeena Jeena</td><td>Badlapur</td><td>Capo 2</td><td>D · A · E</td><td>Matches the film's key with open chord shapes</td></tr>
+  </table>
+</div>
+
+<!-- LESSON 9: SEVEN NATION ARMY -->
+<div class="sec" id="l9">
+  <div class="sec-header">
+    <span class="sec-num">L-09</span>
+    <span class="sec-title">Seven Nation <em>Army</em></span>
+    <span class="sec-tag green">Second Riff</span>
+  </div>
+  <p>Seven Nation Army (The White Stripes, 2003) is the second great beginner riff and one of the most recognisable guitar lines in modern music. Like Peter Gunn, it is a single-string riff — played on the low E string, but now descending and with a distinctive rhythmic feel. Sports arenas worldwide chant it. You'll recognise it the moment you play the first four notes.</p>
+
+  <div class="callout">
+    <strong>Why this riff matters:</strong> Peter Gunn was ascending and taught you single-string accuracy. Seven Nation Army descends and introduces rhythmic articulation — specifically the triplet feel in the opening, and the importance of rhythm in riff identity. The notes of Seven Nation Army are almost secondary to the rhythm — it's the groove that makes it iconic.
+  </div>
+
+  <div class="tab-block">
+    <span class="tab-lbl">Seven Nation Army — Low E String — Standard Tuning (sounds like Eb with bass boost on the original)</span>
+    <span class="tab-string">e |--------------------------------------------------|</span>
+    <span class="tab-string">B |--------------------------------------------------|</span>
+    <span class="tab-string">G |--------------------------------------------------|</span>
+    <span class="tab-string">D |--------------------------------------------------|</span>
+    <span class="tab-string">A |--------------------------------------------------|</span>
+    <span class="tab-string">E |<span class="tab-note">7   7  10  7  5  7  5</span>   <span class="tab-note">3   3   5  3  1  3  1</span>---|</span>
+    <span style="color:#52b788;font-size:0.78rem;display:block;margin-top:0.75rem">All notes on the low E string. Play slowly at first — the rhythm is: long · short · long · long · short · short · rest</span>
+    <span style="color:#78716c;font-size:0.78rem;display:block;margin-top:0.25rem">Fret guide: 5=ring or pinky, 7=pinky (stretch), 10=barre or pinky (5 frets up from 5th)</span>
+  </div>
+
+  <div class="notation">
+    <span class="lbl">Rhythm notation — Seven Nation Army (simplified)</span>
+    Rhythm  :  LONG  short  LONG  LONG  short  short  rest
+    Count   :  1  -  &amp;  -  2  -  3  -  &amp;  -  4  &amp;  -  rest
+
+    Note 7  :  LONG (holds for almost 2 beats)
+    Note 7  :  short (quick)
+    Note 10 :  LONG
+    Note 7  :  LONG
+    Note 5  :  short
+    Note 7  :  short
+    Note 5  :  LONG (rings out)
+
+    Tip: Sing the rhythm before playing. "DA-da DA-DA-da-da rest" — feel it before you fret it.
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h4>Learning steps — Seven Nation Army</h4>
+      <ul>
+        <li>Step 1: Tap the rhythm on your leg first — get the long-short-long pattern in your body</li>
+        <li>Step 2: Play only notes 7-7-10 (first three notes) until the rhythm is right</li>
+        <li>Step 3: Add 7-5 (notes 4 and 5) — this descent is the heart of the riff</li>
+        <li>Step 4: Add 7-5 at the end (notes 6 and 7) to complete the phrase</li>
+        <li>Step 5: Loop the full riff with a pause before repeating — groove over speed</li>
+        <li>Fret 10 option: use a half-barre at fret 10 or stretch from fret 7 with pinky</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>What this riff teaches</h4>
+      <ul>
+        <li>Rhythm is the message — the notes are secondary to the groove</li>
+        <li>Descending phrases: different feel and fingering to ascending riffs</li>
+        <li>Pinky training: fret 10 requires the 4th finger or a significant stretch</li>
+        <li>Note duration: long and short notes express different emotions — feel the difference</li>
+        <li>The "repeat riff" song structure — most rock and blues is built on this principle</li>
+        <li>Playing for a reaction: people recognise this riff instantly — first audience moment</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- LESSON 10: SONGS FOR MODULE 3 -->
+<div class="sec" id="l10">
+  <div class="sec-header">
+    <span class="sec-num">L-10</span>
+    <span class="sec-title">Songs For <em>Module 3</em></span>
+    <span class="sec-tag">Repertoire</span>
+  </div>
+  <p>Module 3 adds Em and Am — the two most important minor chords. The song range explodes. You can now play the Am–F–C–G and Em–C–G–D progressions that power an enormous proportion of both Bollywood and Western music. (G and C will be taught in Module 4 — use backing tracks until then, or jump ahead just to learn those chord shapes.)</p>
+
+  <p style="font-family:'Space Mono',monospace;font-size:0.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.4rem">Bollywood — Em and Am songs</p>
+  <table class="song-table">
+    <tr><th>Song</th><th>Film / Artist</th><th>Chords</th><th>Strum Pattern</th><th>Difficulty</th></tr>
+    <tr><td>Tum Hi Ho</td><td>Aashiqui 2</td><td>D · A · Em · G</td><td>Pattern 2 (DDUUDU)</td><td><span class="diff-easy">Easy</span></td></tr>
+    <tr><td>Channa Mereya</td><td>Ae Dil Hai Mushkil</td><td>Em · C · G · D</td><td>Pattern 2 or 3</td><td><span class="diff-easy">Easy</span></td></tr>
+    <tr><td>Phir Le Aaya Dil</td><td>Barfi!</td><td>D · A · Em · G</td><td>Pattern 3 (Bollywood)</td><td><span class="diff-easy">Easy</span></td></tr>
+    <tr><td>Hawayein</td><td>Jab Harry Met Sejal</td><td>D · Em · G · A</td><td>Pattern 2</td><td><span class="diff-easy">Easy</span></td></tr>
+    <tr><td>Tujhe Kitna Chahne Lage</td><td>Kabir Singh</td><td>D · A · Em · G</td><td>Pattern 3 slow</td><td><span class="diff-easy">Easy</span></td></tr>
+    <tr><td>Ae Dil Hai Mushkil</td><td>ADHM</td><td>Am · G · C · Em</td><td>Pattern 2</td><td><span class="diff-easy">Easy</span></td></tr>
+    <tr><td>Jeene Laga Hoon</td><td>Ramaiya Vastavaiya</td><td>D · A · Em · G</td><td>Pattern 3</td><td><span class="diff-easy">Easy</span></td></tr>
+    <tr><td>Ilahi</td><td>Yeh Jawaani Hai Deewani</td><td>Em · Am · D · G</td><td>Pattern 2 or 4</td><td><span class="diff-med">Medium</span></td></tr>
+    <tr><td>Abhi Mujh Mein Kahin</td><td>Agneepath</td><td>Am · G · F · E</td><td>Pattern 2 slow</td><td><span class="diff-med">Medium</span></td></tr>
+    <tr><td>Gerua</td><td>Dilwale</td><td>Em · C · G · D</td><td>Pattern 3 + capo</td><td><span class="diff-med">Medium</span></td></tr>
+  </table>
+
+  <p style="font-family:'Space Mono',monospace;font-size:0.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.4rem;margin-top:1.5rem">Western / International — Em and Am songs</p>
+  <table class="song-table">
+    <tr><th>Song</th><th>Artist</th><th>Chords</th><th>Capo</th><th>Difficulty</th></tr>
+    <tr><td>Wonderwall</td><td>Oasis</td><td>Em7 · G · D · A7sus4</td><td>Capo 2</td><td><span class="diff-easy">Easy</span></td></tr>
+    <tr><td>Shape of You</td><td>Ed Sheeran</td><td>Em · A · Am · D</td><td>None</td><td><span class="diff-easy">Easy</span></td></tr>
+    <tr><td>Counting Stars</td><td>OneRepublic</td><td>Am · C · G · Em</td><td>None</td><td><span class="diff-easy">Easy</span></td></tr>
+    <tr><td>Photograph</td><td>Ed Sheeran</td><td>Em · C · G · D</td><td>None</td><td><span class="diff-easy">Easy</span></td></tr>
+    <tr><td>Someone Like You</td><td>Adele</td><td>A · E · D · F#m</td><td>Capo 2</td><td><span class="diff-easy">Easy</span></td></tr>
+    <tr><td>Let Her Go</td><td>Passenger</td><td>D · A · Em · G</td><td>None</td><td><span class="diff-easy">Easy</span></td></tr>
+    <tr><td>Demons</td><td>Imagine Dragons</td><td>D · A · Em · G</td><td>None</td><td><span class="diff-easy">Easy</span></td></tr>
+    <tr><td>Losing My Religion</td><td>R.E.M.</td><td>Am · Em · Dm</td><td>None</td><td><span class="diff-med">Medium</span></td></tr>
+    <tr><td>House of the Rising Sun</td><td>Animals</td><td>Am · C · D · F · E</td><td>None</td><td><span class="diff-med">Medium</span></td></tr>
+    <tr><td>While My Guitar Gently Weeps</td><td>Beatles</td><td>Am · Am/G · Am/F# · Am/F</td><td>None</td><td><span class="diff-med">Medium</span></td></tr>
+  </table>
+
+  <div class="callout-green">
+    <strong>Recommended Module 3 songs:</strong> Start with <em>Tum Hi Ho</em> if you haven't already — it needs D, A, Em, G and is the most-searched beginner Bollywood song. For Western, <em>Counting Stars</em> or <em>Photograph</em> both use Am · C · G · Em which is the definitive four-chord minor progression. When you can play either of these songs comfortably, you have truly completed Module 3.
+  </div>
+</div>
+
+<!-- LESSON 11: PRACTICE ROUTINE -->
+<div class="sec" id="l11">
+  <div class="sec-header">
+    <span class="sec-num">L-11</span>
+    <span class="sec-title">Module 3 <em>Practice Routine</em></span>
+    <span class="sec-tag">Structure</span>
+  </div>
+
+  <p>Module 3 has the most new content so far — two new chords, up strums, four new strum patterns, capo technique, and a new riff. Resist the urge to practice everything every day. Instead, rotate focus: rhythm one day, chords the next, song on the third. This prevents plateau and builds all skills simultaneously.</p>
+
+  <div class="timer-row">
+    <div class="timer-cell">
+      <span class="ttime">3 min</span>
+      <span class="tlbl">Warmup · Em &amp; Am chord forming</span>
+    </div>
+    <div class="timer-cell active">
+      <span class="ttime">6 min</span>
+      <span class="tlbl">OMC — Em↔Am · Am↔D · Em↔D (2 sets each)</span>
+    </div>
+    <div class="timer-cell active">
+      <span class="ttime">5 min</span>
+      <span class="tlbl">Strum pattern drill — current pattern with metronome</span>
+    </div>
+    <div class="timer-cell">
+      <span class="ttime">4 min</span>
+      <span class="tlbl">Seven Nation Army riff — current section</span>
+    </div>
+    <div class="timer-cell active">
+      <span class="ttime">7 min</span>
+      <span class="tlbl">Song — changes + strum pattern together</span>
+    </div>
+    <div class="timer-cell">
+      <span class="ttime">5 min</span>
+      <span class="tlbl">Capo exploration — try a known song with capo</span>
+    </div>
+  </div>
+
+  <table class="week-table" style="margin-top:1.5rem">
+    <tr><th>Day</th><th>Chord Focus</th><th>Rhythm Focus</th><th>Song / Riff</th></tr>
+    <tr><td>Day 1</td><td>Em — all 6 strings clean; E → Em rapid switch</td><td>Up strum isolation exercise (Pattern 1)</td><td>Seven Nation Army — bars 1–2</td></tr>
+    <tr><td>Day 2</td><td>Am — index on B fret 1, check high e open</td><td>Pattern 2 (DDUUDU) at 55 BPM + foot tap</td><td>SNA full riff at slow tempo</td></tr>
+    <tr><td>Day 3</td><td>Em ↔ Am OMC — drill the hardest new pair</td><td>Counting ands aloud with Pattern 2</td><td>Song verse (Em and Am sections)</td></tr>
+    <tr><td>Day 4</td><td>Am ↔ D and Em ↔ D — common Bollywood pairs</td><td>Pattern 3 (Bollywood feel) introduction</td><td>Song chorus + verse together</td></tr>
+    <tr><td>Day 5</td><td>Full chord set: D A E Em Am — changes for one</td><td>Pattern 3 + capo exploration</td><td>Try song with capo — compare feel</td></tr>
+    <tr><td>Day 6</td><td>Song-specific chord sequence — all changes in order</td><td>Pattern 4 (muted chuck) introduction slowly</td><td>Full song — verse, chorus, bridge</td></tr>
+    <tr><td>Day 7</td><td>Light review or rest</td><td>Record yourself — focus on rhythm consistency</td><td>Play Em and Am songs back to back — feel the minor mood</td></tr>
+  </table>
+
+  <p style="font-weight:500;margin-top:1.5rem">Module 3 completion checklist</p>
+  <ul class="checklist">
+    <li><div class="check-box"></div>Em — all 6 strings ring clean; can switch E → Em in under 1 second</li>
+    <li><div class="check-box"></div>Am — all 5 strings ring clean including open high e</li>
+    <li><div class="check-box"></div>Em ↔ Am OMC: 25+ changes per minute</li>
+    <li><div class="check-box"></div>Am ↔ D OMC: 25+ changes per minute</li>
+    <li><div class="check-box"></div>Posture check: can explain and demonstrate correct holding position</li>
+    <li><div class="check-box"></div>Counting ands: can count "1 and 2 and 3 and 4 and" in time with a song</li>
+    <li><div class="check-box"></div>Up strums: Pattern 1 (all 8th notes) clean at 65 BPM</li>
+    <li><div class="check-box"></div>Pattern 2 (DDUUDU): clean at 70 BPM with foot tap locked</li>
+    <li><div class="check-box"></div>Pattern 3 (Bollywood): clean at 70 BPM</li>
+    <li><div class="check-box"></div>Capo: can attach to any fret and explain what it does to the key</li>
+    <li><div class="check-box"></div>Seven Nation Army riff: full riff at 80 BPM with correct rhythm (long-short-long)</li>
+    <li><div class="check-box"></div>Complete song using Em or Am — verse and chorus with consistent strum pattern</li>
+  </ul>
+
+  <p style="font-weight:500;margin-top:2rem">Module 3 — common mistakes</p>
+  <table class="mistake-table">
+    <tr><th>Mistake</th><th>Fix</th></tr>
+    <tr><td>Em high e and B strings buzzing</td><td>Middle and ring fingers are not arching enough — only the very tips should touch the A and D strings. Practice with finger isolation: hold each finger alone and verify the open strings still ring.</td></tr>
+    <tr><td>Am high e string muting</td><td>Index finger (B-str fret 1) is too flat and touching the high e. Arch the index more — the tip should press the B string while the pad clears the high e.</td></tr>
+    <tr><td>Up strums catching all 6 strings (harsh)</td><td>Reduce the travel distance of your upstroke. The up strum should catch only the top 2–3 strings. Practice the upstroke alone, aiming to miss the low E and A strings entirely.</td></tr>
+    <tr><td>DDUUDU pattern — losing beat 3 upstroke</td><td>The "3 ↑" in DDUUDU is on the beat (not the "and"), which feels wrong at first. Count aloud: "1 and 2 and UP and 3+and UP and" — the word "UP" marks beats 3 and 4 of the pattern.</td></tr>
+    <tr><td>Capo causing string buzz</td><td>Capo is not close enough to the fret wire. Move it as close to the metal fret as possible without sitting on top of it. Also check that the capo applies equal pressure across all strings — it may be slightly crooked.</td></tr>
+    <tr><td>Seven Nation Army rhythm wrong — sounds like notes, not a riff</td><td>You're making all notes equal length. The riff is defined by its LONG-short rhythm. Sing it first: "DA-da-DA-DA-da-da-rest." The first note holds for nearly two beats. If it doesn't groove, slow down and exaggerate the long notes.</td></tr>
+    <tr><td>Not connecting patterns to songs</td><td>Always practice strum patterns on a song, not in isolation. Four bars of a real song with Pattern 3 teaches timing, feel, and chord changes simultaneously. Isolated strumming practice has a ceiling.</td></tr>
+  </table>
+
+  <div class="callout-green" style="margin-top:1.5rem">
+    <strong>Ready for Module 4?</strong> Module 4 introduces the F chord — the first "difficult" chord in the course and a major milestone. F requires a partial barre (index finger across strings 1 and 2), which takes several weeks to feel comfortable. Starting it early is wise. The reward: F unlocks the full Am–F–C–G progression that powers the majority of popular music worldwide.
+  </div>
+</div>
+
+<div class="orn">◆ &nbsp; ◆ &nbsp; ◆</div>
+<p style="text-align:center;font-size:0.78rem;color:var(--ink3);font-style:italic;max-width:540px;margin:0 auto">Module 3 — Minor Chords &amp; Up Strums · 11 Lessons · Beginner Guitar Course<br>Em and Am open doors that major chords cannot. The pendulum swings both ways now.</p>
+
+</div>
+</body>
+</html>
